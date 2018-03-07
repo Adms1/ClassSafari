@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/search_class"
+            android:stretchColumns="*">
+
+            <TableRow
+                android:id="@+id/tableRow_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="4">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_margin="0.1dp"
+                    android:layout_weight="1"
+                    android:background="@color/search_boder"
+                    android:gravity="center"
+                    android:text="@string/add_name"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_11sdp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_margin="0.1dp"
+                    android:layout_weight="0.8"
+                    android:background="@color/blue"
+                    android:gravity="center"
+                    android:text="@string/add_age"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_11sdp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_margin="0.1dp"
+                    android:layout_weight="1"
+                    android:background="@color/rating_bar"
+                    android:gravity="center"
+                    android:text="@string/add_gender"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_11sdp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_margin="0.1dp"
+                    android:layout_weight="1.2"
+                    android:background="@color/bgBottomNavigation"
+                    android:gravity="center"
+                    android:text="@string/add_no"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_11sdp"
+                    android:textStyle="normal" />
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+</layout>

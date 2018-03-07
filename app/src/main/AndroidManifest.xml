@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.adms.classsafari">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true"
+        android:xlargeScreens="true" />
+
+    <application
+        android:name=".MyApp"
+        android:allowBackup="true"
+        android:icon="@drawable/safari"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".Activites.LoginScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activites.SearchByUser"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Activites.ClassDeatilScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activites.SessionName"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activites.ClassSearchScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activites.RegistrationScreen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activites.AddStudentScreen"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Activites.SessionName1"></activity>
+    </application>
+
+</manifest>
