@@ -7,7 +7,7 @@
         <item name="android:windowFullscreen">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorAccent">@color/blue</item>
         <item name="android:typeface">monospace</item>
 
     </style>
@@ -40,6 +40,12 @@
         <item name="android:paddingRight">@dimen/_5sdp</item>
     </style>
 
+    <style name="Theme_Dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowMinWidthMajor">95%</item>
+        <item name="android:windowMinWidthMinor">95%</item>
+
+        <!--<item name="@android:textColor">@android:color/primary_text_light</item>-->
+    </style>
 
 
 </resources>

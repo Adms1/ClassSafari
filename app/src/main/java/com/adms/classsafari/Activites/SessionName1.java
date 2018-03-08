@@ -23,9 +23,8 @@ public class SessionName1 extends AppCompatActivity {
 
     ActivitySessionName1Binding activitySessionName1Binding;
     Context mContext;
-    SessionDetailAdapter sessionDetailAdapter;
-    ArrayList<String> arrayList;
     PTMPageAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,16 +37,16 @@ public class SessionName1 extends AppCompatActivity {
     }
 
     public void init() {
+        setSupportActionBar(activitySessionName1Binding.toolbar);
         activitySessionName1Binding.tabLayoutPtm.addTab(activitySessionName1Binding.tabLayoutPtm.newTab().setText("Summary"), true);
         activitySessionName1Binding.tabLayoutPtm.addTab(activitySessionName1Binding.tabLayoutPtm.newTab().setText("Reviews"));
 //        activitySessionName1Binding.tabLayoutPtm.addTab(activitySessionName1Binding.tabLayoutPtm.newTab().setText("Photos"));
         activitySessionName1Binding.tabLayoutPtm.setTabMode(TabLayout.MODE_FIXED);
         activitySessionName1Binding.tabLayoutPtm.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        adapter = new PTMPageAdapter(mContext,getSupportFragmentManager(), activitySessionName1Binding.tabLayoutPtm.getTabCount());
+        adapter = new PTMPageAdapter(mContext, getSupportFragmentManager(), activitySessionName1Binding.tabLayoutPtm.getTabCount());
 //Adding adapter to pager
         activitySessionName1Binding.pager.setAdapter(adapter);
-//        adapter.notifyDataSetChanged();
 
         if (android.os.Build.VERSION.SDK_INT >= 21) {
             activitySessionName1Binding.view.setVisibility(View.GONE);
@@ -71,7 +70,7 @@ public class SessionName1 extends AppCompatActivity {
                 Intent inback = new Intent(mContext, LoginScreen.class);
                 inback.putExtra("flag", "1");
                 startActivity(inback);
-                Log.d("flag",""+inback.putExtra("flag", "1"));
+                Log.d("flag", "" + inback.putExtra("flag", "1"));
             }
         });
         activitySessionName1Binding.pager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(
@@ -93,6 +92,7 @@ public class SessionName1 extends AppCompatActivity {
         });
 
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
