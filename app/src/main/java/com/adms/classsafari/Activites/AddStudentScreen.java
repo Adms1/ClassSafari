@@ -21,13 +21,14 @@ public class AddStudentScreen extends AppCompatActivity {
     Context mContext;
     SelectStudentListAdapter selectStudentListAdapter;
     ArrayList<String> arrayList;
-String flag;
+    String flag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addStudentScreenBinding = DataBindingUtil.setContentView(this, R.layout.activity_add_student_screen);
         mContext = AddStudentScreen.this;
-        flag=getIntent().getStringExtra("flag");
+        flag = getIntent().getStringExtra("flag");
         init();
         setListner();
     }
@@ -51,6 +52,13 @@ String flag;
                 Intent inback = new Intent(mContext, RegistrationScreen.class);
                 inback.putExtra("flag", flag);
                 startActivity(inback);
+            }
+        });
+        addStudentScreenBinding.addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Intent inaddsession = new Intent(mContext, AddSessionScreen.class);
+//                startActivity(inaddsession);
             }
         });
     }

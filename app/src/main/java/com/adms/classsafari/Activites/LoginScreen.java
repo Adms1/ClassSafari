@@ -36,6 +36,13 @@ public class LoginScreen extends AppCompatActivity {
                 startActivity(inregister);
             }
         });
+        loginScreenBinding.loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Intent inpayment = new Intent(mContext, PaymentActivity.class);
+//                startActivity(inpayment);
+            }
+        });
     }
 
     @Override

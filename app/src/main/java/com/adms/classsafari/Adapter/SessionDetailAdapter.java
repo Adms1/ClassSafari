@@ -22,7 +22,7 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
     private Context mContext;
     ArrayList<String> arrayList;
     private final static int HEADER_VIEW = 0;
-    private final static int ROW_VIEW = 0;
+    private final static int ROW_VIEW = 2;
     private final static int CONTENT_VIEW = 1;
 
     public SessionDetailAdapter(Context mContext, ArrayList<String> arrayList) {
@@ -62,13 +62,13 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         switch (viewType) {
-//            case HEADER_VIEW:
-//                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.session_card_layout_1, parent, false);
-//                return new SessionCard(view);
+            case HEADER_VIEW:
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.session_card_layout_1, parent, false);
+                return new SessionCard(view);
 
-            case ROW_VIEW:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_reviews, parent, false);
-                return new RowView(view);
+//            case ROW_VIEW:
+//                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_reviews, parent, false);
+//                return new RowView(view);
 
             case CONTENT_VIEW:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.session_review_card_layout_1, parent, false);
@@ -86,10 +86,10 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
     public int getItemViewType(int position) {
 
         switch (position) {
-//            case 0:
-//                return HEADER_VIEW;
             case 0:
-                return ROW_VIEW;
+                return HEADER_VIEW;
+//            case 0:
+//                return ROW_VIEW;
             default:
                 return CONTENT_VIEW;
         }

@@ -47,9 +47,8 @@
             android:name=".Activites.AddStudentScreen"
             android:screenOrientation="portrait" />
         <activity android:name=".Activites.SessionName1" />
-        <activity android:name=".Activites.AddSessionScreen">
-
-        </activity>
+        <activity android:name=".Activites.AddSessionScreen" />
+        <activity android:name=".Activites.PaymentActivity"></activity>
     </application>
 
 </manifest>

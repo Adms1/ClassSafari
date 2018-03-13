@@ -53,7 +53,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
         holder.session_name_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent inSession=new Intent(mContext, SessionName1.class);
+                Intent inSession=new Intent(mContext, SessionName.class);
                 mContext.startActivity(inSession);
             }
         });

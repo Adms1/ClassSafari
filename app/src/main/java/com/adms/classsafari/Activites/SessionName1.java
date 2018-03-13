@@ -37,7 +37,7 @@ public class SessionName1 extends AppCompatActivity {
     }
 
     public void init() {
-        setSupportActionBar(activitySessionName1Binding.toolbar);
+//        setSupportActionBar(activitySessionName1Binding.toolbar);
         activitySessionName1Binding.tabLayoutPtm.addTab(activitySessionName1Binding.tabLayoutPtm.newTab().setText("Summary"), true);
         activitySessionName1Binding.tabLayoutPtm.addTab(activitySessionName1Binding.tabLayoutPtm.newTab().setText("Reviews"));
 //        activitySessionName1Binding.tabLayoutPtm.addTab(activitySessionName1Binding.tabLayoutPtm.newTab().setText("Photos"));

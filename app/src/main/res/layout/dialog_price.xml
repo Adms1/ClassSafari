@@ -6,7 +6,7 @@
     android:layout_height="@dimen/_250sdp"
     android:layout_gravity="bottom"
     android:orientation="vertical"
-    android:weightSum="4">
+    android:weightSum="3">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -74,22 +74,60 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1.5"
+            android:layout_weight="2"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/price_range_txt"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_15sdp"
-                android:gravity="start"
-                android:text="₹ 0 - ₹ 5000+ Per Session"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/_15sdp" />
+                android:layout_height="@dimen/_40sdp"
+                android:orientation="horizontal"
+                android:weightSum="4">
+
+                <TextView
+                    android:id="@+id/price_range1_txt"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.8"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:gravity="start"
+                    android:text="₹ 50000"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_15sdp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_1sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:text="-"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_15sdp" />
+
+                <TextView
+                    android:id="@+id/price_range2_txt"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.8"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_2sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:text=" ₹ 5000"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_15sdp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1.8"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:text="+ Per Session"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_12sdp" />
+            </LinearLayout>
 
             <com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar
-                android:id="@+id/rangeSeekbar3"
+                android:id="@+id/rangeSeekbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_10sdp"
@@ -106,32 +144,32 @@
                 app:right_thumb_color_pressed="@color/search_boder" />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/dark_gray" />
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0.1dp"-->
+            <!--android:background="@color/dark_gray" />-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/_3sdp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_marginBottom="@dimen/_3sdp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:orientation="vertical">-->
 
-            <CheckBox
-                android:id="@+id/sms_checkbox"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/_25sdp"
-                android:layout_marginLeft="@dimen/_5sdp"
-                android:layout_weight=".40"
-                android:button="@drawable/check_uncheck"
-                android:checked="true"
-                android:gravity="center"
-                android:paddingLeft="@dimen/_5sdp"
-                android:text="@string/checkboc_text"
-                android:textAlignment="center"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/_10sdp" />
-        </LinearLayout>
+            <!--<CheckBox-->
+                <!--android:id="@+id/sms_checkbox"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="@dimen/_25sdp"-->
+                <!--android:layout_marginLeft="@dimen/_5sdp"-->
+                <!--android:layout_weight=".40"-->
+                <!--android:button="@drawable/check_uncheck"-->
+                <!--android:checked="true"-->
+                <!--android:gravity="center"-->
+                <!--android:paddingLeft="@dimen/_5sdp"-->
+                <!--android:text="@string/checkboc_text"-->
+                <!--android:textAlignment="center"-->
+                <!--android:textColor="@color/text_color"-->
+                <!--android:textSize="@dimen/_10sdp" />-->
+        <!--</LinearLayout>-->
     </LinearLayout>
 </LinearLayout>

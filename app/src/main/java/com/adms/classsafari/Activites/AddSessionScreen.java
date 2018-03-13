@@ -2,6 +2,7 @@ package com.adms.classsafari.Activites;
 
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -89,7 +90,6 @@ public class AddSessionScreen extends AppCompatActivity implements com.wdullaer.
             public void onClick(View view) {
                 datePickerDialog = DatePickerDialog.newInstance(AddSessionScreen.this, Year, Month, Day);
                 datePickerDialog.setThemeDark(false);
-                timePickerDialog.is24HourMode();
                 datePickerDialog.setOkText("Done");
                 datePickerDialog.showYearPickerFirst(false);
                 datePickerDialog.setAccentColor(Color.parseColor("#f2552c"));

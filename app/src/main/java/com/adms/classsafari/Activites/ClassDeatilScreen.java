@@ -6,19 +6,16 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -29,6 +26,9 @@ import com.adms.classsafari.Adapter.PopularClassListAdapter;
 import com.adms.classsafari.BottomNavigationViewHelper;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivityClassDeatilScreenBinding;
+import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
+import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
+import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 
 import java.util.ArrayList;
 
@@ -39,10 +39,12 @@ public class ClassDeatilScreen extends AppCompatActivity {
     ClassDetailAdapter classDetailAdapter;
     ArrayList<String> arrayList;
     ArrayList<String> arrayListPopular;
-    public Dialog popularDialog, priceDialog,sortDialog;
+    public Dialog popularDialog, priceDialog, sortDialog;
     PopularClassListAdapter popularClassListAdapter;
     RecyclerView popularListrcView;
     TextView done;
+    CrystalRangeSeekbar rangeSeekbar;
+    TextView price_range1_txt, price_range2_txt, cancel_txt, confirm_txt;
 
     @Override
 
@@ -66,7 +68,6 @@ public class ClassDeatilScreen extends AppCompatActivity {
         binding.classListRecView.setLayoutManager(mLayoutManager);
         binding.classListRecView.setItemAnimator(new DefaultItemAnimator());
         binding.classListRecView.setAdapter(classDetailAdapter);
-
 
     }
 
@@ -108,7 +109,6 @@ public class ClassDeatilScreen extends AppCompatActivity {
                 startActivity(insession);
             }
         });
-
     }
 
     @Override
@@ -135,7 +135,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
         popularDialog.setContentView(R.layout.dialog_popular);
 
         popularListrcView = (RecyclerView) popularDialog.findViewById(R.id.popular_list_rcView);
-        done=(TextView)popularDialog.findViewById(R.id.done_txt);
+        done = (TextView) popularDialog.findViewById(R.id.done_txt);
 
         done.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,12 +170,31 @@ public class ClassDeatilScreen extends AppCompatActivity {
         priceDialog.setCancelable(true);
         priceDialog.setContentView(R.layout.dialog_price);
 
-        done=(TextView)priceDialog.findViewById(R.id.done_txt);
+        done = (TextView) priceDialog.findViewById(R.id.done_txt);
+        rangeSeekbar = (CrystalRangeSeekbar) priceDialog.findViewById(R.id.rangeSeekbar);
+        price_range1_txt = (TextView) priceDialog.findViewById(R.id.price_range1_txt);
+        price_range2_txt = (TextView) priceDialog.findViewById(R.id.price_range2_txt);
 
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 priceDialog.dismiss();
+            }
+        });
+        rangeSeekbar.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
+            @Override
+            public void valueChanged(Number minValue, Number maxValue) {
+                price_range1_txt.setText("₹ " + String.valueOf(minValue));
+                price_range2_txt.setText("₹ " + String.valueOf(maxValue));
+                Log.d("select vlue", "min value" + minValue + "maxvalue" + maxValue);
+            }
+        });
+        rangeSeekbar.setOnRangeSeekbarFinalValueListener(new OnRangeSeekbarFinalValueListener() {
+            @Override
+            public void finalValue(Number minValue, Number maxValue) {
+                price_range1_txt.setText("₹ " + String.valueOf(minValue));
+                price_range2_txt.setText("₹ " + String.valueOf(maxValue));
+                Log.d("final vlue", "min value" + minValue + "maxvalue" + maxValue);
             }
         });
         priceDialog.show();
@@ -197,14 +216,14 @@ public class ClassDeatilScreen extends AppCompatActivity {
         sortDialog.setCancelable(true);
         sortDialog.setContentView(R.layout.dialog_sort);
 
-        done=(TextView)sortDialog.findViewById(R.id.done_txt);
-
+        done = (TextView) sortDialog.findViewById(R.id.done_txt);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sortDialog.dismiss();
             }
         });
+
         sortDialog.show();
     }
 

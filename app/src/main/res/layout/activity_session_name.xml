@@ -66,20 +66,20 @@
                 android:layout_below="@+id/center"
                 android:orientation="vertical"
                 android:layout_marginTop="-50dp">
-                <RelativeLayout
-                android:id="@+id/relativeLayout3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_1sdp"
-                android:orientation="vertical">
-                <LinearLayout
-                    android:id="@+id/linear1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <include layout="@layout/session_card_layout_1" />
-                </LinearLayout>
+                <!--<RelativeLayout-->
+                <!--android:id="@+id/relativeLayout3"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="@dimen/_1sdp"-->
+                <!--android:orientation="vertical">-->
+                <!--<LinearLayout-->
+                    <!--android:id="@+id/linear1"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content">-->
+                    <!--<include layout="@layout/session_card_layout_1" />-->
+                <!--</LinearLayout>-->
 
-                </RelativeLayout>
+                <!--</RelativeLayout>-->
 
 
                 <android.support.v7.widget.RecyclerView

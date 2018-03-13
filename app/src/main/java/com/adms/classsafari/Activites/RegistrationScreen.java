@@ -62,11 +62,11 @@ public class RegistrationScreen extends AppCompatActivity {
         familyRegister1Binding.registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (selectedValue.equalsIgnoreCase("Parents")) {
+//                if (selectedValue.equalsIgnoreCase("Parents")) {
                     Intent inaddstudent = new Intent(mContext, AddStudentScreen.class);
                     inaddstudent.putExtra("flag", flag);
                     startActivity(inaddstudent);
-                }
+//                }
             }
         });
     }
