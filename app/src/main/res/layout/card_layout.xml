@@ -28,7 +28,7 @@
 
                 <TextView
                     android:id="@+id/session_name_txt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/_115sdp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_5sdp"
@@ -41,7 +41,7 @@
                     style="?android:attr/ratingBarStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_40sdp"
+                    android:layout_marginLeft="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:max="5"
                     android:rating="2.5"
@@ -51,7 +51,7 @@
 
                 <TextView
                     android:id="@+id/location_txt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/_80sdp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_5sdp"
@@ -146,48 +146,52 @@
 
                 <Button
                     android:id="@+id/monday_btn"
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:layout_marginLeft="@dimen/_15sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:background="@color/blue"
                     android:text="M"
+                    android:alpha="0.2"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_11sdp"
                     android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/tuesday_btn"
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:layout_marginLeft="@dimen/_18sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:background="@color/blue"
                     android:text="T"
+                    android:alpha="0.2"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_11sdp"
                     android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/wednesday_btn"
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:layout_marginLeft="@dimen/_18sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:background="@color/blue"
                     android:text="W"
+                    android:alpha="0.2"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_11sdp"
                     android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/thursday_btn"
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:layout_marginLeft="@dimen/_18sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:background="@color/blue"
                     android:text="Th"
+                    android:alpha="0.2"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_11sdp"
@@ -195,24 +199,26 @@
 
                 <Button
                     android:id="@+id/friday_btn"
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:layout_marginLeft="@dimen/_18sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:background="@color/blue"
                     android:text="F"
+                    android:alpha="0.2"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_11sdp"
                     android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/saturday_btn"
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:layout_marginLeft="@dimen/_18sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:background="@color/blue"
                     android:text="Sa"
+                    android:alpha="0.2"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_11sdp"
@@ -220,12 +226,13 @@
 
                 <Button
                     android:id="@+id/sunday_btn"
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:layout_marginLeft="@dimen/_19sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:background="@color/blue"
                     android:text="Su"
+                    android:alpha="0.2"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_11sdp"
@@ -239,64 +246,71 @@
 
                 <TextView
                     android:id="@+id/mon_time_txt"
-                    android:layout_width="@dimen/_35sdp"
+                    android:layout_width="@dimen/_37sdp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_5sdp"
-                    android:text="6:00 AM"
+                    android:text="00:00 AM"
+                    android:alpha="0.2"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_8sdp" />
 
                 <TextView
                     android:id="@+id/tues_time_txt"
-                    android:layout_width="@dimen/_35sdp"
+                    android:layout_width="@dimen/_37sdp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_3sdp"
-                    android:text="6:00 AM"
+                    android:text="00:00 AM"
+                    android:alpha="0.2"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_8sdp" />
 
                 <TextView
                     android:id="@+id/wed_time_txt"
-                    android:layout_width="@dimen/_35sdp"
+                    android:layout_width="@dimen/_37sdp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_3sdp"
-                    android:text="6:00 AM"
+                    android:text="00:00 AM"
+                    android:alpha="0.2"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_8sdp" />
 
                 <TextView
                     android:id="@+id/thur_time_txt"
-                    android:layout_width="@dimen/_35sdp"
+                    android:layout_width="@dimen/_37sdp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_3sdp"
-                    android:text="6:00 AM"
+                    android:text="00:00 AM"
+                    android:alpha="0.2"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_8sdp" />
 
                 <TextView
                     android:id="@+id/fri_time_txt"
-                    android:layout_width="@dimen/_35sdp"
+                    android:layout_width="@dimen/_37sdp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_3sdp"
-                    android:text="6:00 AM"
+                    android:text="00:00 AM"
+                    android:alpha="0.2"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_8sdp" />
 
                 <TextView
                     android:id="@+id/sat_time_txt"
-                    android:layout_width="@dimen/_35sdp"
+                    android:layout_width="@dimen/_37sdp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_3sdp"
-                    android:text="6:00 AM"
+                    android:text="00:00 AM"
+                    android:alpha="0.2"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_8sdp" />
 
                 <TextView
                     android:id="@+id/sun_time_txt"
-                    android:layout_width="@dimen/_35sdp"
+                    android:layout_width="@dimen/_37sdp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_3sdp"
-                    android:text="6:00 AM"
+                    android:text="00:00 AM"
+                    android:alpha="0.2"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_8sdp" />
             </LinearLayout>
@@ -310,11 +324,16 @@
                 <TextView
                     android:id="@+id/duration_txt"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/_25sdp"
                     android:layout_marginLeft="@dimen/_12sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/_5sdp"
                     android:text="@string/duration"
                     android:textColor="@color/search_boder"
-                    android:textSize="@dimen/_8sdp" />
+                    android:textSize="@dimen/_10sdp"
+                    android:textStyle="bold"/>
             </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>

@@ -23,7 +23,11 @@ import android.widget.Toast;
 
 import com.adms.classsafari.Adapter.ClassDetailAdapter;
 import com.adms.classsafari.Adapter.PopularClassListAdapter;
+import com.adms.classsafari.AppConstant.ApiHandler;
+import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.BottomNavigationViewHelper;
+import com.adms.classsafari.Model.ClassDetailModel;
+import com.adms.classsafari.Model.MainClassModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivityClassDeatilScreenBinding;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
@@ -31,6 +35,12 @@ import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListen
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class ClassDeatilScreen extends AppCompatActivity {
 
@@ -44,7 +54,9 @@ public class ClassDeatilScreen extends AppCompatActivity {
     RecyclerView popularListrcView;
     TextView done;
     CrystalRangeSeekbar rangeSeekbar;
-    TextView price_range1_txt, price_range2_txt, cancel_txt, confirm_txt;
+    TextView price_range1_txt, price_range2_txt;
+    List<ClassDetailModel> sessionfullDetailList;
+    String subjectStr, boardStr, standardStr, streamStr;
 
     @Override
 
@@ -58,16 +70,16 @@ public class ClassDeatilScreen extends AppCompatActivity {
     }
 
     public void init() {
+        subjectStr = getIntent().getStringExtra("subject");
+        standardStr = getIntent().getStringExtra("standard");
+        streamStr = getIntent().getStringExtra("stream");
+        boardStr = getIntent().getStringExtra("board");
         BottomNavigationViewHelper.removeShiftMode(binding.bottomNavigationView);
-        arrayList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            arrayList.add(String.valueOf(i));
-        }
-        classDetailAdapter = new ClassDetailAdapter(mContext, arrayList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        binding.classListRecView.setLayoutManager(mLayoutManager);
-        binding.classListRecView.setItemAnimator(new DefaultItemAnimator());
-        binding.classListRecView.setAdapter(classDetailAdapter);
+        callClassDetailApi();
+//        binding.subjectTxt.setText(subjectStr);
+//        binding.boardTxt.setText("\u2022 "+boardStr);
+//        binding.standardTxt.setText("\u2022 "+standardStr);
+//        binding.streamTxt.setText("\u2022 "+streamStr);
 
     }
 
@@ -225,6 +237,69 @@ public class ClassDeatilScreen extends AppCompatActivity {
         });
 
         sortDialog.show();
+    }
+
+
+    //Use for get CLass Detail
+    public void callClassDetailApi() {
+        if (Utils.checkNetwork(mContext)) {
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_SessionByEmployeeTypeID(getsessionDetail(), new retrofit.Callback<MainClassModel>() {
+                @Override
+                public void success(MainClassModel sessionInfo, Response response) {
+                    Utils.dismissDialog();
+                    if (sessionInfo == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionInfo.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionInfo.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.dismissDialog();
+                        if (sessionInfo.getData() != null) {
+                            Utils.ping(mContext, getString(R.string.false_msg));
+                        }
+                        return;
+                    }
+                    if (sessionInfo.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.dismissDialog();
+                        if (sessionInfo.getData() != null) {
+                            sessionfullDetailList = sessionInfo.getData();
+                            if (sessionfullDetailList.size() > 0) {
+                                binding.recViewLinear.setVisibility(View.VISIBLE);
+                                binding.noRecordTxt.setVisibility(View.GONE);
+                                classDetailAdapter = new ClassDetailAdapter(mContext, sessionfullDetailList);
+                                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
+                                binding.classListRecView.setLayoutManager(mLayoutManager);
+                                binding.classListRecView.setItemAnimator(new DefaultItemAnimator());
+                                binding.classListRecView.setAdapter(classDetailAdapter);
+                            } else {
+                                binding.recViewLinear.setVisibility(View.GONE);
+                                binding.noRecordTxt.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getsessionDetail() {
+        Map<String, String> map = new HashMap<>();
+        map.put("EmployeeTypeID", "1");
+        return map;
     }
 
 

@@ -36,7 +36,7 @@
 
                 <TextView
                     android:id="@+id/subject_txt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/_145sdp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_5sdp"
@@ -49,7 +49,7 @@
                     android:id="@+id/search_img"
                     android:layout_width="@dimen/_15sdp"
                     android:layout_height="@dimen/_15sdp"
-                    android:layout_marginLeft="@dimen/_185sdp"
+                    android:layout_marginLeft="@dimen/_90sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:src="@drawable/search1" />
             </LinearLayout>
@@ -180,16 +180,31 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="3.7"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="visible">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/class_list_recView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="none"
-            android:visibility="visible" />
+             />
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/no_record_txt"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="0.1dp"
+            android:layout_weight="3.7"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="No Class Available..."
+            android:textColor="@color/search_boder"
+            android:textSize="@dimen/_11sdp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
 
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/bottomNavigationView"

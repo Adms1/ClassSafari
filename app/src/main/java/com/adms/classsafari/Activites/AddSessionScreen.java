@@ -1,24 +1,19 @@
 package com.adms.classsafari.Activites;
 
-import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.adms.classsafari.R;
-import com.adms.classsafari.Utils;
+import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.databinding.ActivityAddSessionScreenBinding;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

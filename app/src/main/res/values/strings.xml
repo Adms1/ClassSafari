@@ -78,4 +78,18 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <!--Webservice String-->
+    <string name="internet_error">Internet Connection !</string>
+    <string name="internet_connection_error">ClassSafariTeacher requires an internet connection.Make sure Wi-Fi or mobile networks are turned on, then try again.</string>
+    <string name="something_wrong">Something Wrong</string>
+    <string name="blank">Blank Filed Not Allowed</string>
+    <string name="false_msg">Record not found</string>
+    <string name="true_msg">Send Successfully</string>
+    <string name="validation_msg">Enter Proper Value</string>
+
+    <!--Network Dialog String-->
+    <string name="alert_msg">Alert Msg</string>
+    <string name="ok">OK</string>
 </resources>
