@@ -225,63 +225,62 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                 spiltComma = spiltPipes[i].split("\\,");
                 spiltDash = spiltComma[1].split("\\-");
                 calculateHours(spiltDash[0], spiltDash[1]);
-
+                arrayList.get(position).setDateTime(spiltDash[0]);
                 switch (spiltComma[0]) {
                     case "sun":
                         holder.sun_time_txt.setEnabled(true);
                         holder.sunday_btn.setEnabled(true);
                         holder.sun_time_txt.setAlpha(1);
                         holder.sunday_btn.setAlpha(1);
-                        holder.sun_time_txt.setText(spiltDash[0]);
-                        arrayList.get(position).setDateTime(holder.sun_time_txt.getText().toString());
+                        holder.sun_time_txt.setText(arrayList.get(position).getDateTime());
                         break;
                     case "mon":
                         holder.mon_time_txt.setEnabled(true);
                         holder.monday_btn.setEnabled(true);
                         holder.mon_time_txt.setAlpha(1);
                         holder.monday_btn.setAlpha(1);
-                        holder.mon_time_txt.setText(spiltDash[0]);
-                        arrayList.get(position).setDateTime(holder.mon_time_txt.getText().toString());
+                        holder.mon_time_txt.setText(arrayList.get(position).getDateTime());
+//                        arrayList.get(position).setDateTime(holder.mon_time_txt.getText().toString());
                         break;
                     case "tue":
                         holder.tues_time_txt.setEnabled(true);
                         holder.tuesday_btn.setEnabled(true);
                         holder.tues_time_txt.setAlpha(1);
                         holder.tuesday_btn.setAlpha(1);
-                        holder.tues_time_txt.setText(spiltDash[0]);
-                        arrayList.get(position).setDateTime(holder.tues_time_txt.getText().toString());
+                        holder.tues_time_txt.setText(arrayList.get(position).getDateTime());
+//                        arrayList.get(position).setDateTime(holder.tues_time_txt.getText().toString());
                         break;
                     case "wed":
                         holder.wed_time_txt.setEnabled(true);
                         holder.wednesday_btn.setEnabled(true);
                         holder.wed_time_txt.setAlpha(1);
                         holder.wednesday_btn.setAlpha(1);
-                        holder.wed_time_txt.setText(spiltDash[0]);
-                        arrayList.get(position).setDateTime(holder.wed_time_txt.getText().toString());
+                        holder.wed_time_txt.setText(arrayList.get(position).getDateTime());
+//                        arrayList.get(position).setDateTime(holder.wed_time_txt.getText().toString());
                         break;
                     case "thu":
                         holder.thur_time_txt.setEnabled(true);
                         holder.thursday_btn.setEnabled(true);
                         holder.thur_time_txt.setAlpha(1);
                         holder.thursday_btn.setAlpha(1);
-                        holder.thur_time_txt.setText(spiltDash[0]);
-                        arrayList.get(position).setDateTime(holder.thur_time_txt.getText().toString());
+                        holder.thur_time_txt.setText(arrayList.get(position).getDateTime());
+//                        arrayList.get(position).setDateTime(holder.thur_time_txt.getText().toString());
                         break;
                     case "fri":
                         holder.fri_time_txt.setEnabled(true);
                         holder.friday_btn.setEnabled(true);
                         holder.fri_time_txt.setAlpha(1);
                         holder.friday_btn.setAlpha(1);
-                        holder.fri_time_txt.setText(spiltDash[0]);
-                        arrayList.get(position).setDateTime(holder.fri_time_txt.getText().toString());
+                        holder.fri_time_txt.setText(arrayList.get(position).getDateTime());
+//                        arrayList.get(position).setDateTime(holder.fri_time_txt.getText().toString());
                         break;
                     case "sat":
                         holder.sat_time_txt.setEnabled(true);
                         holder.saturday_btn.setEnabled(true);
                         holder.sat_time_txt.setAlpha(1);
                         holder.saturday_btn.setAlpha(1);
-                        holder.sat_time_txt.setText(spiltDash[0]);
-                        arrayList.get(position).setDateTime(holder.sat_time_txt.getText().toString());
+                        holder.sat_time_txt.setText(arrayList.get(position).getDateTime());
+//                        arrayList.get(position).setDateTime(holder.sat_time_txt.getText().toString());
                         break;
                     default:
 

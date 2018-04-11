@@ -67,6 +67,17 @@ public class ClassDetailModel {
     @SerializedName("DateTime")
     @Expose
     private String dateTime;
+    @SerializedName("Day")
+    @Expose
+    private String day;
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
 
     public String getDateTime() {
         return dateTime;
