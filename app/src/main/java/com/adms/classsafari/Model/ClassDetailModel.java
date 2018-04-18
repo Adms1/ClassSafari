@@ -70,6 +70,17 @@ public class ClassDetailModel {
     @SerializedName("Day")
     @Expose
     private String day;
+    @SerializedName("Duration")
+    @Expose
+    private String duration;
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
 
     public String getDay() {
         return day;

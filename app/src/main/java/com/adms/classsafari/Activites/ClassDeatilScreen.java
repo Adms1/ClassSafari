@@ -34,7 +34,10 @@ import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +60,8 @@ public class ClassDeatilScreen extends AppCompatActivity {
     TextView price_range1_txt, price_range2_txt;
     List<ClassDetailModel> sessionfullDetailList;
     String subjectStr, boardStr, standardStr, streamStr;
+    int SessionHour = 0;
+    Integer SessionMinit = 0;
 
     @Override
 
@@ -239,7 +244,6 @@ public class ClassDeatilScreen extends AppCompatActivity {
         sortDialog.show();
     }
 
-
     //Use for get CLass Detail
     public void callClassDetailApi() {
         if (Utils.checkNetwork(mContext)) {
@@ -270,11 +274,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                             if (sessionfullDetailList.size() > 0) {
                                 binding.recViewLinear.setVisibility(View.VISIBLE);
                                 binding.noRecordTxt.setVisibility(View.GONE);
-                                classDetailAdapter = new ClassDetailAdapter(mContext, sessionfullDetailList);
-                                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
-                                binding.classListRecView.setLayoutManager(mLayoutManager);
-                                binding.classListRecView.setItemAnimator(new DefaultItemAnimator());
-                                binding.classListRecView.setAdapter(classDetailAdapter);
+                                fillData();
                             } else {
                                 binding.recViewLinear.setVisibility(View.GONE);
                                 binding.noRecordTxt.setVisibility(View.VISIBLE);
@@ -302,5 +302,33 @@ public class ClassDeatilScreen extends AppCompatActivity {
         return map;
     }
 
+    public void fillData() {
+        for (int i = 0; i < sessionfullDetailList.size(); i++) {
+            sessionfullDetailList.get(i).setSessionAmount(String.valueOf(Math.round(Float.parseFloat(sessionfullDetailList.get(i).getSessionAmount()))));
+            if (sessionfullDetailList.get(i).getSessionAmount().equalsIgnoreCase("0")) {
+                sessionfullDetailList.get(i).setSessionAmount("Free");
+            }
 
+//            String[] spiltPipes = sessionfullDetailList.get(i).getSchedule().split("\\|");
+//            String[] spiltComma;
+//            String[] spiltDash;
+//            Log.d("spilt", "" + spiltPipes.toString());
+//            for (int j = 0; j < spiltPipes.length; j++) {
+//                spiltComma = spiltPipes[j].split("\\,");
+//                spiltDash = spiltComma[1].split("\\-");
+////                calculateHours(spiltDash[0], spiltDash[1]);
+//                sessionfullDetailList.get(i).setDay(spiltComma[0]);
+//                sessionfullDetailList.get(i).setDateTime(spiltDash[0]);
+//                Log.d("DateTime", spiltDash[0]);
+//            }
+//            Log.d("Day",sessionfullDetailList.get(i).getDay());
+        }
+
+        classDetailAdapter = new ClassDetailAdapter(mContext, sessionfullDetailList);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
+        binding.classListRecView.setLayoutManager(mLayoutManager);
+        binding.classListRecView.setItemAnimator(new DefaultItemAnimator());
+        binding.classListRecView.setAdapter(classDetailAdapter);
+
+    }
 }

@@ -35,11 +35,14 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     List<ClassDetailModel> arrayList;
     int SessionHour = 0;
     Integer SessionMinit = 0;
+
     String address;
 
     public ClassDetailAdapter(Context mContext, List<ClassDetailModel> arrayList) {
         this.mContext = mContext;
         this.arrayList = arrayList;
+//        setHasStableIds(true);
+
     }
 
 
@@ -107,230 +110,127 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
         });
 
 
-//        ArrayList<String> days = new ArrayList<String>();
-//        DateFormat df1 = new SimpleDateFormat("dd/MM/yyyy");
-//
-//        Date date1 = null;
-//        Date date2 = null;
-//
-//        try {
-//            date1 = df1.parse(arrayList.get(position).getStartDate());
-//            date2 = df1.parse(arrayList.get(position).getEndDate());
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Calendar cal1 = Calendar.getInstance();
-//        cal1.setTime(date1);
-//
-//
-//        Calendar cal2 = Calendar.getInstance();
-//        cal2.setTime(date2);
-//
-////        if(cal2.after(cal1)) {
-//        while (!cal1.after(cal2)) {
-//            days.add(new SimpleDateFormat("EE").format(cal1.getTime()));
-//            cal1.add(Calendar.DATE, 1);
-//
-//        }
-//        Log.d("days", "" + days);
-//        holder.sun_time_txt.setEnabled(false);
-//        holder.sunday_btn.setEnabled(false);
-//        holder.sun_time_txt.setAlpha(0.2f);
-//        holder.sunday_btn.setAlpha(0.2f);
-//
-//        holder.mon_time_txt.setEnabled(false);
-//        holder.monday_btn.setEnabled(false);
-//        holder.mon_time_txt.setAlpha(0.2f);
-//        holder.monday_btn.setAlpha(0.2f);
-//
-//        holder.tues_time_txt.setEnabled(false);
-//        holder.tuesday_btn.setEnabled(false);
-//        holder.tues_time_txt.setAlpha(0.2f);
-//        holder.tuesday_btn.setAlpha(0.2f);
-//
-//        holder.wed_time_txt.setEnabled(false);
-//        holder.wednesday_btn.setEnabled(false);
-//        holder.wed_time_txt.setAlpha(0.2f);
-//        holder.wednesday_btn.setAlpha(0.2f);
-//
-//        holder.thur_time_txt.setEnabled(false);
-//        holder.thursday_btn.setEnabled(false);
-//        holder.thur_time_txt.setAlpha(0.2f);
-//        holder.thursday_btn.setAlpha(0.2f);
-//
-//        holder.fri_time_txt.setEnabled(false);
-//        holder.friday_btn.setEnabled(false);
-//        holder.fri_time_txt.setAlpha(0.2f);
-//        holder.friday_btn.setAlpha(0.2f);
-//
-//        holder.sat_time_txt.setEnabled(false);
-//        holder.saturday_btn.setEnabled(false);
-//        holder.sat_time_txt.setAlpha(0.2f);
-//        holder.saturday_btn.setAlpha(0.2f);
-//
-//        for (int i = 0; i < days.size(); i++) {
-//            switch (days.get(i)) {
-//                case "sun":
-//                    holder.sun_time_txt.setEnabled(true);
-//                    holder.sunday_btn.setEnabled(true);
-//                    holder.sun_time_txt.setAlpha(1);
-//                    holder.sunday_btn.setAlpha(1);
-//                    break;
-//                case "mon":
-//                    holder.mon_time_txt.setEnabled(true);
-//                    holder.monday_btn.setEnabled(true);
-//                    holder.mon_time_txt.setAlpha(1);
-//                    holder.monday_btn.setAlpha(1);
-//                    break;
-//                case "tue":
-//                    holder.tues_time_txt.setEnabled(true);
-//                    holder.tuesday_btn.setEnabled(true);
-//                    holder.tues_time_txt.setAlpha(1);
-//                    holder.tuesday_btn.setAlpha(1);
-//                    break;
-//                case "wed":
-//                    holder.wed_time_txt.setEnabled(true);
-//                    holder.wednesday_btn.setEnabled(true);
-//                    holder.wed_time_txt.setAlpha(1);
-//                    holder.wednesday_btn.setAlpha(1);
-//                    break;
-//                case "thu":
-//                    holder.thur_time_txt.setEnabled(true);
-//                    holder.thursday_btn.setEnabled(true);
-//                    holder.thur_time_txt.setAlpha(1);
-//                    holder.thursday_btn.setAlpha(1);
-//                    break;
-//                case "fri":
-//                    holder.fri_time_txt.setEnabled(true);
-//                    holder.friday_btn.setEnabled(true);
-//                    holder.fri_time_txt.setAlpha(1);
-//                    holder.friday_btn.setAlpha(1);
-//                    break;
-//                case "sat":
-//                    holder.sat_time_txt.setEnabled(true);
-//                    holder.saturday_btn.setEnabled(true);
-//                    holder.sat_time_txt.setAlpha(1);
-//                    holder.saturday_btn.setAlpha(1);
-//                    break;
-//                default:
-//            }
-//        }
 
-            String[] spiltPipes = arrayList.get(position).getSchedule().split("\\|");
-            String[] spiltComma;
-            String[] spiltDash;
-            Log.d("spilt", "" + spiltPipes.toString());
-            for (int i = 0; i < spiltPipes.length; i++) {
-                spiltComma = spiltPipes[i].split("\\,");
-                spiltDash = spiltComma[1].split("\\-");
-                calculateHours(spiltDash[0], spiltDash[1]);
-                arrayList.get(position).setDateTime(spiltDash[0]);
-                switch (spiltComma[0]) {
-                    case "sun":
-                        holder.sun_time_txt.setEnabled(true);
-                        holder.sunday_btn.setEnabled(true);
-                        holder.sun_time_txt.setAlpha(1);
-                        holder.sunday_btn.setAlpha(1);
-                        holder.sun_time_txt.setText(arrayList.get(position).getDateTime());
-                        break;
-                    case "mon":
-                        holder.mon_time_txt.setEnabled(true);
-                        holder.monday_btn.setEnabled(true);
-                        holder.mon_time_txt.setAlpha(1);
-                        holder.monday_btn.setAlpha(1);
-                        holder.mon_time_txt.setText(arrayList.get(position).getDateTime());
-//                        arrayList.get(position).setDateTime(holder.mon_time_txt.getText().toString());
-                        break;
-                    case "tue":
-                        holder.tues_time_txt.setEnabled(true);
-                        holder.tuesday_btn.setEnabled(true);
-                        holder.tues_time_txt.setAlpha(1);
-                        holder.tuesday_btn.setAlpha(1);
-                        holder.tues_time_txt.setText(arrayList.get(position).getDateTime());
-//                        arrayList.get(position).setDateTime(holder.tues_time_txt.getText().toString());
-                        break;
-                    case "wed":
-                        holder.wed_time_txt.setEnabled(true);
-                        holder.wednesday_btn.setEnabled(true);
-                        holder.wed_time_txt.setAlpha(1);
-                        holder.wednesday_btn.setAlpha(1);
-                        holder.wed_time_txt.setText(arrayList.get(position).getDateTime());
-//                        arrayList.get(position).setDateTime(holder.wed_time_txt.getText().toString());
-                        break;
-                    case "thu":
-                        holder.thur_time_txt.setEnabled(true);
-                        holder.thursday_btn.setEnabled(true);
-                        holder.thur_time_txt.setAlpha(1);
-                        holder.thursday_btn.setAlpha(1);
-                        holder.thur_time_txt.setText(arrayList.get(position).getDateTime());
-//                        arrayList.get(position).setDateTime(holder.thur_time_txt.getText().toString());
-                        break;
-                    case "fri":
-                        holder.fri_time_txt.setEnabled(true);
-                        holder.friday_btn.setEnabled(true);
-                        holder.fri_time_txt.setAlpha(1);
-                        holder.friday_btn.setAlpha(1);
-                        holder.fri_time_txt.setText(arrayList.get(position).getDateTime());
-//                        arrayList.get(position).setDateTime(holder.fri_time_txt.getText().toString());
-                        break;
-                    case "sat":
-                        holder.sat_time_txt.setEnabled(true);
-                        holder.saturday_btn.setEnabled(true);
-                        holder.sat_time_txt.setAlpha(1);
-                        holder.saturday_btn.setAlpha(1);
-                        holder.sat_time_txt.setText(arrayList.get(position).getDateTime());
-//                        arrayList.get(position).setDateTime(holder.sat_time_txt.getText().toString());
-                        break;
-                    default:
+        String[] spiltPipes = arrayList.get(position).getSchedule().split("\\|");
+        String[] spiltComma;
+        String[] spiltDash;
+        Log.d("spilt", "" + spiltPipes.toString());
+        for (int i = 0; i < spiltPipes.length; i++) {
+            spiltComma = spiltPipes[i].split("\\,");
+            spiltDash = spiltComma[1].split("\\-");
+            calculateHours(spiltDash[0], spiltDash[1]);
+            arrayList.get(position).setDateTime(spiltDash[0]);
+            Log.d("DateTime", spiltDash[0]);
+            switch (spiltComma[0]) {
+                case "sun":
+                    holder.sun_time_txt.setEnabled(true);
+                    holder.sunday_btn.setEnabled(true);
+                    holder.sun_time_txt.setAlpha(1);
+                    holder.sunday_btn.setAlpha(1);
+                    holder.sun_time_txt.setText(arrayList.get(position).getDateTime());
+                    break;
+                case "mon":
+                    holder.mon_time_txt.setEnabled(true);
+                    holder.monday_btn.setEnabled(true);
+                    holder.mon_time_txt.setAlpha(1);
+                    holder.monday_btn.setAlpha(1);
+                    holder.mon_time_txt.setText(arrayList.get(position).getDateTime());
+                    break;
+                case "tue":
+                    holder.tues_time_txt.setEnabled(true);
+                    holder.tuesday_btn.setEnabled(true);
+                    holder.tues_time_txt.setAlpha(1);
+                    holder.tuesday_btn.setAlpha(1);
+                    holder.tues_time_txt.setText(arrayList.get(position).getDateTime());
+                    break;
+                case "wed":
+                    holder.wed_time_txt.setEnabled(true);
+                    holder.wednesday_btn.setEnabled(true);
+                    holder.wed_time_txt.setAlpha(1);
+                    holder.wednesday_btn.setAlpha(1);
+                    holder.wed_time_txt.setText(arrayList.get(position).getDateTime());
+                    break;
+                case "thu":
+                    holder.thur_time_txt.setEnabled(true);
+                    holder.thursday_btn.setEnabled(true);
+                    holder.thur_time_txt.setAlpha(1);
+                    holder.thursday_btn.setAlpha(1);
+                    holder.thur_time_txt.setText(arrayList.get(position).getDateTime());
+                    break;
+                case "fri":
+                    holder.fri_time_txt.setEnabled(true);
+                    holder.friday_btn.setEnabled(true);
+                    holder.fri_time_txt.setAlpha(1);
+                    holder.friday_btn.setAlpha(1);
+                    holder.fri_time_txt.setText(arrayList.get(position).getDateTime());
+                    break;
+                case "sat":
+                    holder.sat_time_txt.setEnabled(true);
+                    holder.saturday_btn.setEnabled(true);
+                    holder.sat_time_txt.setAlpha(1);
+                    holder.saturday_btn.setAlpha(1);
+                    holder.sat_time_txt.setText(arrayList.get(position).getDateTime());
+                    break;
+                default:
 
-                }
             }
-            holder.duration_txt.setText(SessionHour + " hr" + ", " + SessionMinit + " min");
-            holder.location_txt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(address));
-                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
-                    mapIntent.setPackage("com.google.android.apps.maps");
-                    mContext.startActivity(mapIntent);
-                }
-            });
         }
+        arrayList.get(position).setDuration("Duration " + SessionHour + " hr " + SessionMinit + " min");
+        holder.duration_txt.setText(arrayList.get(position).getDuration());
+        holder.location_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(address));
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                mContext.startActivity(mapIntent);
+            }
+        });
+    }
 
-        @Override
-        public int getItemCount () {
-            return arrayList.size();
-        }
+    @Override
+    public int getItemCount() {
+        return arrayList.size();
+    }
 
-        public void calculateHours (String time1, String time2){
-            Date date1, date2;
-            int days, hours, min;
-            String hourstr, minstr;
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
-            try {
-                date1 = simpleDateFormat.parse(time1);
-                date2 = simpleDateFormat.parse(time2);
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-                long difference = date2.getTime() - date1.getTime();
-                days = (int) (difference / (1000 * 60 * 60 * 24));
-                hours = (int) ((difference - (1000 * 60 * 60 * 24 * days)) / (1000 * 60 * 60));
-                min = (int) (difference - (1000 * 60 * 60 * 24 * days) - (1000 * 60 * 60 * hours)) / (1000 * 60);
-                hours = (hours < 0 ? -hours : hours);
-                SessionHour = hours;
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    public void calculateHours(String time1, String time2) {
+        Date date1, date2;
+        int days, hours, min;
+        String hourstr, minstr;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
+        try {
+            date1 = simpleDateFormat.parse(time1);
+            date2 = simpleDateFormat.parse(time2);
+
+            long difference = date2.getTime() - date1.getTime();
+            days = (int) (difference / (1000 * 60 * 60 * 24));
+            hours = (int) ((difference - (1000 * 60 * 60 * 24 * days)) / (1000 * 60 * 60));
+            min = (int) (difference - (1000 * 60 * 60 * 24 * days) - (1000 * 60 * 60 * hours)) / (1000 * 60);
+            hours = (hours < 0 ? -hours : hours);
+            SessionHour = hours;
 //            if(min>0){
-                SessionMinit = min;
+            SessionMinit = min;
 //            }else{
 //                SessionMinit=null;
 //            }
 
-                Log.i("======= Hours", " :: " + hours + ":" + min);
+            Log.i("======= Hours", " :: " + hours + ":" + min);
 
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
+
     }
+
+}
