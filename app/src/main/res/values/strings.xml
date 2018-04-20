@@ -2,7 +2,6 @@
     <string name="app_name">ClassSafari</string>
     <string name="search_user">Search anyclass...</string>
     <string name="location">Location</string>
-    <string name="or"> <b>\u2014</b> OR <b>\u2014 </b></string>
     <string name="lets_play">LETS PLAY!</string>
     <string name="lets_study">LETS STUDY!</string>
     <string name="subject">Maths</string>
@@ -18,66 +17,31 @@
     <string name="price">PRICE</string>
     <string name="sort">SORT</string>
     <string name="filter">FILTER</string>
-    <string name="session_name">Session Name</string>
     <string name="tutor">Tutor / Tution Class</string>
-    <string name="start_date">Start Date</string>
-    <string name="end_date">End Date</string>
-    <string name="duration">Duration : 00hr</string>
     <string name="session_detail">Session</string>
     <string name="session_type">Type</string>
     <string name="session_detail_name">Name</string>
-    <string name="session_board">Board</string>
-    <string name="session_standard">Standard</string>
     <string name="session_stream">Stream</string>
-    <string name="total_student">Total Students</string>
-    <string name="address">Address</string>
     <string name="email">Email id</string>
     <string name="phone">Phone</string>
     <string name="session_reviews">Reviews</string>
     <string name="user_name">Felicia Richi Bwown</string>
     <string name="book_session">BOOK SESSION</string>
     <string name="class_search">CLASS SEARCH</string>
-    <string name="family_register1">Registration</string>
     <string name="search_string">Search State, City, Area</string>
     <string name="search_country">India</string>
-    <string name="search_board">Board</string>
-    <string name="search_standard">Standard</string>
     <string name="search_stream">Stream</string>
     <string name="search_MF">M/F</string>
     <string name="search_class">Yoga Classes</string>
-    <string name="user_id">Email</string>
-    <string name="user_pass">Password</string>
-    <string name="register">haven\'t account? <u>Register</u></string>
-    <string name="forgot_pass">Forgot Password</string>
-    <string name="first_name">First Name</string>
-    <string name="last_name">Last Name</string>
-    <string name="phone_no">Phone Number</string>
     <string name="comment_hint">Write Your Comment</string>
     <string name="login"><u><b>Login</b></u></string>
-    <string name="add_Student">Add Child</string>
-    <string name="age">Age</string>
-    <string name="gender">Gender</string>
-    <string name="select">Select From List</string>
-    <string name="add_name">NAME</string>
-    <string name="add_age">AGE</string>
-    <string name="add_gender">GENDER</string>
-    <string name="add_no">PHONE NUMBER</string>
     <string name="sortby">SORT BY</string>
     <string name="most_recent">Most Recent</string>
     <string name="addsession">Add Session</string>
-    <string name="session_time">Session Time</string>
-    <string name="date">Date</string>
-    <string name="time">Time</string>
-    <string name="area">Area</string>
-    <string name="state">State</string>
-    <string name="zipcode">Zipcode</string>
-    <string name="description">Description</string>
-    <string name="alert">Alert</string>
+
     <string name="checkboc_text">All-inclusive price(coupon &amp; wallet applied)</string>
     <string name="payment">Payment</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
     <!--Webservice String-->
@@ -92,4 +56,149 @@
     <!--Network Dialog String-->
     <string name="alert_msg">Alert Msg</string>
     <string name="ok">OK</string>
+
+
+    <!--SafariTeacher-->
+    <string name="or"> <b>\u2014</b> OR <b>\u2014 </b></string>
+    <string name="user_id">Email</string>
+    <string name="user_pass">Password</string>
+    <string name="register_str">Don\’t have an account?</string>
+    <string name="register"><u>Register</u></string>
+    <string name="forgot_pass">Forgot Password?</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="phone_no">Phone Number</string>
+    <string name="family_register1">Registration</string>
+    <string name="forgot">Forgot Password</string>
+    <string name="title_activity_dash_board">DashBoardActivity</string>
+    <string name="session_time">Add Session Time</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="area">Area</string>
+    <string name="state">State</string>
+    <string name="zipcode">Zipcode</string>
+    <string name="description">Description</string>
+    <string name="alert">Alert</string>
+    <string name="session_name">Session Name</string>
+    <string name="session_standard">Standard</string>
+    <string name="search_board">Board</string>
+    <string name="search_standard">Standard</string>
+    <string name="session_board">Board</string>
+    <string name="address">Address</string>
+    <string name="duration">Duration</string>
+    <string name="submit">Submit</string>
+    <string name="name">Name</string>
+    <string name="present">P</string>
+    <string name="absent">A</string>
+    <string name="leave">L</string>
+    <string name="remarks">Remarks</string>
+    <string name="free_radio">Free</string>
+    <string name="paid_radio">Paid</string>
+    <string name="recurring">Recurring</string>
+    <string name="single">Single</string>
+    <string name="academic">Academic</string>
+    <string name="play">Sports</string>
+    <string name="add_Student">Add Family</string>
+    <string name="age">Age</string>
+    <string name="dob">Date of Birth</string>
+    <string name="gender">Gender</string>
+    <string name="select">Select From List</string>
+    <string name="add_name">NAME</string>
+    <string name="add_age">AGE</string>
+    <string name="add_gender">GENDER</string>
+    <string name="add_no">NUMBER</string>
+    <string name="child">CHILD</string>
+    <string name="family_name">Family Name</string>
+    <string name="up">\u2303</string>
+    <string name="down">\u2304</string>
+    <!--string for naigation drawer-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+    <string name="openDrawer">open_drawer</string>
+    <string name="closeDrawer">close_drawer</string>
+    <string name="session_price">Session Price</string>
+    <string name="s_subject">Lesson</string>
+    <string name="batch_time">Time</string>
+    <string name="total_student">Student</string>
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
+    <string name="sports">Spot</string>
+    <string name="add_familyname">Family Name</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Toolbar titles when navigation menu item is selected -->
+    <string-array name="nav_item_activity_titles">
+        <item>Session Calendar</item>
+        <item>Add Session</item>
+        <item>Payment Report</item>
+        <item>Student Attendance</item>
+        <!--<item>Change Password</item>-->
+        <!--<item>Logout</item>-->
+    </string-array>
+
+
+    <string-array name="color">
+        <item>#f2552c</item>
+        <item>#dccc43</item>
+        <item>#3db45c</item>
+    </string-array>
+    <!--Important-->
+    <string name="googleplus_sha">DF:DD:F8:1D:1F:BA:43:06:D3:92:25:F5:39:28:E1:3C:3F:FA:8C:06</string>
+    <string name="facebook_app_id">155683868477558</string>
+    <string name="fb_login_protocol_scheme">fb155683868477558</string>
+
+
+    <!--Payment String-->
+    <string name="strSuccess">Success  </string>
+    <string name="strYourTranSucc">Your Transaction was successful</string>
+    <string name="strValue">Value</string>
+    <string name="strEntMobNum">Enter mobile number   </string>
+    <string name="strStartDate">Start Date</string>
+    <string name="strEndDate">End Date</string>
+    <string name="strShow">Show</string>
+
+    <!--Forgot Screen-->
+    <string name="strEnterRegdMobNum">Enter your registered email address</string>
+    <string name="strRegdMobNum">Registered Email Address</string>
+    <string name="strSendOtp">Send</string>
+    <string name="strConfirmPin">Confirm Pin/Password</string>
+    <string name="strChangePwd">CHANGE PASSWORD</string>
+    <string name="strCancel">CANCEL</string>
+    <string name="strPinPwd">Pin/Password</string>
+    <string name="strPinDoNotMatch">Pin do not match. Please try again</string>
+    <string name="strPinUpdated">Your New Pin has been updated successfully.</string>
+    <string name="strOtpNotMatch">Enter OTP does not match. Please try again</string>
+    <string name="strPlEnterPin">Please enter Pin</string>
+    <string name="strOtpMesgText">Code has been sent to your registered number. Enter the code to verify your account.</string>
+
+    <!-- Session Page String-->
+    <string name="sessionName">Please enter session\'s name.</string>
+    <string name="boardName">Please enter board.</string>
+    <string name="standardName">Please enter standard.</string>
+    <string name="streamName">Please enter stream name.</string>
+    <string name="lessonName">Please enter lesson name.</string>
+    <string name="sessionTime">Please add session\'s time.</string>
+    <string name="sessionAddress">Please enter session\'s address.</string>
+    <string name="sessionArea">Please enter session\'s area.</string>
+    <string name="sessionCity">Please enter session\'s city.</string>
+    <string name="sessionState">Please enter session\'s state.</string>
+    <string name="sessionZipcode">Please enter zipcode.</string>
+    <string name="sessionCapacity">Please enter session\'s capacity.</string>
+    <string name="sessionAmount">Please enter session\'s amount.</string>
+    <string name="Date">Please select session start date and end date should be same.</string>
+
+    <!--Change Passsword String-->
+    <string name="newPassword">Enter New Password</string>
+    <string name="changPassword">Your Password Change Succesfully.</string>
+    <string name="confirmpassword">Enter Confirm Password</string>
+    <string name="currentpassword">Enter Current Password</string>
+
+
+    <!-- Class Detail String-->
+    <string name="blank_value">Please Select Proper Value</string>
+    <string name="location_validation">Please Select Proper Location</string>
+
 </resources>

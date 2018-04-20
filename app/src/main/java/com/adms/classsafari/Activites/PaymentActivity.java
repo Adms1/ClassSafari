@@ -3,12 +3,11 @@ package com.adms.classsafari.Activites;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
-import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.adms.classsafari.R;
@@ -265,7 +264,7 @@ public class PaymentActivity extends AppCompatActivity {
                 JSONObject resposeData = new JSONObject(jsonResponse);
                 Log.d(TAG, "ResponseJson: " + resposeData.toString());
 
-                Intent intent = new Intent(getApplicationContext(), LoginScreen.class);
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 intent.putExtra("transactionId", resposeData.getString("transaction_id"));
                 intent.putExtra("responseCode", resposeData.getString("response_code"));
                 intent.putExtra("amount", resposeData.getString("amount"));

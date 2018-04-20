@@ -145,6 +145,7 @@
                     android:orientation="vertical">
 
                     <MultiAutoCompleteTextView
+                        android:id="@+id/multiautocompe"
                         android:layout_width="@dimen/_180sdp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/round_edittext"

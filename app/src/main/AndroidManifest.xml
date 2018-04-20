@@ -2,9 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.adms.classsafari">
 
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <supports-screens
         android:anyDensity="true"
@@ -22,15 +28,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Activites.LoginScreen"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".Activites.SearchByUser"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+            <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -43,14 +46,58 @@
             android:name=".Activites.ClassSearchScreen"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activites.RegistrationScreen"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".Activites.AddStudentScreen"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activites.SessionName1" />
         <activity android:name=".Activites.AddSessionScreen" />
         <activity android:name=".Activites.PaymentActivity"></activity>
+
+        <!--Safari-->
+        <activity
+            android:name=".Activites.LoginActivity"
+            android:configChanges="keyboardHidden"
+            android:screenOrientation="portrait">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <receiver
+            android:name=".BroadcastReceiver.IncomingSms"
+            android:exported="true"
+            android:permission="android.permission.BROADCAST_SMS">
+            <intent-filter android:priority="5822">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".Activites.RegistrationActivity" />
+        <activity
+            android:name=".Activites.DashBoardActivity"
+            android:configChanges="keyboardHidden|screenSize|orientation"
+            android:label="@string/title_activity_dash_board"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!--<meta-data-->
+        <!--android:name="com.facebook.sdk.ApplicationId"-->
+        <!--android:value="@string/facebook_app_id" />-->
+
+        <!--<activity-->
+        <!--android:name="com.facebook.FacebookActivity"-->
+        <!--android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"-->
+        <!--android:label="@string/app_name" />-->
+        <!--<activity-->
+        <!--android:name="com.facebook.CustomTabActivity"-->
+        <!--android:exported="true">-->
+        <!--<intent-filter>-->
+        <!--<action android:name="android.intent.action.VIEW" />-->
+
+        <!--<category android:name="android.intent.category.DEFAULT" />-->
+        <!--<category android:name="android.intent.category.BROWSABLE" />-->
+
+        <!--<data android:scheme="@string/fb_login_protocol_scheme" />-->
+        <!--</intent-filter>-->
+        <!--</activity>-->
     </application>
 
 </manifest>

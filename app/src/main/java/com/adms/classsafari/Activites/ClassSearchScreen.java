@@ -3,14 +3,14 @@ package com.adms.classsafari.Activites;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.Utils;
-import com.adms.classsafari.Model.MainClassModel;
+import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivityClassSearchScreenBinding;
 
@@ -25,7 +25,7 @@ public class ClassSearchScreen extends AppCompatActivity {
 
     ActivityClassSearchScreenBinding classSearchScreenBinding;
     Context mContext;
-    MainClassModel dataResponse;
+    SessionDetailModel dataResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +76,9 @@ public class ClassSearchScreen extends AppCompatActivity {
         if (Utils.checkNetwork(mContext)) {
 
             Utils.showDialog(mContext);
-            ApiHandler.getApiService().get_Board(getBoardDetail(), new retrofit.Callback<MainClassModel>() {
+            ApiHandler.getApiService().get_Board(getBoardDetail(), new retrofit.Callback<SessionDetailModel>() {
                 @Override
-                public void success(MainClassModel boardInfo, Response response) {
+                public void success(SessionDetailModel boardInfo, Response response) {
                     Utils.dismissDialog();
                     if (boardInfo == null) {
                         Utils.ping(mContext, getString(R.string.something_wrong));
@@ -135,9 +135,9 @@ public class ClassSearchScreen extends AppCompatActivity {
         if (Utils.checkNetwork(mContext)) {
 
 //            Utils.showDialog(mContext);
-            ApiHandler.getApiService().get_Standard(getstandardDetail(), new retrofit.Callback<MainClassModel>() {
+            ApiHandler.getApiService().get_Standard(getstandardDetail(), new retrofit.Callback<SessionDetailModel>() {
                 @Override
-                public void success(MainClassModel boardInfo, Response response) {
+                public void success(SessionDetailModel boardInfo, Response response) {
                     Utils.dismissDialog();
                     if (boardInfo == null) {
                         Utils.ping(mContext, getString(R.string.something_wrong));
@@ -195,9 +195,9 @@ public class ClassSearchScreen extends AppCompatActivity {
         if (Utils.checkNetwork(mContext)) {
 
 //            Utils.showDialog(mContext);
-            ApiHandler.getApiService().get_Stream(getStreamDeatil(), new retrofit.Callback<MainClassModel>() {
+            ApiHandler.getApiService().get_Stream(getStreamDeatil(), new retrofit.Callback<SessionDetailModel>() {
                 @Override
-                public void success(MainClassModel boardInfo, Response response) {
+                public void success(SessionDetailModel boardInfo, Response response) {
                     Utils.dismissDialog();
                     if (boardInfo == null) {
                         Utils.ping(mContext, getString(R.string.something_wrong));

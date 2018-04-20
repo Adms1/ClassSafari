@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/list_line"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <TextView
+            android:id="@+id/no_txt"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_weight="0.3"
+            android:gravity="center_vertical|center"
+            android:paddingLeft="@dimen/_3sdp"
+            android:text="01"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/_10sdp" />
+
+        <TextView
+            android:id="@+id/name_txt"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_weight="1.5"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/_5sdp"
+            android:text="Megha Shah"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/_10sdp" />
+
+        <TextView
+            android:id="@+id/phoneno_txt"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_weight="0.79"
+            android:gravity="center|center_vertical"
+            android:paddingLeft="@dimen/_1sdp"
+            android:text="7843568412"
+            android:drawableLeft="@drawable/add_family_mob"
+            android:textColor="@color/blue"
+            android:textAlignment="center"
+            android:textSize="@dimen/_10sdp" />
+    </LinearLayout>
+</LinearLayout>

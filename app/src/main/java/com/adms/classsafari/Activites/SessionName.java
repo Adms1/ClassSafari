@@ -4,37 +4,42 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.adms.classsafari.Adapter.ClassDetailAdapter;
 import com.adms.classsafari.Adapter.SessionDetailAdapter;
+import com.adms.classsafari.AppConstant.ApiHandler;
+import com.adms.classsafari.AppConstant.Utils;
+import com.adms.classsafari.Model.Session.SessionDetailModel;
+import com.adms.classsafari.Model.Session.sessionDataModel;
 import com.adms.classsafari.R;
-import com.adms.classsafari.databinding.ActivitySessionNameBinding;
 import com.adms.classsafari.databinding.ActivitySessionNameNewBinding;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class SessionName extends AppCompatActivity {
     ActivitySessionNameNewBinding sessionNameBinding;
     Context mContext;
     SessionDetailAdapter sessionDetailAdapter;
-    ArrayList<String> arrayList;
+    List<sessionDataModel> arrayList;
     Dialog confimDialog;
     TextView cancel_txt, confirm_txt;
+    String sessionIDStr;
+    SessionDetailModel dataResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,20 +47,18 @@ public class SessionName extends AppCompatActivity {
         sessionNameBinding = DataBindingUtil.setContentView(this, R.layout.activity_session_name_new);
         mContext = SessionName.this;
 
+        sessionIDStr = getIntent().getStringExtra("sessionID");
         init();
         setListner();
     }
 
     public void init() {
-        arrayList = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            arrayList.add(String.valueOf(i));
-        }
-        sessionDetailAdapter = new SessionDetailAdapter(mContext, arrayList);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, OrientationHelper.VERTICAL, false);
-        sessionNameBinding.sessionListRecView.setLayoutManager(mLayoutManager);
-        sessionNameBinding.sessionListRecView.setItemAnimator(new DefaultItemAnimator());
-        sessionNameBinding.sessionListRecView.setAdapter(sessionDetailAdapter);
+//        arrayList = new ArrayList<>();
+//        for (int i = 0; i < 10; i++) {
+//            arrayList.add(String.valueOf(i));
+//        }
+        callSessionListApi();
+
     }
 
     public void setListner() {
@@ -113,7 +116,7 @@ public class SessionName extends AppCompatActivity {
         confirm_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent inLogin=new Intent(SessionName.this,LoginScreen.class);
+                Intent inLogin = new Intent(SessionName.this, LoginActivity.class);
                 inLogin.putExtra("flag", "1");
                 startActivity(inLogin);
             }
@@ -124,4 +127,68 @@ public class SessionName extends AppCompatActivity {
 
 
     }
+
+    //Use for SessionList
+    public void callSessionListApi() {
+        if (Utils.checkNetwork(mContext)) {
+
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_SessionBySessionID(getSessionListDetail(), new retrofit.Callback<SessionDetailModel>() {
+                @Override
+                public void success(SessionDetailModel sessionDetailInfo, Response response) {
+                    Utils.dismissDialog();
+                    if (sessionDetailInfo == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionDetailInfo.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionDetailInfo.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.ping(mContext, getString(R.string.false_msg));
+                        return;
+                    }
+                    if (sessionDetailInfo.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.dismissDialog();
+                        if (sessionDetailInfo.getData().size() > 0) {
+                            dataResponse = sessionDetailInfo;
+                            setData();
+                        }
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getSessionListDetail() {
+        Map<String, String> map = new HashMap<>();
+        map.put("SessionID", sessionIDStr);
+        return map;
+    }
+
+    public void setData() {
+        arrayList=new ArrayList<sessionDataModel>();
+
+        for (int i = 0; i < dataResponse.getData().size(); i++) {
+            arrayList.add(dataResponse.getData().get(i));
+        }
+
+        sessionDetailAdapter = new SessionDetailAdapter(mContext, arrayList);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, OrientationHelper.VERTICAL, false);
+        sessionNameBinding.sessionListRecView.setLayoutManager(mLayoutManager);
+        sessionNameBinding.sessionListRecView.setItemAnimator(new DefaultItemAnimator());
+        sessionNameBinding.sessionListRecView.setAdapter(sessionDetailAdapter);
+    }
+
 }

@@ -4,10 +4,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +18,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,19 +29,17 @@ import com.adms.classsafari.Adapter.PopularClassListAdapter;
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.BottomNavigationViewHelper;
-import com.adms.classsafari.Model.ClassDetailModel;
-import com.adms.classsafari.Model.MainClassModel;
+import com.adms.classsafari.Model.Session.SessionDetailModel;
+import com.adms.classsafari.Model.Session.sessionDataModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivityClassDeatilScreenBinding;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -58,10 +59,12 @@ public class ClassDeatilScreen extends AppCompatActivity {
     TextView done;
     CrystalRangeSeekbar rangeSeekbar;
     TextView price_range1_txt, price_range2_txt;
-    List<ClassDetailModel> sessionfullDetailList;
-    String subjectStr, boardStr, standardStr, streamStr;
+    //    List<ClassDetailModel> sessionfullDetailList;
+    String subjectStr, boardStr, standardStr, streamStr, locationStr, classNameStr;
     int SessionHour = 0;
     Integer SessionMinit = 0;
+    SessionDetailModel dataResponse;
+    List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
 
     @Override
 
@@ -79,13 +82,17 @@ public class ClassDeatilScreen extends AppCompatActivity {
         standardStr = getIntent().getStringExtra("standard");
         streamStr = getIntent().getStringExtra("stream");
         boardStr = getIntent().getStringExtra("board");
+        locationStr = Utils.getPref(mContext, "location");
+        classNameStr = Utils.getPref(mContext, "sessionName");
         BottomNavigationViewHelper.removeShiftMode(binding.bottomNavigationView);
-        callClassDetailApi();
-//        binding.subjectTxt.setText(subjectStr);
+        //        binding.subjectTxt.setText(subjectStr);
 //        binding.boardTxt.setText("\u2022 "+boardStr);
 //        binding.standardTxt.setText("\u2022 "+standardStr);
 //        binding.streamTxt.setText("\u2022 "+streamStr);
 
+//        binding.subjectTxt.setText(classNameStr);
+//        binding.cityTxt.setText(locationStr);
+        callSessionListApi();
     }
 
     public void setListner() {
@@ -124,6 +131,57 @@ public class ClassDeatilScreen extends AppCompatActivity {
             public void onClick(View view) {
                 Intent insession = new Intent(mContext, ClassSearchScreen.class);
                 startActivity(insession);
+            }
+        });
+
+        binding.multiautocompe.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                String str = binding.multiautocompe.getText().toString();
+                if (!str.equalsIgnoreCase("")) {
+                    String[] spilt = adapterView.getItemAtPosition(i).toString().split("\\,");
+
+                    for (sessionDataModel arrayObj : dataResponse.getData()) {
+                        if (arrayObj.getAddressCity().equalsIgnoreCase(locationStr.trim()) && arrayObj.getSessionName().equalsIgnoreCase(classNameStr.trim())) {
+                            if (arrayObj.getRegionName().contains(spilt[0])) {
+                                filterFinalArray.add(arrayObj);
+
+                            }
+                        }
+                    }
+                    Log.d("FilterArray", "" + filterFinalArray.size());
+                    fillData(filterFinalArray);
+                } else {
+
+                }
+            }
+        });
+        binding.multiautocompe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                binding.multiautocompe.showDropDown();
+                String str = binding.multiautocompe.getText().toString();
+                if (str.equalsIgnoreCase("")) {
+                    filterFinalArray = new ArrayList<sessionDataModel>();
+                    for (sessionDataModel arrayObj : dataResponse.getData()) {
+                        if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) && arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr)) {
+                            filterFinalArray.add(arrayObj);
+                        }
+                    }
+                    fillData(filterFinalArray);
+                }else{
+                    for (sessionDataModel arrayObj : dataResponse.getData()) {
+                        if (arrayObj.getAddressCity().equalsIgnoreCase(locationStr.trim()) && arrayObj.getSessionName().equalsIgnoreCase(classNameStr.trim())) {
+                            if (arrayObj.getRegionName().contains(str)) {
+                                filterFinalArray.add(arrayObj);
+
+                            }
+                        }
+                    }
+                    Log.d("FilterArray", "" + filterFinalArray.size());
+                    fillData(filterFinalArray);
+                }
             }
         });
     }
@@ -244,13 +302,15 @@ public class ClassDeatilScreen extends AppCompatActivity {
         sortDialog.show();
     }
 
-    //Use for get CLass Detail
-    public void callClassDetailApi() {
+
+    //Use for SessionList
+    public void callSessionListApi() {
         if (Utils.checkNetwork(mContext)) {
+
             Utils.showDialog(mContext);
-            ApiHandler.getApiService().get_SessionByEmployeeTypeID(getsessionDetail(), new retrofit.Callback<MainClassModel>() {
+            ApiHandler.getApiService().get_SessionList(getSessionListDetail(), new retrofit.Callback<SessionDetailModel>() {
                 @Override
-                public void success(MainClassModel sessionInfo, Response response) {
+                public void success(SessionDetailModel sessionInfo, Response response) {
                     Utils.dismissDialog();
                     if (sessionInfo == null) {
                         Utils.ping(mContext, getString(R.string.something_wrong));
@@ -261,24 +321,22 @@ public class ClassDeatilScreen extends AppCompatActivity {
                         return;
                     }
                     if (sessionInfo.getSuccess().equalsIgnoreCase("false")) {
-                        Utils.dismissDialog();
-                        if (sessionInfo.getData() != null) {
-                            Utils.ping(mContext, getString(R.string.false_msg));
-                        }
+                        Utils.ping(mContext, getString(R.string.false_msg));
                         return;
                     }
                     if (sessionInfo.getSuccess().equalsIgnoreCase("True")) {
                         Utils.dismissDialog();
-                        if (sessionInfo.getData() != null) {
-                            sessionfullDetailList = sessionInfo.getData();
-                            if (sessionfullDetailList.size() > 0) {
-                                binding.recViewLinear.setVisibility(View.VISIBLE);
-                                binding.noRecordTxt.setVisibility(View.GONE);
-                                fillData();
-                            } else {
-                                binding.recViewLinear.setVisibility(View.GONE);
-                                binding.noRecordTxt.setVisibility(View.VISIBLE);
+                        if (sessionInfo.getData().size() > 0) {
+                            dataResponse = sessionInfo;
+                            fillArea();
+
+                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) && arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr)) {
+                                    filterFinalArray.add(arrayObj);
+                                }
                             }
+                            fillData(filterFinalArray);
                         }
                     }
                 }
@@ -296,39 +354,46 @@ public class ClassDeatilScreen extends AppCompatActivity {
         }
     }
 
-    private Map<String, String> getsessionDetail() {
+    private Map<String, String> getSessionListDetail() {
         Map<String, String> map = new HashMap<>();
-        map.put("EmployeeTypeID", "1");
         return map;
     }
 
-    public void fillData() {
-        for (int i = 0; i < sessionfullDetailList.size(); i++) {
-            sessionfullDetailList.get(i).setSessionAmount(String.valueOf(Math.round(Float.parseFloat(sessionfullDetailList.get(i).getSessionAmount()))));
-            if (sessionfullDetailList.get(i).getSessionAmount().equalsIgnoreCase("0")) {
-                sessionfullDetailList.get(i).setSessionAmount("Free");
+    public void fillData(List<sessionDataModel> array) {
+        for (int i = 0; i < array.size(); i++) {
+            if (!array.get(i).getSessionAmount().equalsIgnoreCase("Free")) {
+                array.get(i).setSessionAmount(String.valueOf(Math.round(Float.parseFloat(array.get(i).getSessionAmount()))));
+                if (array.get(i).getSessionAmount().equalsIgnoreCase("0")) {
+                    array.get(i).setSessionAmount("Free");
+                }
             }
-
-//            String[] spiltPipes = sessionfullDetailList.get(i).getSchedule().split("\\|");
-//            String[] spiltComma;
-//            String[] spiltDash;
-//            Log.d("spilt", "" + spiltPipes.toString());
-//            for (int j = 0; j < spiltPipes.length; j++) {
-//                spiltComma = spiltPipes[j].split("\\,");
-//                spiltDash = spiltComma[1].split("\\-");
-////                calculateHours(spiltDash[0], spiltDash[1]);
-//                sessionfullDetailList.get(i).setDay(spiltComma[0]);
-//                sessionfullDetailList.get(i).setDateTime(spiltDash[0]);
-//                Log.d("DateTime", spiltDash[0]);
-//            }
-//            Log.d("Day",sessionfullDetailList.get(i).getDay());
         }
-
-        classDetailAdapter = new ClassDetailAdapter(mContext, sessionfullDetailList);
+        classDetailAdapter = new ClassDetailAdapter(mContext, array);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         binding.classListRecView.setLayoutManager(mLayoutManager);
         binding.classListRecView.setItemAnimator(new DefaultItemAnimator());
         binding.classListRecView.setAdapter(classDetailAdapter);
 
     }
+
+    public void fillArea() {
+        ArrayList<String> AreaName = new ArrayList<String>();
+
+        for (int j = 0; j < dataResponse.getData().size(); j++) {
+            if(locationStr.equalsIgnoreCase(dataResponse.getData().get(j).getAddressCity())
+                    &&classNameStr.equalsIgnoreCase(dataResponse.getData().get(j).getSessionName()))
+            {
+                AreaName.add(dataResponse.getData().get(j).getRegionName());
+            }
+        }
+        HashSet<String> hashSet = new HashSet<String>();
+        hashSet.addAll(AreaName);
+        AreaName.clear();
+        AreaName.addAll(hashSet);
+        ArrayAdapter<String> adapterTerm = new ArrayAdapter<String>(mContext, R.layout.autocomplete_layout, AreaName);
+        binding.multiautocompe.setThreshold(1);
+        binding.multiautocompe.setAdapter(adapterTerm);
+        binding.multiautocompe.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+    }
+
 }

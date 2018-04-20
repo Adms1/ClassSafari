@@ -1,13 +1,16 @@
 package com.adms.classsafari.AppConstant;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +20,12 @@ import android.widget.Toast;
 
 import com.adms.classsafari.R;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -30,38 +37,6 @@ public class Utils {
     public static Dialog dialog;
     public static final String MyPREFERENCES = "MyPrefs";
     public static SharedPreferences sharedpreferences;
-
-    public static String getTodaysDate() {
-        final Calendar calendar = Calendar.getInstance();
-        int yy = calendar.get(Calendar.YEAR);
-        int mm = calendar.get(Calendar.MONTH) + 1;
-        int dd = calendar.get(Calendar.DAY_OF_MONTH);
-
-
-        String mDAY, mMONTH, mYEAR;
-
-        mDAY = Integer.toString(dd);
-        mMONTH = Integer.toString(mm);
-        mYEAR = Integer.toString(yy);
-
-        if (dd < 10) {
-            mDAY = "0" + mDAY;
-        }
-        if (mm < 10) {
-            mMONTH = "0" + mMONTH;
-        }
-
-        return mDAY + "/" + mMONTH + "/" + mYEAR;
-    }
-
-    public static String getCurrentTime() {
-
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat mdformat = new SimpleDateFormat("HH:mm");
-        String strDate = mdformat.format(calendar.getTime());
-        Log.d("Currenttime", strDate);
-        return strDate;
-    }
 
     public static boolean checkNetwork(Context context) {
         boolean wifiAvailable = false;
@@ -77,6 +52,17 @@ public class Utils {
                     mobileAvailable = true;
         }
         return wifiAvailable || mobileAvailable;
+    }
+
+    public static boolean isNetworkConnected(Context ctxt) {
+        ConnectivityManager cm = (ConnectivityManager) ctxt
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        if (ni == null) {
+            // There are no active networks.
+            return false;
+        } else
+            return true;
     }
 
     public static void showCustomDialog(String title, String str, Activity activity) {
@@ -133,6 +119,39 @@ public class Utils {
             }
     }
 
+
+    public static String getTodaysDate() {
+        final Calendar calendar = Calendar.getInstance();
+        int yy = calendar.get(Calendar.YEAR);
+        int mm = calendar.get(Calendar.MONTH) + 1;
+        int dd = calendar.get(Calendar.DAY_OF_MONTH);
+
+
+        String mDAY, mMONTH, mYEAR;
+
+        mDAY = Integer.toString(dd);
+        mMONTH = Integer.toString(mm);
+        mYEAR = Integer.toString(yy);
+
+        if (dd < 10) {
+            mDAY = "0" + mDAY;
+        }
+        if (mm < 10) {
+            mMONTH = "0" + mMONTH;
+        }
+
+        return mDAY + "/" + mMONTH + "/" + mYEAR;
+    }
+
+    public static String getCurrentTime() {
+
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat mdformat = new SimpleDateFormat("HH:mm:a");
+        String strDate = mdformat.format(calendar.getTime());
+        Log.d("Currenttime", strDate);
+        return strDate;
+    }
+
     public static void ping(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
@@ -162,6 +181,68 @@ public class Utils {
         sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         String value = sharedpreferences.getString(key, "");
         return value;
+    }
+
+    public static boolean getAge(String date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        int age = 0;
+        try {
+            Date date1 = dateFormat.parse(date);
+            Calendar now = Calendar.getInstance();
+            Calendar dob = Calendar.getInstance();
+            dob.setTime(date1);
+            if (dob.after(now)) {
+//                throw new IllegalArgumentException("Can't be born in the future");
+            }
+            int year1 = now.get(Calendar.YEAR);
+            int year2 = dob.get(Calendar.YEAR);
+            age = year1 - year2;
+            int month1 = now.get(Calendar.MONTH);
+            int month2 = dob.get(Calendar.MONTH);
+            if (month2 > month1) {
+                age--;
+            } else if (month1 == month2) {
+                int day1 = now.get(Calendar.DAY_OF_MONTH);
+                int day2 = dob.get(Calendar.DAY_OF_MONTH);
+                if (day2 > day1) {
+                    age--;
+                }
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return age >= 5;
+    }
+
+    public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
+    public static boolean checkAndRequestPermissions(final Context context) {
+        int permissionSendMessage = ContextCompat.checkSelfPermission(context,
+                Manifest.permission.SEND_SMS);
+        int receiveSMS = ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_SMS);
+        int readSMS = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS);
+        int callPhone=ContextCompat.checkSelfPermission(context,Manifest.permission.CALL_PHONE);
+        List<String> listPermissionsNeeded = new ArrayList<>();
+
+        if(callPhone!= PackageManager.PERMISSION_GRANTED){
+            listPermissionsNeeded.add(Manifest.permission.CALL_PHONE);
+        }
+        if (receiveSMS != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.RECEIVE_MMS);
+        }
+        if (readSMS != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_SMS);
+        }
+        if (permissionSendMessage != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.SEND_SMS);
+        }
+        if (!listPermissionsNeeded.isEmpty()) {
+            android.support.v13.app.ActivityCompat.requestPermissions((Activity) context,
+                    listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),
+                    REQUEST_ID_MULTIPLE_PERMISSIONS);
+            return false;
+        }
+        return true;
     }
 
 }

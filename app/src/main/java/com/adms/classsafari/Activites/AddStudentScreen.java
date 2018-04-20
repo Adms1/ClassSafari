@@ -49,7 +49,7 @@ public class AddStudentScreen extends AppCompatActivity {
         addStudentScreenBinding.back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent inback = new Intent(mContext, RegistrationScreen.class);
+                Intent inback = new Intent(mContext, RegistrationActivity.class);
                 inback.putExtra("flag", flag);
                 startActivity(inback);
             }
@@ -65,7 +65,7 @@ public class AddStudentScreen extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent inback = new Intent(mContext, RegistrationScreen.class);
+        Intent inback = new Intent(mContext, RegistrationActivity.class);
         inback.putExtra("flag", flag);
         startActivity(inback);
     }

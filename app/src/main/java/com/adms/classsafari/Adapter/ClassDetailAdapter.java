@@ -9,19 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.adms.classsafari.Activites.SessionName;
-import com.adms.classsafari.Activites.SessionName1;
-import com.adms.classsafari.Model.ClassDetailModel;
+import com.adms.classsafari.Model.Session.sessionDataModel;
 import com.adms.classsafari.R;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -32,13 +27,13 @@ import java.util.List;
 public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.MyViewHolder> {
 
     private Context mContext;
-    List<ClassDetailModel> arrayList;
+    List<sessionDataModel> arrayList;
     int SessionHour = 0;
     Integer SessionMinit = 0;
 
     String address;
 
-    public ClassDetailAdapter(Context mContext, List<ClassDetailModel> arrayList) {
+    public ClassDetailAdapter(Context mContext, List<sessionDataModel> arrayList) {
         this.mContext = mContext;
         this.arrayList = arrayList;
 //        setHasStableIds(true);
@@ -89,7 +84,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
         address = arrayList.get(position).getAddressLine1() +
                 "," + arrayList.get(position).getRegionName() +
@@ -105,10 +100,10 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
             @Override
             public void onClick(View view) {
                 Intent inSession = new Intent(mContext, SessionName.class);
+                inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
                 mContext.startActivity(inSession);
             }
         });
-
 
 
         String[] spiltPipes = arrayList.get(position).getSchedule().split("\\|");
