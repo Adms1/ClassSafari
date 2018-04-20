@@ -161,27 +161,6 @@ public class ClassDeatilScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 binding.multiautocompe.showDropDown();
-                String str = binding.multiautocompe.getText().toString();
-                if (str.equalsIgnoreCase("")) {
-                    filterFinalArray = new ArrayList<sessionDataModel>();
-                    for (sessionDataModel arrayObj : dataResponse.getData()) {
-                        if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) && arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr)) {
-                            filterFinalArray.add(arrayObj);
-                        }
-                    }
-                    fillData(filterFinalArray);
-                }else{
-                    for (sessionDataModel arrayObj : dataResponse.getData()) {
-                        if (arrayObj.getAddressCity().equalsIgnoreCase(locationStr.trim()) && arrayObj.getSessionName().equalsIgnoreCase(classNameStr.trim())) {
-                            if (arrayObj.getRegionName().contains(str)) {
-                                filterFinalArray.add(arrayObj);
-
-                            }
-                        }
-                    }
-                    Log.d("FilterArray", "" + filterFinalArray.size());
-                    fillData(filterFinalArray);
-                }
             }
         });
     }
