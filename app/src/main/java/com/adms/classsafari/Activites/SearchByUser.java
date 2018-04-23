@@ -53,6 +53,12 @@ public class SearchByUser extends AppCompatActivity {
                 startActivity(inClassDetail);
             }
         });
+        searchByUserBinding.searchClassEdt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                searchByUserBinding.searchClassEdt.showDropDown();
+            }
+        });
         searchByUserBinding.searchTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,12 +98,10 @@ public class SearchByUser extends AppCompatActivity {
                 startActivity(inClassDetail);
             }
         });
-        searchByUserBinding.locationEdt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        searchByUserBinding.locationEdt.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFocusChange(View view, boolean b) {
-                if(b){
-                    searchByUserBinding.locationEdt.showDropDown();
-                }
+            public void onClick(View view) {
+                searchByUserBinding.locationEdt.showDropDown();
             }
         });
 

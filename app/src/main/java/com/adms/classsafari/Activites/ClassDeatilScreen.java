@@ -12,6 +12,8 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -65,6 +67,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
     Integer SessionMinit = 0;
     SessionDetailModel dataResponse;
     List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+    boolean arraynull = false;
 
     @Override
 
@@ -137,14 +140,18 @@ public class ClassDeatilScreen extends AppCompatActivity {
         binding.multiautocompe.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                binding.inforTxt.setVisibility(View.GONE);
+                if (arraynull) {
+                    filterFinalArray = new ArrayList<sessionDataModel>();
+                }
                 String str = binding.multiautocompe.getText().toString();
                 if (!str.equalsIgnoreCase("")) {
-                    String[] spilt = adapterView.getItemAtPosition(i).toString().split("\\,");
+                    arraynull = false;
+                    String[] spilt = adapterView.getItemAtPosition(i).toString().trim().split("\\,");
 
                     for (sessionDataModel arrayObj : dataResponse.getData()) {
-                        if (arrayObj.getAddressCity().equalsIgnoreCase(locationStr.trim()) && arrayObj.getSessionName().equalsIgnoreCase(classNameStr.trim())) {
-                            if (arrayObj.getRegionName().contains(spilt[0])) {
+                        if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) && arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim())) {
+                            if (arrayObj.getRegionName().trim().equalsIgnoreCase(spilt[0])) {
                                 filterFinalArray.add(arrayObj);
 
                             }
@@ -161,6 +168,49 @@ public class ClassDeatilScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 binding.multiautocompe.showDropDown();
+            }
+        });
+
+        binding.multiautocompe.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int count) {
+
+                Log.d("valueOf OnTextChange", "" + charSequence + i + i1);
+                if (charSequence.length() == 0) {
+                    binding.inforTxt.setVisibility(View.VISIBLE);
+                    List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                    for (sessionDataModel arrayObj : dataResponse.getData()) {
+                        if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) && arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim())) {
+                            filterFinalArray.add(arrayObj);
+                        }
+                    }
+                    fillData(filterFinalArray);
+                    arraynull = true;
+                } else {
+                    String[] spilt = charSequence.toString().trim().split("\\,");
+                    Log.d("spiltOnText", "" + spilt.length);
+                    List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                    for (int k = 0; k < spilt.length; k++) {
+                        for (sessionDataModel arrayObj:dataResponse.getData()){
+                            if(arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim())&&arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim())){
+                               if(arrayObj.getRegionName().trim().equalsIgnoreCase(spilt[k])){
+                                   filterFinalArray.add(arrayObj);
+                               }
+                            }
+
+                        }
+                        fillData(filterFinalArray);
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
             }
         });
     }
@@ -311,7 +361,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
 
                             List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                             for (sessionDataModel arrayObj : dataResponse.getData()) {
-                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) && arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr)) {
+                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) && arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim())) {
                                     filterFinalArray.add(arrayObj);
                                 }
                             }
@@ -359,9 +409,8 @@ public class ClassDeatilScreen extends AppCompatActivity {
         ArrayList<String> AreaName = new ArrayList<String>();
 
         for (int j = 0; j < dataResponse.getData().size(); j++) {
-            if(locationStr.equalsIgnoreCase(dataResponse.getData().get(j).getAddressCity())
-                    &&classNameStr.equalsIgnoreCase(dataResponse.getData().get(j).getSessionName()))
-            {
+            if (locationStr.trim().equalsIgnoreCase(dataResponse.getData().get(j).getAddressCity().trim())
+                    && classNameStr.trim().equalsIgnoreCase(dataResponse.getData().get(j).getSessionName().trim())) {
                 AreaName.add(dataResponse.getData().get(j).getRegionName());
             }
         }

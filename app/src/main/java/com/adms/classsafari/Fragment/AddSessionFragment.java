@@ -64,6 +64,10 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
     AlertListAdapter alertListAdapter;
 
     //Use for AddSession Time Dialog
+
+    static boolean checkTime_sun = false, checkTime_mon = false,
+            checkTime_tue = false, checkTime_wed = false, checkTime_thu = false, checkTime_fri = false, checkTime_sat = false;
+
     TextView start_date_txt, end_date_txt;
     static TextView sun_start_time_txt, sun_end_time_txt, mon_start_time_txt, mon_end_time_txt, tue_start_time_txt,
             tue_end_time_txt, wed_start_time_txt, wed_end_time_txt, thu_start_time_txt, thu_end_time_txt, fri_end_time_txt,
@@ -570,244 +574,121 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                 scheduleArray = new ArrayList<>();
                 newEnteryArray = new ArrayList<>();
                 scheduleStr = "";
+                if (!checkTime_sun && !checkTime_mon && !checkTime_thu && !checkTime_wed && !checkTime_tue && !checkTime_fri && !checkTime_sat) {
+                    if (!sun_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !sun_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
+                        sunstartTimeStr = sun_start_time_txt.getText().toString();
+                        sunendTimeStr = sun_end_time_txt.getText().toString();
+                        finalsunTimeStr = "sun" + "," + sunstartTimeStr + "-" + sunendTimeStr;
+                        Log.d("SundayTime", finalsunTimeStr);
 
-                if (!sun_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !sun_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
-                    sunstartTimeStr = sun_start_time_txt.getText().toString();
-                    sunendTimeStr = sun_end_time_txt.getText().toString();
-                    finalsunTimeStr = "sun" + "," + sunstartTimeStr + "-" + sunendTimeStr;
-                    Log.d("SundayTime", finalsunTimeStr);
-//                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
-//                    try {
-//                        Date inTime = sdf.parse(sunstartTimeStr);
-//                        Date outTime = sdf.parse(sunendTimeStr);
-//                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
-//                            sun_start_add_session_btn.setText("+");
-//                            sun_start_add_session_btn.setTextColor(getResources().getColor(R.color.blue));
-//                            sun_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_btn));
-//                            sun_start_time_txt.setText("Add");
-//
-//                            sun_end_add_session_btn.setText("+");
-//                            sun_end_add_session_btn.setTextColor(getResources().getColor(R.color.blue));
-//                            sun_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_btn));
-//                            sun_end_time_txt.setText("Add");
-//                        } else {
-                            scheduleArray.add(finalsunTimeStr);
-//                        }
-//                    } catch (ParseException e) {
-//                        e.printStackTrace();
-//                    }
-                } else {
-//                    Utils.ping(mContext, "Please Select Time.");
-                }
-                if (!mon_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !mon_end_time_txt.getText().toString().equalsIgnoreCase("")) {
-                    monstartTimeStr = mon_start_time_txt.getText().toString();
-                    monendTimeStr = mon_end_time_txt.getText().toString();
-                    finalmonTimeStr = "mon" + "," + monstartTimeStr + "-" + monendTimeStr;
-                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
-                    try {
-                        Date inTime = sdf.parse(monstartTimeStr);
-                        Date outTime = sdf.parse(monendTimeStr);
-                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                            mon_start_add_session_btn.setText("+");
-                            mon_start_add_session_btn.setTextColor(getResources().getColor(R.color.blue));
-                            mon_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_btn));
-                            mon_start_time_txt.setText("Add");
+                        scheduleArray.add(finalsunTimeStr);
 
-                            mon_end_add_session_btn.setText("+");
-                            mon_end_add_session_btn.setTextColor(getResources().getColor(R.color.blue));
-                            mon_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_btn));
-                            mon_end_time_txt.setText("Add");
-                        } else {
-                            scheduleArray.add(finalmonTimeStr);
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-
-                } else {
-//                    Utils.ping(mContext, "Please Select Time.");
-
-                }
-                if (!tue_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !tue_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
-                    tuestartTimeStr = tue_start_time_txt.getText().toString();
-                    tueendTimeStr = tue_end_time_txt.getText().toString();
-                    finaltueTimeStr = "tue" + "," + tuestartTimeStr + "-" + tueendTimeStr;
-                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
-                    try {
-                        Date inTime = sdf.parse(tuestartTimeStr);
-                        Date outTime = sdf.parse(tueendTimeStr);
-                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                            tue_start_add_session_btn.setText("+");
-                            tue_start_add_session_btn.setTextColor(getResources().getColor(R.color.blue));
-                            tue_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_btn));
-                            tue_start_time_txt.setText("Add");
-
-                            tue_end_add_session_btn.setText("+");
-                            tue_end_add_session_btn.setTextColor(getResources().getColor(R.color.blue));
-                            tue_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_btn));
-                            tue_end_time_txt.setText("Add");
-                        } else {
-                            scheduleArray.add(finaltueTimeStr);
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-//                    Utils.ping(mContext, "Please Select Time.");
-
-                }
-                if (!wed_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !wed_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
-                    wedstartTimeStr = wed_start_time_txt.getText().toString();
-                    wedendTimeStr = wed_end_time_txt.getText().toString();
-                    finalwedTimeStr = "wed" + "," + wedstartTimeStr + "-" + wedendTimeStr;
-                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
-                    try {
-                        Date inTime = sdf.parse(wedstartTimeStr);
-                        Date outTime = sdf.parse(wedendTimeStr);
-                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                            wed_start_add_session_btn.setText("+");
-                            wed_start_add_session_btn.setTextColor(getResources().getColor(R.color.blue));
-                            wed_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_btn));
-                            wed_start_time_txt.setText("Add");
-
-                            wed_end_add_session_btn.setText("+");
-                            wed_end_add_session_btn.setTextColor(getResources().getColor(R.color.blue));
-                            wed_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_btn));
-                            wed_end_time_txt.setText("Add");
-                        } else {
-                            scheduleArray.add(finalwedTimeStr);
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-//                    Utils.ping(mContext, "Please Select Time.");
-
-                }
-                if (!thu_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !thu_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
-                    thustartTimeStr = thu_start_time_txt.getText().toString();
-                    thuendTimeStr = thu_end_time_txt.getText().toString();
-                    finalthuTimeStr = "thu" + "," + thustartTimeStr + "-" + thuendTimeStr;
-                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
-                    try {
-                        Date inTime = sdf.parse(thustartTimeStr);
-                        Date outTime = sdf.parse(thuendTimeStr);
-                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                            thu_start_add_session_btn.setText("+");
-                            thu_start_add_session_btn.setTextColor(getResources().getColor(R.color.blue));
-                            thu_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_btn));
-                            thu_start_time_txt.setText("Add");
-
-                            thu_end_add_session_btn.setText("+");
-                            thu_end_add_session_btn.setTextColor(getResources().getColor(R.color.blue));
-                            thu_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_btn));
-                            thu_end_time_txt.setText("Add");
-                        } else {
-                            scheduleArray.add(finalthuTimeStr);
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-//                    Utils.ping(mContext, "Please Select Time.");
-
-                }
-                if (!fri_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !fri_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
-                    fristartTimeStr = fri_start_time_txt.getText().toString();
-                    friendTimeStr = fri_end_time_txt.getText().toString();
-                    finalfriTimeStr = "fri" + "," + fristartTimeStr + "-" + friendTimeStr;
-                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
-                    try {
-                        Date inTime = sdf.parse(fristartTimeStr);
-                        Date outTime = sdf.parse(friendTimeStr);
-                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                            fri_start_add_session_btn.setText("+");
-                            fri_start_add_session_btn.setTextColor(getResources().getColor(R.color.blue));
-                            fri_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_btn));
-                            fri_start_time_txt.setText("Add");
-
-                            fri_end_add_session_btn.setText("+");
-                            fri_end_add_session_btn.setTextColor(getResources().getColor(R.color.blue));
-                            fri_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_btn));
-                            fri_end_time_txt.setText("Add");
-                        } else {
-                            scheduleArray.add(finalfriTimeStr);
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-//                    Utils.ping(mContext, "Please Select Time.");
-
-                }
-                if (!sat_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !sat_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
-                    satstartTimeStr = sat_start_time_txt.getText().toString();
-                    satendTimeStr = sat_end_time_txt.getText().toString();
-                    finalsatTimeStr = "sat" + "," + satstartTimeStr + "-" + satendTimeStr;
-                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
-                    try {
-                        Date inTime = sdf.parse(satstartTimeStr);
-                        Date outTime = sdf.parse(satendTimeStr);
-                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                            sat_start_add_session_btn.setText("+");
-                            sat_start_add_session_btn.setTextColor(getResources().getColor(R.color.blue));
-                            sat_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_btn));
-                            sat_start_time_txt.setText("Add");
-
-                            sat_end_add_session_btn.setText("+");
-                            sat_end_add_session_btn.setTextColor(getResources().getColor(R.color.blue));
-                            sat_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_btn));
-                            sat_end_time_txt.setText("Add");
-                        } else {
-                            scheduleArray.add(finalsatTimeStr);
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-//                    Utils.ping(mContext, "Please Select Time.");
-                }
-                Log.d("scheduleArray", "" + scheduleArray.size());
-
-                for (int i = 0; i < scheduleArray.size(); i++) {
-                    newEnteryArray.add(scheduleArray.get(i));
-                }
-                Log.d("newEnteryArray", "" + newEnteryArray);
-
-                for (String s : newEnteryArray) {
-                    if (!s.equals("")) {
-                        scheduleStr = scheduleStr + "|" + s;
-
-                    }
-
-                }
-                Log.d("scheduleStr", scheduleStr);
-                if (!scheduleStr.equalsIgnoreCase("")) {
-                    scheduleStr = scheduleStr.substring(1, scheduleStr.length());
-                    Log.d("responseString ", scheduleStr);
-                }
-//                if (days.size() == scheduleArray.size()) {
-                if (sessiontypeStr.equalsIgnoreCase("1")) {
-                    if (!scheduleStr.equalsIgnoreCase("")) {
-                        popularDialog.dismiss();
                     } else {
-                        Utils.ping(mContext, "Please Select Time.");
                     }
-                } else {
-                    if (startDateStr.equalsIgnoreCase(endDateStr)) {
+                    if (!mon_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !mon_end_time_txt.getText().toString().equalsIgnoreCase("")) {
+                        monstartTimeStr = mon_start_time_txt.getText().toString();
+                        monendTimeStr = mon_end_time_txt.getText().toString();
+                        finalmonTimeStr = "mon" + "," + monstartTimeStr + "-" + monendTimeStr;
+                        scheduleArray.add(finalmonTimeStr);
+
+                    } else {
+//                    Util.ping(mContext, "Please Select Time.");
+
+                    }
+                    if (!tue_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !tue_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
+                        tuestartTimeStr = tue_start_time_txt.getText().toString();
+                        tueendTimeStr = tue_end_time_txt.getText().toString();
+                        finaltueTimeStr = "tue" + "," + tuestartTimeStr + "-" + tueendTimeStr;
+                        scheduleArray.add(finaltueTimeStr);
+                    } else {
+//                    Util.ping(mContext, "Please Select Time.");
+
+                    }
+                    if (!wed_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !wed_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
+                        wedstartTimeStr = wed_start_time_txt.getText().toString();
+                        wedendTimeStr = wed_end_time_txt.getText().toString();
+                        finalwedTimeStr = "wed" + "," + wedstartTimeStr + "-" + wedendTimeStr;
+                        scheduleArray.add(finalwedTimeStr);
+                    } else {
+//                    Util.ping(mContext, "Please Select Time.");
+
+                    }
+                    if (!thu_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !thu_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
+                        thustartTimeStr = thu_start_time_txt.getText().toString();
+                        thuendTimeStr = thu_end_time_txt.getText().toString();
+                        finalthuTimeStr = "thu" + "," + thustartTimeStr + "-" + thuendTimeStr;
+
+                        scheduleArray.add(finalthuTimeStr);
+                    } else {
+//                    Util.ping(mContext, "Please Select Time.");
+
+                    }
+                    if (!fri_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !fri_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
+                        fristartTimeStr = fri_start_time_txt.getText().toString();
+                        friendTimeStr = fri_end_time_txt.getText().toString();
+                        finalfriTimeStr = "fri" + "," + fristartTimeStr + "-" + friendTimeStr;
+
+                        scheduleArray.add(finalfriTimeStr);
+
+                    } else {
+//                    Util.ping(mContext, "Please Select Time.");
+
+                    }
+                    if (!sat_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !sat_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
+                        satstartTimeStr = sat_start_time_txt.getText().toString();
+                        satendTimeStr = sat_end_time_txt.getText().toString();
+                        finalsatTimeStr = "sat" + "," + satstartTimeStr + "-" + satendTimeStr;
+
+                        scheduleArray.add(finalsatTimeStr);
+                    } else {
+//                    Util.ping(mContext, "Please Select Time.");
+                    }
+                    Log.d("scheduleArray", "" + scheduleArray.size());
+
+                    for (int i = 0; i < scheduleArray.size(); i++) {
+                        newEnteryArray.add(scheduleArray.get(i));
+                    }
+                    Log.d("newEnteryArray", "" + newEnteryArray);
+
+                    for (String s : newEnteryArray) {
+                        if (!s.equals("")) {
+                            scheduleStr = scheduleStr + "|" + s;
+
+                        }
+
+                    }
+                    Log.d("scheduleStr", scheduleStr);
+                    if (!scheduleStr.equalsIgnoreCase("")) {
+                        scheduleStr = scheduleStr.substring(1, scheduleStr.length());
+                        Log.d("responseString ", scheduleStr);
+                    }
+//                if (days.size() == scheduleArray.size()) {
+                    if (sessiontypeStr.equalsIgnoreCase("1")) {
                         if (!scheduleStr.equalsIgnoreCase("")) {
                             popularDialog.dismiss();
                         } else {
                             Utils.ping(mContext, "Please Select Time.");
                         }
                     } else {
-                        Utils.ping(mContext, "Please select session start date and end date should be same.");
-                    }
+                        if (startDateStr.equalsIgnoreCase(endDateStr)) {
+                            if (!scheduleStr.equalsIgnoreCase("")) {
+                                popularDialog.dismiss();
+                            } else {
+                                Utils.ping(mContext, "Please Select Time.");
+                            }
+                        } else {
+                            Utils.ping(mContext, "Please select session start date and end date should be same.");
+                        }
 
-                }
+                    }
 //                }else{
-//                    Utils.ping(mContext,"Please Enter Proper Time");
+//                    Util.ping(mContext,"Please Enter Proper Time");
 //                }
+
+                } else
+                    Utils.ping(mContext, "Please Select ProperTime.");
+                {
+                }
 
             }
         });
@@ -1638,17 +1519,12 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                         Date inTime = sdf.parse(sun_start_time_txt.getText().toString());
                         Date outTime = sdf.parse(sun_end_time_txt.getText().toString());
                         if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                            sun_start_add_session_btn.setText("+");
-                            sun_start_add_session_btn.setTextColor(getResources().getColor(R.color.blue));
-                            sun_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_btn));
-                            sun_start_time_txt.setText("Add");
-
-                            sun_end_add_session_btn.setText("+");
-                            sun_end_add_session_btn.setTextColor(getResources().getColor(R.color.blue));
-                            sun_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_btn));
-                            sun_end_time_txt.setText("Add");
+                            sun_end_time_txt.setTextColor(getResources().getColor(R.color.search_boder));
+                            sun_end_linear.setBackgroundResource(R.drawable.red_linear);
+                            checkTime_sun = true;
                         } else {
-//                            scheduleArray.add(finalsunTimeStr);
+                            checkTime_sun = false;
+                            sun_end_time_txt.setTextColor(getResources().getColor(R.color.text_color));
                         }
                     } catch (ParseException e) {
                         e.printStackTrace();
@@ -1665,6 +1541,22 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     mon_end_add_session_btn.setText("x");
                     mon_end_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
                     mon_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                    SimpleDateFormat sdf1 = new SimpleDateFormat("hh:mm a");
+                    try {
+                        Date inTime = sdf1.parse(mon_start_time_txt.getText().toString());
+                        Date outTime = sdf1.parse(mon_end_time_txt.getText().toString());
+                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                            mon_end_time_txt.setTextColor(getResources().getColor(R.color.search_boder));
+                            mon_end_linear.setBackgroundResource(R.drawable.red_linear);
+                            checkTime_mon = true;
+                        } else {
+                            checkTime_mon = false;
+                            mon_end_time_txt.setTextColor(getResources().getColor(R.color.text_color));
+                            mon_end_linear.setBackgroundResource(R.drawable.linear_shape);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case "4":
                     tue_start_time_txt.setText(FinalTimeStr);
@@ -1677,6 +1569,22 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     tue_end_add_session_btn.setText("x");
                     tue_end_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
                     tue_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                    SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm a");
+                    try {
+                        Date inTime = sdf2.parse(tue_start_time_txt.getText().toString());
+                        Date outTime = sdf2.parse(tue_end_time_txt.getText().toString());
+                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                            tue_end_time_txt.setTextColor(getResources().getColor(R.color.search_boder));
+                            tue_end_linear.setBackgroundResource(R.drawable.red_linear);
+                            checkTime_tue = true;
+                        } else {
+                            checkTime_tue = false;
+                            tue_end_time_txt.setTextColor(getResources().getColor(R.color.text_color));
+                            tue_end_linear.setBackgroundResource(R.drawable.linear_shape);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case "6":
                     wed_start_time_txt.setText(FinalTimeStr);
@@ -1689,6 +1597,23 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     wed_end_add_session_btn.setText("x");
                     wed_end_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
                     wed_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+
+                    SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm a");
+                    try {
+                        Date inTime = sdf3.parse(wed_start_time_txt.getText().toString());
+                        Date outTime = sdf3.parse(wed_end_time_txt.getText().toString());
+                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                            wed_end_time_txt.setTextColor(getResources().getColor(R.color.search_boder));
+                            wed_end_linear.setBackgroundResource(R.drawable.red_linear);
+                            checkTime_wed = true;
+                        } else {
+                            checkTime_wed = false;
+                            wed_end_time_txt.setTextColor(getResources().getColor(R.color.text_color));
+                            wed_end_linear.setBackgroundResource(R.drawable.linear_shape);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case "8":
                     thu_start_time_txt.setText(FinalTimeStr);
@@ -1701,6 +1626,23 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     thu_end_add_session_btn.setText("x");
                     thu_end_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
                     thu_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+
+                    SimpleDateFormat sdf4 = new SimpleDateFormat("hh:mm a");
+                    try {
+                        Date inTime = sdf4.parse(thu_start_time_txt.getText().toString());
+                        Date outTime = sdf4.parse(thu_end_time_txt.getText().toString());
+                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                            thu_end_time_txt.setTextColor(getResources().getColor(R.color.search_boder));
+                            thu_end_linear.setBackgroundResource(R.drawable.red_linear);
+                            checkTime_thu = true;
+                        } else {
+                            checkTime_thu = false;
+                            thu_end_time_txt.setTextColor(getResources().getColor(R.color.text_color));
+                            thu_end_linear.setBackgroundResource(R.drawable.linear_shape);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case "10":
                     fri_start_time_txt.setText(FinalTimeStr);
@@ -1713,6 +1655,23 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     fri_end_add_session_btn.setText("x");
                     fri_end_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
                     fri_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+
+                    SimpleDateFormat sdf5 = new SimpleDateFormat("hh:mm a");
+                    try {
+                        Date inTime = sdf5.parse(fri_start_time_txt.getText().toString());
+                        Date outTime = sdf5.parse(fri_end_time_txt.getText().toString());
+                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                            fri_end_time_txt.setTextColor(getResources().getColor(R.color.search_boder));
+                            fri_end_linear.setBackgroundResource(R.drawable.red_linear);
+                            checkTime_fri = true;
+                        } else {
+                            checkTime_fri = false;
+                            fri_end_time_txt.setTextColor(getResources().getColor(R.color.text_color));
+                            fri_end_linear.setBackgroundResource(R.drawable.linear_shape);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case "12":
                     sat_start_time_txt.setText(FinalTimeStr);
@@ -1725,6 +1684,23 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     sat_end_add_session_btn.setText("x");
                     sat_end_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
                     sat_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+
+                    SimpleDateFormat sdf6 = new SimpleDateFormat("hh:mm a");
+                    try {
+                        Date inTime = sdf6.parse(sat_start_time_txt.getText().toString());
+                        Date outTime = sdf6.parse(sat_end_time_txt.getText().toString());
+                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                            sat_end_time_txt.setTextColor(getResources().getColor(R.color.search_boder));
+                            sat_end_linear.setBackgroundResource(R.drawable.red_linear);
+                            checkTime_sat = true;
+                        } else {
+                            checkTime_sat = false;
+                            sat_end_time_txt.setTextColor(getResources().getColor(R.color.text_color));
+                            sat_end_linear.setBackgroundResource(R.drawable.linear_shape);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 default:
             }

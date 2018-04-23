@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.adms.classsafari.Adapter.SessionDetailAdapter;
 import com.adms.classsafari.AppConstant.ApiHandler;
+import com.adms.classsafari.AppConstant.AppConfiguration;
 import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.Session.sessionDataModel;
@@ -37,7 +38,7 @@ public class SessionName extends AppCompatActivity {
     SessionDetailAdapter sessionDetailAdapter;
     List<sessionDataModel> arrayList;
     Dialog confimDialog;
-    TextView cancel_txt, confirm_txt;
+    TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, session_fee_txt;
     String sessionIDStr;
     SessionDetailModel dataResponse;
 
@@ -53,10 +54,7 @@ public class SessionName extends AppCompatActivity {
     }
 
     public void init() {
-//        arrayList = new ArrayList<>();
-//        for (int i = 0; i < 10; i++) {
-//            arrayList.add(String.valueOf(i));
-//        }
+
         callSessionListApi();
 
     }
@@ -74,6 +72,8 @@ public class SessionName extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ConformSessionDialog();
+//                Intent iLogin = new Intent(mContext, LoginActivity.class);
+//                startActivity(iLogin);
 
             }
         });
@@ -93,8 +93,8 @@ public class SessionName extends AppCompatActivity {
         confimDialog = new Dialog(mContext, R.style.Theme_Dialog);
         Window window = confimDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
-        confimDialog.getWindow().getAttributes().verticalMargin = 0.10f;
-        wlp.gravity = Gravity.CENTER;
+        confimDialog.getWindow().getAttributes().verticalMargin = 0.20f;
+        wlp.gravity = Gravity.TOP;
         window.setAttributes(wlp);
 
         confimDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
@@ -104,9 +104,17 @@ public class SessionName extends AppCompatActivity {
         confimDialog.setContentView(R.layout.confirm_session_dialog);
 
 
+        session_student_txt_view = (TextView) confimDialog.findViewById(R.id.session_student_txt_view);
+        session_student_txt = (TextView) confimDialog.findViewById(R.id.session_student_txt);
+        session_name_txt = (TextView) confimDialog.findViewById(R.id.session_name_txt);
+        location_txt = (TextView) confimDialog.findViewById(R.id.location_txt);
+        duration_txt = (TextView) confimDialog.findViewById(R.id.duration_txt);
+        time_txt = (TextView) confimDialog.findViewById(R.id.time_txt);
+        session_fee_txt = (TextView) confimDialog.findViewById(R.id.session_fee_txt);
         confirm_txt = (TextView) confimDialog.findViewById(R.id.confirm_txt);
         cancel_txt = (TextView) confimDialog.findViewById(R.id.cancel_txt);
 
+        setDialogData();
         cancel_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,10 +132,7 @@ public class SessionName extends AppCompatActivity {
 
 
         confimDialog.show();
-
-
     }
-
     //Use for SessionList
     public void callSessionListApi() {
         if (Utils.checkNetwork(mContext)) {
@@ -178,10 +183,14 @@ public class SessionName extends AppCompatActivity {
     }
 
     public void setData() {
-        arrayList=new ArrayList<sessionDataModel>();
+        arrayList = new ArrayList<sessionDataModel>();
 
         for (int i = 0; i < dataResponse.getData().size(); i++) {
             arrayList.add(dataResponse.getData().get(i));
+            if (dataResponse.getData().get(i).getSessionAmount().equalsIgnoreCase("0.00")) {
+                dataResponse.getData().get(i).setSessionAmount("Free");
+            }
+            sessionNameBinding.priceTxt.setText("₹ " + dataResponse.getData().get(i).getSessionAmount());
         }
 
         sessionDetailAdapter = new SessionDetailAdapter(mContext, arrayList);
@@ -189,6 +198,25 @@ public class SessionName extends AppCompatActivity {
         sessionNameBinding.sessionListRecView.setLayoutManager(mLayoutManager);
         sessionNameBinding.sessionListRecView.setItemAnimator(new DefaultItemAnimator());
         sessionNameBinding.sessionListRecView.setAdapter(sessionDetailAdapter);
+    }
+
+    public void setDialogData() {
+        for (int i = 0; i < dataResponse.getData().size(); i++) {
+            if (dataResponse.getData().get(i).getSessionAmount().equalsIgnoreCase("0.00")) {
+                session_fee_txt.setText("Free");
+            } else {
+                session_fee_txt.setText("₹ " + dataResponse.getData().get(i).getSessionAmount());
+            }
+            session_name_txt.setText(dataResponse.getData().get(i).getSessionName());
+            location_txt.setText(dataResponse.getData().get(i).getAddressLine1()
+                    + ", " + dataResponse.getData().get(i).getRegionName()
+                    + ", " + dataResponse.getData().get(i).getAddressCity()
+                    + ", " + dataResponse.getData().get(i).getAddressState()
+                    + "- " + dataResponse.getData().get(i).getAddressZipCode());
+            duration_txt.setText(AppConfiguration.SessionDuration);
+            time_txt.setText(AppConfiguration.SessionTime);
+            session_student_txt.setText(dataResponse.getData().get(i).getName());
+        }
     }
 
 }

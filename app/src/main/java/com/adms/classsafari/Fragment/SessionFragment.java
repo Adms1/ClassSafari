@@ -218,13 +218,13 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
             parseTodaysDate(String.valueOf(event.getStartTime().getTime()), String.valueOf(event.getEndTime().getTime()));
 
             sessionnameStr = event.getTitle();
-            sessionIDStr = String.valueOf(event.getId());
-            Log.d("sessionID", sessionIDStr);
-            Utils.setPref(mContext, "SessionID", sessionIDStr);
+            sessionDetailIDStr = String.valueOf(event.getId());
+            Log.d("sessionDetailIDStr", sessionDetailIDStr);
+            Utils.setPref(mContext, "sessionDetailID", sessionDetailIDStr);
             for (int i = 0; i < finalsessionfullDetailModel.getData().size(); i++) {
                 for (int j = 0; j < finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().size(); j++) {
-                    if (sessionIDStr.equalsIgnoreCase(finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionID())) {
-                        sessionDetailIDStr = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionDetailID();
+                    if (sessionDetailIDStr.equalsIgnoreCase(finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionDetailID())) {
+                        sessionIDStr = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionID();
                         sessionCapacity = Integer.parseInt(finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionCapacity());
                         priceStr = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionPrice();
                         AppConfiguration.SessionLocation = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getAddressLine1()
@@ -238,7 +238,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                         AppConfiguration.SessionDuration = "( " + SessionHour + "hr" + ", " + SessionMinit + "min )";
                         AppConfiguration.SessionTime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime();
                         AppConfiguration.SessionPrice = String.valueOf(Math.round(Float.parseFloat(finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionPrice())));
-                        Utils.setPref(mContext, "sessionDetailID", sessionDetailIDStr);
+                        Utils.setPref(mContext, "sessionID", sessionIDStr);
                     }
 
                 }
@@ -496,7 +496,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                         + ", " + finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getAddressCity()
                         + ", " + finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getAddressState()
                         + "- " + finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getAddressZipCode();
-                DrawableCalendarEvent event = new DrawableCalendarEvent(Integer.parseInt(finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionID()),
+                DrawableCalendarEvent event = new DrawableCalendarEvent(Integer.parseInt(finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionDetailID()),
                         colorList.get(k), finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionName(),
                         finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionName(),
                         finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime()
