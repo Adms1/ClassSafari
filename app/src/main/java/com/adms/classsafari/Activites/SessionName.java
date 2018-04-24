@@ -113,7 +113,7 @@ public class SessionName extends AppCompatActivity {
         session_fee_txt = (TextView) confimDialog.findViewById(R.id.session_fee_txt);
         confirm_txt = (TextView) confimDialog.findViewById(R.id.confirm_txt);
         cancel_txt = (TextView) confimDialog.findViewById(R.id.cancel_txt);
-
+        session_student_txt_view.setText("TEACHER NAME");
         setDialogData();
         cancel_txt.setOnClickListener(new View.OnClickListener() {
             @Override
