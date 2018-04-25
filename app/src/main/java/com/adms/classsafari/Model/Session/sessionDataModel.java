@@ -259,6 +259,17 @@ public class sessionDataModel {
     @SerializedName("Duration")
     @Expose
     private String duration;
+    @SerializedName("Gender_ID")
+    @Expose
+    private String genderID;
+
+    public String getGenderID() {
+        return genderID;
+    }
+
+    public void setGenderID(String genderID) {
+        this.genderID = genderID;
+    }
 
     public String getDuration() {
         return duration;

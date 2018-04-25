@@ -47,10 +47,10 @@
 
                 <ImageView
                     android:id="@+id/search_img"
-                    android:layout_width="@dimen/_15sdp"
-                    android:layout_height="@dimen/_15sdp"
-                    android:layout_marginLeft="@dimen/_90sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginLeft="@dimen/_70sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
                     android:src="@drawable/search1" />
             </LinearLayout>
 

@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import com.adms.classsafari.AppConstant.ApiHandler;
+import com.adms.classsafari.AppConstant.AppConfiguration;
 import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.R;
@@ -49,7 +50,10 @@ public class SearchByUser extends AppCompatActivity {
         searchByUserBinding.letsStudyTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AppConfiguration.ClassLocation = searchByUserBinding.locationEdt.getText().toString();
                 Intent inClassDetail = new Intent(mContext, ClassSearchScreen.class);
+                inClassDetail.putExtra("flag","study");
+                inClassDetail.putExtra("withOR","withOR");
                 startActivity(inClassDetail);
             }
         });
@@ -68,7 +72,10 @@ public class SearchByUser extends AppCompatActivity {
         searchByUserBinding.letsPlayTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AppConfiguration.ClassLocation = searchByUserBinding.locationEdt.getText().toString();
                 Intent inClassDetail = new Intent(mContext, ClassSearchScreen.class);
+                inClassDetail.putExtra("flag","play");
+                inClassDetail.putExtra("withOR","withOR");
                 startActivity(inClassDetail);
             }
         });
@@ -94,7 +101,7 @@ public class SearchByUser extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent inClassDetail = new Intent(mContext, LoginActivity.class);
-                inClassDetail.putExtra("flag", "0");
+//                inClassDetail.putExtra("flag", "0");
                 startActivity(inClassDetail);
             }
         });
@@ -106,6 +113,7 @@ public class SearchByUser extends AppCompatActivity {
         });
 
     }
+
     //Use for SessionList
     public void callSessionListApi() {
         if (Utils.checkNetwork(mContext)) {
@@ -159,7 +167,7 @@ public class SearchByUser extends AppCompatActivity {
         ArrayList<String> CityName = new ArrayList<String>();
 
         for (int j = 0; j < dataResponse.getData().size(); j++) {
-                CityName.add(dataResponse.getData().get(j).getAddressCity());
+            CityName.add(dataResponse.getData().get(j).getAddressCity());
         }
         HashSet<String> hashSet = new HashSet<String>();
         hashSet.addAll(CityName);
@@ -197,18 +205,17 @@ public class SearchByUser extends AppCompatActivity {
     public void validation() {
         selectedSessionNameStr = searchByUserBinding.searchClassEdt.getText().toString();
         selectedLocationStr = searchByUserBinding.locationEdt.getText().toString();
+        AppConfiguration.ClassLocation = selectedLocationStr;
         if (!selectedSessionNameStr.equalsIgnoreCase("") && !selectedLocationStr.equalsIgnoreCase("")) {
-//            for (int i = 0; i < dataResponse.getData().size(); i++) {
-//                if (selectedSessionNameStr.equalsIgnoreCase(dataResponse.getData().get(i).getSessionName()) && selectedLocationStr.equalsIgnoreCase(dataResponse.getData().get(i).getAddressCity())) {
-                    Utils.setPref(mContext, "location", selectedLocationStr);
-                    Utils.setPref(mContext, "sessionName", selectedSessionNameStr);
-                    Intent inClassDetail = new Intent(mContext, ClassDeatilScreen.class);
-                    startActivity(inClassDetail);
-//                } else {
-//
-//                }
-//            }
-
+            Utils.setPref(mContext, "location", selectedLocationStr);
+            Utils.setPref(mContext, "sessionName", selectedSessionNameStr);
+            Intent inClassDetail = new Intent(mContext, ClassDeatilScreen.class);
+            inClassDetail.putExtra("city",selectedLocationStr);
+            inClassDetail.putExtra("sessionName",selectedSessionNameStr);
+            inClassDetail.putExtra("SearchBy","1");
+            inClassDetail.putExtra("withOR","withOutOR");
+            inClassDetail.putExtra("searchType","study");
+            startActivity(inClassDetail);
         } else {
             Utils.ping(mContext, getResources().getString(R.string.blank_value));
         }
