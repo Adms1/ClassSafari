@@ -10,6 +10,9 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebViewClient;
 
+import com.adms.classsafari.AppConstant.ApiHandler;
+import com.adms.classsafari.AppConstant.Utils;
+import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivityPaymentBinding;
 
@@ -22,19 +25,25 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
 
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 public class PaymentActivity extends AppCompatActivity {
 
     ActivityPaymentBinding paymentBinding;
     Context mContext;
     private Bundle extras = null;
     private static final String TAG = "TNPRequestDebugTag";
+    String sessionIDStr, contatIDstr,paymentStatusstr;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         paymentBinding = DataBindingUtil.setContentView(this, R.layout.activity_payment);
         mContext = PaymentActivity.this;
 
-
+        sessionIDStr = getIntent().getStringExtra("sessionID");
+        contatIDstr = getIntent().getStringExtra("contactID");
         init();
         setListner();
     }
@@ -58,7 +67,7 @@ public class PaymentActivity extends AppCompatActivity {
         String amount = "";
         String currency = "INR";
         String description = "";
-        String name = "ADMS";//AppConfiguration.CustomerDetail.get("CustomerName")
+        String name = getIntent().getStringExtra("username");//AppConfiguration.CustomerDetail.get("CustomerName")
         String email = "saralpayonline@gmail.com";//saralpayonline@gmail.com
         String phone = "7575809733";//7575809733
         String address_line_1 = "-";
@@ -76,12 +85,17 @@ public class PaymentActivity extends AppCompatActivity {
         String card_name = "";
         String card_exp_month = "";
         String card_exp_year = "";
-        String show_saved_cards="n";
+        String show_saved_cards = "n";
 
         mode = "LIVE";//mode
         amount = "10";//amount
         order_id = "A0008180309052208";
         description = "description";
+
+        mode = getIntent().getStringExtra("mode");//mode
+        amount = getIntent().getStringExtra("amount");//amount
+        order_id = getIntent().getStringExtra("orderID");
+
 
         //comment from megha
         // Getting these values from Main activity
@@ -115,7 +129,7 @@ public class PaymentActivity extends AppCompatActivity {
         mapHashData.put("address_line_1", address_line_1);
         mapHashData.put("address_line_2", address_line_2);
         mapHashData.put("amount", amount);
-        mapHashData.put("api_key","0c1d72c0-ab5a-4159-9135-139d53235bbd" );//AppConfiguration.api_key
+        mapHashData.put("api_key", "535ee616-a161-4e16-88ed-a338582e841a");//AppConfiguration.api_key
         mapHashData.put("city", city);
         mapHashData.put("country", country);
         mapHashData.put("currency", currency);
@@ -133,13 +147,13 @@ public class PaymentActivity extends AppCompatActivity {
         mapHashData.put("udf4", udf4);
         mapHashData.put("udf5", udf5);
         mapHashData.put("zip_code", zip_code);
-        mapHashData.put("show_saved_cards",show_saved_cards);
+        mapHashData.put("show_saved_cards", show_saved_cards);
 
         Map<String, String> mapPostData = new HashMap<String, String>();
         mapPostData.put("address_line_1", address_line_1);
         mapPostData.put("address_line_2", address_line_2);
         mapPostData.put("amount", amount);
-        mapPostData.put("api_key","0c1d72c0-ab5a-4159-9135-139d53235bbd" );//AppConfiguration.api_key
+        mapPostData.put("api_key", "535ee616-a161-4e16-88ed-a338582e841a");//AppConfiguration.api_key
 
 //        if(extras.containsKey("CardDetails")) {
 //            mapPostData.put("card_exp_month", card_exp_month);
@@ -165,9 +179,9 @@ public class PaymentActivity extends AppCompatActivity {
         mapPostData.put("udf4", udf4);
         mapPostData.put("udf5", udf5);
         mapPostData.put("zip_code", zip_code);
-        mapPostData.put("show_saved_cards",show_saved_cards);
+        mapPostData.put("show_saved_cards", show_saved_cards);
 
-        String hashData = "74ca9c70aea6509d90176172cece61925a4105aa";//AppConfiguration.secret_key;
+        String hashData = "531553f8d6b906aa3342948a3c535ca301de9d5d";//AppConfiguration.secret_key;
         String postData = "";
 
         for (String key : new TreeSet<String>(mapHashData.keySet())) {
@@ -210,6 +224,7 @@ public class PaymentActivity extends AppCompatActivity {
         paymentBinding.webView.addJavascriptInterface(new MyJavaScriptInterface(this), "Android");
 
     }
+
     /**
      * Generates the SHA-512 hash (same as PHP) for the given string
      *
@@ -263,40 +278,27 @@ public class PaymentActivity extends AppCompatActivity {
             try {
                 JSONObject resposeData = new JSONObject(jsonResponse);
                 Log.d(TAG, "ResponseJson: " + resposeData.toString());
-
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                if (resposeData.getString("response_code").equalsIgnoreCase("0")) {
+                    paymentStatusstr = "1";
+                } else {
+                    paymentStatusstr = "0";
+                }
+                callSessionConfirmationApi();
+                Intent intent = new Intent(PaymentActivity.this, PaymentSuccessActivity.class);
                 intent.putExtra("transactionId", resposeData.getString("transaction_id"));
                 intent.putExtra("responseCode", resposeData.getString("response_code"));
                 intent.putExtra("amount", resposeData.getString("amount"));
                 intent.putExtra("description", resposeData.getString("description"));
                 intent.putExtra("order_id", resposeData.getString("order_id"));
-//                if(extras.containsKey("CardDetails")) {
-//                    intent.putExtra("Trans_Type", "1");
-//                }else {
-//                    intent.putExtra("Trans_Type", "2");
-//                }
                 startActivity(intent);
-                finish();
 
-                /*if (responseCode.equals("0")) {
-                    Intent intent = new Intent(getApplicationContext(), PaymentSuccessScreen.class);
-                    intent.putExtra("transactionId", transactionId);
-                    intent.putExtra("responseCode", responseCode);
-                    intent.putExtra("responseMessage", responseMessage);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(getApplicationContext(), TraknpayResponseActivity.class);
-                    intent.putExtra("transactionId", transactionId);
-                    intent.putExtra("responseCode", responseCode);
-                    intent.putExtra("responseMessage", responseMessage);
-                    startActivity(intent);
-                }*/
 
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
     }
+
     public void setListner() {
     }
 
@@ -304,4 +306,51 @@ public class PaymentActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
     }
+    //Use for Family and Child Session Confirmation
+    public void callSessionConfirmationApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_Session_ContactEnrollment(getSessionConfirmationdetail(), new retrofit.Callback<TeacherInfoModel>() {
+                @Override
+                public void success(TeacherInfoModel sessionconfirmationInfoModel, Response response) {
+                    Utils.dismissDialog();
+                    if (sessionconfirmationInfoModel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionconfirmationInfoModel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionconfirmationInfoModel.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.ping(mContext, getString(R.string.false_msg));
+                        return;
+                    }
+                    if (sessionconfirmationInfoModel.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.ping(mContext,"Payment Successfully.");
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getSessionConfirmationdetail() {
+        Map<String, String> map = new HashMap<>();
+        map.put("SessionID", sessionIDStr);
+        map.put("ContactID", contatIDstr);
+        map.put("PaymentStatus",paymentStatusstr);
+        return map;
+    }
+
 }

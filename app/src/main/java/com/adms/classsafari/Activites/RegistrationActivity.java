@@ -1,24 +1,28 @@
 package com.adms.classsafari.Activites;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.adms.classsafari.databinding.ActivityRegistrationBinding;
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.AppConfiguration;
 import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
+import com.adms.classsafari.databinding.ActivityRegistrationBinding;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.ParseException;
@@ -40,14 +44,21 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     Calendar calendar;
     private DatePickerDialog datePickerDialog;
     int mYear, mMonth, mDay;
-    String firstNameStr, lastNameStr, emailStr, passwordStr, phonenoStr, gendarIdStr = "1", dateofbirthStr, coachTypeIDStr = "1";
+    String firstNameStr, lastNameStr, emailStr, passwordStr, phonenoStr, gendarIdStr = "1", dateofbirthStr, coachTypeIDStr = "1",
+            registerTypeStr = "family", contatIDstr, type, whereTocomestr,sessionIDStr,paymentStatusstr,orderIDStr;
+
+    //Use for Confirmation Dialog
+    Dialog confimDialog;
+    TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, time_txt_view, session_fee_txt;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         registrationBinding = DataBindingUtil.setContentView(this, R.layout.activity_registration);
         mContext = RegistrationActivity.this;
-
+        whereTocomestr = getIntent().getStringExtra("frontLogin");
+        sessionIDStr = getIntent().getStringExtra("sessionID");
         init();
         setListner();
     }
@@ -68,7 +79,24 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                 startActivity(inback);
             }
         });
+        registrationBinding.registerTypeRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                int radioButtonID = registrationBinding.registerTypeRg.getCheckedRadioButtonId();
+                switch (radioButtonID) {
+                    case R.id.family_rb:
+                        registrationBinding.session1TypeRg.setVisibility(View.GONE);
+                        registerTypeStr = registrationBinding.familyRb.getTag().toString();
 
+                        break;
+                    case R.id.teacher_rb:
+                        registrationBinding.session1TypeRg.setVisibility(View.VISIBLE);
+                        registerTypeStr = registrationBinding.teacherRb.getTag().toString();
+                        break;
+
+                }
+            }
+        });
         registrationBinding.emailEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
@@ -100,8 +128,8 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
                     registrationBinding.dateOfBirthEdt.setError(null);
                     datePickerDialog = com.wdullaer.materialdatetimepicker.date.DatePickerDialog.newInstance(RegistrationActivity.this, Year, Month, Day);
                     datePickerDialog.setThemeDark(false);
@@ -350,7 +378,11 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                     }
                     if (teacherInfoModel.getSuccess().equalsIgnoreCase("false")) {
 //                        Utils.ping(mContext, getString(R.string.false_msg));
-                        callTeacherApi();
+                        if (registerTypeStr.equalsIgnoreCase("family")) {
+                            callFamilyApi();
+                        } else {
+                            callTeacherApi();
+                        }
                         return;
                     }
                     if (teacherInfoModel.getSuccess().equalsIgnoreCase("True")) {
@@ -407,8 +439,23 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                         Utils.setPref(mContext, "coachTypeID", splitCoachID[1]);
                         Utils.setPref(mContext, "RegisterUserName", teacherInfoModel.getName());
                         Utils.setPref(mContext, "RegisterEmail", teacherInfoModel.getEmailID());
+                        Utils.setPref(mContext, "LoginType", teacherInfoModel.getLoginType());
                         AppConfiguration.RegisterEmail = emailStr;
                         AppConfiguration.coachId = teacherInfoModel.getCoachID();
+                        type = teacherInfoModel.getLoginType();
+                        contatIDstr = splitCoachID[0];
+                        if (teacherInfoModel.getLoginType().equalsIgnoreCase("Family")) {
+                            if (whereTocomestr.equalsIgnoreCase("beforeLogin")) {
+                                Intent iSearchByUser = new Intent(mContext, SearchByUser.class);
+                                startActivity(iSearchByUser);
+                            } else {
+                                ConformSessionDialog();
+                            }
+
+                        } else {
+                            Intent inLogin = new Intent(mContext, DashBoardActivity.class);
+                            startActivity(inLogin);
+                        }
                         if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
                             Intent intentDashboard = new Intent(mContext, DashBoardActivity.class);
                             startActivity(intentDashboard);
@@ -440,4 +487,228 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         return map;
     }
 
+    //Use for New Family
+    public void callFamilyApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_Create_Family(getNewFamilyetail(), new retrofit.Callback<TeacherInfoModel>() {
+                @Override
+                public void success(TeacherInfoModel familyInfoModel, Response response) {
+                    Utils.dismissDialog();
+                    if (familyInfoModel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (familyInfoModel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (familyInfoModel.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.ping(mContext, getString(R.string.false_msg));
+                        return;
+                    }
+                    if (familyInfoModel.getSuccess().equalsIgnoreCase("True")) {
+
+                        Utils.setPref(mContext, "FamilyID", familyInfoModel.getContactID());
+                        contatIDstr = familyInfoModel.getContactID();
+                        callTeacherLoginApi();
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getNewFamilyetail() {
+        Map<String, String> map = new HashMap<>();
+        map.put("FirstName", firstNameStr);
+        map.put("LastName", lastNameStr);
+        map.put("EmailAddress", emailStr);
+        map.put("Password", passwordStr);
+        map.put("GenderID", gendarIdStr);
+        map.put("DateOfBirth", dateofbirthStr);
+        map.put("PhoneNumber", phonenoStr);
+        return map;
+    }
+
+    public void ConformSessionDialog() {
+        confimDialog = new Dialog(mContext, R.style.Theme_Dialog);
+        Window window = confimDialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        confimDialog.getWindow().getAttributes().verticalMargin = 0.20f;
+        wlp.gravity = Gravity.TOP;
+        window.setAttributes(wlp);
+
+        confimDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+
+        confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        confimDialog.setCancelable(false);
+        confimDialog.setContentView(R.layout.confirm_session_dialog);
+
+
+        session_student_txt_view = (TextView) confimDialog.findViewById(R.id.session_student_txt_view);
+        session_student_txt = (TextView) confimDialog.findViewById(R.id.session_student_txt);
+        session_name_txt = (TextView) confimDialog.findViewById(R.id.session_name_txt);
+        location_txt = (TextView) confimDialog.findViewById(R.id.location_txt);
+        duration_txt = (TextView) confimDialog.findViewById(R.id.duration_txt);
+        time_txt = (TextView) confimDialog.findViewById(R.id.time_txt);
+        time_txt_view = (TextView) confimDialog.findViewById(R.id.time_txt_view);
+        session_fee_txt = (TextView) confimDialog.findViewById(R.id.session_fee_txt);
+        confirm_txt = (TextView) confimDialog.findViewById(R.id.confirm_txt);
+        cancel_txt = (TextView) confimDialog.findViewById(R.id.cancel_txt);
+        session_student_txt_view.setText("TEACHER NAME");
+
+        session_student_txt.setText(AppConfiguration.classteacherSessionName);
+        session_name_txt.setText(AppConfiguration.classSessionName);
+        location_txt.setText(AppConfiguration.classsessionLocation);
+        duration_txt.setText(AppConfiguration.classsessionDuration);
+        time_txt.setText(AppConfiguration.classsessionDate);
+        if (AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
+            session_fee_txt.setText("Free");
+        } else {
+            session_fee_txt.setText("₹ " + AppConfiguration.classsessionPrice);
+        }
+        cancel_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                confimDialog.dismiss();
+            }
+        });
+        confirm_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
+                    callpaymentRequestApi();
+                } else {
+                    paymentStatusstr = "1";
+                    callSessionConfirmationApi();
+                }
+                confimDialog.dismiss();
+            }
+        });
+
+
+        confimDialog.show();
+    }
+
+    //Use for paymentRequest
+    public void callpaymentRequestApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_GeneratePaymentRequest(getpaymentRequestdetail(), new retrofit.Callback<TeacherInfoModel>() {
+                @Override
+                public void success(TeacherInfoModel paymentRequestModel, Response response) {
+                    Utils.dismissDialog();
+                    if (paymentRequestModel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (paymentRequestModel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (paymentRequestModel.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.ping(mContext, getString(R.string.false_msg));
+                        return;
+                    }
+                    if (paymentRequestModel.getSuccess().equalsIgnoreCase("True")) {
+                        orderIDStr = paymentRequestModel.getOrderID();
+                        Intent ipayment = new Intent(mContext, PaymentActivity.class);
+                        ipayment.putExtra("orderID", orderIDStr);
+                        ipayment.putExtra("amount", AppConfiguration.classsessionPrice);
+                        ipayment.putExtra("mode", "TEST");
+                        ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
+                        ipayment.putExtra("sessionID", sessionIDStr);
+                        ipayment.putExtra("contactID", Utils.getPref(mContext, "coachID"));
+                        ipayment.putExtra("type", Utils.getPref(mContext, "LoginType"));
+                        startActivity(ipayment);
+
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getpaymentRequestdetail() {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("ContactID", contatIDstr);
+        map.put("SessionID", sessionIDStr);
+        map.put("Amount", AppConfiguration.classsessionPrice);
+
+        return map;
+    }
+
+
+    //Use for Family and Child Session Confirmation
+    public void callSessionConfirmationApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_Session_ContactEnrollment(getSessionConfirmationdetail(), new retrofit.Callback<TeacherInfoModel>() {
+                @Override
+                public void success(TeacherInfoModel sessionconfirmationInfoModel, Response response) {
+                    Utils.dismissDialog();
+                    if (sessionconfirmationInfoModel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionconfirmationInfoModel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionconfirmationInfoModel.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.ping(mContext, getString(R.string.false_msg));
+                        return;
+                    }
+                    if (sessionconfirmationInfoModel.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.ping(mContext, "Login Succesfully");
+                        confimDialog.dismiss();
+                        Intent isearchBYuser = new Intent(mContext, SearchByUser.class);
+                        startActivity(isearchBYuser);
+
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getSessionConfirmationdetail() {
+        Map<String, String> map = new HashMap<>();
+        map.put("SessionID", sessionIDStr);
+        map.put("ContactID", contatIDstr);
+        map.put("PaymentStatus", paymentStatusstr);
+        return map;
+    }
 }

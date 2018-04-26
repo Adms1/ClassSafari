@@ -30,12 +30,16 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     List<sessionDataModel> arrayList;
     int SessionHour = 0;
     Integer SessionMinit = 0;
+    String searchByStr, locationStr, classNameStr;
 
     String address;
 
-    public ClassDetailAdapter(Context mContext, List<sessionDataModel> arrayList) {
+    public ClassDetailAdapter(Context mContext, List<sessionDataModel> arrayList, String searchByStr, String locationStr, String classNameStr) {
         this.mContext = mContext;
         this.arrayList = arrayList;
+        this.searchByStr = searchByStr;
+        this.locationStr = locationStr;
+        this.classNameStr = classNameStr;
 //        setHasStableIds(true);
 
     }
@@ -101,6 +105,11 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
             public void onClick(View view) {
                 Intent inSession = new Intent(mContext, SessionName.class);
                 inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
+                inSession.putExtra("SearchBy", searchByStr);
+                inSession.putExtra("city", locationStr);
+                inSession.putExtra("sessionName", classNameStr);
+                inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() +" To "+ holder.end_date_txt.getText().toString());
+                inSession.putExtra("duration", holder.duration_txt.getText().toString());
                 mContext.startActivity(inSession);
             }
         });
@@ -170,7 +179,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
 
             }
         }
-        arrayList.get(position).setDuration("Duration " + SessionHour + " hr " + SessionMinit + " min");
+        arrayList.get(position).setDuration(SessionHour + " hr " + SessionMinit + " min");
         holder.duration_txt.setText(arrayList.get(position).getDuration());
         holder.location_txt.setOnClickListener(new View.OnClickListener() {
             @Override

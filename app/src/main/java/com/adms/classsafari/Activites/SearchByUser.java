@@ -101,7 +101,7 @@ public class SearchByUser extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent inClassDetail = new Intent(mContext, LoginActivity.class);
-//                inClassDetail.putExtra("flag", "0");
+                inClassDetail.putExtra("frontLogin", "beforeLogin");
                 startActivity(inClassDetail);
             }
         });

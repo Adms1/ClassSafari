@@ -230,11 +230,7 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
                                     if (!phonenoStr.equalsIgnoreCase("") && phonenoStr.length() >= 10) {
                                         if (!gendarIdStr.equalsIgnoreCase("")) {
                                             if (!dateofbirthStr.equalsIgnoreCase("")) {
-                                                if (type.equalsIgnoreCase("Family")) {
-                                                    callFamilyApi();
-                                                } else {
-                                                    callNewChildApi();
-                                                }
+                                              callCheckEmailIdApi();
                                             } else {
                                                 addFamilyBinding.dateOfBirthEdt.setError("Please Select Your Birth Date.");
                                             }
@@ -395,7 +391,11 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
                         return;
                     }
                     if (teacherInfoModel.getSuccess().equalsIgnoreCase("false")) {
-                        Utils.ping(mContext, getString(R.string.false_msg));
+                        if (type.equalsIgnoreCase("Family")) {
+                            callFamilyApi();
+                        } else {
+                            callNewChildApi();
+                        }
                         return;
                     }
                     if (teacherInfoModel.getSuccess().equalsIgnoreCase("True")) {

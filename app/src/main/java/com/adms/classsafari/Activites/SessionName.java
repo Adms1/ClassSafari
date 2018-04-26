@@ -2,13 +2,16 @@ package com.adms.classsafari.Activites;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -21,6 +24,7 @@ import com.adms.classsafari.AppConstant.AppConfiguration;
 import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.Session.sessionDataModel;
+import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivitySessionNameNewBinding;
 
@@ -38,8 +42,8 @@ public class SessionName extends AppCompatActivity {
     SessionDetailAdapter sessionDetailAdapter;
     List<sessionDataModel> arrayList;
     Dialog confimDialog;
-    TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, session_fee_txt;
-    String sessionIDStr;
+    TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, time_txt_view, session_fee_txt;
+    String sessionIDStr, searchByStr, locationStr, classNameStr, sessionDateStr, durationStr, paymentStatusstr, orderIDStr;
     SessionDetailModel dataResponse;
 
     @Override
@@ -49,6 +53,11 @@ public class SessionName extends AppCompatActivity {
         mContext = SessionName.this;
 
         sessionIDStr = getIntent().getStringExtra("sessionID");
+        searchByStr = getIntent().getStringExtra("SearchBy");
+        locationStr = getIntent().getStringExtra("city");
+        classNameStr = getIntent().getStringExtra("sessionName");
+        sessionDateStr = getIntent().getStringExtra("sessiondate");
+        durationStr = getIntent().getStringExtra("duration");
         init();
         setListner();
     }
@@ -64,6 +73,9 @@ public class SessionName extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent inback = new Intent(mContext, ClassDeatilScreen.class);
+                inback.putExtra("SearchBy", searchByStr);
+                inback.putExtra("city", locationStr);
+                inback.putExtra("sessionName", classNameStr);
                 startActivity(inback);
             }
         });
@@ -71,10 +83,32 @@ public class SessionName extends AppCompatActivity {
         sessionNameBinding.bookSessionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ConformSessionDialog();
-//                Intent iLogin = new Intent(mContext, LoginActivity.class);
-//                startActivity(iLogin);
+                if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
+                    new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                            .setCancelable(false)
+                            .setTitle("Login")
+                            .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+                            .setMessage("You are not login,So Please Login.")
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intentLogin = new Intent(mContext, LoginActivity.class);
+                                    intentLogin.putExtra("frontLogin", "afterLogin");
+                                    intentLogin.putExtra("sessionID", sessionIDStr);
+                                    startActivity(intentLogin);
+                                    finish();
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
 
+                                }
+                            })
+                            .setIcon(R.drawable.safari)
+                            .show();
+                } else {
+                    ConformSessionDialog();
+                }
             }
         });
 
@@ -85,7 +119,7 @@ public class SessionName extends AppCompatActivity {
         super.onBackPressed();
 
         Intent inback = new Intent(mContext, ClassDeatilScreen.class);
-        inback.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        inback.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(inback);
     }
 
@@ -110,6 +144,7 @@ public class SessionName extends AppCompatActivity {
         location_txt = (TextView) confimDialog.findViewById(R.id.location_txt);
         duration_txt = (TextView) confimDialog.findViewById(R.id.duration_txt);
         time_txt = (TextView) confimDialog.findViewById(R.id.time_txt);
+        time_txt_view = (TextView) confimDialog.findViewById(R.id.time_txt_view);
         session_fee_txt = (TextView) confimDialog.findViewById(R.id.session_fee_txt);
         confirm_txt = (TextView) confimDialog.findViewById(R.id.confirm_txt);
         cancel_txt = (TextView) confimDialog.findViewById(R.id.cancel_txt);
@@ -124,15 +159,20 @@ public class SessionName extends AppCompatActivity {
         confirm_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent inLogin = new Intent(SessionName.this, LoginActivity.class);
-                inLogin.putExtra("flag", "1");
-                startActivity(inLogin);
+                if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
+                    callpaymentRequestApi();
+                } else {
+                    paymentStatusstr = "1";
+                    callSessionConfirmationApi();
+                }
+                confimDialog.dismiss();
             }
         });
 
 
         confimDialog.show();
     }
+
     //Use for SessionList
     public void callSessionListApi() {
         if (Utils.checkNetwork(mContext)) {
@@ -187,10 +227,27 @@ public class SessionName extends AppCompatActivity {
 
         for (int i = 0; i < dataResponse.getData().size(); i++) {
             arrayList.add(dataResponse.getData().get(i));
+            AppConfiguration.classsessionPrice = dataResponse.getData().get(i).getSessionAmount();
             if (dataResponse.getData().get(i).getSessionAmount().equalsIgnoreCase("0.00")) {
                 dataResponse.getData().get(i).setSessionAmount("Free");
             }
             sessionNameBinding.priceTxt.setText("₹ " + dataResponse.getData().get(i).getSessionAmount());
+
+            AppConfiguration.classSessionName = dataResponse.getData().get(i).getSessionName();
+            AppConfiguration.classteacherSessionName = dataResponse.getData().get(i).getName();
+            AppConfiguration.classsessionLocation = dataResponse.getData().get(i).getAddressLine1()
+                    + ", " + dataResponse.getData().get(i).getRegionName()
+                    + ", " + dataResponse.getData().get(i).getAddressCity()
+                    + ", " + dataResponse.getData().get(i).getAddressState()
+                    + "- " + dataResponse.getData().get(i).getAddressZipCode();
+            AppConfiguration.classsessionDate = sessionDateStr;
+            AppConfiguration.classsessionDuration = durationStr;
+//            if (dataResponse.getData().get(i).getSessionAmount().equalsIgnoreCase("0.00")) {
+//                AppConfiguration.classsessionPrice = "Free";
+//            } else {
+
+//            }
+
         }
 
         sessionDetailAdapter = new SessionDetailAdapter(mContext, arrayList);
@@ -198,6 +255,8 @@ public class SessionName extends AppCompatActivity {
         sessionNameBinding.sessionListRecView.setLayoutManager(mLayoutManager);
         sessionNameBinding.sessionListRecView.setItemAnimator(new DefaultItemAnimator());
         sessionNameBinding.sessionListRecView.setAdapter(sessionDetailAdapter);
+
+
     }
 
     public void setDialogData() {
@@ -213,10 +272,123 @@ public class SessionName extends AppCompatActivity {
                     + ", " + dataResponse.getData().get(i).getAddressCity()
                     + ", " + dataResponse.getData().get(i).getAddressState()
                     + "- " + dataResponse.getData().get(i).getAddressZipCode());
-            duration_txt.setText(AppConfiguration.SessionDuration);
-            time_txt.setText(AppConfiguration.SessionTime);
             session_student_txt.setText(dataResponse.getData().get(i).getName());
+        }
+        time_txt_view.setText("Date");
+        duration_txt.setText(durationStr);
+        time_txt.setText(sessionDateStr);
+
+    }
+
+    //Use for paymentRequest
+    public void callpaymentRequestApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_GeneratePaymentRequest(getpaymentRequestdetail(), new retrofit.Callback<TeacherInfoModel>() {
+                @Override
+                public void success(TeacherInfoModel paymentRequestModel, Response response) {
+                    Utils.dismissDialog();
+                    if (paymentRequestModel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (paymentRequestModel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (paymentRequestModel.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.ping(mContext, getString(R.string.false_msg));
+                        return;
+                    }
+                    if (paymentRequestModel.getSuccess().equalsIgnoreCase("True")) {
+                        orderIDStr = paymentRequestModel.getOrderID();
+                        Intent ipayment = new Intent(mContext, PaymentActivity.class);
+                        ipayment.putExtra("orderID", orderIDStr);
+                        ipayment.putExtra("amount", AppConfiguration.classsessionPrice);
+                        ipayment.putExtra("mode", "TEST");
+                        ipayment.putExtra("username", Utils.getPref(mContext,"RegisterUserName"));
+                        ipayment.putExtra("sessionID", sessionIDStr);
+                        ipayment.putExtra("contactID", Utils.getPref(mContext, "coachID"));
+                        ipayment.putExtra("type", Utils.getPref(mContext, "LoginType"));
+                        startActivity(ipayment);
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
         }
     }
 
+    private Map<String, String> getpaymentRequestdetail() {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("ContactID", Utils.getPref(mContext, "coachID"));
+        map.put("SessionID", sessionIDStr);
+        map.put("Amount", AppConfiguration.classsessionPrice);
+
+        return map;
+    }
+
+
+    //Use for Family and Child Session Confirmation
+    public void callSessionConfirmationApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_Session_ContactEnrollment(getSessionConfirmationdetail(), new retrofit.Callback<TeacherInfoModel>() {
+                @Override
+                public void success(TeacherInfoModel sessionconfirmationInfoModel, Response response) {
+                    Utils.dismissDialog();
+                    if (sessionconfirmationInfoModel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionconfirmationInfoModel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionconfirmationInfoModel.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.ping(mContext, getString(R.string.false_msg));
+                        return;
+                    }
+                    if (sessionconfirmationInfoModel.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.ping(mContext, "Login Succesfully");
+                        confimDialog.dismiss();
+                        Intent isearchBYuser = new Intent(mContext, SearchByUser.class);
+                        startActivity(isearchBYuser);
+
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getSessionConfirmationdetail() {
+        Map<String, String> map = new HashMap<>();
+        map.put("SessionID", sessionIDStr);
+        map.put("ContactID", Utils.getPref(mContext, "coachID"));
+        map.put("PaymentStatus", paymentStatusstr);
+        return map;
+    }
 }
+
+

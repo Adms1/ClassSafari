@@ -21,4 +21,14 @@ public class AppConfiguration {
     public static String RegisterEmail;
     public static String ClassLocation;
 
+
+    //ClassSafari String
+    public static String classSessionName;
+    public static String classteacherSessionName;
+    public static String classsessionLocation;
+    public static String classsessionDate;
+    public static String classsessionDuration;
+    public static String classsessionPrice;
+    public static String famliyName;
+
 }

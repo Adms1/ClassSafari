@@ -394,14 +394,14 @@ public class ClassSearchScreen extends AppCompatActivity {
         ArrayList<String> LessionNameArray = new ArrayList<String>();
 
         for (int j = 0; j < datafilterResponse.size(); j++) {
-            if (selectedSessionStr.equalsIgnoreCase("")) {
+            if (selectedSessionStr.trim().equalsIgnoreCase("")) {
                 if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr)) {
-                    LessionNameArray.add(datafilterResponse.get(j).getLessionTypeName());
+                    LessionNameArray.add(datafilterResponse.get(j).getLessionTypeName().trim());
                 }
             } else {
                 if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr) &&
-                        datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr)) {
-                    LessionNameArray.add(datafilterResponse.get(j).getLessionTypeName());
+                        datafilterResponse.get(j).getSessionName().trim().equalsIgnoreCase(selectedSessionStr)) {
+                    LessionNameArray.add(datafilterResponse.get(j).getLessionTypeName().trim());
                 }
             }
         }

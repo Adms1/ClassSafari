@@ -62,7 +62,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
     CrystalRangeSeekbar rangeSeekbar;
     TextView price_range1_txt, price_range2_txt;
     //    List<ClassDetailModel> sessionfullDetailList;
-    String subjectStr, boardStr="", standardStr="", streamStr="", locationStr, classNameStr, searchByStr, searchTypeStr, wheretoComeStr, genderStr;
+    String subjectStr, boardStr = "", standardStr = "", streamStr = "", locationStr, classNameStr, searchByStr, searchTypeStr, wheretoComeStr, genderStr;
     int SessionHour = 0;
     Integer SessionMinit = 0;
     SessionDetailModel dataResponse;
@@ -92,16 +92,16 @@ public class ClassDeatilScreen extends AppCompatActivity {
         wheretoComeStr = getIntent().getStringExtra("withOR");
         genderStr = getIntent().getStringExtra("gender");
         BottomNavigationViewHelper.removeShiftMode(binding.bottomNavigationView);
-       if(!searchByStr.equalsIgnoreCase("1")) {
-           if (!boardStr.equalsIgnoreCase("") || !standardStr.equalsIgnoreCase("") || !streamStr.equalsIgnoreCase("")) {
-               binding.boardTxt.setText("\u2022" + boardStr);
-               binding.standardTxt.setText("\u2022" + standardStr);
-               binding.streamTxt.setText("\u2022" + streamStr);
+        if (!searchByStr.equalsIgnoreCase("1")) {
+            if (!boardStr.equalsIgnoreCase("") || !standardStr.equalsIgnoreCase("") || !streamStr.equalsIgnoreCase("")) {
+                binding.boardTxt.setText("\u2022" + boardStr);
+                binding.standardTxt.setText("\u2022" + standardStr);
+                binding.streamTxt.setText("\u2022" + streamStr);
 
-           }
-           binding.cityTxt.setText(locationStr);
-           binding.subjectTxt.setText(classNameStr);
-       }
+            }
+            binding.cityTxt.setText(locationStr);
+            binding.subjectTxt.setText(classNameStr);
+        }
         callSessionListApi();
     }
 
@@ -415,7 +415,23 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                             }
                                             fillData(filterFinalArray);
                                         }
-                                    }  else {
+                                    } else if (!subjectStr.equalsIgnoreCase("") || !boardStr.equalsIgnoreCase("") ||
+                                            !standardStr.equalsIgnoreCase("") || !streamStr.equalsIgnoreCase("")) {
+                                        List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                                        for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                            if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+                                                    arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim())) {
+                                                if (arrayObj.getLessionTypeName().trim().equalsIgnoreCase(subjectStr.trim()) ||
+                                                        arrayObj.getBoard().equalsIgnoreCase(boardStr.trim()) ||
+                                                        arrayObj.getStandard().equalsIgnoreCase(standardStr.trim()) ||
+                                                        arrayObj.getStream().equalsIgnoreCase(streamStr.trim()) ||
+                                                        arrayObj.getGenderID().equalsIgnoreCase(genderStr)){
+                                                    filterFinalArray.add(arrayObj);
+                                                }
+                                            }
+                                            fillData(filterFinalArray);
+                                        }
+                                    } else {
                                         List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                                         for (sessionDataModel arrayObj : dataResponse.getData()) {
                                             if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
@@ -459,7 +475,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                 }
             }
         }
-        classDetailAdapter = new ClassDetailAdapter(mContext, array);
+        classDetailAdapter = new ClassDetailAdapter(mContext, array,searchByStr,locationStr,classNameStr);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         binding.classListRecView.setLayoutManager(mLayoutManager);
         binding.classListRecView.setItemAnimator(new DefaultItemAnimator());

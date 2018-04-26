@@ -31,9 +31,9 @@
             android:name=".Activites.SearchByUser"
             android:screenOrientation="portrait">
             <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -49,18 +49,20 @@
             android:name=".Activites.AddStudentScreen"
             android:screenOrientation="portrait" />
         <activity android:name=".Activites.AddSessionScreen" />
-        <activity android:name=".Activites.PaymentActivity"></activity>
+        <activity android:name=".Activites.PaymentActivity" />
 
-        <!--Safari-->
+        <!-- Safari -->
         <activity
             android:name=".Activites.LoginActivity"
             android:configChanges="keyboardHidden"
             android:screenOrientation="portrait">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
+
         <receiver
             android:name=".BroadcastReceiver.IncomingSms"
             android:exported="true"
@@ -78,26 +80,30 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan" />
 
-        <!--<meta-data-->
-        <!--android:name="com.facebook.sdk.ApplicationId"-->
-        <!--android:value="@string/facebook_app_id" />-->
+        <!-- <meta-data -->
+        <!-- android:name="com.facebook.sdk.ApplicationId" -->
+        <!-- android:value="@string/facebook_app_id" /> -->
 
-        <!--<activity-->
-        <!--android:name="com.facebook.FacebookActivity"-->
-        <!--android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"-->
-        <!--android:label="@string/app_name" />-->
-        <!--<activity-->
-        <!--android:name="com.facebook.CustomTabActivity"-->
-        <!--android:exported="true">-->
-        <!--<intent-filter>-->
-        <!--<action android:name="android.intent.action.VIEW" />-->
 
-        <!--<category android:name="android.intent.category.DEFAULT" />-->
-        <!--<category android:name="android.intent.category.BROWSABLE" />-->
+        <!-- <activity -->
+        <!-- android:name="com.facebook.FacebookActivity" -->
+        <!-- android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" -->
+        <!-- android:label="@string/app_name" /> -->
+        <!-- <activity -->
+        <!-- android:name="com.facebook.CustomTabActivity" -->
+        <!-- android:exported="true"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.VIEW" /> -->
 
-        <!--<data android:scheme="@string/fb_login_protocol_scheme" />-->
-        <!--</intent-filter>-->
-        <!--</activity>-->
+
+        <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+        <!-- <category android:name="android.intent.category.BROWSABLE" /> -->
+
+
+        <!-- <data android:scheme="@string/fb_login_protocol_scheme" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
+        <activity android:name=".Activites.PaymentSuccessActivity"></activity>
     </application>
 
 </manifest>

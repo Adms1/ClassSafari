@@ -282,9 +282,9 @@
                 android:layout_marginLeft="@dimen/_15sdp"
                 android:layout_marginRight="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_30sdp"
-                android:background="@drawable/login_btn"
+                android:background="@drawable/register_btn"
                 android:text="Search"
-                android:textAllCaps="false"
+                android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12sdp" />
         </LinearLayout>

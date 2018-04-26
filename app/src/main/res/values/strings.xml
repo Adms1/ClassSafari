@@ -82,6 +82,7 @@
     <string name="session_name">Session Name</string>
     <string name="session_standard">Standard</string>
     <string name="search_board">Board</string>
+    <string name="payment_success">Payment Success</string>
     <string name="search_standard">Standard</string>
     <string name="session_board">Board</string>
     <string name="address">Address</string>
@@ -98,6 +99,8 @@
     <string name="single">Single</string>
     <string name="academic">Academic</string>
     <string name="play">Sports</string>
+    <string name="family_regi">Family</string>
+    <string name="teacher_regi">Teacher</string>
     <string name="add_Student">Add Family</string>
     <string name="age">Age</string>
     <string name="dob">Date of Birth</string>
