@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/_150sdp"
+    android:layout_height="@dimen/_25sdp"
+    android:background="@color/blue"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/btnMyReport"
+        android:layout_width="@dimen/_150sdp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center|center_vertical"
+        android:padding="@dimen/_5sdp"
+        android:text="@string/my_Account"
+        android:textAllCaps="false"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/_12sdp"
+        android:visibility="visible" />
+
+</LinearLayout>

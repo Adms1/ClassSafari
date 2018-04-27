@@ -115,7 +115,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_45sdp"
-                    android:text="₹ 5000/-"
+                    android:text=""
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_15sdp"
                     android:textStyle="bold" />

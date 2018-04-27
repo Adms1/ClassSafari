@@ -30,16 +30,18 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     List<sessionDataModel> arrayList;
     int SessionHour = 0;
     Integer SessionMinit = 0;
-    String searchByStr, locationStr, classNameStr;
+    String searchByStr, locationStr, classNameStr, address, boardStr, streamStr, standardStr;
 
-    String address;
-
-    public ClassDetailAdapter(Context mContext, List<sessionDataModel> arrayList, String searchByStr, String locationStr, String classNameStr) {
+    public ClassDetailAdapter(Context mContext, List<sessionDataModel> arrayList, String searchByStr, String locationStr,
+                              String classNameStr, String boardStr, String streamStr, String standardStr) {
         this.mContext = mContext;
         this.arrayList = arrayList;
         this.searchByStr = searchByStr;
         this.locationStr = locationStr;
         this.classNameStr = classNameStr;
+        this.boardStr = boardStr;
+        this.streamStr = streamStr;
+        this.standardStr = standardStr;
 //        setHasStableIds(true);
 
     }
@@ -96,7 +98,11 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                 "," + arrayList.get(position).getAddressState() +
                 "-" + arrayList.get(position).getAddressZipCode();
         holder.session_name_txt.setText(arrayList.get(position).getSessionName());
-        holder.price_txt.setText("₹ " + arrayList.get(position).getSessionAmount());
+        if (arrayList.get(position).getSessionAmount().equalsIgnoreCase("Free")) {
+            holder.price_txt.setText(arrayList.get(position).getSessionAmount());
+        } else {
+            holder.price_txt.setText("₹ " + arrayList.get(position).getSessionAmount());
+        }
         holder.start_date_txt.setText(arrayList.get(position).getStartDate());
         holder.end_date_txt.setText(arrayList.get(position).getEndDate());
         holder.location_txt.setText(arrayList.get(position).getRegionName());
@@ -108,7 +114,10 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                 inSession.putExtra("SearchBy", searchByStr);
                 inSession.putExtra("city", locationStr);
                 inSession.putExtra("sessionName", classNameStr);
-                inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() +" To "+ holder.end_date_txt.getText().toString());
+                inSession.putExtra("board", boardStr);
+                inSession.putExtra("stream", streamStr);
+                inSession.putExtra("standard", standardStr);
+                inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() + " To " + holder.end_date_txt.getText().toString());
                 inSession.putExtra("duration", holder.duration_txt.getText().toString());
                 mContext.startActivity(inSession);
             }

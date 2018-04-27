@@ -23,7 +23,7 @@
             android:title="Change Password"/>
         <item
             android:id="@+id/logout"
-            android:icon="@drawable/logout"
+            android:icon="@drawable/logout1"
             android:title="Logout" />
 
         <!--<item-->

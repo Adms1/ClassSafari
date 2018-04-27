@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     Dialog forgotDialog;
     EditText edtEmail;
     TextView btnSendRegEmail, cancel_txt;
-    String EmailIdStr, type;
+    String EmailIdStr, type, searchByStr;
 
     //Use for Confirmation dialog
     Dialog confimDialog;
@@ -58,6 +58,8 @@ public class LoginActivity extends AppCompatActivity {
         mContext = LoginActivity.this;
         sessionIDStr = getIntent().getStringExtra("sessionID");
         whereTocomestr = getIntent().getStringExtra("frontLogin");
+        searchByStr = getIntent().getStringExtra("SearchBy");
+
         if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
             checkUnmPwd();
         }
@@ -77,8 +79,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent inregister = new Intent(mContext, RegistrationActivity.class);
-                inregister.putExtra("sessionID",sessionIDStr);
-                inregister.putExtra("frontLogin",whereTocomestr);
+                inregister.putExtra("sessionID", sessionIDStr);
+                inregister.putExtra("frontLogin", whereTocomestr);
                 startActivity(inregister);
             }
         });
@@ -193,12 +195,19 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(mContext, SessionName.class);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        finish();
-        System.exit(0);
+        if (whereTocomestr.equalsIgnoreCase("beforeLogin")) {
+            Intent isearchbyuser = new Intent(mContext, SearchByUser.class);
+            startActivity(isearchbyuser);
+        } else {
+            Intent intent = new Intent(mContext, SessionName.class);
+            intent.putExtra("SearchBy", searchByStr);
+            intent.putExtra("sessionID", sessionIDStr);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+            System.exit(0);
+        }
     }
 
     //Use for Login Teacher
@@ -242,6 +251,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         } else {
                             Intent inLogin = new Intent(mContext, DashBoardActivity.class);
+                            inLogin.putExtra("frontLogin", whereTocomestr);
                             startActivity(inLogin);
                         }
                     }

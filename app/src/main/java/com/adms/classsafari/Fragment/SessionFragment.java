@@ -121,7 +121,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
         Calendar maxDate = Calendar.getInstance();
 
         minDate.add(Calendar.MONTH, -2);
-        maxDate.add(Calendar.YEAR, 1);
+        maxDate.add(Calendar.YEAR, 3);
 
         mockList(eventList);
         calendarBinding.agendaCalendarView.init(eventList, minDate, maxDate, Locale.US, this);

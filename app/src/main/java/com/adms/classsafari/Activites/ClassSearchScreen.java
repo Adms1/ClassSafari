@@ -119,6 +119,7 @@ public class ClassSearchScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent inSearchUser = new Intent(mContext, SearchByUser.class);
+
                 startActivity(inSearchUser);
             }
         });
@@ -304,7 +305,7 @@ public class ClassSearchScreen extends AppCompatActivity {
         selectedSessionCityStr = classSearchScreenBinding.searchAutoTxt.getText().toString();
         ArrayList<String> SesisonNameArray = new ArrayList<String>();
         for (int j = 0; j < datafilterResponse.size(); j++) {
-            if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr)) {
+            if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())) {
                 SesisonNameArray.add(datafilterResponse.get(j).getSessionName());
             }
         }
@@ -322,12 +323,12 @@ public class ClassSearchScreen extends AppCompatActivity {
         ArrayList<String> BoardName = new ArrayList<String>();
         for (int j = 0; j < datafilterResponse.size(); j++) {
             if (selectedSessionStr.equalsIgnoreCase("")) {
-                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr)) {
+                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())) {
                     BoardName.add(datafilterResponse.get(j).getBoard());
                 }
             } else {
-                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr) &&
-                        datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr)) {
+                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
+                        datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim())) {
                     BoardName.add(datafilterResponse.get(j).getBoard());
                 }
             }
@@ -347,12 +348,12 @@ public class ClassSearchScreen extends AppCompatActivity {
         ArrayList<String> StandardName = new ArrayList<String>();
         for (int j = 0; j < datafilterResponse.size(); j++) {
             if (selectedSessionStr.equalsIgnoreCase("")) {
-                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr)) {
+                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())) {
                     StandardName.add(datafilterResponse.get(j).getStandard());
                 }
             } else {
-                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr) &&
-                        datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr)) {
+                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
+                        datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim())) {
                     StandardName.add(datafilterResponse.get(j).getStandard());
                 }
             }
@@ -375,8 +376,8 @@ public class ClassSearchScreen extends AppCompatActivity {
                     StreamName.add(datafilterResponse.get(j).getStream());
                 }
             } else {
-                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr) &&
-                        datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr)) {
+                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
+                        datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim())) {
                     StreamName.add(datafilterResponse.get(j).getStream());
                 }
             }
@@ -395,12 +396,12 @@ public class ClassSearchScreen extends AppCompatActivity {
 
         for (int j = 0; j < datafilterResponse.size(); j++) {
             if (selectedSessionStr.trim().equalsIgnoreCase("")) {
-                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr)) {
+                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())) {
                     LessionNameArray.add(datafilterResponse.get(j).getLessionTypeName().trim());
                 }
             } else {
-                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr) &&
-                        datafilterResponse.get(j).getSessionName().trim().equalsIgnoreCase(selectedSessionStr)) {
+                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
+                        datafilterResponse.get(j).getSessionName().trim().equalsIgnoreCase(selectedSessionStr.trim())) {
                     LessionNameArray.add(datafilterResponse.get(j).getLessionTypeName().trim());
                 }
             }
@@ -434,8 +435,8 @@ public class ClassSearchScreen extends AppCompatActivity {
             if (selectedSessionStr.equalsIgnoreCase("")) {
 
             } else {
-                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr) &&
-                        datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr)) {
+                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
+                        datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim())) {
                     if (dataResponse.getData().get(j).getGenderID().equalsIgnoreCase("1")) {
                         classSearchScreenBinding.maleChk.setChecked(true);
                     } else {

@@ -43,7 +43,7 @@ public class SessionName extends AppCompatActivity {
     List<sessionDataModel> arrayList;
     Dialog confimDialog;
     TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, time_txt_view, session_fee_txt;
-    String sessionIDStr, searchByStr, locationStr, classNameStr, sessionDateStr, durationStr, paymentStatusstr, orderIDStr;
+    String sessionIDStr, searchByStr, locationStr, classNameStr, sessionDateStr, durationStr, paymentStatusstr, orderIDStr,boardStr,standardStr,streamStr;
     SessionDetailModel dataResponse;
 
     @Override
@@ -58,6 +58,9 @@ public class SessionName extends AppCompatActivity {
         classNameStr = getIntent().getStringExtra("sessionName");
         sessionDateStr = getIntent().getStringExtra("sessiondate");
         durationStr = getIntent().getStringExtra("duration");
+        standardStr = getIntent().getStringExtra("standard");
+        streamStr = getIntent().getStringExtra("stream");
+        boardStr = getIntent().getStringExtra("board");
         init();
         setListner();
     }
@@ -69,6 +72,7 @@ public class SessionName extends AppCompatActivity {
     }
 
     public void setListner() {
+
         sessionNameBinding.back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,6 +80,10 @@ public class SessionName extends AppCompatActivity {
                 inback.putExtra("SearchBy", searchByStr);
                 inback.putExtra("city", locationStr);
                 inback.putExtra("sessionName", classNameStr);
+                inback.putExtra("board", boardStr);
+                inback.putExtra("stream", streamStr);
+                inback.putExtra("standard", standardStr);
+
                 startActivity(inback);
             }
         });
@@ -94,6 +102,7 @@ public class SessionName extends AppCompatActivity {
                                     Intent intentLogin = new Intent(mContext, LoginActivity.class);
                                     intentLogin.putExtra("frontLogin", "afterLogin");
                                     intentLogin.putExtra("sessionID", sessionIDStr);
+                                    intentLogin.putExtra("SearchBy", searchByStr);
                                     startActivity(intentLogin);
                                     finish();
                                 }
@@ -119,6 +128,12 @@ public class SessionName extends AppCompatActivity {
         super.onBackPressed();
 
         Intent inback = new Intent(mContext, ClassDeatilScreen.class);
+        inback.putExtra("SearchBy",searchByStr);
+        inback.putExtra("city", locationStr);
+        inback.putExtra("sessionName", classNameStr);
+        inback.putExtra("board", boardStr);
+        inback.putExtra("stream", streamStr);
+        inback.putExtra("standard", standardStr);
         inback.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(inback);
     }
@@ -231,8 +246,11 @@ public class SessionName extends AppCompatActivity {
             if (dataResponse.getData().get(i).getSessionAmount().equalsIgnoreCase("0.00")) {
                 dataResponse.getData().get(i).setSessionAmount("Free");
             }
-            sessionNameBinding.priceTxt.setText("₹ " + dataResponse.getData().get(i).getSessionAmount());
-
+            if (dataResponse.getData().get(i).getSessionAmount().equalsIgnoreCase("Free")) {
+                sessionNameBinding.priceTxt.setText(dataResponse.getData().get(i).getSessionAmount());
+            } else {
+                sessionNameBinding.priceTxt.setText("₹ " + dataResponse.getData().get(i).getSessionAmount()+" /-");
+            }
             AppConfiguration.classSessionName = dataResponse.getData().get(i).getSessionName();
             AppConfiguration.classteacherSessionName = dataResponse.getData().get(i).getName();
             AppConfiguration.classsessionLocation = dataResponse.getData().get(i).getAddressLine1()
@@ -242,11 +260,7 @@ public class SessionName extends AppCompatActivity {
                     + "- " + dataResponse.getData().get(i).getAddressZipCode();
             AppConfiguration.classsessionDate = sessionDateStr;
             AppConfiguration.classsessionDuration = durationStr;
-//            if (dataResponse.getData().get(i).getSessionAmount().equalsIgnoreCase("0.00")) {
-//                AppConfiguration.classsessionPrice = "Free";
-//            } else {
 
-//            }
 
         }
 
@@ -261,10 +275,10 @@ public class SessionName extends AppCompatActivity {
 
     public void setDialogData() {
         for (int i = 0; i < dataResponse.getData().size(); i++) {
-            if (dataResponse.getData().get(i).getSessionAmount().equalsIgnoreCase("0.00")) {
-                session_fee_txt.setText("Free");
+            if (dataResponse.getData().get(i).getSessionAmount().equalsIgnoreCase("Free")) {
+                session_fee_txt.setText(dataResponse.getData().get(i).getSessionAmount());
             } else {
-                session_fee_txt.setText("₹ " + dataResponse.getData().get(i).getSessionAmount());
+                session_fee_txt.setText("₹ " + dataResponse.getData().get(i).getSessionAmount()+" /-");
             }
             session_name_txt.setText(dataResponse.getData().get(i).getSessionName());
             location_txt.setText(dataResponse.getData().get(i).getAddressLine1()

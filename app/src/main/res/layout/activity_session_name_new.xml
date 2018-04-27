@@ -80,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_15sdp"
-                    android:text="₹ 50000000/-"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="@dimen/_15sdp"
                     android:textStyle="bold"

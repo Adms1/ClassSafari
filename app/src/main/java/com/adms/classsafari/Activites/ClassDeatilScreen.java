@@ -93,7 +93,8 @@ public class ClassDeatilScreen extends AppCompatActivity {
         genderStr = getIntent().getStringExtra("gender");
         BottomNavigationViewHelper.removeShiftMode(binding.bottomNavigationView);
         if (!searchByStr.equalsIgnoreCase("1")) {
-            if (!boardStr.equalsIgnoreCase("") || !standardStr.equalsIgnoreCase("") || !streamStr.equalsIgnoreCase("")) {
+            if (!boardStr.equalsIgnoreCase("") || !standardStr.equalsIgnoreCase("")
+                    || !streamStr.equalsIgnoreCase("")) {
                 binding.boardTxt.setText("\u2022" + boardStr);
                 binding.standardTxt.setText("\u2022" + standardStr);
                 binding.streamTxt.setText("\u2022" + streamStr);
@@ -475,7 +476,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                 }
             }
         }
-        classDetailAdapter = new ClassDetailAdapter(mContext, array,searchByStr,locationStr,classNameStr);
+        classDetailAdapter = new ClassDetailAdapter(mContext, array,searchByStr,locationStr,classNameStr,boardStr,streamStr,standardStr);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         binding.classListRecView.setLayoutManager(mLayoutManager);
         binding.classListRecView.setItemAnimator(new DefaultItemAnimator());

@@ -72,7 +72,7 @@ public class DashBoardActivity extends AppCompatActivity {
     Dialog changeDialog;
     EditText edtnewpassword, edtconfirmpassword, edtcurrentpassword;
     Button changepwd_btn, cancel_btn;
-    String EmailIdStr, passWordStr, confirmpassWordStr, currentpasswordStr;
+    String EmailIdStr, passWordStr, confirmpassWordStr, currentpasswordStr,whereTocomestr;
     ImageView session_cal;
 
     @Override
@@ -103,7 +103,7 @@ public class DashBoardActivity extends AppCompatActivity {
         } else {
             getSupportActionBar().setTitle(activityTitles[navItemIndex]);
         }
-
+        whereTocomestr = getIntent().getStringExtra("frontLogin");
         session_cal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -226,7 +226,8 @@ public class DashBoardActivity extends AppCompatActivity {
                                 Utils.setPref(mContex, "sessionDetailID", "");
                                 Utils.setPref(mContex, "RegisterUserName", "");
                                 Utils.setPref(mContex, "RegisterEmail", "");
-                                Intent intentLogin = new Intent(DashBoardActivity.this, LoginActivity.class);
+                                Intent intentLogin = new Intent(DashBoardActivity.this, SearchByUser.class);
+                                intentLogin.putExtra("frontLogin",whereTocomestr);
                                 startActivity(intentLogin);
                                 finish();
                             }

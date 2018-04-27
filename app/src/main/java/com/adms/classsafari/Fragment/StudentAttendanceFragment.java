@@ -366,7 +366,7 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
     private Map<String, String> getSessionDeatil() {
         Map<String, String> map = new HashMap<>();
         map.put("CoachID", Utils.getPref(mContext, "coachID"));//coachIdStr
-        map.put("SessionID", Utils.getPref(mContext, "SessionID"));
+        map.put("SessionID", Utils.getPref(mContext, "sessionID"));
         return map;
     }
 

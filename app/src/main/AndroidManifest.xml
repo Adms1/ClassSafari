@@ -103,7 +103,8 @@
         <!-- <data android:scheme="@string/fb_login_protocol_scheme" /> -->
         <!-- </intent-filter> -->
         <!-- </activity> -->
-        <activity android:name=".Activites.PaymentSuccessActivity"></activity>
+        <activity android:name=".Activites.PaymentSuccessActivity" />
+        <activity android:name=".Activites.MyAccountActivity"></activity>
     </application>
 
 </manifest>

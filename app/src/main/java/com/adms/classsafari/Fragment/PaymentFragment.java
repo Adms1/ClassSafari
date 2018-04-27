@@ -43,7 +43,7 @@ public class PaymentFragment extends Fragment {
     private Context mContext;
     private Bundle extras = null;
     private static final String TAG = "TNPRequestDebugTag";
-    String sessionIDStr, contatIDstr, type;
+    String sessionIDStr, contatIDstr, type,paymentStatusstr;
 
     public PaymentFragment() {
     }
@@ -296,8 +296,11 @@ public class PaymentFragment extends Fragment {
                 JSONObject resposeData = new JSONObject(jsonResponse);
                 Log.d(TAG, "ResponseJson: " + resposeData.toString());
                 if (resposeData.getString("response_code").equalsIgnoreCase("0")) {
-                    callSessionConfirmationApi();
+                    paymentStatusstr = "1";
+                } else {
+                    paymentStatusstr = "0";
                 }
+                callSessionConfirmationApi();
                 Fragment fragment = new PaymentSucessFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -367,6 +370,7 @@ public class PaymentFragment extends Fragment {
         Map<String, String> map = new HashMap<>();
         map.put("SessionID", sessionIDStr);
         map.put("ContactID", contatIDstr);
+        map.put("PaymentStatus",paymentStatusstr);
         return map;
     }
 }

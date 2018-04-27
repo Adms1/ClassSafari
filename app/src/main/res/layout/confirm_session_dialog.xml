@@ -297,7 +297,7 @@
                     android:layout_gravity="center"
                     android:gravity="start|center_vertical"
                     android:paddingLeft="@dimen/_5sdp"
-                    android:text="₹ 5000"
+                    android:text=""
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_13sdp"
                     android:textStyle="bold" />

@@ -444,7 +444,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                         AppConfiguration.coachId = teacherInfoModel.getCoachID();
                         type = teacherInfoModel.getLoginType();
                         contatIDstr = splitCoachID[0];
-                        if (teacherInfoModel.getLoginType().equalsIgnoreCase("Family")) {
+                        if (teacherInfoModel.getLoginType().equalsIgnoreCase("Family")&&!Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
                             if (whereTocomestr.equalsIgnoreCase("beforeLogin")) {
                                 Intent iSearchByUser = new Intent(mContext, SearchByUser.class);
                                 startActivity(iSearchByUser);
@@ -456,13 +456,6 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                             Intent inLogin = new Intent(mContext, DashBoardActivity.class);
                             startActivity(inLogin);
                         }
-                        if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
-                            Intent intentDashboard = new Intent(mContext, DashBoardActivity.class);
-                            startActivity(intentDashboard);
-                            finish();
-                        }
-//                        Intent inLogin = new Intent(mContext, DashBoardActivity.class);
-//                        startActivity(inLogin);
                     }
                 }
 

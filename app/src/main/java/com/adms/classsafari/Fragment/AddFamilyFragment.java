@@ -51,9 +51,11 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
     Calendar calendar;
     private DatePickerDialog datePickerDialog;
     int mYear, mMonth, mDay;
-    String pageTitle, type, firstNameStr, lastNameStr, emailStr = "", passwordStr, phonenoStr, gendarIdStr = "1", dateofbirthStr, contactTypeIDStr, familyIDStr, contatIDstr, orderIDStr, sessionIDStr, classStr = "Child", familyNameStr;
+    String pageTitle, type, firstNameStr, lastNameStr, emailStr = "", passwordStr, phonenoStr, gendarIdStr = "1", dateofbirthStr, contactTypeIDStr,
+            familyIDStr, contatIDstr, orderIDStr, sessionIDStr, classStr = "Child", familyNameStr,paymentStatusstr;
     Dialog confimDialog;
-    TextView cancel_txt, confirm_txt, session_student_txt, session_name_txt, location_txt, duration_txt, time_txt, session_fee_txt, session_student_txt_view;
+    TextView cancel_txt, confirm_txt, session_student_txt, session_name_txt, location_txt, duration_txt, time_txt, session_fee_txt,
+            session_student_txt_view;
     TeacherInfoModel classListInfo;
     HashMap<Integer, String> spinnerClassMap;
 
@@ -72,7 +74,7 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         type = getArguments().getString("type");
         familyIDStr = getArguments().getString("familyID");
         familyNameStr = getArguments().getString("familyNameStr");
-        sessionIDStr = Utils.getPref(mContext, "SessionID");
+        sessionIDStr = Utils.getPref(mContext, "sessionID");
         ((DashBoardActivity) getActivity()).setActionBar(Integer.parseInt(pageTitle), "false");
         initViews();
         setListners();
@@ -201,23 +203,6 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
                 }
             }
         });
-//        addFamilyBinding.classSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                ((TextView)adapterView.getChildAt(i)).setTextColor(Color.parseColor("#ffffff"));
-//                String name = addFamilyBinding.classSpinner.getSelectedItem().toString();
-//                String getid = spinnerClassMap.get(addFamilyBinding.classSpinner.getSelectedItemPosition());
-//
-//                Log.d("value", name + " " + getid);
-//                contactTypeIDStr = getid.toString();
-//                Log.d("classTypeIDStr", contactTypeIDStr);
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> adapterView) {
-//
-//            }
-//        });
         addFamilyBinding.registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -534,6 +519,7 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
                 if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
                     callpaymentRequestApi();
                 } else {
+                    paymentStatusstr = "1";
                     callSessionConfirmationApi();
                 }
                 confimDialog.dismiss();
@@ -678,6 +664,7 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         Map<String, String> map = new HashMap<>();
         map.put("SessionID", sessionIDStr);
         map.put("ContactID", contatIDstr);
+        map.put("PaymentStatus", paymentStatusstr);
         return map;
     }
 

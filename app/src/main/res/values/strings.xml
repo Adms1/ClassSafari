@@ -38,6 +38,7 @@
     <string name="sortby">SORT BY</string>
     <string name="most_recent">Most Recent</string>
     <string name="addsession">Add Session</string>
+    <string name="my_Account">My Account</string>
 
     <string name="checkboc_text">All-inclusive price(coupon &amp; wallet applied)</string>
     <string name="payment">Payment</string>

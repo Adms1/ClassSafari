@@ -1,14 +1,22 @@
 package com.adms.classsafari.Activites;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.PopupWindow;
 
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.AppConfiguration;
@@ -30,6 +38,8 @@ public class SearchByUser extends AppCompatActivity {
     Context mContext;
     SessionDetailModel dataResponse;
     String selectedSessionNameStr = "", selectedLocationStr = "", sessionName = "";
+    private PopupWindow popupWindow;
+    Button btnMyReport;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +53,19 @@ public class SearchByUser extends AppCompatActivity {
     public void init() {
         searchByUserBinding.locationEdt.setText("Ahmedabad");
 //        selectedLocationStr = searchByUserBinding.searchClassEdt.getText().toString();
+        if (!Utils.getPref(mContext, "RegisterUserName").equalsIgnoreCase("")) {
+            if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Coach")) {
+                Intent iDash = new Intent(mContext, DashBoardActivity.class);
+                iDash.putExtra("frontLogin", "beforeLogin");
+                startActivity(iDash);
+            }
+            searchByUserBinding.logout.setVisibility(View.VISIBLE);
+            searchByUserBinding.loginTxt.setText(Html.fromHtml("Logged as " + "<u> <b>" + Utils.getPref(mContext, "RegisterUserName") + "</u></b>"));
+
+        } else {
+            searchByUserBinding.loginTxt.setText(Html.fromHtml("<u><b>Login<u></b>"));
+            searchByUserBinding.logout.setVisibility(View.GONE);
+        }
     }
 
     public void setListner() {
@@ -52,8 +75,8 @@ public class SearchByUser extends AppCompatActivity {
             public void onClick(View view) {
                 AppConfiguration.ClassLocation = searchByUserBinding.locationEdt.getText().toString();
                 Intent inClassDetail = new Intent(mContext, ClassSearchScreen.class);
-                inClassDetail.putExtra("flag","study");
-                inClassDetail.putExtra("withOR","withOR");
+                inClassDetail.putExtra("flag", "study");
+                inClassDetail.putExtra("withOR", "withOR");
                 startActivity(inClassDetail);
             }
         });
@@ -74,8 +97,8 @@ public class SearchByUser extends AppCompatActivity {
             public void onClick(View view) {
                 AppConfiguration.ClassLocation = searchByUserBinding.locationEdt.getText().toString();
                 Intent inClassDetail = new Intent(mContext, ClassSearchScreen.class);
-                inClassDetail.putExtra("flag","play");
-                inClassDetail.putExtra("withOR","withOR");
+                inClassDetail.putExtra("flag", "play");
+                inClassDetail.putExtra("withOR", "withOR");
                 startActivity(inClassDetail);
             }
         });
@@ -100,15 +123,55 @@ public class SearchByUser extends AppCompatActivity {
         searchByUserBinding.loginTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent inClassDetail = new Intent(mContext, LoginActivity.class);
-                inClassDetail.putExtra("frontLogin", "beforeLogin");
-                startActivity(inClassDetail);
+                if (!Utils.getPref(mContext, "RegisterUserName").equalsIgnoreCase("")) {
+                    PopupWindow popupwindow_obj = popupDisplay();
+                    popupwindow_obj.showAsDropDown(searchByUserBinding.loginTxt, 0, 0);
+                } else {
+                    Intent inClassDetail = new Intent(mContext, LoginActivity.class);
+                    inClassDetail.putExtra("frontLogin", "beforeLogin");
+                    startActivity(inClassDetail);
+                }
             }
         });
         searchByUserBinding.locationEdt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 searchByUserBinding.locationEdt.showDropDown();
+            }
+        });
+        searchByUserBinding.logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                        .setCancelable(false)
+                        .setTitle("Logout")
+                        .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+                        .setMessage("Are you sure you want to logout?")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Utils.setPref(mContext, "coachID", "");
+                                Utils.setPref(mContext, "coachTypeID", "");
+                                Utils.setPref(mContext, "RegisterUserName", "");
+                                Utils.setPref(mContext, "RegisterEmail", "");
+                                Utils.setPref(mContext, "LoginType", "");
+                                Utils.setPref(mContext, "Password", "");
+                                Utils.setPref(mContext, "FamilyID", "");
+                                Utils.setPref(mContext, "location", "");
+                                Utils.setPref(mContext, "sessionName", "");
+                                Intent intentLogin = new Intent(mContext, SearchByUser.class);
+                                intentLogin.putExtra("frontLogin", "beforeLogin");
+                                startActivity(intentLogin);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+
+                            }
+                        })
+                        .setIcon(R.drawable.safari)
+                        .show();
             }
         });
 
@@ -210,14 +273,41 @@ public class SearchByUser extends AppCompatActivity {
             Utils.setPref(mContext, "location", selectedLocationStr);
             Utils.setPref(mContext, "sessionName", selectedSessionNameStr);
             Intent inClassDetail = new Intent(mContext, ClassDeatilScreen.class);
-            inClassDetail.putExtra("city",selectedLocationStr);
-            inClassDetail.putExtra("sessionName",selectedSessionNameStr);
-            inClassDetail.putExtra("SearchBy","1");
-            inClassDetail.putExtra("withOR","withOutOR");
-            inClassDetail.putExtra("searchType","study");
+            inClassDetail.putExtra("city", selectedLocationStr);
+            inClassDetail.putExtra("sessionName", selectedSessionNameStr);
+            inClassDetail.putExtra("SearchBy", "1");
+            inClassDetail.putExtra("withOR", "withOutOR");
+            inClassDetail.putExtra("searchType", "study");
             startActivity(inClassDetail);
         } else {
             Utils.ping(mContext, getResources().getString(R.string.blank_value));
         }
     }
+
+    public PopupWindow popupDisplay() {
+
+        popupWindow = new PopupWindow(this);
+
+        // inflate your layout or dynamically add view
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View view = inflater.inflate(R.layout.layout_menu, null);
+
+        btnMyReport = (Button) view.findViewById(R.id.btnMyReport);
+        btnMyReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent imyaccount = new Intent(mContext, MyAccountActivity.class);
+                startActivity(imyaccount);
+            }
+        });
+
+        popupWindow.setFocusable(true);
+        popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+        popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        popupWindow.setContentView(view);
+
+        return popupWindow;
+    }
+
 }
