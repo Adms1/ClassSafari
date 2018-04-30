@@ -91,6 +91,8 @@ public class SessionName extends AppCompatActivity {
                 inback.putExtra("lessionName", subjectStr);
                 inback.putExtra("gender",genderStr);
                 inback.putExtra("withOR",wheretoComeStr);
+                inback.putExtra("city",locationStr);
+                inback.putExtra("sessionName",classNameStr);
                 startActivity(inback);
             }
         });
@@ -110,6 +112,15 @@ public class SessionName extends AppCompatActivity {
                                     intentLogin.putExtra("frontLogin", "afterLogin");
                                     intentLogin.putExtra("sessionID", sessionIDStr);
                                     intentLogin.putExtra("SearchBy", searchByStr);
+                                    intentLogin.putExtra("board", boardStr);
+                                    intentLogin.putExtra("stream", streamStr);
+                                    intentLogin.putExtra("standard", standardStr);
+                                    intentLogin.putExtra("city",locationStr);
+                                    intentLogin.putExtra("sessionName",classNameStr);
+                                    intentLogin.putExtra("searchType", searchTypeStr);
+                                    intentLogin.putExtra("lessionName",subjectStr);
+                                    intentLogin.putExtra("gender",genderStr);
+                                    intentLogin.putExtra("withOR",wheretoComeStr);
                                     startActivity(intentLogin);
                                     finish();
                                 }
@@ -145,6 +156,10 @@ public class SessionName extends AppCompatActivity {
         inback.putExtra("lessionName", subjectStr);
         inback.putExtra("gender",genderStr);
         inback.putExtra("withOR",wheretoComeStr);
+        inback.putExtra("city",locationStr);
+        inback.putExtra("sessionName",classNameStr);
+        inback.putExtra("city",locationStr);
+        inback.putExtra("sessionName",classNameStr);
         inback.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(inback);
     }

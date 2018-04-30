@@ -38,7 +38,10 @@ public class LoginActivity extends AppCompatActivity {
 //    private LoginManager mLoginManager;
 //    private AccessTokenTracker mAccessTokenTracker;
     private boolean loggedin;
-    String usernameStr, passwordStr, sessionIDStr, contatIDstr, whereTocomestr, orderIDStr, checkStr, paymentStatusstr;
+    String usernameStr, passwordStr, sessionIDStr, contatIDstr,
+            whereTocomestr, orderIDStr, checkStr, paymentStatusstr,
+            boardStr, standardStr, streamStr, locationStr, classNameStr,
+            searchTypeStr, subjectStr, genderStr,frontloginStr;
 
     //    Use for Dialog
     Dialog forgotDialog;
@@ -48,7 +51,9 @@ public class LoginActivity extends AppCompatActivity {
 
     //Use for Confirmation dialog
     Dialog confimDialog;
-    TextView confirm_txt, session_student_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, time_txt_view, session_fee_txt;
+    TextView confirm_txt, session_student_txt, session_student_txt_view,
+            session_name_txt, location_txt, duration_txt, time_txt,
+            time_txt_view, session_fee_txt;
 
 
     @Override
@@ -57,9 +62,17 @@ public class LoginActivity extends AppCompatActivity {
         loginScreenBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         mContext = LoginActivity.this;
         sessionIDStr = getIntent().getStringExtra("sessionID");
-        whereTocomestr = getIntent().getStringExtra("frontLogin");
+        whereTocomestr = getIntent().getStringExtra("withOR");
         searchByStr = getIntent().getStringExtra("SearchBy");
-
+        boardStr = getIntent().getStringExtra("board");
+        standardStr = getIntent().getStringExtra("standard");
+        streamStr = getIntent().getStringExtra("stream");
+        locationStr = getIntent().getStringExtra("city");
+        classNameStr = getIntent().getStringExtra("sessionName");
+        searchTypeStr = getIntent().getStringExtra("searchType");
+        subjectStr = getIntent().getStringExtra("lessionName");
+        genderStr = getIntent().getStringExtra("gender");
+        frontloginStr=getIntent().getStringExtra("frontLogin");
         if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
             checkUnmPwd();
         }
@@ -80,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent inregister = new Intent(mContext, RegistrationActivity.class);
                 inregister.putExtra("sessionID", sessionIDStr);
-                inregister.putExtra("frontLogin", whereTocomestr);
+                inregister.putExtra("frontLogin", frontloginStr);
                 startActivity(inregister);
             }
         });
@@ -196,13 +209,22 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (whereTocomestr.equalsIgnoreCase("beforeLogin")) {
+        if (frontloginStr.equalsIgnoreCase("beforeLogin")) {
             Intent isearchbyuser = new Intent(mContext, SearchByUser.class);
             startActivity(isearchbyuser);
         } else {
             Intent intent = new Intent(mContext, SessionName.class);
             intent.putExtra("SearchBy", searchByStr);
             intent.putExtra("sessionID", sessionIDStr);
+            intent.putExtra("board", boardStr);
+            intent.putExtra("stream", streamStr);
+            intent.putExtra("standard", standardStr);
+            intent.putExtra("city", locationStr);
+            intent.putExtra("sessionName", classNameStr);
+            intent.putExtra("searchType", searchTypeStr);
+            intent.putExtra("lessionName", subjectStr);
+            intent.putExtra("gender",genderStr);
+            intent.putExtra("withOR",whereTocomestr);
             intent.addCategory(Intent.CATEGORY_HOME);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -243,7 +265,7 @@ public class LoginActivity extends AppCompatActivity {
                         type = teacherInfoModel.getLoginType();
                         contatIDstr = splitCoachID[0];
                         if (teacherInfoModel.getLoginType().equalsIgnoreCase("Family")) {
-                            if (whereTocomestr.equalsIgnoreCase("beforeLogin")) {
+                            if (frontloginStr.equalsIgnoreCase("beforeLogin")) {
                                 Intent iSearchByUser = new Intent(mContext, SearchByUser.class);
                                 startActivity(iSearchByUser);
                             } else {
@@ -252,7 +274,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         } else {
                             Intent inLogin = new Intent(mContext, DashBoardActivity.class);
-                            inLogin.putExtra("frontLogin", whereTocomestr);
+                            inLogin.putExtra("frontLogin", frontloginStr);
                             startActivity(inLogin);
                         }
                     }
@@ -361,7 +383,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     if (teacherInfoModel.getSuccess().equalsIgnoreCase("True")) {
 //                        if (!checkStr.equalsIgnoreCase("login")) {
-                            callForgotPasswordApi();
+                        callForgotPasswordApi();
 //
                     }
                 }
