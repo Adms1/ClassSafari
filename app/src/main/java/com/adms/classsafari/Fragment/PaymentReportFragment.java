@@ -145,7 +145,7 @@ public class PaymentReportFragment extends Fragment implements DatePickerDialog.
 
     }
 
-    //Use for Create Session
+    //Use for GetPayment Report
     public void callPaymentReportApi() {
         if (Utils.isNetworkConnected(mContext)) {
 

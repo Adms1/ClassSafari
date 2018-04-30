@@ -48,8 +48,10 @@
         <activity
             android:name=".Activites.AddStudentScreen"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activites.AddSessionScreen" />
-        <activity android:name=".Activites.PaymentActivity" />
+        <activity android:name=".Activites.AddSessionScreen"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activites.PaymentActivity"
+            android:screenOrientation="portrait"/>
 
         <!-- Safari -->
         <activity
@@ -72,7 +74,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".Activites.RegistrationActivity" />
+        <activity android:name=".Activites.RegistrationActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Activites.DashBoardActivity"
             android:configChanges="keyboardHidden|screenSize|orientation"
@@ -103,8 +106,10 @@
         <!-- <data android:scheme="@string/fb_login_protocol_scheme" /> -->
         <!-- </intent-filter> -->
         <!-- </activity> -->
-        <activity android:name=".Activites.PaymentSuccessActivity" />
-        <activity android:name=".Activites.MyAccountActivity"></activity>
+        <activity android:name=".Activites.PaymentSuccessActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activites.MyAccountActivity"
+            android:screenOrientation="landscape"/>
     </application>
 
 </manifest>

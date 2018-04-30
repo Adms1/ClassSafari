@@ -43,7 +43,8 @@ public class SessionName extends AppCompatActivity {
     List<sessionDataModel> arrayList;
     Dialog confimDialog;
     TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, time_txt_view, session_fee_txt;
-    String sessionIDStr, searchByStr, locationStr, classNameStr, sessionDateStr, durationStr, paymentStatusstr, orderIDStr,boardStr,standardStr,streamStr;
+    String sessionIDStr, searchByStr, locationStr, classNameStr,genderStr, sessionDateStr, durationStr,
+            paymentStatusstr, orderIDStr, boardStr, standardStr, streamStr, searchTypeStr, subjectStr,wheretoComeStr;
     SessionDetailModel dataResponse;
 
     @Override
@@ -51,7 +52,7 @@ public class SessionName extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         sessionNameBinding = DataBindingUtil.setContentView(this, R.layout.activity_session_name_new);
         mContext = SessionName.this;
-
+        subjectStr = getIntent().getStringExtra("lessionName");
         sessionIDStr = getIntent().getStringExtra("sessionID");
         searchByStr = getIntent().getStringExtra("SearchBy");
         locationStr = getIntent().getStringExtra("city");
@@ -61,6 +62,9 @@ public class SessionName extends AppCompatActivity {
         standardStr = getIntent().getStringExtra("standard");
         streamStr = getIntent().getStringExtra("stream");
         boardStr = getIntent().getStringExtra("board");
+        searchTypeStr = getIntent().getStringExtra("searchType");
+        genderStr=getIntent().getStringExtra("gender");
+        wheretoComeStr=getIntent().getStringExtra("withOR");
         init();
         setListner();
     }
@@ -83,7 +87,10 @@ public class SessionName extends AppCompatActivity {
                 inback.putExtra("board", boardStr);
                 inback.putExtra("stream", streamStr);
                 inback.putExtra("standard", standardStr);
-
+                inback.putExtra("searchType", searchTypeStr);
+                inback.putExtra("lessionName", subjectStr);
+                inback.putExtra("gender",genderStr);
+                inback.putExtra("withOR",wheretoComeStr);
                 startActivity(inback);
             }
         });
@@ -128,12 +135,16 @@ public class SessionName extends AppCompatActivity {
         super.onBackPressed();
 
         Intent inback = new Intent(mContext, ClassDeatilScreen.class);
-        inback.putExtra("SearchBy",searchByStr);
+        inback.putExtra("SearchBy", searchByStr);
         inback.putExtra("city", locationStr);
         inback.putExtra("sessionName", classNameStr);
         inback.putExtra("board", boardStr);
         inback.putExtra("stream", streamStr);
         inback.putExtra("standard", standardStr);
+        inback.putExtra("searchType", searchTypeStr);
+        inback.putExtra("lessionName", subjectStr);
+        inback.putExtra("gender",genderStr);
+        inback.putExtra("withOR",wheretoComeStr);
         inback.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(inback);
     }
@@ -249,7 +260,7 @@ public class SessionName extends AppCompatActivity {
             if (dataResponse.getData().get(i).getSessionAmount().equalsIgnoreCase("Free")) {
                 sessionNameBinding.priceTxt.setText(dataResponse.getData().get(i).getSessionAmount());
             } else {
-                sessionNameBinding.priceTxt.setText("₹ " + dataResponse.getData().get(i).getSessionAmount()+" /-");
+                sessionNameBinding.priceTxt.setText("₹ " + dataResponse.getData().get(i).getSessionAmount() + " /-");
             }
             AppConfiguration.classSessionName = dataResponse.getData().get(i).getSessionName();
             AppConfiguration.classteacherSessionName = dataResponse.getData().get(i).getName();
@@ -278,7 +289,7 @@ public class SessionName extends AppCompatActivity {
             if (dataResponse.getData().get(i).getSessionAmount().equalsIgnoreCase("Free")) {
                 session_fee_txt.setText(dataResponse.getData().get(i).getSessionAmount());
             } else {
-                session_fee_txt.setText("₹ " + dataResponse.getData().get(i).getSessionAmount()+" /-");
+                session_fee_txt.setText("₹ " + dataResponse.getData().get(i).getSessionAmount() + " /-");
             }
             session_name_txt.setText(dataResponse.getData().get(i).getSessionName());
             location_txt.setText(dataResponse.getData().get(i).getAddressLine1()
@@ -321,7 +332,7 @@ public class SessionName extends AppCompatActivity {
                         ipayment.putExtra("orderID", orderIDStr);
                         ipayment.putExtra("amount", AppConfiguration.classsessionPrice);
                         ipayment.putExtra("mode", "TEST");
-                        ipayment.putExtra("username", Utils.getPref(mContext,"RegisterUserName"));
+                        ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
                         ipayment.putExtra("sessionID", sessionIDStr);
                         ipayment.putExtra("contactID", Utils.getPref(mContext, "coachID"));
                         ipayment.putExtra("type", Utils.getPref(mContext, "LoginType"));

@@ -90,7 +90,8 @@ public class LoginActivity extends AppCompatActivity {
                 getInsertedValue();
                 if (!EmailIdStr.equalsIgnoreCase("") && Utils.isValidEmaillId(EmailIdStr) && !passwordStr.equalsIgnoreCase("") && passwordStr.length() >= 4 && passwordStr.length() <= 8) {
                     checkStr = "login";
-                    callCheckEmailIdApi();
+//                    callCheckEmailIdApi();
+                    callTeacherLoginApi();
                 } else {
                     Utils.ping(mContext, "Invalid Email Address or Password.");
                 }
@@ -359,11 +360,9 @@ public class LoginActivity extends AppCompatActivity {
                         return;
                     }
                     if (teacherInfoModel.getSuccess().equalsIgnoreCase("True")) {
-                        if (!checkStr.equalsIgnoreCase("login")) {
+//                        if (!checkStr.equalsIgnoreCase("login")) {
                             callForgotPasswordApi();
-                        } else {
-                            callTeacherLoginApi();
-                        }
+//
                     }
                 }
 

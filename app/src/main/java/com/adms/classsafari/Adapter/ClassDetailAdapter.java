@@ -30,10 +30,10 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     List<sessionDataModel> arrayList;
     int SessionHour = 0;
     Integer SessionMinit = 0;
-    String searchByStr, locationStr, classNameStr, address, boardStr, streamStr, standardStr;
+    String searchByStr, locationStr, classNameStr, address, boardStr, streamStr, standardStr,searchTypeStr,wheretoComeStr;
 
     public ClassDetailAdapter(Context mContext, List<sessionDataModel> arrayList, String searchByStr, String locationStr,
-                              String classNameStr, String boardStr, String streamStr, String standardStr) {
+                              String classNameStr, String boardStr, String streamStr, String standardStr, String searchTypeStr, String wheretoComeStr) {
         this.mContext = mContext;
         this.arrayList = arrayList;
         this.searchByStr = searchByStr;
@@ -42,6 +42,8 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
         this.boardStr = boardStr;
         this.streamStr = streamStr;
         this.standardStr = standardStr;
+        this.searchTypeStr=searchTypeStr;
+        this.wheretoComeStr=wheretoComeStr;
 //        setHasStableIds(true);
 
     }
@@ -117,8 +119,12 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                 inSession.putExtra("board", boardStr);
                 inSession.putExtra("stream", streamStr);
                 inSession.putExtra("standard", standardStr);
+                inSession.putExtra("lessionName",arrayList.get(position).getLessionTypeName());
                 inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() + " To " + holder.end_date_txt.getText().toString());
                 inSession.putExtra("duration", holder.duration_txt.getText().toString());
+                inSession.putExtra("gender",arrayList.get(position).getGenderID());
+                inSession.putExtra("searchType",searchTypeStr);
+                inSession.putExtra("withOR",wheretoComeStr);
                 mContext.startActivity(inSession);
             }
         });

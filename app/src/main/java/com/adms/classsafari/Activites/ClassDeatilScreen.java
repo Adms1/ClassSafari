@@ -61,10 +61,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
     TextView done;
     CrystalRangeSeekbar rangeSeekbar;
     TextView price_range1_txt, price_range2_txt;
-    //    List<ClassDetailModel> sessionfullDetailList;
     String subjectStr, boardStr = "", standardStr = "", streamStr = "", locationStr, classNameStr, searchByStr, searchTypeStr, wheretoComeStr, genderStr;
-    int SessionHour = 0;
-    Integer SessionMinit = 0;
     SessionDetailModel dataResponse;
     List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
     boolean arraynull = false;
@@ -408,10 +405,10 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                             if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
                                                     arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
                                                     arrayObj.getLessionTypeName().trim().equalsIgnoreCase(subjectStr.trim()) &&
-                                                    arrayObj.getBoard().equalsIgnoreCase(boardStr.trim()) &&
-                                                    arrayObj.getStandard().equalsIgnoreCase(standardStr.trim()) &&
-                                                    arrayObj.getStream().equalsIgnoreCase(streamStr.trim()) &&
-                                                    arrayObj.getGenderID().equalsIgnoreCase(genderStr)) {
+                                                    arrayObj.getBoard().trim().equalsIgnoreCase(boardStr.trim()) &&
+                                                    arrayObj.getStandard().trim().equalsIgnoreCase(standardStr.trim()) &&
+                                                    arrayObj.getStream().trim().equalsIgnoreCase(streamStr.trim()) &&
+                                                    arrayObj.getGenderID().trim().equalsIgnoreCase(genderStr.trim())) {
                                                 filterFinalArray.add(arrayObj);
                                             }
                                             fillData(filterFinalArray);
@@ -476,7 +473,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                 }
             }
         }
-        classDetailAdapter = new ClassDetailAdapter(mContext, array,searchByStr,locationStr,classNameStr,boardStr,streamStr,standardStr);
+        classDetailAdapter = new ClassDetailAdapter(mContext, array,searchByStr,locationStr,classNameStr,boardStr,streamStr,standardStr,searchTypeStr,wheretoComeStr);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         binding.classListRecView.setLayoutManager(mLayoutManager);
         binding.classListRecView.setItemAnimator(new DefaultItemAnimator());

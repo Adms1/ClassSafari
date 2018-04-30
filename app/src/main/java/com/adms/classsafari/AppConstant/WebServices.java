@@ -1,7 +1,6 @@
 package com.adms.classsafari.AppConstant;
 
 
-import com.adms.classsafari.Model.MainClassModel;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 
@@ -17,15 +16,6 @@ import retrofit.http.POST;
  */
 
 public interface WebServices {
-    @FormUrlEncoded
-    @POST("/Get_SessionByEmployeeTypeID")
-    public void get_SessionByEmployeeTypeID(@FieldMap Map<String, String> map, Callback<MainClassModel> callback);
-
-    @FormUrlEncoded
-    @POST("/Get_CityList")
-    public void get_CityList(@FieldMap Map<String, String> map, Callback<MainClassModel> callback);
-
-    //    Safari
     @FormUrlEncoded
     @POST("/Create_Teacher")
     public void getCreateTeacher(@FieldMap Map<String, String> map, Callback<TeacherInfoModel> callback);

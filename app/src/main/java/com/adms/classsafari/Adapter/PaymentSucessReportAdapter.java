@@ -36,7 +36,6 @@ public class PaymentSucessReportAdapter extends RecyclerView.Adapter<PaymentSuce
             amount_txt = (TextView) view.findViewById(R.id.amount_txt);
             sucess_txt = (TextView) view.findViewById(R.id.sucess_txt);
             family_name_txt = (TextView) view.findViewById(R.id.family_name_txt);
-//        
         }
     }
 
