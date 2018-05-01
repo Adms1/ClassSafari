@@ -10,7 +10,7 @@ import java.util.List;
  * Created by admsandroid on 3/22/2018.
  */
 
-public class sessionDataModel {
+public class sessionDataModel{
     @SerializedName("Board_ID")
     @Expose
     private String boardID;
@@ -262,6 +262,17 @@ public class sessionDataModel {
     @SerializedName("Gender_ID")
     @Expose
     private String genderID;
+    @SerializedName("Rating")
+    @Expose
+    private String rating;
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
 
     public String getGenderID() {
         return genderID;
@@ -771,4 +782,5 @@ public class sessionDataModel {
     public void setContactEnrollmentID(String contactEnrollmentID) {
         this.contactEnrollmentID = contactEnrollmentID;
     }
+
 }

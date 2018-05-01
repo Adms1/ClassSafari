@@ -78,7 +78,7 @@
                     android:hint="@string/search_user"
                     android:paddingLeft="@dimen/_5sdp"
                     android:paddingRight="@dimen/_9sdp"
-                    android:singleLine="true" />
+                    android:singleLine="true"/>
 
                 <TextView
                     android:id="@+id/search_txt"
@@ -87,7 +87,8 @@
                     android:layout_gravity="center_vertical"
                     android:background="@color/search_class"
                     android:drawableLeft="@drawable/search"
-                    android:paddingLeft="@dimen/_1sdp" />
+                    android:paddingLeft="@dimen/_1sdp"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -111,7 +112,7 @@
                     android:hint="@string/location"
                     android:paddingLeft="@dimen/_9sdp"
                     android:paddingRight="@dimen/_9sdp"
-                    android:singleLine="true" />
+                    android:singleLine="true"/>
             </LinearLayout>
         </LinearLayout>
 

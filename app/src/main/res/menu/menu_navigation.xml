@@ -14,15 +14,16 @@
         android:title="@string/price"
         app:showAsAction="always|withText"/>
     <item
-        android:id="@+id/action_sort"
-        android:icon="@drawable/sort"
-        android:title="@string/sort"
-        android:enabled="true"
-        app:showAsAction="always|withText"/>
-    <item
         android:id="@+id/action_filter"
-        android:icon="@drawable/filter"
+        android:icon="@drawable/sort"
         android:title="@string/filter"
         android:enabled="true"
         app:showAsAction="always|withText"/>
 </menu>
+
+<!--<item-->
+<!--android:id="@+id/action_sort"-->
+<!--android:icon="@drawable/sort"-->
+<!--android:title="@string/sort"-->
+<!--android:enabled="true"-->
+<!--app:showAsAction="always|withText"/>-->

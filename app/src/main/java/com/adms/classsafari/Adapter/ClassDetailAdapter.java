@@ -6,17 +6,21 @@ import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.adms.classsafari.Activites.SessionName;
+import com.adms.classsafari.Interface.onViewClick;
 import com.adms.classsafari.Model.Session.sessionDataModel;
 import com.adms.classsafari.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,10 +34,13 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     List<sessionDataModel> arrayList;
     int SessionHour = 0;
     Integer SessionMinit = 0;
-    String searchByStr, locationStr, classNameStr, address, boardStr, streamStr, standardStr,searchTypeStr,wheretoComeStr;
+    String searchByStr, locationStr, classNameStr, address, boardStr, streamStr, standardStr, searchTypeStr, wheretoComeStr;
+    onViewClick onViewClick;
+    private ArrayList<String> SessionDetail;
 
     public ClassDetailAdapter(Context mContext, List<sessionDataModel> arrayList, String searchByStr, String locationStr,
-                              String classNameStr, String boardStr, String streamStr, String standardStr, String searchTypeStr, String wheretoComeStr) {
+                              String classNameStr, String boardStr, String streamStr, String standardStr, String searchTypeStr,
+                              String wheretoComeStr, onViewClick onViewClick) {
         this.mContext = mContext;
         this.arrayList = arrayList;
         this.searchByStr = searchByStr;
@@ -42,8 +49,9 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
         this.boardStr = boardStr;
         this.streamStr = streamStr;
         this.standardStr = standardStr;
-        this.searchTypeStr=searchTypeStr;
-        this.wheretoComeStr=wheretoComeStr;
+        this.searchTypeStr = searchTypeStr;
+        this.wheretoComeStr = wheretoComeStr;
+        this.onViewClick = onViewClick;
 //        setHasStableIds(true);
 
     }
@@ -54,6 +62,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                 mon_time_txt, tues_time_txt, wed_time_txt, thur_time_txt, fri_time_txt, sat_time_txt, sun_time_txt,
                 location_txt, duration_txt;
         public Button monday_btn, tuesday_btn, wednesday_btn, thursday_btn, friday_btn, saturday_btn, sunday_btn;
+        public RatingBar rating_bar;
 
         public MyViewHolder(View view) {
             super(view);
@@ -80,6 +89,8 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
             friday_btn = (Button) view.findViewById(R.id.friday_btn);
             saturday_btn = (Button) view.findViewById(R.id.saturday_btn);
             sunday_btn = (Button) view.findViewById(R.id.sunday_btn);
+
+            rating_bar = (RatingBar) view.findViewById(R.id.rating_bar);
         }
     }
 
@@ -94,14 +105,15 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
+        holder.rating_bar.setRating(Float.parseFloat(arrayList.get(position).getRating()));
         address = arrayList.get(position).getAddressLine1() +
                 "," + arrayList.get(position).getRegionName() +
                 "," + arrayList.get(position).getAddressCity() +
                 "," + arrayList.get(position).getAddressState() +
                 "-" + arrayList.get(position).getAddressZipCode();
         holder.session_name_txt.setText(arrayList.get(position).getSessionName());
-        if (arrayList.get(position).getSessionAmount().equalsIgnoreCase("Free")) {
-            holder.price_txt.setText(arrayList.get(position).getSessionAmount());
+        if (arrayList.get(position).getSessionAmount().equalsIgnoreCase("0.00")) {
+            holder.price_txt.setText("Free");
         } else {
             holder.price_txt.setText("₹ " + arrayList.get(position).getSessionAmount());
         }
@@ -119,17 +131,26 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                 inSession.putExtra("board", boardStr);
                 inSession.putExtra("stream", streamStr);
                 inSession.putExtra("standard", standardStr);
-                inSession.putExtra("lessionName",arrayList.get(position).getLessionTypeName());
+                inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
                 inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() + " To " + holder.end_date_txt.getText().toString());
                 inSession.putExtra("duration", holder.duration_txt.getText().toString());
-                inSession.putExtra("gender",arrayList.get(position).getGenderID());
-                inSession.putExtra("searchType",searchTypeStr);
-                inSession.putExtra("withOR",wheretoComeStr);
+                inSession.putExtra("gender", arrayList.get(position).getGenderID());
+                inSession.putExtra("searchType", searchTypeStr);
+                inSession.putExtra("withOR", wheretoComeStr);
                 mContext.startActivity(inSession);
             }
         });
-
-
+        holder.rating_bar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                SessionDetail = new ArrayList<>();
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    SessionDetail.add(arrayList.get(position).getSessionName());
+                    onViewClick.getViewClick();
+                }
+                return true;
+            }
+        });
         String[] spiltPipes = arrayList.get(position).getSchedule().split("\\|");
         String[] spiltComma;
         String[] spiltDash;
@@ -252,4 +273,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
 
     }
 
+    public ArrayList<String> getSessionDetail() {
+        return SessionDetail;
+    }
 }

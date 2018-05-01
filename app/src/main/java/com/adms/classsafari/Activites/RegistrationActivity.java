@@ -45,7 +45,9 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     private DatePickerDialog datePickerDialog;
     int mYear, mMonth, mDay;
     String firstNameStr, lastNameStr, emailStr, passwordStr, phonenoStr, gendarIdStr = "1", dateofbirthStr, coachTypeIDStr = "1",
-            registerTypeStr = "family", contatIDstr, type, whereTocomestr,sessionIDStr,paymentStatusstr,orderIDStr;
+            registerTypeStr = "family", contatIDstr, type, whereTocomestr, sessionIDStr, paymentStatusstr, orderIDStr,frontloginStr,
+            boardStr, standardStr, streamStr, locationStr, classNameStr,
+            searchTypeStr, subjectStr, genderStr,searchByStr;
 
     //Use for Confirmation Dialog
     Dialog confimDialog;
@@ -57,8 +59,18 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         super.onCreate(savedInstanceState);
         registrationBinding = DataBindingUtil.setContentView(this, R.layout.activity_registration);
         mContext = RegistrationActivity.this;
-        whereTocomestr = getIntent().getStringExtra("frontLogin");
+        frontloginStr = getIntent().getStringExtra("frontLogin");
         sessionIDStr = getIntent().getStringExtra("sessionID");
+        whereTocomestr = getIntent().getStringExtra("withOR");
+        searchByStr = getIntent().getStringExtra("SearchBy");
+        boardStr = getIntent().getStringExtra("board");
+        standardStr = getIntent().getStringExtra("standard");
+        streamStr = getIntent().getStringExtra("stream");
+        locationStr = getIntent().getStringExtra("city");
+        classNameStr = getIntent().getStringExtra("sessionName");
+        searchTypeStr = getIntent().getStringExtra("searchType");
+        subjectStr = getIntent().getStringExtra("lessionName");
+        genderStr = getIntent().getStringExtra("gender");
         init();
         setListner();
     }
@@ -237,7 +249,18 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     public void onBackPressed() {
         super.onBackPressed();
         Intent inback = new Intent(mContext, LoginActivity.class);
-//        inback.putExtra("flag", flag);
+        inback.putExtra("SearchBy", searchByStr);
+        inback.putExtra("sessionID", sessionIDStr);
+        inback.putExtra("board", boardStr);
+        inback.putExtra("stream", streamStr);
+        inback.putExtra("standard", standardStr);
+        inback.putExtra("city", locationStr);
+        inback.putExtra("sessionName", classNameStr);
+        inback.putExtra("searchType", searchTypeStr);
+        inback.putExtra("lessionName", subjectStr);
+        inback.putExtra("gender",genderStr);
+        inback.putExtra("frontLogin",frontloginStr);
+        inback.putExtra("withOR",whereTocomestr);
         startActivity(inback);
     }
 
@@ -444,7 +467,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                         AppConfiguration.coachId = teacherInfoModel.getCoachID();
                         type = teacherInfoModel.getLoginType();
                         contatIDstr = splitCoachID[0];
-                        if (teacherInfoModel.getLoginType().equalsIgnoreCase("Family")&&!Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
+                        if (teacherInfoModel.getLoginType().equalsIgnoreCase("Family") && !Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
                             if (whereTocomestr.equalsIgnoreCase("beforeLogin")) {
                                 Intent iSearchByUser = new Intent(mContext, SearchByUser.class);
                                 startActivity(iSearchByUser);

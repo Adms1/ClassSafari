@@ -94,6 +94,16 @@ public class LoginActivity extends AppCompatActivity {
                 Intent inregister = new Intent(mContext, RegistrationActivity.class);
                 inregister.putExtra("sessionID", sessionIDStr);
                 inregister.putExtra("frontLogin", frontloginStr);
+                inregister.putExtra("SearchBy", searchByStr);
+                inregister.putExtra("board", boardStr);
+                inregister.putExtra("stream", streamStr);
+                inregister.putExtra("standard", standardStr);
+                inregister.putExtra("city", locationStr);
+                inregister.putExtra("sessionName", classNameStr);
+                inregister.putExtra("searchType", searchTypeStr);
+                inregister.putExtra("lessionName", subjectStr);
+                inregister.putExtra("gender",genderStr);
+                inregister.putExtra("withOR",whereTocomestr);
                 startActivity(inregister);
             }
         });
