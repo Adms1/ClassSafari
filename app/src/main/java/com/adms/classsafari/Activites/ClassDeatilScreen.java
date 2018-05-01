@@ -79,9 +79,9 @@ public class ClassDeatilScreen extends AppCompatActivity {
     boolean arraynull = false;
 
     //Use for sortDialog
-    RadioGroup range_status_rg;
-    RadioButton low_high_rb, high_low_rb;
-    String rangestatusStr = "", result, afterfilterresult;
+    RadioGroup range_status_rg, user_rating_status_rg;
+    RadioButton low_high_rb, high_low_rb, lowest_first_user_rb, highest_first_user_rb;
+    String rangestatusStr = "", result, afterfilterresult, pricewiseStr, ratingStr = "";
     TextView result_txt, result1_txt;
 
     @Override
@@ -399,6 +399,11 @@ public class ClassDeatilScreen extends AppCompatActivity {
         range_status_rg = (RadioGroup) sortDialog.findViewById(R.id.range_status_rg);
         low_high_rb = (RadioButton) sortDialog.findViewById(R.id.low_high_rb);
         high_low_rb = (RadioButton) sortDialog.findViewById(R.id.high_low_rb);
+
+        user_rating_status_rg = (RadioGroup) sortDialog.findViewById(R.id.user_rating_status_rg);
+        lowest_first_user_rb = (RadioButton) sortDialog.findViewById(R.id.lowest_first_user_rb);
+        highest_first_user_rb = (RadioButton) sortDialog.findViewById(R.id.highest_first_rating_rb);
+
         result_txt = (TextView) sortDialog.findViewById(R.id.result_txt);
         result1_txt = (TextView) sortDialog.findViewById(R.id.result1_txt);
 
@@ -408,31 +413,85 @@ public class ClassDeatilScreen extends AppCompatActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!rangestatusStr.equalsIgnoreCase("")) {
-                    if (rangestatusStr.equalsIgnoreCase("low")) {
-                        List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-                        for (sessionDataModel arrayObj : dataResponse.getData()) {
-                            if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                                    arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim())) {
-                                filterFinalArray.add(arrayObj);
-                                Collections.sort(filterFinalArray, new LowToHighSortSessionPrice());
+                if (pricewiseStr.equalsIgnoreCase("price")) {
+                    if (!rangestatusStr.equalsIgnoreCase("")) {
+                        if (rangestatusStr.equalsIgnoreCase("low")) {
+                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim())) {
+                                    filterFinalArray.add(arrayObj);
+                                    Collections.sort(filterFinalArray, new LowToHighSortSessionPrice());
+                                }
                             }
+                            fillData(filterFinalArray);
+                        } else {
+                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim())) {
+                                    filterFinalArray.add(arrayObj);
+                                    Collections.sort(filterFinalArray, new HightToLowSortSessionPrice());
+                                }
+                            }
+                            fillData(filterFinalArray);
                         }
-                        fillData(filterFinalArray);
+                        sortDialog.dismiss();
                     } else {
-                        List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-                        for (sessionDataModel arrayObj : dataResponse.getData()) {
-                            if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                                    arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim())) {
-                                filterFinalArray.add(arrayObj);
-                                Collections.sort(filterFinalArray, new HightToLowSortSessionPrice());
-                            }
-                        }
-                        fillData(filterFinalArray);
+                        Utils.ping(mContext, "Please Select One Option");
                     }
-                    sortDialog.dismiss();
                 } else {
-                    Utils.ping(mContext, "Please Select One Option");
+                    if (!ratingStr.equalsIgnoreCase("")) {
+                        if (ratingStr.equalsIgnoreCase("low")) {
+                            List<Float> ratingList = new ArrayList<>();
+                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim())) {
+                                    filterFinalArray.add(arrayObj);
+                                }
+                            }
+                            for (int i = 0; i < filterFinalArray.size(); i++) {
+                                ratingList.add(Float.parseFloat(filterFinalArray.get(i).getRating()));
+                            }
+
+                            Object objmin = Collections.min(ratingList);
+                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim())
+                                        && arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim())) {
+                                    if (Float.parseFloat(arrayObj.getRating()) >= Integer.parseInt(String.valueOf(objmin)) ) {
+                                        filterFinalArray.add(arrayObj);
+                                    }
+                                }
+                            }
+                            fillData(filterFinalArray);
+                        } else {
+                            List<Float> ratingList = new ArrayList<>();
+                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim())) {
+                                    filterFinalArray.add(arrayObj);
+                                }
+                            }
+                            for (int i = 0; i < filterFinalArray.size(); i++) {
+                                ratingList.add(Float.parseFloat(filterFinalArray.get(i).getRating()));
+                            }
+
+                            Object objmax = Collections.max(ratingList);
+                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim())
+                                        && arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim())) {
+                                    if (Float.parseFloat(arrayObj.getRating()) >= Integer.parseInt(String.valueOf(objmax)) ) {
+                                        filterFinalArray.add(arrayObj);
+                                    }
+                                }
+                            }
+                            fillData(filterFinalArray);
+                        }
+                    } else {
+                        Utils.ping(mContext, "Please Select One Option");
+                    }
                 }
 
             }
@@ -445,9 +504,27 @@ public class ClassDeatilScreen extends AppCompatActivity {
                 switch (radioButtonID) {
                     case R.id.low_high_rb:
                         rangestatusStr = "low";
+                        pricewiseStr = "price";
                         break;
                     case R.id.high_low_rb:
                         rangestatusStr = "high";
+                        pricewiseStr = "price";
+                        break;
+                }
+            }
+        });
+        user_rating_status_rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                int radioButtonID = user_rating_status_rg.getCheckedRadioButtonId();
+                switch (radioButtonID) {
+                    case R.id.lowest_first_rating_rb:
+                        pricewiseStr = "rating";
+                        ratingStr = "low";
+                        break;
+                    case R.id.highest_first_rating_rb:
+                        pricewiseStr = "rating";
+                        ratingStr = "high";
                         break;
                 }
             }
