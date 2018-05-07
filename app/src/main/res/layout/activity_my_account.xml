@@ -33,7 +33,7 @@
                 android:layout_marginLeft="@dimen/_25sdp"
                 android:fontFamily="monospace"
                 android:gravity="center"
-                android:text="@string/payment_report"
+                android:text="@string/my_Account"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_15sdp"
                 android:textStyle="bold" />

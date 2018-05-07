@@ -46,7 +46,7 @@ public class PaymentReportFragment extends Fragment implements DatePickerDialog.
     private static boolean isFromDate = false;
     PaymentSucessReportAdapter paymentSucessReportAdapter;
     List<FamilyDetailModel> paymentReportList;
-    String startDateStr,endDateStr;
+    String startDateStr,endDateStr,flag;
 
     public PaymentReportFragment() {
     }
@@ -173,7 +173,8 @@ public class PaymentReportFragment extends Fragment implements DatePickerDialog.
                             paymentReportBinding.noRecordTxt.setVisibility(View.GONE);
                             paymentReportBinding.listLinear.setVisibility(View.VISIBLE);
                             paymentReportBinding.headerLinear.setVisibility(View.VISIBLE);
-                            paymentSucessReportAdapter = new PaymentSucessReportAdapter(mContext, paymentReportList);
+                            flag="1";
+                            paymentSucessReportAdapter = new PaymentSucessReportAdapter(mContext, paymentReportList,flag);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
                             paymentReportBinding.reportRcList.setLayoutManager(mLayoutManager);
                             paymentReportBinding.reportRcList.setItemAnimator(new DefaultItemAnimator());

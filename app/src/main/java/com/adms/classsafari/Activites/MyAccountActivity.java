@@ -45,7 +45,7 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
     private DatePickerDialog datePickerDialog;
     int mYear, mMonth, mDay;
     private static boolean isFromDate = false;
-    String finalDate, startDateStr, endDateStr;
+    String finalDate, startDateStr, endDateStr,flag;
 
     //Use for paymentreport List
     List<FamilyDetailModel> paymentReportList;
@@ -162,7 +162,7 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
         if (Utils.isNetworkConnected(mContext)) {
 
             Utils.showDialog(mContext);
-            ApiHandler.getApiService().get_Payment_ByCoachID(getReportDetail(), new retrofit.Callback<TeacherInfoModel>() {
+            ApiHandler.getApiService().get_Payment_ByContactID(getReportDetail(), new retrofit.Callback<TeacherInfoModel>() {
                 @Override
                 public void success(TeacherInfoModel paymentInfoModel, Response response) {
                     Utils.dismissDialog();
@@ -185,7 +185,8 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
                             no_record_txt.setVisibility(View.GONE);
                             list_linear.setVisibility(View.VISIBLE);
                             header_linear.setVisibility(View.VISIBLE);
-                            paymentSucessReportAdapter = new PaymentSucessReportAdapter(mContext, paymentReportList);
+                            flag="2";
+                            paymentSucessReportAdapter = new PaymentSucessReportAdapter(mContext, paymentReportList,flag);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
                             report_rcList.setLayoutManager(mLayoutManager);
                             report_rcList.setItemAnimator(new DefaultItemAnimator());
@@ -214,7 +215,7 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
     private Map<String, String> getReportDetail() {
 
         Map<String, String> map = new HashMap<>();
-        map.put("CoachID", Utils.getPref(mContext, "coachID"));
+        map.put("ContactID", Utils.getPref(mContext, "coachID"));
         map.put("StartDate", startDateStr);
         map.put("EndDate", endDateStr);
 

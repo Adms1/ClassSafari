@@ -69,9 +69,20 @@ public class FamilyDetailModel {
     @SerializedName("Name")
     @Expose
     private String name;
+    @SerializedName("SessionName")
+    @Expose
+    private String sessionName;
     @SerializedName("PaymentStatus")
     @Expose
     private String paymentStatus;
+
+    public String getSessionName() {
+        return sessionName;
+    }
+
+    public void setSessionName(String sessionName) {
+        this.sessionName = sessionName;
+    }
 
     public String getPaymentAmount() {
         return paymentAmount;
@@ -312,4 +323,6 @@ public class FamilyDetailModel {
     public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
+
+
 }

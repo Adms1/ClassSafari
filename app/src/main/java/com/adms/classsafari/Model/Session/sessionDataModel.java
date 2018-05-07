@@ -265,6 +265,17 @@ public class sessionDataModel{
     @SerializedName("Rating")
     @Expose
     private String rating;
+    @SerializedName("CoachType_ID")
+    @Expose
+    private String coachTypeID;
+
+    public String getCoachTypeID() {
+        return coachTypeID;
+    }
+
+    public void setCoachTypeID(String coachTypeID) {
+        this.coachTypeID = coachTypeID;
+    }
 
     public String getRating() {
         return rating;
@@ -782,5 +793,43 @@ public class sessionDataModel{
     public void setContactEnrollmentID(String contactEnrollmentID) {
         this.contactEnrollmentID = contactEnrollmentID;
     }
+    //======================User Session_List =========================
 
+    @SerializedName("SessionPrice")
+    @Expose
+    private String sessionPrice;
+    public String getSessionPrice() {
+        return sessionPrice;
+    }
+
+    public void setSessionPrice(String sessionPrice) {
+        this.sessionPrice = sessionPrice;
+    }
+    //=================================================================
+
+
+    //==========================SessionRatingDetail======================
+    @SerializedName("RatingValue")
+    @Expose
+    private Double ratingValue;
+    @SerializedName("Comment")
+    @Expose
+    private String comment;
+
+    public Double getRatingValue() {
+        return ratingValue;
+    }
+
+    public void setRatingValue(Double ratingValue) {
+        this.ratingValue = ratingValue;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+    //===================================================================
 }

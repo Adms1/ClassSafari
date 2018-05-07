@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.adms.classsafari.Interface.onViewClick;
@@ -38,6 +39,7 @@ public class SessionViewStudentListAdapter extends RecyclerView.Adapter<SessionV
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView no_txt, name_txt, phoneno_txt, paid_txt;
+        LinearLayout linear;
 
         public MyViewHolder(View view) {
             super(view);
@@ -45,6 +47,7 @@ public class SessionViewStudentListAdapter extends RecyclerView.Adapter<SessionV
             name_txt = (TextView) view.findViewById(R.id.name_txt);
             phoneno_txt = (TextView) view.findViewById(R.id.phoneno_txt);
             paid_txt = (TextView) view.findViewById(R.id.paid_txt);
+            linear=(LinearLayout)view.findViewById(R.id.linear);
         }
     }
 
@@ -75,7 +78,9 @@ public class SessionViewStudentListAdapter extends RecyclerView.Adapter<SessionV
             }
         });
         if (paidStr.equalsIgnoreCase("0")) {
+            holder.linear.setBackgroundResource(R.drawable.unpaid_linear);
             holder.paid_txt.setText("UnPaid");
+            holder.paid_txt.setBackgroundResource(R.drawable.round_yello);
             holder.paid_txt.setTextColor(Color.parseColor("#f2552c"));
             holder.paid_txt.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -86,6 +91,7 @@ public class SessionViewStudentListAdapter extends RecyclerView.Adapter<SessionV
                 }
             });
         } else {
+            holder.linear.setBackgroundResource(R.drawable.list_line);
             holder.paid_txt.setText("");
             holder.paid_txt.setTextColor(Color.parseColor("#000000"));
 

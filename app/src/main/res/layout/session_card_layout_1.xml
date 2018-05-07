@@ -265,7 +265,6 @@
                         android:layout_marginLeft="@dimen/_2sdp"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:max="5"
-                        android:rating="2.5"
                         android:theme="@style/RatingBar"
                         android:transformPivotX="0dp"
                         android:transformPivotY="0dp" />

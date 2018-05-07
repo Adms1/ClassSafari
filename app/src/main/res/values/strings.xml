@@ -10,6 +10,7 @@
     <string name="board">\u2022 Board</string>
     <string name="standard">\u2022 Standard</string>
     <string name="stream">\u2022 Stream</string>
+    <string name="add_stream">Stream</string>
     <string name="location_add">Add Location Preference</string>
     <string name="location_note">Choose from popular areas or enter your own</string>
     <string name="button_txt">ADD</string>
@@ -38,7 +39,8 @@
     <string name="sortby">SORT BY</string>
     <string name="most_recent">Most Recent</string>
     <string name="addsession">Add Session</string>
-    <string name="my_Account">My Account</string>
+    <string name="my_Account">My Payment</string>
+    <string name="my_session">My Session</string>
 
     <string name="checkboc_text">All-inclusive price(coupon &amp; wallet applied)</string>
     <string name="payment">Payment</string>
@@ -205,5 +207,7 @@
     <!-- Class Detail String-->
     <string name="blank_value">Please Select Proper Value</string>
     <string name="location_validation">Please Select Proper Location</string>
-
+    <string name="rating_header">Please, Rate Session!</string>
+    <string name="rating_row">How much do you like this session?</string>
+    <string name="not_loging">you are not login.</string>
 </resources>

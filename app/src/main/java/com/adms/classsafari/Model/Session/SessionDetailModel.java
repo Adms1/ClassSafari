@@ -14,6 +14,9 @@ public class SessionDetailModel {
     @SerializedName("Success")
     @Expose
     private String success;
+    @SerializedName("RatingAvg")
+    @Expose
+    private String ratingAvg;
     @SerializedName("Data")
     @Expose
     private List<sessionDataModel> data = new ArrayList<sessionDataModel>();
@@ -34,4 +37,11 @@ public class SessionDetailModel {
         this.data = data;
     }
 
+    public String getRatingAvg() {
+        return ratingAvg;
+    }
+
+    public void setRatingAvg(String ratingAvg) {
+        this.ratingAvg = ratingAvg;
+    }
 }

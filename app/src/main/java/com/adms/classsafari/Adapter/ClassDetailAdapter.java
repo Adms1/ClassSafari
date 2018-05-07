@@ -52,8 +52,6 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
         this.searchTypeStr = searchTypeStr;
         this.wheretoComeStr = wheretoComeStr;
         this.onViewClick = onViewClick;
-//        setHasStableIds(true);
-
     }
 
 
@@ -145,7 +143,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 SessionDetail = new ArrayList<>();
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    SessionDetail.add(arrayList.get(position).getSessionName());
+                    SessionDetail.add(arrayList.get(position).getSessionName()+"|"+arrayList.get(position).getSessionID());
                     onViewClick.getViewClick();
                 }
                 return true;
@@ -258,12 +256,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
             min = (int) (difference - (1000 * 60 * 60 * 24 * days) - (1000 * 60 * 60 * hours)) / (1000 * 60);
             hours = (hours < 0 ? -hours : hours);
             SessionHour = hours;
-//            if(min>0){
             SessionMinit = min;
-//            }else{
-//                SessionMinit=null;
-//            }
-
             Log.i("======= Hours", " :: " + hours + ":" + min);
 
         } catch (ParseException e) {

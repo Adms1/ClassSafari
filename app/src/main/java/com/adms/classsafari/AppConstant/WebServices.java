@@ -132,4 +132,20 @@ public interface WebServices {
     @FormUrlEncoded
     @POST("/Get_SessionBySessionID")
     public void get_SessionBySessionID(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
+
+    @FormUrlEncoded
+    @POST("/Add_Session_Rating")
+    public void Add_Session_Rating(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
+
+    @FormUrlEncoded
+    @POST("/Get_Payment_ByContactID")
+    public void get_Payment_ByContactID(@FieldMap Map<String, String> map, Callback<TeacherInfoModel> callback);
+
+    @FormUrlEncoded
+    @POST("/Get_FamilySessionList_ByContactID")
+    public void get_FamilySessionList_ByContactID(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
+
+    @FormUrlEncoded
+    @POST("/Get_SessionRating_By_Session_ID")
+    public void get_SessionRating_By_Session_ID(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
 }

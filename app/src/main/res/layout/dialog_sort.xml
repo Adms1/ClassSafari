@@ -147,7 +147,6 @@
                         android:layout_weight="1"
                         android:button="@drawable/radio_selector"
                         android:paddingLeft="@dimen/_3sdp"
-                        android:checked="false"
                         android:text="Low to High"
                         android:textColor="@color/dark_gray"
                         android:textSize="@dimen/_10sdp" />
@@ -212,7 +211,6 @@
                         android:button="@drawable/radio_selector"
                         android:paddingLeft="@dimen/_3sdp"
                         android:text="Lowest First"
-                        android:checked="false"
                         android:textColor="@color/dark_gray"
                         android:textSize="@dimen/_10sdp" />
 
@@ -273,7 +271,6 @@
                         android:layout_width="0dp"
                         android:layout_height="@dimen/_30sdp"
                         android:layout_weight="1"
-                        android:checked="false"
                         android:button="@drawable/radio_selector"
                         android:paddingLeft="@dimen/_3sdp"
                         android:text="Lowest First"

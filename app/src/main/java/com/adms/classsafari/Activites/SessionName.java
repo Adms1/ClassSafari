@@ -11,17 +11,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.adms.classsafari.Adapter.SessionDetailAdapter;
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.AppConfiguration;
 import com.adms.classsafari.AppConstant.Utils;
+import com.adms.classsafari.Interface.onViewClick;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.Session.sessionDataModel;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
@@ -41,11 +46,14 @@ public class SessionName extends AppCompatActivity {
     Context mContext;
     SessionDetailAdapter sessionDetailAdapter;
     List<sessionDataModel> arrayList;
+    List<sessionDataModel> sessionRatingList;
     Dialog confimDialog;
     TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, time_txt_view, session_fee_txt;
-    String sessionIDStr, searchByStr, locationStr, classNameStr,genderStr, sessionDateStr, durationStr,
-            paymentStatusstr, orderIDStr, boardStr, standardStr, streamStr, searchTypeStr, subjectStr,wheretoComeStr;
-    SessionDetailModel dataResponse;
+    String sessionIDStr, searchByStr, locationStr, classNameStr, genderStr, sessionDateStr, durationStr,
+            paymentStatusstr, orderIDStr, boardStr, standardStr, streamStr, searchTypeStr, subjectStr,
+            wheretoComeStr, sessionId, commentStr, ratingValueStr, purchaseSessionIDStr = "";
+    ArrayList<String> purchaseSessionIDArray;
+    SessionDetailModel dataResponse, dataResponseRating;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +71,8 @@ public class SessionName extends AppCompatActivity {
         streamStr = getIntent().getStringExtra("stream");
         boardStr = getIntent().getStringExtra("board");
         searchTypeStr = getIntent().getStringExtra("searchType");
-        genderStr=getIntent().getStringExtra("gender");
-        wheretoComeStr=getIntent().getStringExtra("withOR");
+        genderStr = getIntent().getStringExtra("gender");
+        wheretoComeStr = getIntent().getStringExtra("withOR");
         init();
         setListner();
     }
@@ -72,7 +80,7 @@ public class SessionName extends AppCompatActivity {
     public void init() {
 
         callSessionListApi();
-
+        callSessionReportApi();
     }
 
     public void setListner() {
@@ -89,10 +97,10 @@ public class SessionName extends AppCompatActivity {
                 inback.putExtra("standard", standardStr);
                 inback.putExtra("searchType", searchTypeStr);
                 inback.putExtra("lessionName", subjectStr);
-                inback.putExtra("gender",genderStr);
-                inback.putExtra("withOR",wheretoComeStr);
-                inback.putExtra("city",locationStr);
-                inback.putExtra("sessionName",classNameStr);
+                inback.putExtra("gender", genderStr);
+                inback.putExtra("withOR", wheretoComeStr);
+                inback.putExtra("city", locationStr);
+                inback.putExtra("sessionName", classNameStr);
                 startActivity(inback);
             }
         });
@@ -100,41 +108,63 @@ public class SessionName extends AppCompatActivity {
         sessionNameBinding.bookSessionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
+                for (int i = 0; i < purchaseSessionIDArray.size(); i++) {
+                    if (sessionIDStr.equalsIgnoreCase(purchaseSessionIDArray.get(i))) {
+                        purchaseSessionIDStr = purchaseSessionIDArray.get(i);
+                    }
+                }
+
+
+                if (purchaseSessionIDStr.equalsIgnoreCase("")) {
+                    if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
+                        new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                                .setCancelable(false)
+                                .setTitle("Login")
+                                .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+                                .setMessage("You are not login,So Please Login.")
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent intentLogin = new Intent(mContext, LoginActivity.class);
+                                        intentLogin.putExtra("frontLogin", "afterLogin");
+                                        intentLogin.putExtra("sessionID", sessionIDStr);
+                                        intentLogin.putExtra("SearchBy", searchByStr);
+                                        intentLogin.putExtra("board", boardStr);
+                                        intentLogin.putExtra("stream", streamStr);
+                                        intentLogin.putExtra("standard", standardStr);
+                                        intentLogin.putExtra("city", locationStr);
+                                        intentLogin.putExtra("sessionName", classNameStr);
+                                        intentLogin.putExtra("searchType", searchTypeStr);
+                                        intentLogin.putExtra("lessionName", subjectStr);
+                                        intentLogin.putExtra("gender", genderStr);
+                                        intentLogin.putExtra("withOR", wheretoComeStr);
+                                        startActivity(intentLogin);
+                                        finish();
+                                    }
+                                })
+                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+
+                                    }
+                                })
+                                .setIcon(R.drawable.safari)
+                                .show();
+                    } else {
+                        ConformSessionDialog();
+                    }
+                } else {
                     new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
                             .setCancelable(false)
                             .setTitle("Login")
                             .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
-                            .setMessage("You are not login,So Please Login.")
+                            .setMessage("You are already purchase.")
                             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Intent intentLogin = new Intent(mContext, LoginActivity.class);
-                                    intentLogin.putExtra("frontLogin", "afterLogin");
-                                    intentLogin.putExtra("sessionID", sessionIDStr);
-                                    intentLogin.putExtra("SearchBy", searchByStr);
-                                    intentLogin.putExtra("board", boardStr);
-                                    intentLogin.putExtra("stream", streamStr);
-                                    intentLogin.putExtra("standard", standardStr);
-                                    intentLogin.putExtra("city",locationStr);
-                                    intentLogin.putExtra("sessionName",classNameStr);
-                                    intentLogin.putExtra("searchType", searchTypeStr);
-                                    intentLogin.putExtra("lessionName",subjectStr);
-                                    intentLogin.putExtra("gender",genderStr);
-                                    intentLogin.putExtra("withOR",wheretoComeStr);
-                                    startActivity(intentLogin);
-                                    finish();
-                                }
-                            })
-                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // do nothing
 
                                 }
                             })
                             .setIcon(R.drawable.safari)
                             .show();
-                } else {
-                    ConformSessionDialog();
                 }
             }
         });
@@ -154,12 +184,12 @@ public class SessionName extends AppCompatActivity {
         inback.putExtra("standard", standardStr);
         inback.putExtra("searchType", searchTypeStr);
         inback.putExtra("lessionName", subjectStr);
-        inback.putExtra("gender",genderStr);
-        inback.putExtra("withOR",wheretoComeStr);
-        inback.putExtra("city",locationStr);
-        inback.putExtra("sessionName",classNameStr);
-        inback.putExtra("city",locationStr);
-        inback.putExtra("sessionName",classNameStr);
+        inback.putExtra("gender", genderStr);
+        inback.putExtra("withOR", wheretoComeStr);
+        inback.putExtra("city", locationStr);
+        inback.putExtra("sessionName", classNameStr);
+        inback.putExtra("city", locationStr);
+        inback.putExtra("sessionName", classNameStr);
         inback.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(inback);
     }
@@ -239,7 +269,8 @@ public class SessionName extends AppCompatActivity {
                         Utils.dismissDialog();
                         if (sessionDetailInfo.getData().size() > 0) {
                             dataResponse = sessionDetailInfo;
-                            setData();
+//                            setData();
+                            callSessionRatingApi();
                         }
                     }
                 }
@@ -260,6 +291,69 @@ public class SessionName extends AppCompatActivity {
     private Map<String, String> getSessionListDetail() {
         Map<String, String> map = new HashMap<>();
         map.put("SessionID", sessionIDStr);
+        return map;
+    }
+
+    //Use for SessionRating
+    public void callSessionRatingApi() {
+        if (Utils.checkNetwork(mContext)) {
+
+//            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_SessionRating_By_Session_ID(getSessionRatingDetail(), new retrofit.Callback<SessionDetailModel>() {
+                @Override
+                public void success(SessionDetailModel sessionRatingInfo, Response response) {
+                    Utils.dismissDialog();
+                    if (sessionRatingInfo == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionRatingInfo.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionRatingInfo.getSuccess().equalsIgnoreCase("false")) {
+//                        Utils.ping(mContext, getString(R.string.false_msg));
+                        dataResponseRating = sessionRatingInfo;
+                        sessionRatingList = new ArrayList<sessionDataModel>();
+                        if (dataResponseRating.getData().size() > 0) {
+                            for (int i = 0; i < dataResponseRating.getData().size(); i++) {
+                                sessionRatingList.add(dataResponseRating.getData().get(i));
+                            }
+                        }
+                        setData();
+                        Utils.dismissDialog();
+                        return;
+                    }
+                    if (sessionRatingInfo.getSuccess().equalsIgnoreCase("True")) {
+
+                        if (sessionRatingInfo.getData().size() > 0) {
+                            dataResponseRating = sessionRatingInfo;
+                            sessionRatingList = new ArrayList<sessionDataModel>();
+                            for (int i = 0; i < dataResponseRating.getData().size(); i++) {
+                                sessionRatingList.add(dataResponseRating.getData().get(i));
+                            }
+                            setData();
+                        }
+                        Utils.dismissDialog();
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getSessionRatingDetail() {
+        Map<String, String> map = new HashMap<>();
+        map.put("Session_ID", sessionIDStr);
         return map;
     }
 
@@ -290,7 +384,12 @@ public class SessionName extends AppCompatActivity {
 
         }
 
-        sessionDetailAdapter = new SessionDetailAdapter(mContext, arrayList);
+        sessionDetailAdapter = new SessionDetailAdapter(mContext, arrayList, sessionRatingList, new onViewClick() {
+            @Override
+            public void getViewClick() {
+                addRating();
+            }
+        });
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, OrientationHelper.VERTICAL, false);
         sessionNameBinding.sessionListRecView.setLayoutManager(mLayoutManager);
         sessionNameBinding.sessionListRecView.setItemAnimator(new DefaultItemAnimator());
@@ -427,6 +526,190 @@ public class SessionName extends AppCompatActivity {
         map.put("SessionID", sessionIDStr);
         map.put("ContactID", Utils.getPref(mContext, "coachID"));
         map.put("PaymentStatus", paymentStatusstr);
+        return map;
+    }
+
+    public void addRating() {
+        ArrayList<String> selectedId = new ArrayList<String>();
+        String sessionName = "";
+        selectedId = sessionDetailAdapter.getSessionDetail();
+        Log.d("selectedId", "" + selectedId);
+        for (int i = 0; i < selectedId.size(); i++) {
+            String[] splitvalue = selectedId.get(i).split("\\|");
+            sessionName = splitvalue[0];
+            sessionId = splitvalue[1];
+        }
+
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.rating_dialog_layout, null);
+        final RatingBar ratingBar = alertLayout.findViewById(R.id.rating_bar);
+        final TextView sessionNametxt = alertLayout.findViewById(R.id.session_name_txt);
+        final TextView session_rating_view_txt = alertLayout.findViewById(R.id.session_rating_view_txt);
+        final TextView cancel_txt = alertLayout.findViewById(R.id.cancel_txt);
+        final TextView confirm_txt = alertLayout.findViewById(R.id.confirm_txt);
+        final EditText comment_edt = alertLayout.findViewById(R.id.comment_edt);
+        sessionNametxt.setText(sessionName);
+
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                if (b) {
+                    int rating = (int) ratingBar.getRating();
+                    if (rating == 1) {
+                        session_rating_view_txt.setText("Very poor");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.remarks));
+                    } else if (rating == 2) {
+                        session_rating_view_txt.setText("Poor");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.remarks));
+                    } else if (rating == 3) {
+                        session_rating_view_txt.setText("Average");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.rating_bar));
+                    } else if (rating == 4) {
+                        session_rating_view_txt.setText("Good");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.present));
+                    } else if (rating == 5) {
+                        session_rating_view_txt.setText("Excellent");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.present));
+                    }
+                }
+            }
+        });
+        android.app.AlertDialog.Builder alert = new android.app.AlertDialog.Builder(this);
+        // this is set the view from XML inside AlertDialog
+        alert.setView(alertLayout);
+        // disallow cancel of AlertDialog on click of back button and outside touch
+        alert.setCancelable(false);
+        alert.setNegativeButton("Not Now", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+//                Toast.makeText(getBaseContext(), "Cancel clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        alert.setPositiveButton("Rate", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+//                String rating = String.valueOf(ratingBar.getRating());
+//                Toast.makeText(getApplicationContext(), rating, Toast.LENGTH_LONG).show();
+                commentStr = comment_edt.getText().toString();
+                if (commentStr.equalsIgnoreCase("")) {
+                    commentStr = session_rating_view_txt.getText().toString();
+                }
+                ratingValueStr = String.valueOf(ratingBar.getRating());
+                if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
+                    callAddrating();
+                } else {
+                    Utils.ping(mContext, getResources().getString(R.string.not_loging));
+                }
+            }
+        });
+        android.app.AlertDialog dialog = alert.create();
+        dialog.show();
+    }
+
+    //Use for AddRating
+    public void callAddrating() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().Add_Session_Rating(getratingDetail(), new retrofit.Callback<SessionDetailModel>() {
+                @Override
+                public void success(SessionDetailModel addratingmodel, Response response) {
+                    Utils.dismissDialog();
+                    if (addratingmodel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (addratingmodel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (addratingmodel.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.ping(mContext, getString(R.string.false_msg));
+                        return;
+                    }
+                    if (addratingmodel.getSuccess().equalsIgnoreCase("True")) {
+                                  callSessionListApi();
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getratingDetail() {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("SessionID", sessionId);
+        map.put("ContactID", Utils.getPref(mContext, "coachID"));
+        map.put("Comment", commentStr);
+        map.put("RatingValue", ratingValueStr);
+
+        return map;
+    }
+
+    //Use for GetSession Report
+    public void callSessionReportApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+//            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_FamilySessionList_ByContactID(getSessionReportDetail(), new retrofit.Callback<SessionDetailModel>() {
+                @Override
+                public void success(SessionDetailModel sessionModel, Response response) {
+                    Utils.dismissDialog();
+                    if (sessionModel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionModel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionModel.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.ping(mContext, getString(R.string.false_msg));
+                        return;
+                    }
+                    if (sessionModel.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.dismissDialog();
+
+                        if (sessionModel.getData().size() > 0) {
+                            purchaseSessionIDArray = new ArrayList<>();
+                            for (int i = 0; i < sessionModel.getData().size(); i++) {
+                                purchaseSessionIDArray.add(sessionModel.getData().get(i).getSessionID());
+                            }
+                        } else {
+                        }
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getSessionReportDetail() {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("ContactID", Utils.getPref(mContext, "coachID"));
         return map;
     }
 }

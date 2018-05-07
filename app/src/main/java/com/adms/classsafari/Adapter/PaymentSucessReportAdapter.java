@@ -16,11 +16,12 @@ public class PaymentSucessReportAdapter extends RecyclerView.Adapter<PaymentSuce
 
     private Context mContext;
     List<FamilyDetailModel> arrayList;
+    String flag;
 
-
-    public PaymentSucessReportAdapter(Context mContext, List<FamilyDetailModel> arrayList) {
+    public PaymentSucessReportAdapter(Context mContext, List<FamilyDetailModel> arrayList, String flag) {
         this.mContext = mContext;
         this.arrayList = arrayList;
+        this.flag = flag;
     }
 
 
@@ -50,13 +51,17 @@ public class PaymentSucessReportAdapter extends RecyclerView.Adapter<PaymentSuce
     @Override
     public void onBindViewHolder(final PaymentSucessReportAdapter.MyViewHolder holder, int position) {
 
-        String str = String.valueOf(position+1);
-            holder.srno_txt.setText(str);
-            holder.sucess_txt.setText(arrayList.get(position).getPaymentStatus());
-            holder.date_txt.setText(arrayList.get(position).getPaymentDate());
-            holder.transactionID_txt.setText(arrayList.get(position).getTrackAndPayPaymentID());
-            holder.amount_txt.setText("₹ " + arrayList.get(position).getPaymentAmount());
+        String str = String.valueOf(position + 1);
+        holder.srno_txt.setText(str);
+        holder.sucess_txt.setText(arrayList.get(position).getPaymentStatus());
+        holder.date_txt.setText(arrayList.get(position).getPaymentDate());
+        holder.transactionID_txt.setText(arrayList.get(position).getTrackAndPayPaymentID());
+        holder.amount_txt.setText("₹ " + arrayList.get(position).getPaymentAmount());
+        if (flag.equalsIgnoreCase("1")) {
             holder.family_name_txt.setText(arrayList.get(position).getName());
+        }else{
+            holder.family_name_txt.setText(arrayList.get(position).getSessionName());
+        }
     }
 
     @Override
@@ -64,10 +69,6 @@ public class PaymentSucessReportAdapter extends RecyclerView.Adapter<PaymentSuce
         return arrayList.size();
     }
 }
-
-
-
-
 
 
 //        extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

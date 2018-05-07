@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/list_line"
+        android:orientation="horizontal"
+        android:weightSum="5">
+
+        <TextView
+            android:id="@+id/no_txt"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_weight="0.6"
+            android:gravity="center_vertical|center"
+            android:paddingLeft="@dimen/_3sdp"
+            android:text="01"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/_10sdp" />
+
+        <TextView
+            android:id="@+id/session_name_txt"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_weight="1.4"
+            android:gravity="center_vertical"
+            android:paddingBottom="@dimen/_5sdp"
+            android:paddingLeft="@dimen/_5sdp"
+            android:text="Megha Shah"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/_10sdp" />
+
+        <TextView
+            android:id="@+id/date_txt"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_weight="1"
+            android:gravity="center|center_vertical"
+            android:paddingLeft="@dimen/_1sdp"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/_10sdp" />
+
+        <TextView
+            android:id="@+id/amount_txt"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_weight="0.8"
+            android:gravity="center|center_vertical"
+            android:paddingLeft="@dimen/_1sdp"
+            android:text=""
+            android:textAlignment="center"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/_10sdp" />
+
+        <TextView
+            android:id="@+id/paid_txt"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_33sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginLeft="@dimen/_1sdp"
+            android:layout_marginRight="@dimen/_3sdp"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_weight="1.1"
+            android:gravity="center_vertical|center"
+            android:text=""
+            android:textColor="@color/search_boder"
+            android:textSize="@dimen/_10sdp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+    </LinearLayout>
+</LinearLayout>

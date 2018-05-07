@@ -40,7 +40,7 @@ public class SearchByUser extends AppCompatActivity {
     SessionDetailModel dataResponse;
     String selectedSessionNameStr = "", selectedLocationStr = "", sessionName = "";
     private PopupWindow popupWindow;
-    Button btnMyReport;
+    Button btnMyReport, btnMySession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +78,7 @@ public class SearchByUser extends AppCompatActivity {
                 Intent inClassDetail = new Intent(mContext, ClassSearchScreen.class);
                 inClassDetail.putExtra("flag", "study");
                 inClassDetail.putExtra("withOR", "withOR");
+                inClassDetail.putExtra("sessionType","1");
                 startActivity(inClassDetail);
             }
         });
@@ -100,6 +101,7 @@ public class SearchByUser extends AppCompatActivity {
                 Intent inClassDetail = new Intent(mContext, ClassSearchScreen.class);
                 inClassDetail.putExtra("flag", "play");
                 inClassDetail.putExtra("withOR", "withOR");
+                inClassDetail.putExtra("sessionType","2");
                 startActivity(inClassDetail);
             }
         });
@@ -293,8 +295,14 @@ public class SearchByUser extends AppCompatActivity {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View view = inflater.inflate(R.layout.layout_menu, null);
+        popupWindow.setFocusable(true);
+        popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+        popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        popupWindow.showAtLocation(searchByUserBinding.loginTxt, Gravity.LEFT, 200, 200);
+        popupWindow.setContentView(view);
 
         btnMyReport = (Button) view.findViewById(R.id.btnMyReport);
+        btnMySession = (Button) view.findViewById(R.id.btnMySession);
         btnMyReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -302,12 +310,13 @@ public class SearchByUser extends AppCompatActivity {
                 startActivity(imyaccount);
             }
         });
-
-        popupWindow.setFocusable(true);
-        popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-        popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
-        popupWindow.setContentView(view);
+        btnMySession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent isession = new Intent(mContext, MySession.class);
+                startActivity(isession);
+            }
+        });
 
         return popupWindow;
     }
