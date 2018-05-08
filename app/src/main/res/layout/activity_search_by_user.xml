@@ -11,6 +11,7 @@
         tools:context="com.adms.classsafari.Activites.SearchByUser">
 
         <LinearLayout
+            android:id="@+id/linear_login"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35sdp"
             android:layout_marginTop="@dimen/_20sdp"

@@ -29,18 +29,19 @@
     <string name="user_name">Felicia Richi Bwown</string>
     <string name="book_session">BOOK SESSION</string>
     <string name="class_search">CLASS SEARCH</string>
-    <string name="search_string">Search State, City, Area</string>
+    <string name="search_string">Search City</string>
     <string name="search_session">Session Name</string>
     <string name="search_stream">Stream</string>
     <string name="search_MF">M/F</string>
-    <string name="search_class">Lession Name</string>
+    <string name="search_class">Lesson Name</string>
     <string name="comment_hint">Write Your Comment</string>
-    <string name="login"><u><b>Login</b></u></string>
+    <string name="login"><u><b>Login or Register</b></u></string>
     <string name="sortby">SORT BY</string>
     <string name="most_recent">Most Recent</string>
     <string name="addsession">Add Session</string>
     <string name="my_Account">My Payment</string>
     <string name="my_session">My Session</string>
+    <string name="my_change_pass">Change Password</string>
 
     <string name="checkboc_text">All-inclusive price(coupon &amp; wallet applied)</string>
     <string name="payment">Payment</string>
@@ -82,7 +83,7 @@
     <string name="zipcode">Zipcode</string>
     <string name="description">Description</string>
     <string name="alert">Alert</string>
-    <string name="session_name">Session Name</string>
+    <string name="session_name">Session Detail</string>
     <string name="session_standard">Standard</string>
     <string name="search_board">Board</string>
     <string name="payment_success">Payment Success</string>

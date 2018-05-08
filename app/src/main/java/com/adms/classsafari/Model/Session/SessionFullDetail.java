@@ -41,7 +41,7 @@ public class SessionFullDetail {
     @SerializedName("SessionTime")
     @Expose
     private String sessionTime;
-    @SerializedName("LowToHighSortSessionPrice")
+    @SerializedName("SessionPrice")
     @Expose
     private String sessionPrice;
     @SerializedName("SessionCapacity")

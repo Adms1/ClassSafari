@@ -62,13 +62,13 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
     //Use for Alert Dialog
     ArrayList<String> timegapArray;
     AlertListAdapter alertListAdapter;
-
-    //Use for AddSession Time Dialog
-
     static boolean checkTime_sun = false, checkTime_mon = false,
             checkTime_tue = false, checkTime_wed = false, checkTime_thu = false, checkTime_fri = false, checkTime_sat = false;
 
+
+    //Use for AddSession Time Dialog
     TextView start_date_txt, end_date_txt;
+//    AddSessionDialogBinding sessionDialogBinding;
     static TextView sun_start_time_txt, sun_end_time_txt, mon_start_time_txt, mon_end_time_txt, tue_start_time_txt,
             tue_end_time_txt, wed_start_time_txt, wed_end_time_txt, thu_start_time_txt, thu_end_time_txt, fri_end_time_txt,
             fri_start_time_txt, sat_end_time_txt, sat_start_time_txt;
@@ -89,7 +89,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
     Calendar calendar;
     int mYear, mMonth, mDay;
     private static String dateFinal;
-    private static String minuteFinal, hourFinal,FinalTimeStr;
+    private static String minuteFinal, hourFinal, FinalTimeStr;
     private static boolean isFromDate = false;
     private com.wdullaer.materialdatetimepicker.date.DatePickerDialog datePickerDialog;
     public Dialog popularDialog;
@@ -682,7 +682,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
 
                     }
 //                }else{
-//                    Util.ping(mContext,"Please Enter Proper Time");
+//                    Utils.ping(mContext,"Please Enter Proper Time");
 //                }
 
                 } else
@@ -1501,7 +1501,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                 minuteFinal = String.valueOf(minute);
             }
 
-            FinalTimeStr=hourFinal + ":" + minuteFinal + " " + status;
+            FinalTimeStr = hourFinal + ":" + minuteFinal + " " + status;
             switch (Tag) {
                 case "0":
                     sun_start_time_txt.setText(FinalTimeStr);
@@ -2571,6 +2571,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         addSessionBinding.paidRb.setEnabled(false);
         addSessionBinding.sportsEdt.setEnabled(false);
         addSessionBinding.alertBtn.setEnabled(false);
+        addSessionBinding.sessionPriceEdt.setEnabled(false);
     }
 
     public void TimeValidation(String startTime1, String endTime1) {

@@ -50,7 +50,7 @@ public class MySession extends AppCompatActivity {
     Dialog confimDialog;
     TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view,
             session_name_txt, location_txt, duration_txt, time_txt, time_txt_view, session_fee_txt;
-    String paymentStatusstr, sessionIDStr, selectedsessionIDStr,sessionPriceStr, orderIDStr;
+    String paymentStatusstr, sessionIDStr, selectedsessionIDStr,sessionPriceStr, orderIDStr,flag;
     SessionDetailModel dataResponse;
     int SessionHour = 0;
     Integer SessionMinit = 0;
@@ -142,7 +142,21 @@ public class MySession extends AppCompatActivity {
         userSessionListAdapter = new UserSessionListAdapter(mContext, sessionList, new onViewClick() {
             @Override
             public void getViewClick() {
-                ConformSessionDialog();
+                ArrayList<String> selectedId = new ArrayList<String>();
+                String sessionName = "";
+                selectedId = userSessionListAdapter.getContactID();
+                Log.d("selectedId", "" + selectedId);
+                for (int i = 0; i < selectedId.size(); i++) {
+                    String []spilt=selectedId.get(i).split("\\|");
+                    sessionIDStr = spilt[0];
+                    flag=spilt[1];
+                }
+
+                if(flag.equalsIgnoreCase("1")){
+
+                }else {
+                    ConformSessionDialog();
+                }
             }
         });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
@@ -358,13 +372,15 @@ public class MySession extends AppCompatActivity {
     }
 
     public void setDialogData() {
-        ArrayList<String> selectedId = new ArrayList<String>();
-        String sessionName = "";
-        selectedId = userSessionListAdapter.getContactID();
-        Log.d("selectedId", "" + selectedId);
-        for (int i = 0; i < selectedId.size(); i++) {
-            sessionIDStr = selectedId.get(i);
-        }
+//        ArrayList<String> selectedId = new ArrayList<String>();
+//        String sessionName = "";
+//        selectedId = userSessionListAdapter.getContactID();
+//        Log.d("selectedId", "" + selectedId);
+//        for (int i = 0; i < selectedId.size(); i++) {
+//            String []spilt=selectedId.get(i).split("\\|");
+//            sessionIDStr = spilt[0];
+//            flag=spilt[1];
+//        }
         time_txt_view.setText("Date");
         for (int i = 0; i < dataResponse.getData().size(); i++) {
             if (sessionIDStr.equalsIgnoreCase(dataResponse.getData().get(i).getSessionID())) {
@@ -421,5 +437,58 @@ public class MySession extends AppCompatActivity {
         }
 
 
+    }
+
+
+    public void SessionDetailDialog() {
+        confimDialog = new Dialog(mContext, R.style.Theme_Dialog);
+        Window window = confimDialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        confimDialog.getWindow().getAttributes().verticalMargin = 0.20f;
+        wlp.gravity = Gravity.TOP;
+        window.setAttributes(wlp);
+
+        confimDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+
+        confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        confimDialog.setCancelable(false);
+        confimDialog.setContentView(R.layout.confirm_session_dialog);
+
+
+        session_student_txt_view = (TextView) confimDialog.findViewById(R.id.session_student_txt_view);
+        session_student_txt = (TextView) confimDialog.findViewById(R.id.session_student_txt);
+        session_name_txt = (TextView) confimDialog.findViewById(R.id.session_name_txt);
+        location_txt = (TextView) confimDialog.findViewById(R.id.location_txt);
+        duration_txt = (TextView) confimDialog.findViewById(R.id.duration_txt);
+        time_txt = (TextView) confimDialog.findViewById(R.id.time_txt);
+        time_txt_view = (TextView) confimDialog.findViewById(R.id.time_txt_view);
+        session_fee_txt = (TextView) confimDialog.findViewById(R.id.session_fee_txt);
+        confirm_txt = (TextView) confimDialog.findViewById(R.id.confirm_txt);
+        cancel_txt = (TextView) confimDialog.findViewById(R.id.cancel_txt);
+        session_student_txt_view.setText("TEACHER NAME");
+//        setDialogData();
+        cancel_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                confimDialog.dismiss();
+            }
+        });
+        confirm_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("") &&
+                        !selectedsessionIDStr.equalsIgnoreCase("") &&
+                        !sessionPriceStr.equalsIgnoreCase("0.00")) {
+                    callpaymentRequestApi();
+                } else {
+                    paymentStatusstr = "1";
+                    callSessionConfirmationApi();
+                }
+                confimDialog.dismiss();
+            }
+        });
+
+
+        confimDialog.show();
     }
 }

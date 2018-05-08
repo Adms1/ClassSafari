@@ -44,7 +44,7 @@
                     android:layout_marginLeft="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:layout_gravity="center_vertical|top"
-                    android:theme="@style/RatingBar"/>
+                    android:theme="@style/RatingBar1"/>
 
                 <TextView
                     android:id="@+id/location_txt"

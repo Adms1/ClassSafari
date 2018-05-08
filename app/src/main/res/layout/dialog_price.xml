@@ -153,7 +153,7 @@
                     android:layout_weight="1.8"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_15sdp"
-                    android:text="+ Per Session"
+                    android:text="Per Session"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_12sdp" />
             </LinearLayout>

@@ -47,7 +47,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     String firstNameStr, lastNameStr, emailStr, passwordStr, phonenoStr, gendarIdStr = "1", dateofbirthStr, coachTypeIDStr = "1",
             registerTypeStr = "family", contatIDstr, type, whereTocomestr, sessionIDStr, paymentStatusstr, orderIDStr,frontloginStr,
             boardStr, standardStr, streamStr, locationStr, classNameStr,
-            searchTypeStr, subjectStr, genderStr,searchByStr;
+            searchTypeStr, subjectStr, genderStr,searchByStr,ratingLoginStr;
 
     //Use for Confirmation Dialog
     Dialog confimDialog;
@@ -71,6 +71,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         searchTypeStr = getIntent().getStringExtra("searchType");
         subjectStr = getIntent().getStringExtra("lessionName");
         genderStr = getIntent().getStringExtra("gender");
+        ratingLoginStr=getIntent().getStringExtra("ratingLogin");
         init();
         setListner();
     }
@@ -88,6 +89,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
             @Override
             public void onClick(View view) {
                 Intent inback = new Intent(mContext, LoginActivity.class);
+                inback.putExtra("frontLogin",frontloginStr);
                 startActivity(inback);
             }
         });
@@ -261,6 +263,8 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         inback.putExtra("gender",genderStr);
         inback.putExtra("frontLogin",frontloginStr);
         inback.putExtra("withOR",whereTocomestr);
+        inback.putExtra("ratingLogin",ratingLoginStr);
+        inback.putExtra("frontLogin",frontloginStr);
         startActivity(inback);
     }
 
@@ -468,7 +472,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                         type = teacherInfoModel.getLoginType();
                         contatIDstr = splitCoachID[0];
                         if (teacherInfoModel.getLoginType().equalsIgnoreCase("Family") && !Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
-                            if (whereTocomestr.equalsIgnoreCase("beforeLogin")) {
+                            if (frontloginStr.equalsIgnoreCase("beforeLogin")) {
                                 Intent iSearchByUser = new Intent(mContext, SearchByUser.class);
                                 startActivity(iSearchByUser);
                             } else {

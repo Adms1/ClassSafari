@@ -42,9 +42,14 @@ public class PaymentSucessReportAdapter extends RecyclerView.Adapter<PaymentSuce
 
     @Override
     public PaymentSucessReportAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.payment_report_list_item, parent, false);
-
+        View itemView;
+        if (flag.equalsIgnoreCase("1")) {
+         itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.payment_report_list_item, parent, false);
+        }else{
+         itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.payment_report_list_item1, parent, false);
+        }
         return new PaymentSucessReportAdapter.MyViewHolder(itemView);
     }
 

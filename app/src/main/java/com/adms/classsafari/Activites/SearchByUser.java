@@ -1,5 +1,6 @@
 package com.adms.classsafari.Activites;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,16 +14,19 @@ import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.PopupWindow;
 
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.AppConfiguration;
 import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
+import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivitySearchByUserBinding;
 
@@ -40,7 +44,11 @@ public class SearchByUser extends AppCompatActivity {
     SessionDetailModel dataResponse;
     String selectedSessionNameStr = "", selectedLocationStr = "", sessionName = "";
     private PopupWindow popupWindow;
-    Button btnMyReport, btnMySession;
+    Button btnMyReport, btnMySession, btnChangePassword;
+    Dialog changeDialog;
+    String passWordStr, confirmpassWordStr, currentpasswordStr;
+    EditText edtnewpassword, edtconfirmpassword, edtcurrentpassword;
+    Button changepwd_btn, cancel_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +72,7 @@ public class SearchByUser extends AppCompatActivity {
             searchByUserBinding.loginTxt.setText(Html.fromHtml("Logged as " + "<u> <b>" + Utils.getPref(mContext, "RegisterUserName") + "</u></b>"));
 
         } else {
-            searchByUserBinding.loginTxt.setText(Html.fromHtml("<u><b>Login<u></b>"));
+            searchByUserBinding.loginTxt.setText(Html.fromHtml("<u><b>Login or Register<u></b>"));
             searchByUserBinding.logout.setVisibility(View.GONE);
         }
     }
@@ -78,7 +86,7 @@ public class SearchByUser extends AppCompatActivity {
                 Intent inClassDetail = new Intent(mContext, ClassSearchScreen.class);
                 inClassDetail.putExtra("flag", "study");
                 inClassDetail.putExtra("withOR", "withOR");
-                inClassDetail.putExtra("sessionType","1");
+                inClassDetail.putExtra("sessionType", "1");
                 startActivity(inClassDetail);
             }
         });
@@ -101,7 +109,7 @@ public class SearchByUser extends AppCompatActivity {
                 Intent inClassDetail = new Intent(mContext, ClassSearchScreen.class);
                 inClassDetail.putExtra("flag", "play");
                 inClassDetail.putExtra("withOR", "withOR");
-                inClassDetail.putExtra("sessionType","2");
+                inClassDetail.putExtra("sessionType", "2");
                 startActivity(inClassDetail);
             }
         });
@@ -128,10 +136,11 @@ public class SearchByUser extends AppCompatActivity {
             public void onClick(View view) {
                 if (!Utils.getPref(mContext, "RegisterUserName").equalsIgnoreCase("")) {
                     PopupWindow popupwindow_obj = popupDisplay();
-                    popupwindow_obj.showAsDropDown(searchByUserBinding.loginTxt, 0, 0);
+                    popupwindow_obj.showAsDropDown(searchByUserBinding.linearLogin, 250, 10);
                 } else {
                     Intent inClassDetail = new Intent(mContext, LoginActivity.class);
                     inClassDetail.putExtra("frontLogin", "beforeLogin");
+                    inClassDetail.putExtra("ratingLogin", "false");
                     startActivity(inClassDetail);
                 }
             }
@@ -253,6 +262,10 @@ public class SearchByUser extends AppCompatActivity {
                 SesisonNameArray.add(dataResponse.getData().get(j).getSessionName());
             }
         }
+        HashSet<String> hashSet = new HashSet<String>();
+        hashSet.addAll(SesisonNameArray);
+        SesisonNameArray.clear();
+        SesisonNameArray.addAll(hashSet);
         ArrayAdapter<String> adapterSessionName = new ArrayAdapter<String>(mContext, R.layout.autocomplete_layout, SesisonNameArray);
         searchByUserBinding.searchClassEdt.setThreshold(1);
         searchByUserBinding.searchClassEdt.setAdapter(adapterSessionName);
@@ -298,11 +311,13 @@ public class SearchByUser extends AppCompatActivity {
         popupWindow.setFocusable(true);
         popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
         popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-        popupWindow.showAtLocation(searchByUserBinding.loginTxt, Gravity.LEFT, 200, 200);
+//        popupWindow.showAtLocation(searchByUserBinding.linearLogin, Gravity.LEFT, 300, 0);
         popupWindow.setContentView(view);
 
         btnMyReport = (Button) view.findViewById(R.id.btnMyReport);
         btnMySession = (Button) view.findViewById(R.id.btnMySession);
+        btnChangePassword = (Button) view.findViewById(R.id.btnChangePassword);
+
         btnMyReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -317,8 +332,120 @@ public class SearchByUser extends AppCompatActivity {
                 startActivity(isession);
             }
         });
-
+        btnChangePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changePasswordDialog();
+            }
+        });
         return popupWindow;
+    }
+
+    public void changePasswordDialog() {
+        changeDialog = new Dialog(mContext, R.style.Theme_Dialog);
+        Window window = changeDialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        changeDialog.getWindow().getAttributes().verticalMargin = 0.0f;
+        wlp.gravity = Gravity.CENTER;
+        window.setAttributes(wlp);
+
+        changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+
+        changeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        changeDialog.setCancelable(false);
+        changeDialog.setContentView(R.layout.change_password_dialog);
+
+        cancel_btn = (Button) changeDialog.findViewById(R.id.cancel_btn);
+        changepwd_btn = (Button) changeDialog.findViewById(R.id.changepwd_btn);
+        edtconfirmpassword = (EditText) changeDialog.findViewById(R.id.edtconfirmpassword);
+        edtnewpassword = (EditText) changeDialog.findViewById(R.id.edtnewpassword);
+        edtcurrentpassword = (EditText) changeDialog.findViewById(R.id.edtcurrentpassword);
+
+        changepwd_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentpasswordStr = edtcurrentpassword.getText().toString();
+                confirmpassWordStr = edtconfirmpassword.getText().toString();
+                passWordStr = edtnewpassword.getText().toString();
+                if (currentpasswordStr.equalsIgnoreCase(Utils.getPref(mContext, "Password"))) {
+                    if (!passWordStr.equalsIgnoreCase("") && passWordStr.length() >= 4 && passWordStr.length() <= 8) {
+                        if (passWordStr.equalsIgnoreCase(confirmpassWordStr)) {
+                            callChangePasswordApi();
+                        } else {
+                            edtcurrentpassword.setError("Confirm Password does not match.");
+                        }
+                    } else {
+//                    Util.ping(mContex, "Confirm Password does not match.");
+                        edtconfirmpassword.setError("Password must be 4-8 Characters.");
+                        edtconfirmpassword.setText("");
+                        edtconfirmpassword.setText("");
+                    }
+                } else {
+                    edtcurrentpassword.setError("Password does not match to current password.");
+                }
+
+
+            }
+        });
+        cancel_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeDialog.dismiss();
+            }
+        });
+
+        changeDialog.show();
+
+    }
+
+    //USe for Change Password
+    public void callChangePasswordApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_Change_Password(getChangePasswordDetail(), new retrofit.Callback<TeacherInfoModel>() {
+                @Override
+                public void success(TeacherInfoModel forgotInfoModel, Response response) {
+                    Utils.dismissDialog();
+                    if (forgotInfoModel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (forgotInfoModel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (forgotInfoModel.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.ping(mContext, "Please Enter Valid Password.");
+                        return;
+                    }
+                    if (forgotInfoModel.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.ping(mContext, getResources().getString(R.string.changPassword));
+                        changeDialog.dismiss();
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getChangePasswordDetail() {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("EmailAddress", Utils.getPref(mContext, "RegisterEmail"));
+        map.put("Password", passWordStr);
+
+
+        return map;
     }
 
 }

@@ -17,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -35,7 +36,9 @@ import android.widget.TextView;
 import com.adms.classsafari.Adapter.ClassDetailAdapter;
 import com.adms.classsafari.Adapter.PopularClassListAdapter;
 import com.adms.classsafari.AppConstant.ApiHandler;
+import com.adms.classsafari.AppConstant.HighToLowSortRating;
 import com.adms.classsafari.AppConstant.HightToLowSortSessionPrice;
+import com.adms.classsafari.AppConstant.LowToHighSortRating;
 import com.adms.classsafari.AppConstant.LowToHighSortSessionPrice;
 import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.BottomNavigationViewHelper;
@@ -48,8 +51,11 @@ import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarChangeListener;
 import com.crystal.crystalrangeseekbar.interfaces.OnRangeSeekbarFinalValueListener;
 import com.crystal.crystalrangeseekbar.widgets.CrystalRangeSeekbar;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -64,7 +70,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
     Context mContext;
     ClassDetailAdapter classDetailAdapter;
     ArrayList<String> arrayList;
-    ArrayList<String> arrayListPopular;
+    List<sessionDataModel> arrayListPopular;
     public Dialog popularDialog, priceDialog, sortDialog;
     PopularClassListAdapter popularClassListAdapter;
     RecyclerView popularListrcView;
@@ -73,8 +79,10 @@ public class ClassDeatilScreen extends AppCompatActivity {
     TextView price_range1_txt, price_range2_txt;
     String subjectStr, boardStr = "", standardStr = "", streamStr = "",
             locationStr, classNameStr, searchByStr, searchTypeStr,
-            wheretoComeStr, genderStr, maxpriceStr, minpriceStr, sessionId, commentStr, ratingValueStr;
-    SessionDetailModel dataResponse;
+            wheretoComeStr, genderStr, maxpriceStr, minpriceStr,
+            sessionId, commentStr, ratingValueStr, popularsessionID = "",
+            populardurationStr = "", populargenderStr = "", popluarsessiondateStr = "";
+    SessionDetailModel dataResponse,populardataresponse;
     List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
     boolean arraynull = false;
 
@@ -83,7 +91,8 @@ public class ClassDeatilScreen extends AppCompatActivity {
     RadioButton low_high_rb, high_low_rb, lowest_first_user_rb, highest_first_user_rb;
     String rangestatusStr = "", result, afterfilterresult, pricewiseStr = "", ratingStr = "", sessionType;
     TextView result_txt, result1_txt;
-
+    int SessionHour = 0;
+    Integer SessionMinit = 0;
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,20 +116,33 @@ public class ClassDeatilScreen extends AppCompatActivity {
         wheretoComeStr = getIntent().getStringExtra("withOR");
         genderStr = getIntent().getStringExtra("gender");
         sessionType = getIntent().getStringExtra("sessionType");
-
+        Utils.setPref(mContext, "location", locationStr.trim());
+        Utils.setPref(mContext, "classname", classNameStr.trim().toLowerCase());
         BottomNavigationViewHelper.removeShiftMode(binding.bottomNavigationView);
         if (!searchByStr.equalsIgnoreCase("1")) {
             if (!boardStr.equalsIgnoreCase("") || !standardStr.equalsIgnoreCase("")
                     || !streamStr.equalsIgnoreCase("")) {
+                binding.boardTxt.setVisibility(View.VISIBLE);
+                binding.standardTxt.setVisibility(View.VISIBLE);
+                binding.streamTxt.setVisibility(View.VISIBLE);
+
                 binding.boardTxt.setText("\u2022" + boardStr);
                 binding.standardTxt.setText("\u2022" + standardStr);
                 binding.streamTxt.setText("\u2022" + streamStr);
 
+            } else {
+                binding.boardTxt.setVisibility(View.GONE);
+                binding.standardTxt.setVisibility(View.GONE);
+                binding.streamTxt.setVisibility(View.GONE);
             }
-            binding.cityTxt.setText(locationStr);
-            binding.subjectTxt.setText(classNameStr);
+
+        } else {
+
         }
+        binding.cityTxt.setText(locationStr);
+        binding.subjectTxt.setText(classNameStr);
         callSessionListApi();
+
     }
 
     public void setListner() {
@@ -179,7 +201,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
 
                     for (sessionDataModel arrayObj : dataResponse.getData()) {
                         if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                                arrayObj.getSessionName().trim().contains(classNameStr.trim())) {
+                                arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
                             if (arrayObj.getRegionName().trim().equalsIgnoreCase(spilt[0])) {
                                 filterFinalArray.add(arrayObj);
 
@@ -215,7 +237,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                     List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                     for (sessionDataModel arrayObj : dataResponse.getData()) {
                         if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                                arrayObj.getSessionName().trim().contains(classNameStr.trim())) {
+                                arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
                             filterFinalArray.add(arrayObj);
                         }
                     }
@@ -228,7 +250,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                     for (int k = 0; k < spilt.length; k++) {
                         for (sessionDataModel arrayObj : dataResponse.getData()) {
                             if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                                    arrayObj.getSessionName().trim().contains(classNameStr.trim())) {
+                                    arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
                                 if (arrayObj.getRegionName().trim().equalsIgnoreCase(spilt[k])) {
                                     filterFinalArray.add(arrayObj);
                                 }
@@ -270,23 +292,62 @@ public class ClassDeatilScreen extends AppCompatActivity {
 
         popularListrcView = (RecyclerView) popularDialog.findViewById(R.id.popular_list_rcView);
         done = (TextView) popularDialog.findViewById(R.id.done_txt);
+        result_txt = (TextView) popularDialog.findViewById(R.id.result_txt);
+
+        callPopularSessionListApi();
 
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                popularDialog.dismiss();
+                List<SessionDetailModel> arrayList = new ArrayList<SessionDetailModel>();
+
+                if (!popularsessionID.equalsIgnoreCase("")) {
+                    List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+
+//                    for (int i = 0; i < dataResponse.getData().size(); i++) {
+//                        arrayList.add(dataResponse);
+//                    }
+                    for (int i = 0; i < dataResponse.getData().size(); i++) {
+                        if (popularsessionID.equalsIgnoreCase(dataResponse.getData().get(i).getSessionID())) {
+                            String[] spiltPipes = dataResponse.getData().get(i).getSchedule().split("\\|");
+                            String[] spiltComma;
+                            String[] spiltDash;
+                            Log.d("spilt", "" + spiltPipes.toString());
+                            for (int j = 0; j < spiltPipes.length; j++) {
+                                spiltComma = spiltPipes[j].split("\\,");
+                                spiltDash = spiltComma[1].split("\\-");
+                                calculateHours(spiltDash[0], spiltDash[1]);
+                                populardurationStr=SessionHour + " hr " + SessionMinit + " min";
+
+                            }
+                            populargenderStr = dataResponse.getData().get(i).getGenderID();
+                            popluarsessiondateStr = dataResponse.getData().get(i).getStartDate() + " To " + dataResponse.getData().get(i).getEndDate();
+                        }
+                    }
+                    Log.d("duration,+Time", populardurationStr + "" + popluarsessiondateStr);
+
+                    Intent inSession = new Intent(mContext, SessionName.class);
+                    inSession.putExtra("sessionID", popularsessionID);
+                    inSession.putExtra("SearchBy", searchByStr);
+                    inSession.putExtra("city", locationStr);
+                    inSession.putExtra("sessionName", classNameStr);
+                    inSession.putExtra("board", boardStr);
+                    inSession.putExtra("stream", streamStr);
+                    inSession.putExtra("standard", standardStr);
+                    inSession.putExtra("lessionName", subjectStr);
+                    inSession.putExtra("sessiondate", popluarsessiondateStr);
+                    inSession.putExtra("duration", populardurationStr);
+                    inSession.putExtra("gender", populargenderStr);
+                    inSession.putExtra("searchType", searchTypeStr);
+                    inSession.putExtra("withOR", wheretoComeStr);
+                    mContext.startActivity(inSession);
+                    popularDialog.dismiss();
+                } else {
+                    popularDialog.dismiss();
+                }
             }
         });
-        arrayListPopular = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            arrayListPopular.add(String.valueOf(i));
-        }
 
-        popularClassListAdapter = new PopularClassListAdapter(mContext, arrayListPopular);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 3);
-        popularListrcView.setLayoutManager(mLayoutManager);
-        popularListrcView.setItemAnimator(new DefaultItemAnimator());
-        popularListrcView.setAdapter(popularClassListAdapter);
         popularDialog.show();
     }
 
@@ -317,7 +378,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
 
         for (sessionDataModel arrayObj : dataResponse.getData()) {
             if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                    arrayObj.getSessionName().trim().contains(classNameStr.trim())) {
+                    arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
                 filterFinalArray.add(arrayObj);
             }
         }
@@ -340,7 +401,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                 List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                 for (sessionDataModel arrayObj : dataResponse.getData()) {
                     if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim())
-                            && arrayObj.getSessionName().trim().contains(classNameStr.trim())) {
+                            && arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
                         if (Float.parseFloat(arrayObj.getSessionAmount()) >= Integer.parseInt(minpriceStr) &&
                                 Float.parseFloat(arrayObj.getSessionAmount()) <= Integer.parseInt(maxpriceStr)) {
                             filterFinalArray.add(arrayObj);
@@ -361,7 +422,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                 List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                 for (sessionDataModel arrayObj : dataResponse.getData()) {
                     if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim())
-                            && arrayObj.getSessionName().trim().contains(classNameStr.trim())) {
+                            && arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
                         if (Float.parseFloat(arrayObj.getSessionAmount()) >= Integer.parseInt(String.valueOf(minValue)) &&
                                 Float.parseFloat(arrayObj.getSessionAmount()) <= Integer.parseInt(String.valueOf(maxValue))) {
                             filterFinalArray.add(arrayObj);
@@ -408,7 +469,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
 
         user_rating_status_rg = (RadioGroup) sortDialog.findViewById(R.id.user_rating_status_rg);
         lowest_first_user_rb = (RadioButton) sortDialog.findViewById(R.id.lowest_first_user_rb);
-        highest_first_user_rb = (RadioButton) sortDialog.findViewById(R.id.highest_first_rating_rb);
+        highest_first_user_rb = (RadioButton) sortDialog.findViewById(R.id.highest_first_user_rb);
 
         result_txt = (TextView) sortDialog.findViewById(R.id.result_txt);
         result1_txt = (TextView) sortDialog.findViewById(R.id.result1_txt);
@@ -426,91 +487,68 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                 List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                                 for (sessionDataModel arrayObj : dataResponse.getData()) {
                                     if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                                            arrayObj.getSessionName().trim().contains(classNameStr.trim())) {
+                                            arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
                                         filterFinalArray.add(arrayObj);
                                         Collections.sort(filterFinalArray, new LowToHighSortSessionPrice());
                                     }
                                 }
                                 fillData(filterFinalArray);
+                                sortDialog.dismiss();
+                                pricewiseStr = "";
                             } else {
                                 List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                                 for (sessionDataModel arrayObj : dataResponse.getData()) {
                                     if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                                            arrayObj.getSessionName().trim().contains(classNameStr.trim())) {
+                                            arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
                                         filterFinalArray.add(arrayObj);
                                         Collections.sort(filterFinalArray, new HightToLowSortSessionPrice());
                                     }
                                 }
                                 fillData(filterFinalArray);
+                                sortDialog.dismiss();
+                                pricewiseStr = "";
                             }
-                            sortDialog.dismiss();
-                            pricewiseStr="";
                         } else {
                             Utils.ping(mContext, "Please Select One Option");
                         }
                     } else {
                         if (!ratingStr.equalsIgnoreCase("")) {
                             if (ratingStr.equalsIgnoreCase("low")) {
-                                List<Float> ratingList = new ArrayList<>();
-                                for (sessionDataModel arrayObj : dataResponse.getData()) {
-                                    if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                                            arrayObj.getSessionName().trim().contains(classNameStr.trim())) {
-                                        filterFinalArray.add(arrayObj);
-                                    }
-                                }
-                                for (int i = 0; i < filterFinalArray.size(); i++) {
-                                    ratingList.add(Float.parseFloat(filterFinalArray.get(i).getRating()));
-                                }
-
-                                Object objmin = Collections.min(ratingList);
                                 List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                                 for (sessionDataModel arrayObj : dataResponse.getData()) {
-                                    if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim())
-                                            && arrayObj.getSessionName().trim().contains(classNameStr.trim())) {
-                                        if (Float.parseFloat(arrayObj.getRating()) >= Integer.parseInt(String.valueOf(objmin))) {
-                                            filterFinalArray.add(arrayObj);
-                                        }
-                                    }
-                                }
-                                fillData(filterFinalArray);
-                            } else {
-                                List<Float> ratingList = new ArrayList<>();
-                                for (sessionDataModel arrayObj : dataResponse.getData()) {
                                     if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                                            arrayObj.getSessionName().trim().contains(classNameStr.trim())) {
+                                            arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
                                         filterFinalArray.add(arrayObj);
-                                    }
-                                }
-                                for (int i = 0; i < filterFinalArray.size(); i++) {
-                                    ratingList.add(Float.parseFloat(filterFinalArray.get(i).getRating()));
-                                }
-
-                                Object objmax = Collections.max(ratingList);
-                                List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-                                for (sessionDataModel arrayObj : dataResponse.getData()) {
-                                    if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim())
-                                            && arrayObj.getSessionName().trim().contains(classNameStr.trim())) {
-                                        if (Float.parseFloat(arrayObj.getRating()) >= Integer.parseInt(String.valueOf(objmax))) {
-                                            filterFinalArray.add(arrayObj);
-                                        }
+                                        Collections.sort(filterFinalArray, new LowToHighSortRating());
                                     }
                                 }
                                 fillData(filterFinalArray);
                                 sortDialog.dismiss();
-                                pricewiseStr="";
+                                pricewiseStr = "";
+                            } else {
+                                List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                                for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                    if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+                                            arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+                                        filterFinalArray.add(arrayObj);
+                                        Collections.sort(filterFinalArray, new HighToLowSortRating());
+                                    }
+                                }
+                                fillData(filterFinalArray);
+                                sortDialog.dismiss();
+                                pricewiseStr = "";
                             }
                         } else {
                             Utils.ping(mContext, "Please Select One Option");
                         }
                     }
 
-                }else {
+                } else {
                     Utils.ping(mContext, "Please Select One Option");
                 }
             }
         });
-        range_status_rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
+        range_status_rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 int radioButtonID = range_status_rg.getCheckedRadioButtonId();
@@ -523,8 +561,8 @@ public class ClassDeatilScreen extends AppCompatActivity {
                         rangestatusStr = "high";
                         pricewiseStr = "price";
                         break;
-                        default:
-                            break;
+                    default:
+                        break;
                 }
             }
         });
@@ -532,15 +570,15 @@ public class ClassDeatilScreen extends AppCompatActivity {
         user_rating_status_rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                int radioButtonRating=user_rating_status_rg.getCheckedRadioButtonId();
-                switch (radioButtonRating){
-                    case R.id.lowest_first_rating_rb:
-                        ratingStr="low";
-//                        pricewiseStr="rating";
+                int radioButtonRating = user_rating_status_rg.getCheckedRadioButtonId();
+                switch (radioButtonRating) {
+                    case R.id.lowest_first_user_rb:
+                        ratingStr = "low";
+                        pricewiseStr = "rating";
                         break;
-                    case R.id.highest_first_rating_rb:
-                        ratingStr="high";
-//                        pricewiseStr="rating";
+                    case R.id.highest_first_user_rb:
+                        ratingStr = "high";
+                        pricewiseStr = "rating";
                         break;
                     default:
                         break;
@@ -581,7 +619,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                 List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                                 for (sessionDataModel arrayObj : dataResponse.getData()) {
                                     if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim())
-                                            && arrayObj.getSessionName().trim().contains(classNameStr.trim())) {
+                                            && arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
                                         filterFinalArray.add(arrayObj);
                                         result = String.valueOf(filterFinalArray.size());
                                     }
@@ -594,7 +632,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                         List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                                         for (sessionDataModel arrayObj : dataResponse.getData()) {
                                             if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                                                    arrayObj.getSessionName().trim().contains(classNameStr.trim()) &&
+                                                    arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase()) &&
                                                     arrayObj.getLessionTypeName().trim().equalsIgnoreCase(subjectStr.trim())) {
                                                 filterFinalArray.add(arrayObj);
                                                 result = String.valueOf(filterFinalArray.size());
@@ -605,7 +643,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                         List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                                         for (sessionDataModel arrayObj : dataResponse.getData()) {
                                             if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                                                    arrayObj.getSessionName().trim().contains(classNameStr.trim())) {
+                                                    arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
                                                 filterFinalArray.add(arrayObj);
                                                 result = String.valueOf(filterFinalArray.size());
                                             }
@@ -619,7 +657,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                         List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                                         for (sessionDataModel arrayObj : dataResponse.getData()) {
                                             if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                                                    arrayObj.getSessionName().trim().contains(classNameStr.trim()) &&
+                                                    arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase()) &&
                                                     arrayObj.getLessionTypeName().trim().equalsIgnoreCase(subjectStr.trim()) &&
                                                     arrayObj.getBoard().trim().equalsIgnoreCase(boardStr.trim()) &&
                                                     arrayObj.getStandard().trim().equalsIgnoreCase(standardStr.trim()) &&
@@ -635,7 +673,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                         List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                                         for (sessionDataModel arrayObj : dataResponse.getData()) {
                                             if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                                                    arrayObj.getSessionName().trim().contains(classNameStr.trim())) {
+                                                    arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
                                                 if (arrayObj.getLessionTypeName().trim().equalsIgnoreCase(subjectStr.trim()) ||
                                                         arrayObj.getBoard().equalsIgnoreCase(boardStr.trim()) ||
                                                         arrayObj.getStandard().equalsIgnoreCase(standardStr.trim()) ||
@@ -651,7 +689,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                         List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                                         for (sessionDataModel arrayObj : dataResponse.getData()) {
                                             if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                                                    arrayObj.getSessionName().trim().contains(classNameStr.trim())) {
+                                                    arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
                                                 filterFinalArray.add(arrayObj);
                                                 result = String.valueOf(filterFinalArray.size());
                                             }
@@ -662,6 +700,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
 
                             }
                         }
+                        binding.countTxt.setText(result);
                     }
                 }
 
@@ -696,7 +735,43 @@ public class ClassDeatilScreen extends AppCompatActivity {
                 classNameStr, boardStr, streamStr, standardStr, searchTypeStr, wheretoComeStr, new onViewClick() {
             @Override
             public void getViewClick() {
-                addRating();
+                if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
+                    addRating();
+                } else {
+                    new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                            .setCancelable(false)
+                            .setTitle("Login")
+                            .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+                            .setMessage("You are not login,So Please Login.")
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intentLogin = new Intent(mContext, LoginActivity.class);
+                                    intentLogin.putExtra("frontLogin", "afterLogin");
+                                    intentLogin.putExtra("sessionID", sessionId);
+                                    intentLogin.putExtra("SearchBy", searchByStr);
+                                    intentLogin.putExtra("board", boardStr);
+                                    intentLogin.putExtra("stream", streamStr);
+                                    intentLogin.putExtra("standard", standardStr);
+                                    intentLogin.putExtra("city", locationStr);
+                                    intentLogin.putExtra("sessionName", classNameStr);
+                                    intentLogin.putExtra("searchType", searchTypeStr);
+                                    intentLogin.putExtra("lessionName", subjectStr);
+                                    intentLogin.putExtra("gender", genderStr);
+                                    intentLogin.putExtra("withOR", wheretoComeStr);
+                                    intentLogin.putExtra("ratingLogin", "ratingLoginclass");
+                                    startActivity(intentLogin);
+                                    finish();
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+
+                                }
+                            })
+                            .setIcon(R.drawable.safari)
+                            .show();
+                }
             }
         });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
@@ -711,7 +786,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
 
         for (int j = 0; j < dataResponse.getData().size(); j++) {
             if (locationStr.trim().equalsIgnoreCase(dataResponse.getData().get(j).getAddressCity().trim())
-                    && classNameStr.trim().equalsIgnoreCase(dataResponse.getData().get(j).getSessionName().trim())) {
+                    && classNameStr.trim().toLowerCase().contains(dataResponse.getData().get(j).getSessionName().trim().toLowerCase())) {
                 AreaName.add(dataResponse.getData().get(j).getRegionName());
             }
         }
@@ -854,5 +929,99 @@ public class ClassDeatilScreen extends AppCompatActivity {
         map.put("RatingValue", ratingValueStr);
 
         return map;
+    }
+
+    //Use for PopularSessionList
+    public void callPopularSessionListApi() {
+        if (Utils.checkNetwork(mContext)) {
+
+//            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_Popular_Session_List(getPopularSessionListDetail(), new retrofit.Callback<SessionDetailModel>() {
+                @Override
+                public void success(SessionDetailModel sessionInfo, Response response) {
+                    Utils.dismissDialog();
+                    if (sessionInfo == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionInfo.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionInfo.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.ping(mContext, getString(R.string.false_msg));
+                        return;
+                    }
+                    if (sessionInfo.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.dismissDialog();
+                        if (sessionInfo.getData().size() > 0) {
+                            populardataresponse = sessionInfo;
+                            arrayListPopular = new ArrayList<sessionDataModel>();
+                            result = String.valueOf(arrayListPopular.size());
+                            for (int i = 0; i < populardataresponse.getData().size(); i++) {
+                                arrayListPopular.add(populardataresponse.getData().get(i));
+                            }
+                            result_txt.setText(arrayListPopular.size());
+                            popularClassListAdapter = new PopularClassListAdapter(mContext, arrayListPopular, new onViewClick() {
+                                @Override
+                                public void getViewClick() {
+                                    ArrayList<String> selectedId = new ArrayList<String>();
+                                    String sessionName = "";
+                                    selectedId = popularClassListAdapter.getSessionDetail();
+                                    Log.d("selectedId", "" + selectedId);
+                                    for (int i = 0; i < selectedId.size(); i++) {
+                                        popularsessionID = selectedId.get(i);
+                                    }
+                                    Log.d("popularsessionID", "" + popularsessionID);
+                                }
+                            });
+                            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(mContext, 2);
+                            popularListrcView.setLayoutManager(mLayoutManager);
+                            popularListrcView.setItemAnimator(new DefaultItemAnimator());
+                            popularListrcView.setAdapter(popularClassListAdapter);
+                        }
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getPopularSessionListDetail() {
+        Map<String, String> map = new HashMap<>();
+        return map;
+    }
+    public  void calculateHours(String time1, String time2) {
+        Date date1, date2;
+        int days, hours=0, min = 0;
+        String hourstr, minstr;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
+        try {
+            date1 = simpleDateFormat.parse(time1);
+            date2 = simpleDateFormat.parse(time2);
+
+            long difference = date2.getTime() - date1.getTime();
+            days = (int) (difference / (1000 * 60 * 60 * 24));
+            hours = (int) ((difference - (1000 * 60 * 60 * 24 * days)) / (1000 * 60 * 60));
+            min = (int) (difference - (1000 * 60 * 60 * 24 * days) - (1000 * 60 * 60 * hours)) / (1000 * 60);
+            hours = (hours < 0 ? -hours : hours);
+            SessionHour = hours;
+            SessionMinit = min;
+            Log.i("======= Hours", " :: " + hours + ":" + min);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
     }
 }

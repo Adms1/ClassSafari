@@ -16,7 +16,7 @@
     <item
         android:id="@+id/action_filter"
         android:icon="@drawable/sort"
-        android:title="@string/filter"
+        android:title="@string/sort"
         android:enabled="true"
         app:showAsAction="always|withText"/>
 </menu>

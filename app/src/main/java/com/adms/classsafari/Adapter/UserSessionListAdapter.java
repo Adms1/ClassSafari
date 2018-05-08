@@ -69,6 +69,14 @@ public class UserSessionListAdapter extends RecyclerView.Adapter<UserSessionList
         }
         holder.session_name_txt.setText(arrayList.get(position).getSessionName());
 
+        holder.session_name_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                familyIdCheck = new ArrayList<String>();
+                familyIdCheck.add(arrayList.get(position).getSessionID()+"|"+"1");
+                onViewClick.getViewClick();
+            }
+        });
         if (paidStr.equalsIgnoreCase("False")) {
             holder.linear.setBackgroundResource(R.drawable.unpaid_linear);
             holder.paid_txt.setText("UnPaid");
@@ -78,7 +86,7 @@ public class UserSessionListAdapter extends RecyclerView.Adapter<UserSessionList
                 @Override
                 public void onClick(View view) {
                     familyIdCheck = new ArrayList<String>();
-                    familyIdCheck.add(arrayList.get(position).getSessionID());
+                    familyIdCheck.add(arrayList.get(position).getSessionID()+"|"+"2");
                     onViewClick.getViewClick();
                 }
             });

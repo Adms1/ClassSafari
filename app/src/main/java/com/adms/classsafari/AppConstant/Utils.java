@@ -145,6 +145,51 @@ public class Utils {
         return mDAY + "/" + mMONTH + "/" + mYEAR;
     }
 
+    public static String getPriviousDate() {
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, -30);
+        Date d = c.getTime();
+        Log.d("priviousDate", "" + d);
+        String time = String.valueOf(d);
+        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+        Date date = null;
+        try {
+            date = sdf.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy");
+        String s = sdf1.format(date.getTime());
+        Log.d("priviousDatefinal", "" + s);
+        return String.valueOf(s);
+    }
+
+    public static Integer calculateHours(String time1, String time2) {
+        Date date1, date2;
+        int days, hours=0, min = 0;
+        String hourstr, minstr;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
+        try {
+            date1 = simpleDateFormat.parse(time1);
+            date2 = simpleDateFormat.parse(time2);
+
+            long difference = date2.getTime() - date1.getTime();
+            days = (int) (difference / (1000 * 60 * 60 * 24));
+            hours = (int) ((difference - (1000 * 60 * 60 * 24 * days)) / (1000 * 60 * 60));
+            min = (int) (difference - (1000 * 60 * 60 * 24 * days) - (1000 * 60 * 60 * hours)) / (1000 * 60);
+            hours = (hours < 0 ? -hours : hours);
+//            SessionHour = hours;
+//            SessionMinit = min;
+            Log.i("======= Hours", " :: " + hours + ":" + min);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return hours + min ;
+
+    }
+
     public static String getCurrentTime() {
 
         Calendar calendar = Calendar.getInstance();
@@ -218,15 +263,16 @@ public class Utils {
     }
 
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
+
     public static boolean checkAndRequestPermissions(final Context context) {
         int permissionSendMessage = ContextCompat.checkSelfPermission(context,
                 Manifest.permission.SEND_SMS);
         int receiveSMS = ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_SMS);
         int readSMS = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS);
-        int callPhone=ContextCompat.checkSelfPermission(context,Manifest.permission.CALL_PHONE);
+        int callPhone = ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE);
         List<String> listPermissionsNeeded = new ArrayList<>();
 
-        if(callPhone!= PackageManager.PERMISSION_GRANTED){
+        if (callPhone != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.CALL_PHONE);
         }
         if (receiveSMS != PackageManager.PERMISSION_GRANTED) {

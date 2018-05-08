@@ -23,7 +23,7 @@
                 android:id="@+id/confirm_title_txt"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="0.2"
                 android:gravity="center_vertical|center"
                 android:paddingLeft="@dimen/_15sdp"
                 android:text="@string/rating_header"
@@ -34,7 +34,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_weight="0.2"
                 android:gravity="center_vertical|center"
                 android:paddingLeft="@dimen/_15sdp"
                 android:text="@string/rating_row"
@@ -117,11 +117,12 @@
 
             <RatingBar
                 android:id="@+id/rating_bar"
-                style="@style/RatingBar"
+                style="@style/Widget.AppCompat.RatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|center_vertical"
-                android:layout_marginTop="@dimen/_10sdp" />
+                android:layout_marginTop="@dimen/_10sdp"
+                android:theme="@style/RatingBar"/>
 
             <EditText
                 android:id="@+id/comment_edt"

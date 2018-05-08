@@ -126,7 +126,7 @@
             android:orientation="vertical"
             android:visibility="gone">
 
-            <include layout="@layout/payment_header_list" />
+            <include layout="@layout/payment_header_list1" />
 
         </LinearLayout>
 

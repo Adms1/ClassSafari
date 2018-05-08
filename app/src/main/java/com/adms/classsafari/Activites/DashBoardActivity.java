@@ -436,7 +436,7 @@ public class DashBoardActivity extends AppCompatActivity {
                 confirmpassWordStr = edtconfirmpassword.getText().toString();
                 passWordStr = edtnewpassword.getText().toString();
                 if (currentpasswordStr.equalsIgnoreCase(Utils.getPref(mContex, "Password"))) {
-                    if (!passWordStr.equalsIgnoreCase("") && passWordStr.length() >= 6 && passWordStr.length() <= 12) {
+                    if (!passWordStr.equalsIgnoreCase("") && passWordStr.length() >= 4 && passWordStr.length() <= 8) {
                         if (passWordStr.equalsIgnoreCase(confirmpassWordStr)) {
                             callChangePasswordApi();
                         } else {
@@ -444,7 +444,7 @@ public class DashBoardActivity extends AppCompatActivity {
                         }
                     } else {
 //                    Utils.ping(mContex, "Confirm Password does not match.");
-                        edtconfirmpassword.setError("Password must be 6-12 Characters.");
+                        edtconfirmpassword.setError("Password must be 4-8 Characters.");
                         edtconfirmpassword.setText("");
                         edtconfirmpassword.setText("");
                     }

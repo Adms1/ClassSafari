@@ -57,7 +57,7 @@ public class OldFamilyListFragment extends Fragment {
 
     Dialog confimDialog;
     TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, session_fee_txt;
-    String familyIdStr = "", contatIDstr, orderIDStr, sessionIDStr, type, familyNameStr = "";
+    String familyIdStr = "", contatIDstr, orderIDStr, sessionIDStr, type, familyNameStr = "",paymentStatusstr;
     ArrayList<String> selectedId;
 
     public OldFamilyListFragment() {
@@ -177,6 +177,7 @@ public class OldFamilyListFragment extends Fragment {
                 if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
                     callpaymentRequestApi();
                 } else {
+                    paymentStatusstr="1";
                     callSessionConfirmationApi();
                 }
                 confimDialog.dismiss();
@@ -187,80 +188,6 @@ public class OldFamilyListFragment extends Fragment {
         confimDialog.show();
 
     }
-
-//    //Use for Get FamilyList
-//    public void callFamilyListApi() {
-//        if (Util.isNetworkConnected(mContext)) {
-//
-//            Util.showDialog(mContext);
-//            ApiHandler.getApiService().get_FamiliyByFamilyID(getFamilyListDetail(), new retrofit.Callback<TeacherInfoModel>() {
-//                @Override
-//                public void success(TeacherInfoModel familyInfoModel, Response response) {
-//                    Util.dismissDialog();
-//                    if (familyInfoModel == null) {
-//                        Util.ping(mContext, getString(R.string.something_wrong));
-//                        return;
-//                    }
-//                    if (familyInfoModel.getSuccess() == null) {
-//                        Util.ping(mContext, getString(R.string.something_wrong));
-//                        return;
-//                    }
-//                    if (familyInfoModel.getSuccess().equalsIgnoreCase("false")) {
-//                        Util.ping(mContext, getString(R.string.false_msg));
-//                        return;
-//                    }
-//                    if (familyInfoModel.getSuccess().equalsIgnoreCase("True")) {
-//                        finalFamilyDetail = familyInfoModel.getData();
-//                        if (familyInfoModel.getData() != null) {
-//                            fillExpLV();
-//                            expandableSelectStudentListAdapter = new ExpandableSelectStudentListAdapter(getActivity(), listDataHeader, listDataChild, new onChlidClick() {
-//                                @Override
-//                                public void getChilClick() {
-//                                    getFamilyID();
-//                                    Fragment fragment = new AddFamilyFragment();
-//                                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//                                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                                    Bundle args = new Bundle();
-//                                    args.putString("session", "11");
-//                                    args.putString("type", "Child");
-//                                    args.putString("familyID", familyIdStr);
-//                                    fragment.setArguments(args);
-//                                    fragmentTransaction.replace(R.id.frame, fragment);
-//                                    fragmentTransaction.addToBackStack(null);
-//                                    fragmentTransaction.commit();
-//                                }
-//                            }, new onViewClick() {
-//                                @Override
-//                                public void getViewClick() {
-//                                    ConformationDialog();
-//                                }
-//                            });
-//                            oldFamilyListBinding.lvExpfamilylist.setAdapter(expandableSelectStudentListAdapter);
-//                            oldFamilyListBinding.lvExpfamilylist.expandGroup(0);
-//                        }
-//                    }
-//                }
-//
-//                @Override
-//                public void failure(RetrofitError error) {
-//                    Util.dismissDialog();
-//                    error.printStackTrace();
-//                    error.getMessage();
-//                    Util.ping(mContext, getString(R.string.something_wrong));
-//                }
-//            });
-//        } else {
-//            Util.ping(mContext, getString(R.string.internet_connection_error));
-//        }
-//    }
-//
-//    private Map<String, String> getFamilyListDetail() {
-//        Map<String, String> map = new HashMap<>();
-//        map.put("FamilyID", "0");
-//        return map;
-//    }
-
-
     //Use for Get FamilyList
     public void callFamilyListApi() {
         if (Utils.isNetworkConnected(mContext)) {
@@ -290,7 +217,7 @@ public class OldFamilyListFragment extends Fragment {
                                 oldFamilyListBinding.listLinear.setVisibility(View.VISIBLE);
                                 oldFamilyListBinding.noRecordTxt.setVisibility(View.GONE);
                                 fillExpLV();
-                                expandableSelectStudentListAdapter = new ExpandableSelectStudentListAdapter(getActivity(),listDataHeader,listDataChild, new onChlidClick() {
+                                expandableSelectStudentListAdapter = new ExpandableSelectStudentListAdapter(getActivity(), listDataHeader, listDataChild, new onChlidClick() {
                                     @Override
                                     public void getChilClick() {
                                         getFamilyID();
@@ -389,9 +316,11 @@ public class OldFamilyListFragment extends Fragment {
 //            contatIDstr = selectedId.get(i);
             String[] spilt = selectedId.get(i).split("\\|");
             contatIDstr = spilt[2];
+            Utils.setPref(mContext, "FamilyID", contatIDstr);
             session_student_txt.setText(spilt[0] + " " + spilt[1]);
             session_student_txt_view.setText(spilt[3]);
             type = spilt[4];
+            Utils.setPref(mContext,"Type",type);
             Log.d("selectedIdStr", contatIDstr);
         }
     }
@@ -451,6 +380,7 @@ public class OldFamilyListFragment extends Fragment {
         Map<String, String> map = new HashMap<>();
         map.put("SessionID", sessionIDStr);
         map.put("ContactID", contatIDstr);
+        map.put("PaymentStatus",paymentStatusstr);
         return map;
     }
 

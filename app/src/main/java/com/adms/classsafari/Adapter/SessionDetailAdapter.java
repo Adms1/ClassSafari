@@ -127,7 +127,7 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
             final SessionCard headerHolder = (SessionCard) holder;
             headerHolder.session_name_txt.setText(arrayList.get(position).getSessionName());
             headerHolder.session_ratingbar.setRating(Float.parseFloat(arrayList.get(position).getRating()));
-            if (arrayList.get(position).getSessionType().equalsIgnoreCase("1")) {
+            if (arrayList.get(position).getCoachTypeID().equalsIgnoreCase("1")) {
                 headerHolder.session_type_txt.setText("Academic");
             } else {
                 headerHolder.session_type_txt.setText("Sport");

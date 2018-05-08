@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     String usernameStr, passwordStr, sessionIDStr, contatIDstr,
             whereTocomestr, orderIDStr, checkStr, paymentStatusstr,
             boardStr, standardStr, streamStr, locationStr, classNameStr,
-            searchTypeStr, subjectStr, genderStr,frontloginStr;
+            searchTypeStr, subjectStr, genderStr,frontloginStr,ratingLoginStr;
 
     //    Use for Dialog
     Dialog forgotDialog;
@@ -73,6 +73,8 @@ public class LoginActivity extends AppCompatActivity {
         subjectStr = getIntent().getStringExtra("lessionName");
         genderStr = getIntent().getStringExtra("gender");
         frontloginStr=getIntent().getStringExtra("frontLogin");
+        ratingLoginStr=getIntent().getStringExtra("ratingLogin");
+
         if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
             checkUnmPwd();
         }
@@ -104,6 +106,7 @@ public class LoginActivity extends AppCompatActivity {
                 inregister.putExtra("lessionName", subjectStr);
                 inregister.putExtra("gender",genderStr);
                 inregister.putExtra("withOR",whereTocomestr);
+                inregister.putExtra("ratingLogin",ratingLoginStr);
                 startActivity(inregister);
             }
         });
@@ -235,6 +238,7 @@ public class LoginActivity extends AppCompatActivity {
             intent.putExtra("lessionName", subjectStr);
             intent.putExtra("gender",genderStr);
             intent.putExtra("withOR",whereTocomestr);
+            intent.putExtra("ratingLogin",ratingLoginStr);
             intent.addCategory(Intent.CATEGORY_HOME);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -279,7 +283,40 @@ public class LoginActivity extends AppCompatActivity {
                                 Intent iSearchByUser = new Intent(mContext, SearchByUser.class);
                                 startActivity(iSearchByUser);
                             } else {
-                                ConformSessionDialog();
+                                if (ratingLoginStr.equalsIgnoreCase("ratingLoginclass")) {
+                                    Intent iSearchByUser = new Intent(mContext, ClassDeatilScreen.class);
+                                    iSearchByUser.putExtra("frontLogin", "afterLogin");
+                                    iSearchByUser.putExtra("sessionID", sessionIDStr);
+                                    iSearchByUser.putExtra("SearchBy", searchByStr);
+                                    iSearchByUser.putExtra("board", boardStr);
+                                    iSearchByUser.putExtra("stream", streamStr);
+                                    iSearchByUser.putExtra("standard", standardStr);
+                                    iSearchByUser.putExtra("city", locationStr);
+                                    iSearchByUser.putExtra("sessionName", classNameStr);
+                                    iSearchByUser.putExtra("searchType", searchTypeStr);
+                                    iSearchByUser.putExtra("lessionName", subjectStr);
+                                    iSearchByUser.putExtra("gender", genderStr);
+                                    iSearchByUser.putExtra("withOR", whereTocomestr);
+                                    startActivity(iSearchByUser);
+                                }else if(ratingLoginStr.equalsIgnoreCase("ratingLoginSession")) {
+                                    Intent iSearchByUser = new Intent(mContext, SessionName.class);
+                                    iSearchByUser.putExtra("frontLogin", "afterLogin");
+                                    iSearchByUser.putExtra("sessionID", sessionIDStr);
+                                    iSearchByUser.putExtra("SearchBy", searchByStr);
+                                    iSearchByUser.putExtra("board", boardStr);
+                                    iSearchByUser.putExtra("stream", streamStr);
+                                    iSearchByUser.putExtra("standard", standardStr);
+                                    iSearchByUser.putExtra("city", locationStr);
+                                    iSearchByUser.putExtra("sessionName", classNameStr);
+                                    iSearchByUser.putExtra("searchType", searchTypeStr);
+                                    iSearchByUser.putExtra("lessionName", subjectStr);
+                                    iSearchByUser.putExtra("gender", genderStr);
+                                    iSearchByUser.putExtra("withOR", whereTocomestr);
+                                    iSearchByUser.putExtra("ratingLogin","false");
+                                    startActivity(iSearchByUser);
+                                }else{
+                                    ConformSessionDialog();
+                                }
                             }
 
                         } else {

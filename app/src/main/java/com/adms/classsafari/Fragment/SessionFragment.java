@@ -245,6 +245,8 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                         AppConfiguration.SessionDuration = "( " + SessionHour + "hr" + ", " + SessionMinit + "min )";
                         AppConfiguration.SessionTime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime();
                         AppConfiguration.SessionPrice = String.valueOf(Math.round(Float.parseFloat(finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionPrice())));
+//                        AppConfiguration.SessionPrice=finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionPrice();
+                        Log.d("price",AppConfiguration.SessionPrice);
                         Utils.setPref(mContext, "sessionID", sessionIDStr);
                     }
 

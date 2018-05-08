@@ -80,9 +80,9 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
         Month = calendar.get(Calendar.MONTH);
         Day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        txtStartDate.setText("dd/MM/yyyy");
-        txtEndDate.setText("dd/MM/yyyy");
-
+        txtStartDate.setText(Utils.getPriviousDate());
+        txtEndDate.setText(Utils.getTodaysDate());
+        callPaymentReportApi();
     }
 
     public void setListner() {
@@ -142,8 +142,6 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
                 datePickerDialog.show(getFragmentManager(), "Datepickerdialog");
                 break;
             case R.id.btnShow:
-                startDateStr = txtStartDate.getText().toString();
-                endDateStr = txtEndDate.getText().toString();
                 if (!startDateStr.equalsIgnoreCase("dd/MM/yyyy") && !endDateStr.equalsIgnoreCase("dd/MM/yyyy")) {
                     callPaymentReportApi();
                 } else {
@@ -213,7 +211,8 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
     }
 
     private Map<String, String> getReportDetail() {
-
+        startDateStr = txtStartDate.getText().toString();
+        endDateStr = txtEndDate.getText().toString();
         Map<String, String> map = new HashMap<>();
         map.put("ContactID", Utils.getPref(mContext, "coachID"));
         map.put("StartDate", startDateStr);

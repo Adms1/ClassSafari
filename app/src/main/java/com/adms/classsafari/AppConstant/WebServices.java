@@ -148,4 +148,8 @@ public interface WebServices {
     @FormUrlEncoded
     @POST("/Get_SessionRating_By_Session_ID")
     public void get_SessionRating_By_Session_ID(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
+
+    @FormUrlEncoded
+    @POST("/Get_Popular_Session_List")
+    public void get_Popular_Session_List(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
 }

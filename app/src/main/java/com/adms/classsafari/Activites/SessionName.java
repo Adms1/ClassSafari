@@ -108,13 +108,13 @@ public class SessionName extends AppCompatActivity {
         sessionNameBinding.bookSessionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (int i = 0; i < purchaseSessionIDArray.size(); i++) {
-                    if (sessionIDStr.equalsIgnoreCase(purchaseSessionIDArray.get(i))) {
-                        purchaseSessionIDStr = purchaseSessionIDArray.get(i);
+                if (purchaseSessionIDArray.size() > 0) {
+                    for (int i = 0; i < purchaseSessionIDArray.size(); i++) {
+                        if (sessionIDStr.equalsIgnoreCase(purchaseSessionIDArray.get(i))) {
+                            purchaseSessionIDStr = purchaseSessionIDArray.get(i);
+                        }
                     }
                 }
-
-
                 if (purchaseSessionIDStr.equalsIgnoreCase("")) {
                     if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
                         new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
@@ -137,6 +137,7 @@ public class SessionName extends AppCompatActivity {
                                         intentLogin.putExtra("lessionName", subjectStr);
                                         intentLogin.putExtra("gender", genderStr);
                                         intentLogin.putExtra("withOR", wheretoComeStr);
+                                        intentLogin.putExtra("ratingLogin","false");
                                         startActivity(intentLogin);
                                         finish();
                                     }
@@ -387,7 +388,43 @@ public class SessionName extends AppCompatActivity {
         sessionDetailAdapter = new SessionDetailAdapter(mContext, arrayList, sessionRatingList, new onViewClick() {
             @Override
             public void getViewClick() {
-                addRating();
+                if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
+                    addRating();
+                } else {
+                    new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                            .setCancelable(false)
+                            .setTitle("Login")
+                            .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+                            .setMessage("You are not login,So Please Login.")
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intentLogin = new Intent(mContext, LoginActivity.class);
+                                    intentLogin.putExtra("frontLogin", "afterLogin");
+                                    intentLogin.putExtra("sessionID", sessionIDStr);
+                                    intentLogin.putExtra("SearchBy", searchByStr);
+                                    intentLogin.putExtra("board", boardStr);
+                                    intentLogin.putExtra("stream", streamStr);
+                                    intentLogin.putExtra("standard", standardStr);
+                                    intentLogin.putExtra("city", locationStr);
+                                    intentLogin.putExtra("sessionName", classNameStr);
+                                    intentLogin.putExtra("searchType", searchTypeStr);
+                                    intentLogin.putExtra("lessionName", subjectStr);
+                                    intentLogin.putExtra("gender", genderStr);
+                                    intentLogin.putExtra("withOR", wheretoComeStr);
+                                    intentLogin.putExtra("ratingLogin","ratingLoginSession");
+                                    startActivity(intentLogin);
+                                    finish();
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+
+                                }
+                            })
+                            .setIcon(R.drawable.safari)
+                            .show();
+                }
             }
         });
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, OrientationHelper.VERTICAL, false);
@@ -631,7 +668,7 @@ public class SessionName extends AppCompatActivity {
                         return;
                     }
                     if (addratingmodel.getSuccess().equalsIgnoreCase("True")) {
-                                  callSessionListApi();
+                        callSessionListApi();
                     }
                 }
 
@@ -677,7 +714,8 @@ public class SessionName extends AppCompatActivity {
                         return;
                     }
                     if (sessionModel.getSuccess().equalsIgnoreCase("false")) {
-                        Utils.ping(mContext, getString(R.string.false_msg));
+//                        Utils.ping(mContext, getString(R.string.false_msg));
+                        purchaseSessionIDArray = new ArrayList<>();
                         return;
                     }
                     if (sessionModel.getSuccess().equalsIgnoreCase("True")) {

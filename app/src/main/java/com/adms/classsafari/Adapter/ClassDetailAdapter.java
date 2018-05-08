@@ -58,7 +58,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView session_name_txt, price_txt, start_date_txt, end_date_txt,
                 mon_time_txt, tues_time_txt, wed_time_txt, thur_time_txt, fri_time_txt, sat_time_txt, sun_time_txt,
-                location_txt, duration_txt;
+                location_txt, duration_txt,tutor_name_txt;
         public Button monday_btn, tuesday_btn, wednesday_btn, thursday_btn, friday_btn, saturday_btn, sunday_btn;
         public RatingBar rating_bar;
 
@@ -77,8 +77,10 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
             sat_time_txt = (TextView) view.findViewById(R.id.sat_time_txt);
             sun_time_txt = (TextView) view.findViewById(R.id.sun_time_txt);
 
+
             location_txt = (TextView) view.findViewById(R.id.location_txt);
             duration_txt = (TextView) view.findViewById(R.id.duration_txt);
+            tutor_name_txt=(TextView)view.findViewById(R.id.tutor_name_txt);
 
             monday_btn = (Button) view.findViewById(R.id.monday_btn);
             tuesday_btn = (Button) view.findViewById(R.id.tuesday_btn);
@@ -213,6 +215,12 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
 
             }
         }
+        if(arrayList.get(position).getCoachTypeID().equalsIgnoreCase("1")){
+            holder.tutor_name_txt.setText("Academic " +"/"+arrayList.get(position).getLessionTypeName());
+        }else{
+            holder.tutor_name_txt.setText("Sport " +"/"+arrayList.get(position).getLessionTypeName());
+        }
+
         arrayList.get(position).setDuration(SessionHour + " hr " + SessionMinit + " min");
         holder.duration_txt.setText(arrayList.get(position).getDuration());
         holder.location_txt.setOnClickListener(new View.OnClickListener() {
