@@ -28,30 +28,35 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
     private Context mContext;
     List<sessionDataModel> arrayList, sessionRatingList;
     private final static int HEADER_VIEW = 0;
-    private final static int ROW_VIEW = 2;
-    private final static int CONTENT_VIEW = 1;
+    private final static int ROW_VIEW = 1;
+    private final static int CONTENT_VIEW = 2;
     String address;
     private ArrayList<String> SessionDetail;
     onViewClick onViewClick;
+    ArrayList<String> reviewarray;
 
     public SessionDetailAdapter(Context mContext, List<sessionDataModel> arrayList,
-                                List<sessionDataModel> sessionRatingList, onViewClick onViewClick) {
+                                ArrayList<String> reviewarray, List<sessionDataModel> sessionRatingList, onViewClick onViewClick) {
         this.mContext = mContext;
         this.arrayList = arrayList;
         this.onViewClick = onViewClick;
         this.sessionRatingList = sessionRatingList;
+        this.reviewarray = reviewarray;
     }
 
 
     public class SessionCard extends RecyclerView.ViewHolder {
         public TextView session_name_txt, session_type_txt, session_detail_name_txt,
                 session_board_txt, session_standard_txt, session_stream_txt, session_total_student_txt,
-                address_txt, email_txt, phone_txt;
+                address_txt, email_txt, phone_txt, rating_txt, session_board_txt_view, session_standard_txt_view, session_stream_txt_view;
 
         RatingBar session_ratingbar;
 
         public SessionCard(View view) {
             super(view);
+            session_board_txt_view = (TextView) view.findViewById(R.id.session_board_txt_view);
+            session_standard_txt_view = (TextView) view.findViewById(R.id.session_standard_txt_view);
+            session_stream_txt_view = (TextView) view.findViewById(R.id.session_stream_txt_view);
             session_name_txt = (TextView) view.findViewById(R.id.session_name_txt);
             session_type_txt = (TextView) view.findViewById(R.id.session_type_txt);
             session_detail_name_txt = (TextView) view.findViewById(R.id.session_detail_name_txt);
@@ -63,6 +68,7 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
             email_txt = (TextView) view.findViewById(R.id.email_txt);
             phone_txt = (TextView) view.findViewById(R.id.phone_txt);
             session_ratingbar = (RatingBar) view.findViewById(R.id.session_ratingbar);
+            rating_txt = (TextView) view.findViewById(R.id.rating_txt);
 
         }
     }
@@ -75,19 +81,20 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
     }
 
     public class ReviewCard extends RecyclerView.ViewHolder {
-        public TextView reviewcomment_type_txt, re_review_date_txt, reviewcomment_txt, reviewuser_name_txt;
+        public TextView reviewcomment_type_txt, re_review_date_txt, reviewcomment_txt, reviewuser_name_txt, rating_txt;
         RatingBar session_reviews_rating_bar;
         ImageView person_image;
 
 
         public ReviewCard(View view) {
             super(view);
-            reviewcomment_type_txt = (TextView) view.findViewById(R.id.comment_type_txt);
+//            reviewcomment_type_txt = (TextView) view.findViewById(R.id.comment_type_txt);
             re_review_date_txt = (TextView) view.findViewById(R.id.review_date_txt);
             reviewcomment_txt = (TextView) view.findViewById(R.id.comment_txt);
             reviewuser_name_txt = (TextView) view.findViewById(R.id.user_name_txt);
             session_reviews_rating_bar = (RatingBar) view.findViewById(R.id.session_reviews_rating_bar);
             person_image = (ImageView) view.findViewById(R.id.person_image);
+            rating_txt = (TextView) view.findViewById(R.id.rating_txt);
         }
     }
 
@@ -99,26 +106,15 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.session_card_layout_1, parent, false);
             return new SessionCard(view);
         }
-
+        if (viewType == ROW_VIEW) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_reviews, parent, false);
+            return new RowView(view);
+        }
         if (viewType == CONTENT_VIEW) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.session_review_card_layout_1, parent, false);
-                return new ReviewCard(view);
+            return new ReviewCard(view);
         }
         return null;
-//        switch (viewType) {
-//            case HEADER_VIEW:
-//                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.session_card_layout_1, parent, false);
-////                return new SessionCard(view);
-//
-////            case ROW_VIEW:
-////                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_reviews, parent, false);
-////                return new RowView(view);
-//
-//            case CONTENT_VIEW:
-//                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.session_review_card_layout_1, parent, false);
-//                return new ReviewCard(view);
-//        }
-//        return null;
     }
 
     @Override
@@ -127,10 +123,23 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
             final SessionCard headerHolder = (SessionCard) holder;
             headerHolder.session_name_txt.setText(arrayList.get(position).getSessionName());
             headerHolder.session_ratingbar.setRating(Float.parseFloat(arrayList.get(position).getRating()));
+            headerHolder.rating_txt.setText(String.valueOf("(" + arrayList.get(position).getRating() + ")"));
             if (arrayList.get(position).getCoachTypeID().equalsIgnoreCase("1")) {
+                headerHolder.session_board_txt.setVisibility(View.VISIBLE);
+                headerHolder.session_standard_txt.setVisibility(View.VISIBLE);
+                headerHolder.session_stream_txt.setVisibility(View.VISIBLE);
+                headerHolder.session_stream_txt_view.setVisibility(View.VISIBLE);
+                headerHolder.session_standard_txt_view.setVisibility(View.VISIBLE);
+                headerHolder.session_board_txt_view.setVisibility(View.VISIBLE);
                 headerHolder.session_type_txt.setText("Academic");
             } else {
-                headerHolder.session_type_txt.setText("Sport");
+                headerHolder.session_board_txt.setVisibility(View.GONE);
+                headerHolder.session_standard_txt.setVisibility(View.GONE);
+                headerHolder.session_stream_txt.setVisibility(View.GONE);
+                headerHolder.session_stream_txt_view.setVisibility(View.GONE);
+                headerHolder.session_standard_txt_view.setVisibility(View.GONE);
+                headerHolder.session_board_txt_view.setVisibility(View.GONE);
+                headerHolder.session_type_txt.setText("Sports");
             }
             address = arrayList.get(position).getAddressLine1() +
                     "," + arrayList.get(position).getRegionName() +
@@ -174,34 +183,53 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
                     return true;
                 }
             });
+            headerHolder.email_txt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    intent.putExtra(Intent.EXTRA_EMAIL, arrayList.get(position).getEmailAddress());
+                    intent.setType("text/html");
+                    intent.setPackage("com.google.android.gm");
+                    mContext.startActivity(Intent.createChooser(intent, "Send mail"));
+                }
+            });
+        }
+        if (holder instanceof RowView) {
+
         }
         if (holder instanceof ReviewCard) {
             final ReviewCard rowHolder = (ReviewCard) holder;
-            if(sessionRatingList.get(position-arrayList.size()).getRatingValue()==1){
-                rowHolder.reviewcomment_type_txt.setText("Very poor");
-            }else if(sessionRatingList.get(position-arrayList.size()).getRatingValue()==2){
-                rowHolder.reviewcomment_type_txt.setText("Poor");
-            }else if(sessionRatingList.get(position-arrayList.size()).getRatingValue()==3){
-                rowHolder.reviewcomment_type_txt.setText("Average");
-            }else if(sessionRatingList.get(position-arrayList.size()).getRatingValue()==4){
-                rowHolder.reviewcomment_type_txt.setText("Good");
-            }else if(sessionRatingList.get(position-arrayList.size()).getRatingValue()==5){
-                rowHolder.reviewcomment_type_txt.setText("Excellent");
-            }
-            rowHolder.session_reviews_rating_bar.setRating(Float.parseFloat(String.valueOf(sessionRatingList.get(position-arrayList.size()).getRatingValue())));
-            rowHolder.re_review_date_txt.setText(sessionRatingList.get(position-arrayList.size()).getCreateDate());
-            rowHolder.reviewuser_name_txt.setText(sessionRatingList.get(position-arrayList.size()).getFirstName() + " " + sessionRatingList.get(position-arrayList.size()).getLastName());
-            rowHolder.reviewcomment_txt.setText(sessionRatingList.get(position-arrayList.size()).getComment());
+//            if (sessionRatingList.get(position - arrayList.size() - reviewarray.size()).getRatingValue() == 1.00) {
+//                rowHolder.reviewcomment_type_txt.setText("Very poor");
+//            } else if (sessionRatingList.get(position - arrayList.size() - reviewarray.size()).getRatingValue() == 2.00) {
+//                rowHolder.reviewcomment_type_txt.setText("Poor");
+//            } else if (sessionRatingList.get(position - arrayList.size() - reviewarray.size()).getRatingValue() == 3.00) {
+//                rowHolder.reviewcomment_type_txt.setText("Average");
+//            } else if (sessionRatingList.get(position - arrayList.size() - reviewarray.size()).getRatingValue() == 4.00) {
+//                rowHolder.reviewcomment_type_txt.setText("Good");
+//            } else if (sessionRatingList.get(position - arrayList.size() - reviewarray.size()).getRatingValue() == 5.00) {
+//                rowHolder.reviewcomment_type_txt.setText("Excellent");
+//            }
+            rowHolder.session_reviews_rating_bar.setRating(Float.parseFloat
+                    (String.valueOf(sessionRatingList.get(position - arrayList.size() - reviewarray.size()).getRatingValue())));
+            rowHolder.re_review_date_txt.setText(sessionRatingList.get(position - arrayList.size() - reviewarray.size()).getCreateDate());
+            rowHolder.reviewuser_name_txt.setText(sessionRatingList.get(position - arrayList.size() - reviewarray.size()).getFirstName()
+                    + " " + sessionRatingList.get(position - arrayList.size() - reviewarray.size()).getLastName());
+            rowHolder.reviewcomment_txt.setText(sessionRatingList.get(position - arrayList.size() - reviewarray.size()).getComment());
+            rowHolder.rating_txt.setText(String.valueOf("(" + sessionRatingList.get(position - arrayList.size() - reviewarray.size()).getRatingValue() + ")"));
         }
     }
 
     @Override
     public int getItemViewType(int position) {
 
-        if(position<arrayList.size()){
+        if (position < arrayList.size()) {
             return HEADER_VIEW;
         }
-        if(position-arrayList.size()<sessionRatingList.size()){
+        if (position - arrayList.size() < reviewarray.size()) {
+            return ROW_VIEW;
+        }
+        if (position - arrayList.size() - reviewarray.size() < sessionRatingList.size()) {
             return CONTENT_VIEW;
         }
         return -1;
@@ -209,7 +237,7 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return arrayList.size() + sessionRatingList.size();
+        return arrayList.size() + reviewarray.size() + sessionRatingList.size();
     }
 
     public ArrayList<String> getSessionDetail() {

@@ -92,7 +92,7 @@ public class UserSessionListAdapter extends RecyclerView.Adapter<UserSessionList
             });
         } else {
             holder.linear.setBackgroundResource(R.drawable.list_line);
-            holder.paid_txt.setText("Sucess");
+            holder.paid_txt.setText("Success");
             holder.paid_txt.setTextColor(Color.parseColor("#3db45c"));
 
         }

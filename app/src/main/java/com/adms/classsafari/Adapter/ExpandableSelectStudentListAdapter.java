@@ -26,6 +26,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
 /**
  * Created by admsandroid on 3/26/2018.
  */
@@ -41,14 +42,16 @@ public class ExpandableSelectStudentListAdapter extends BaseExpandableListAdapte
     private ArrayList<String> familyIdCheck;
     private ArrayList<String> sesionDeatil;
     ArrayList<String> value;
+    String froncontanctStr;
 
     public ExpandableSelectStudentListAdapter(Context mContext, List<String> listDataHeader,
-                                              HashMap<String, List<ChildDetailModel>> listDataChild, onChlidClick onChlidClick,onViewClick session) {
+                                              HashMap<String, List<ChildDetailModel>> listDataChild, String froncontanctStr, onChlidClick onChlidClick, onViewClick session) {
         this.mContext = mContext;
         this._listDataChild = listDataChild;
         this._listDataHeader = listDataHeader;
         this.onViewClick = session;
         this.onChlidClick = onChlidClick;
+        this.froncontanctStr = froncontanctStr;
     }
 
 
@@ -64,11 +67,10 @@ public class ExpandableSelectStudentListAdapter extends BaseExpandableListAdapte
         AddStudentHeaderBinding headerBinding;
 
         if (childPosition > 0) {// && childPosition < getChildrenCount(groupPosition) - 1
-
-
             itembinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
                     R.layout.list_item_select_student, parent, false);
             convertView = itembinding.getRoot();
+
             final ChildDetailModel childDetail = getChild(groupPosition, childPosition - 1);
             itembinding.nameRb.setText(childDetail.getFirstName() + " " + childDetail.getLastName());
 
@@ -107,28 +109,29 @@ public class ExpandableSelectStudentListAdapter extends BaseExpandableListAdapte
             Log.d("age", ageS);
             itembinding.ageTxt.setText(ageS);
             itembinding.phoneNoTxt.setText(childDetail.getContactPhoneNumber());
-            itembinding.nameRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                    int RadioButtonid = itembinding.nameRg.getCheckedRadioButtonId();
-                    switch (RadioButtonid) {
-                        case R.id.name_rb:
-                            sesionDeatil = new ArrayList<String>();
-                            sesionDeatil.add(childDetail.getFirstName() + "|" + childDetail.getLastName() + "|" + childDetail.getContactID() + "|" + "STUDENT NAME" + "|" + "Child");
-                            onViewClick.getViewClick();
-                            itembinding.nameRb.setChecked(false);
-                            break;
-                    }
+            if(!froncontanctStr.equalsIgnoreCase("true")) {
+                itembinding.nameRb.setChecked(false);
+                itembinding.nameRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                        int RadioButtonid = itembinding.nameRg.getCheckedRadioButtonId();
+                        switch (RadioButtonid) {
+                            case R.id.name_rb:
+                                sesionDeatil = new ArrayList<String>();
+                                sesionDeatil.add(childDetail.getFirstName() + "|" + childDetail.getLastName() + "|" + childDetail.getContactID() + "|" + "STUDENT NAME" + "|" + "Child");
+                                onViewClick.getViewClick();
+                                itembinding.nameRb.setChecked(false);
+                                break;
+                        }
 
-                }
-            });
+                    }
+                });
+            }else{
+                itembinding.nameRb.setChecked(true);
+            }
             itembinding.phoneNoTxt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    boolean result = Util.checkPermission(mContext);
-//                    if (result) {
-//
-//                    }
                     Intent intent = new Intent(Intent.ACTION_DIAL);
                     intent.setData(Uri.fromParts("tel", itembinding.phoneNoTxt.getText().toString(), null));
                     mContext.startActivity(intent);
@@ -211,15 +214,6 @@ public class ExpandableSelectStudentListAdapter extends BaseExpandableListAdapte
                 R.layout.list_group_family_list, parent, false);
         convertView = groupbinding.getRoot();
 
-//        if (groupPosition % 4 == 0) {
-//            convertView.setBackgroundResource(R.drawable.first_row);
-//        } else if (groupPosition % 4 == 1) {
-//            convertView.setBackgroundResource(R.drawable.second_row);
-//        } else if (groupPosition % 4 == 2) {
-//            convertView.setBackgroundResource(R.drawable.third_row);
-//        } else {
-//            convertView.setBackgroundResource(R.drawable.fourth_row);
-//        }
 
         if (isExpanded) {
             convertView.setBackgroundResource(R.drawable.selected_header);
@@ -233,26 +227,30 @@ public class ExpandableSelectStudentListAdapter extends BaseExpandableListAdapte
         groupbinding.familynameRb.setText(spiltValue[0] + " " + spiltValue[1]);
         groupbinding.noTxt.setText(spiltValue[2]);
         FamilyID = spiltValue[3];
-
-        groupbinding.familynameRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                int RadioButtonid = groupbinding.familynameRg.getCheckedRadioButtonId();
-                switch (RadioButtonid) {
-                    case R.id.familyname_rb:
-                        sesionDeatil = new ArrayList<String>();
-                        sesionDeatil.add(spiltValue[0] + "|" + spiltValue[1] + "|" + spiltValue[4] + "|" + "FAMILY NAME" + "|" + "Family");
-                        onViewClick.getViewClick();
-                        groupbinding.familynameRb.setChecked(false);
-                        break;
+        if(!froncontanctStr.equalsIgnoreCase("true")) {
+            groupbinding.familynameRb.setChecked(false);
+            groupbinding.familynameRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                    int RadioButtonid = groupbinding.familynameRg.getCheckedRadioButtonId();
+                    switch (RadioButtonid) {
+                        case R.id.familyname_rb:
+                            sesionDeatil = new ArrayList<String>();
+                            sesionDeatil.add(spiltValue[0] + "|" + spiltValue[1] + "|" + spiltValue[4] + "|" + "FAMILY NAME" + "|" + "Family");
+                            onViewClick.getViewClick();
+                            groupbinding.familynameRb.setChecked(false);
+                            break;
+                    }
                 }
-            }
-        });
+            });
+        }else{
+            groupbinding.familynameRb.setChecked(true);
+        }
         groupbinding.addchildTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 familyIdCheck = new ArrayList<String>();
-                familyIdCheck.add(spiltValue[3]+"|"+spiltValue[0] + "|" + spiltValue[1]);
+                familyIdCheck.add(spiltValue[3] + "|" + spiltValue[0] + "|" + spiltValue[1]);
                 onChlidClick.getChilClick();
             }
         });

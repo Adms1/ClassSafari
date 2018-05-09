@@ -115,8 +115,10 @@
         <activity
             android:name=".Activites.MyAccountActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activites.MySession"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activites.MySession"
+            android:screenOrientation="portrait" />
+        <activity android:name=".Activites.FamilyListActivity"></activity>
     </application>
 
 </manifest>

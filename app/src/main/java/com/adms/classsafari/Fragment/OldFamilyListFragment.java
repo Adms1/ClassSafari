@@ -59,7 +59,7 @@ public class OldFamilyListFragment extends Fragment {
     TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, session_fee_txt;
     String familyIdStr = "", contatIDstr, orderIDStr, sessionIDStr, type, familyNameStr = "",paymentStatusstr;
     ArrayList<String> selectedId;
-
+String froncontanctStr;
     public OldFamilyListFragment() {
     }
 
@@ -77,6 +77,7 @@ public class OldFamilyListFragment extends Fragment {
         initViews();
         setListners();
         callFamilyListApi();
+        froncontanctStr="false";
         return rootView;
     }
 
@@ -217,7 +218,7 @@ public class OldFamilyListFragment extends Fragment {
                                 oldFamilyListBinding.listLinear.setVisibility(View.VISIBLE);
                                 oldFamilyListBinding.noRecordTxt.setVisibility(View.GONE);
                                 fillExpLV();
-                                expandableSelectStudentListAdapter = new ExpandableSelectStudentListAdapter(getActivity(), listDataHeader, listDataChild, new onChlidClick() {
+                                expandableSelectStudentListAdapter = new ExpandableSelectStudentListAdapter(getActivity(), listDataHeader, listDataChild, froncontanctStr, new onChlidClick() {
                                     @Override
                                     public void getChilClick() {
                                         getFamilyID();

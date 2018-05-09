@@ -6,7 +6,7 @@
     android:tag="cards main container">
 
     <LinearLayout
-        android:id="@+id/card_view"
+        android:id="@+id/card_view1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -17,7 +17,15 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_190sdp"
             android:src="@drawable/physics_img" />
-
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_2sdp"
+            card_view:cardBackgroundColor="@color/white"
+            card_view:cardCornerRadius="@dimen/_10sdp"
+            card_view:cardElevation="4dp"
+            card_view:cardUseCompatPadding="true">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -225,7 +233,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/_5sdp"
                             android:layout_marginTop="@dimen/_5sdp"
-                            android:text="@string/total_student"
+                            android:text="@string/sports"
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_12sdp"
                             android:textStyle="normal" />
@@ -254,19 +262,34 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_5sdp"
-
                     android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
                     <RatingBar
                         android:id="@+id/session_ratingbar"
                         style="@style/Widget.AppCompat.RatingBar.Small"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/_15sdp"
+                        android:layout_gravity="center_vertical|top"
                         android:layout_marginLeft="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_gravity="center_vertical|top"
-                        android:theme="@style/RatingBar1"/>
+                        android:theme="@style/RatingBar1" />
 
+                        <TextView
+                            android:id="@+id/rating_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_2sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:paddingLeft="@dimen/_5sdp"
+                            android:textColor="@color/rating_bar"
+                            android:textSize="@dimen/_12sdp"
+                            android:visibility="gone"/>
+                    </LinearLayout>
                     <TextView
                         android:id="@+id/adress_txt_view"
                         android:layout_width="wrap_content"
@@ -343,6 +366,7 @@
 
 
         </LinearLayout>
+        </android.support.v7.widget.CardView>
     </LinearLayout>
 
     <View

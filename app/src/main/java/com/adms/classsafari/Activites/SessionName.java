@@ -47,11 +47,14 @@ public class SessionName extends AppCompatActivity {
     SessionDetailAdapter sessionDetailAdapter;
     List<sessionDataModel> arrayList;
     List<sessionDataModel> sessionRatingList;
+    ArrayList<String> reviewarray;
     Dialog confimDialog;
     TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, time_txt_view, session_fee_txt;
     String sessionIDStr, searchByStr, locationStr, classNameStr, genderStr, sessionDateStr, durationStr,
             paymentStatusstr, orderIDStr, boardStr, standardStr, streamStr, searchTypeStr, subjectStr,
-            wheretoComeStr, sessionId, commentStr, ratingValueStr, purchaseSessionIDStr = "";
+            wheretoComeStr, sessionId, commentStr, ratingValueStr, purchaseSessionIDStr = "",
+            familysessionfeesStr, familysessionnameStr, familylocationStr, familysessionStudentStr;
+    ;
     ArrayList<String> purchaseSessionIDArray;
     SessionDetailModel dataResponse, dataResponseRating;
 
@@ -137,7 +140,7 @@ public class SessionName extends AppCompatActivity {
                                         intentLogin.putExtra("lessionName", subjectStr);
                                         intentLogin.putExtra("gender", genderStr);
                                         intentLogin.putExtra("withOR", wheretoComeStr);
-                                        intentLogin.putExtra("ratingLogin","false");
+                                        intentLogin.putExtra("ratingLogin", "false");
                                         startActivity(intentLogin);
                                         finish();
                                     }
@@ -151,7 +154,27 @@ public class SessionName extends AppCompatActivity {
                                 .setIcon(R.drawable.safari)
                                 .show();
                     } else {
-                        ConformSessionDialog();
+//                        ConformSessionDialog();
+                        setDialogData();
+                        Intent intent = new Intent(mContext, FamilyListActivity.class);
+                        intent.putExtra("sessionID", sessionIDStr);
+                        intent.putExtra("duration", durationStr);
+                        intent.putExtra("sessiondate", sessionDateStr);
+                        intent.putExtra("sessionName", familysessionnameStr);
+                        intent.putExtra("location", familylocationStr);
+                        intent.putExtra("sessionfees", familysessionfeesStr);
+                        intent.putExtra("sessionStudent", familysessionStudentStr);
+                        intent.putExtra("city", locationStr);
+                        intent.putExtra("SearchBy", searchByStr);
+                        intent.putExtra("board", boardStr);
+                        intent.putExtra("stream", streamStr);
+                        intent.putExtra("standard", standardStr);
+                        intent.putExtra("searchType", searchTypeStr);
+                        intent.putExtra("lessionName", subjectStr);
+                        intent.putExtra("gender", genderStr);
+                        intent.putExtra("withOR", wheretoComeStr);
+                        intent.putExtra("froncontanct", "false");
+                        startActivity(intent);
                     }
                 } else {
                     new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
@@ -267,11 +290,12 @@ public class SessionName extends AppCompatActivity {
                         return;
                     }
                     if (sessionDetailInfo.getSuccess().equalsIgnoreCase("True")) {
-                        Utils.dismissDialog();
+
                         if (sessionDetailInfo.getData().size() > 0) {
                             dataResponse = sessionDetailInfo;
 //                            setData();
                             callSessionRatingApi();
+                            Utils.dismissDialog();
                         }
                     }
                 }
@@ -321,6 +345,7 @@ public class SessionName extends AppCompatActivity {
                                 sessionRatingList.add(dataResponseRating.getData().get(i));
                             }
                         }
+                        reviewarray = new ArrayList<>();
                         setData();
                         Utils.dismissDialog();
                         return;
@@ -333,6 +358,8 @@ public class SessionName extends AppCompatActivity {
                             for (int i = 0; i < dataResponseRating.getData().size(); i++) {
                                 sessionRatingList.add(dataResponseRating.getData().get(i));
                             }
+                            reviewarray = new ArrayList<>();
+                            reviewarray.add("Reviews");
                             setData();
                         }
                         Utils.dismissDialog();
@@ -385,7 +412,7 @@ public class SessionName extends AppCompatActivity {
 
         }
 
-        sessionDetailAdapter = new SessionDetailAdapter(mContext, arrayList, sessionRatingList, new onViewClick() {
+        sessionDetailAdapter = new SessionDetailAdapter(mContext, arrayList, reviewarray, sessionRatingList, new onViewClick() {
             @Override
             public void getViewClick() {
                 if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
@@ -411,7 +438,7 @@ public class SessionName extends AppCompatActivity {
                                     intentLogin.putExtra("lessionName", subjectStr);
                                     intentLogin.putExtra("gender", genderStr);
                                     intentLogin.putExtra("withOR", wheretoComeStr);
-                                    intentLogin.putExtra("ratingLogin","ratingLoginSession");
+                                    intentLogin.putExtra("ratingLogin", "ratingLoginSession");
                                     startActivity(intentLogin);
                                     finish();
                                 }
@@ -436,23 +463,36 @@ public class SessionName extends AppCompatActivity {
     }
 
     public void setDialogData() {
+
         for (int i = 0; i < dataResponse.getData().size(); i++) {
-            if (dataResponse.getData().get(i).getSessionAmount().equalsIgnoreCase("Free")) {
-                session_fee_txt.setText(dataResponse.getData().get(i).getSessionAmount());
-            } else {
-                session_fee_txt.setText("₹ " + dataResponse.getData().get(i).getSessionAmount() + " /-");
-            }
-            session_name_txt.setText(dataResponse.getData().get(i).getSessionName());
-            location_txt.setText(dataResponse.getData().get(i).getAddressLine1()
+//            if (dataResponse.getData().get(i).getSessionAmount().equalsIgnoreCase("Free")) {
+//                session_fee_txt.setText(dataResponse.getData().get(i).getSessionAmount());
+//            } else {
+//                session_fee_txt.setText("₹ " + dataResponse.getData().get(i).getSessionAmount() + " /-");
+//            }
+//            session_name_txt.setText(dataResponse.getData().get(i).getSessionName());
+//            location_txt.setText(dataResponse.getData().get(i).getAddressLine1()
+//                    + ", " + dataResponse.getData().get(i).getRegionName()
+//                    + ", " + dataResponse.getData().get(i).getAddressCity()
+//                    + ", " + dataResponse.getData().get(i).getAddressState()
+//                    + "- " + dataResponse.getData().get(i).getAddressZipCode());
+//            session_student_txt.setText(dataResponse.getData().get(i).getName());
+
+
+            familysessionfeesStr = dataResponse.getData().get(i).getSessionAmount();
+            familysessionnameStr = dataResponse.getData().get(i).getSessionName();
+            familylocationStr = dataResponse.getData().get(i).getAddressLine1()
                     + ", " + dataResponse.getData().get(i).getRegionName()
                     + ", " + dataResponse.getData().get(i).getAddressCity()
                     + ", " + dataResponse.getData().get(i).getAddressState()
-                    + "- " + dataResponse.getData().get(i).getAddressZipCode());
-            session_student_txt.setText(dataResponse.getData().get(i).getName());
+                    + "- " + dataResponse.getData().get(i).getAddressZipCode();
+            familysessionStudentStr = dataResponse.getData().get(i).getName();
+
         }
-        time_txt_view.setText("Date");
-        duration_txt.setText(durationStr);
-        time_txt.setText(sessionDateStr);
+//        time_txt_view.setText("Date");
+//        duration_txt.setText(durationStr);
+//        time_txt.setText(sessionDateStr);
+
 
     }
 
@@ -636,7 +676,11 @@ public class SessionName extends AppCompatActivity {
                 }
                 ratingValueStr = String.valueOf(ratingBar.getRating());
                 if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
-                    callAddrating();
+                    if (!ratingValueStr.equalsIgnoreCase("")) {
+                        callAddrating();
+                    } else {
+                        Utils.ping(mContext, "Please Select Rate.");
+                    }
                 } else {
                     Utils.ping(mContext, getResources().getString(R.string.not_loging));
                 }

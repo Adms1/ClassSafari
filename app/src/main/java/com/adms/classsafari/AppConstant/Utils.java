@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +39,13 @@ public class Utils {
     public static Dialog dialog;
     public static final String MyPREFERENCES = "MyPrefs";
     public static SharedPreferences sharedpreferences;
+    public static Dialog menuDialog;
+    public static Button btnMyReport, btnMySession, btnChangePassword,btnaddChild,btnLogout;
+    public static String passWordStr, confirmpassWordStr, currentpasswordStr;
 
+
+
+    
     public static boolean checkNetwork(Context context) {
         boolean wifiAvailable = false;
         boolean mobileAvailable = false;
@@ -292,5 +299,6 @@ public class Utils {
         }
         return true;
     }
+    
 
 }

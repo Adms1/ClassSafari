@@ -19,7 +19,7 @@
 
             <TextView
                 android:id="@+id/login_txt"
-                android:layout_width="@dimen/_255sdp"
+                android:layout_width="@dimen/_280sdp"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_marginLeft="@dimen/_7sdp"
                 android:gravity="end"
@@ -36,7 +36,7 @@
                 android:layout_gravity="end"
                 android:layout_marginLeft="@dimen/_5sdp"
                 android:src="@drawable/logout1"
-                android:visibility="visible"/>
+                android:visibility="gone"/>
         </LinearLayout>
 
         <ImageView

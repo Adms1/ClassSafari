@@ -6,7 +6,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/add_student_bg"
+        android:background="@drawable/add_family_bg"
         tools:context="com.adms.classsafari.Activites.AddStudentScreen">
 
         <android.support.v7.widget.Toolbar
@@ -39,22 +39,99 @@
         </android.support.v7.widget.Toolbar>
 
         <LinearLayout
-            android:id="@+id/linear1"
+            android:id="@+id/linear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/toolbar"
             android:layout_marginLeft="@dimen/_10sdp"
             android:layout_marginRight="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_1sdp"
+            android:layout_below="@+id/toolbar"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/familyname_txt_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:text="@string/add_familyname"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/familyname_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_marginRight="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textColor="@color/white"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <RadioGroup
+                android:id="@+id/class_type_group"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_gravity="center|center_horizontal"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_15sdp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <RadioButton
+                    android:id="@+id/self_chk"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_weight="0.8"
+                    android:button="@drawable/absent_radio_type"
+                    android:paddingLeft="@dimen/_3sdp"
+                    android:tag="1"
+                    android:text="Self"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp"
+                    android:visibility="gone" />
+
+                <RadioButton
+                    android:id="@+id/child_chk"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_weight="0.8"
+                    android:button="@drawable/absent_radio_type"
+                    android:checked="true"
+                    android:paddingLeft="@dimen/_3sdp"
+                    android:tag="2"
+                    android:text="Child"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp" />
+
+                <RadioButton
+                    android:id="@+id/spouse_chk"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_weight="0.8"
+                    android:button="@drawable/absent_radio_type"
+                    android:paddingLeft="@dimen/_3sdp"
+                    android:tag="3"
+                    android:text="Spouse"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp" />
+            </RadioGroup>
 
             <EditText
                 android:id="@+id/first_name_edt"
                 style="@style/AutoComplete"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"
-                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:drawableRight="@drawable/user_white"
                 android:hint="@string/first_name" />
 
@@ -67,32 +144,26 @@
                 android:drawableRight="@drawable/user_white"
                 android:hint="@string/last_name" />
 
-            <LinearLayout
+            <EditText
+                android:id="@+id/email_edt"
+                style="@style/AutoComplete"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:drawableRight="@drawable/email_white"
+                android:hint="@string/user_id"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress" />
 
-                <EditText
-                    android:id="@+id/age_edt"
-                    style="@style/AutoComplete"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:layout_weight="1"
-                    android:drawableRight="@drawable/age"
-                    android:hint="@string/age" />
-
-                <EditText
-                    android:id="@+id/gender_edt"
-                    style="@style/AutoComplete"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:layout_weight="1"
-                    android:drawableRight="@drawable/gender"
-                    android:hint="@string/gender" />
-            </LinearLayout>
+            <EditText
+                android:id="@+id/password_edt"
+                style="@style/AutoComplete"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:drawableRight="@drawable/password_white"
+                android:hint="@string/user_pass"
+                android:inputType="textPassword" />
 
             <EditText
                 android:id="@+id/phone_no_edt"
@@ -101,94 +172,95 @@
                 android:layout_height="@dimen/_30sdp"
                 android:layout_marginTop="@dimen/_15sdp"
                 android:drawableRight="@drawable/mobile"
-                android:hint="@string/phone_no" />
-        </LinearLayout>
+                android:hint="@string/phone_no"
+                android:inputType="number"
+                android:maxLength="10" />
 
-        <Button
-            android:id="@+id/add_btn"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_35sdp"
-            android:layout_below="@+id/linear1"
-            android:layout_marginLeft="@dimen/_15sdp"
-            android:layout_marginRight="@dimen/_15sdp"
-            android:layout_marginTop="@dimen/_30sdp"
-            android:background="@drawable/login_btn"
-            android:text="ADD"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_12sdp" />
-
-        <LinearLayout
-            android:id="@+id/or_linear"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/add_btn"
-            android:layout_gravity="center|center_horizontal"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/or_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/_120sdp"
-                android:gravity="center"
-                android:text="@string/or"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_16sdp"
-                android:textStyle="normal" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/select_linear"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/or_linear"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_2sdp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/select_txt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="@dimen/_90sdp"
-                android:gravity="center"
-                android:text="@string/select"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_16sdp"
-                android:textStyle="normal" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/lv_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/select_linear"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:orientation="horizontal"
-            android:visibility="visible">
-
-            <include layout="@layout/add_student_header" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/lv_header"
-            android:orientation="vertical">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/select_student_rcView"
+            <Button
+                android:id="@+id/date_of_birth_edt"
+                style="@style/AutoComplete"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="none" />
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:drawableRight="@drawable/dob"
+                android:hint="@string/dob" />
+
+            <RadioGroup
+                android:id="@+id/gender_group"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_gravity="center|center_horizontal"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_15sdp"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <RadioButton
+                    android:id="@+id/male_chk"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_weight="0.8"
+                    android:button="@drawable/absent_radio_type"
+                    android:checked="true"
+                    android:paddingLeft="@dimen/_3sdp"
+                    android:tag="1"
+                    android:text="Male"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp" />
+
+                <RadioButton
+                    android:id="@+id/female_chk"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_weight="0.8"
+                    android:button="@drawable/absent_radio_type"
+                    android:paddingLeft="@dimen/_3sdp"
+                    android:tag="2"
+                    android:text="Female"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_12sdp" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/linear"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/register_btn"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_marginLeft="@dimen/_20sdp"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_weight="1"
+                android:background="@drawable/register_btn"
+                android:text="ADD"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/cancel_btn"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_35sdp"
+                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_weight="1"
+                android:background="@drawable/register_btn"
+                android:text="CANCEL"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold" />
         </LinearLayout>
     </RelativeLayout>
 </layout>

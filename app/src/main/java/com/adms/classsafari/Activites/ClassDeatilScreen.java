@@ -82,7 +82,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
             wheretoComeStr, genderStr, maxpriceStr, minpriceStr,
             sessionId, commentStr, ratingValueStr, popularsessionID = "",
             populardurationStr = "", populargenderStr = "", popluarsessiondateStr = "";
-    SessionDetailModel dataResponse,populardataresponse;
+    SessionDetailModel dataResponse, populardataresponse;
     List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
     boolean arraynull = false;
 
@@ -93,6 +93,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
     TextView result_txt, result1_txt;
     int SessionHour = 0;
     Integer SessionMinit = 0;
+
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -317,7 +318,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                 spiltComma = spiltPipes[j].split("\\,");
                                 spiltDash = spiltComma[1].split("\\-");
                                 calculateHours(spiltDash[0], spiltDash[1]);
-                                populardurationStr=SessionHour + " hr " + SessionMinit + " min";
+                                populardurationStr = SessionHour + " hr " + SessionMinit + " min";
 
                             }
                             populargenderStr = dataResponse.getData().get(i).getGenderID();
@@ -454,7 +455,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
         wlp.gravity = Gravity.BOTTOM;
         window.setAttributes(wlp);
 
-        sortDialog.getWindow().setBackgroundDrawableResource(R.drawable.filterby);
+        sortDialog.getWindow().setBackgroundDrawableResource(R.drawable.filter1);
 
         sortDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         sortDialog.setCancelable(true);
@@ -870,7 +871,11 @@ public class ClassDeatilScreen extends AppCompatActivity {
                 }
                 ratingValueStr = String.valueOf(ratingBar.getRating());
                 if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
-                    callAddrating();
+                    if (!ratingValueStr.equalsIgnoreCase("")) {
+                        callAddrating();
+                    } else {
+                        Utils.ping(mContext, "Please Select Rate.");
+                    }
                 } else {
                     Utils.ping(mContext, getResources().getString(R.string.not_loging));
                 }
@@ -961,7 +966,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                             for (int i = 0; i < populardataresponse.getData().size(); i++) {
                                 arrayListPopular.add(populardataresponse.getData().get(i));
                             }
-                            result_txt.setText(arrayListPopular.size());
+//                            result_txt.setText(arrayListPopular.size());
                             popularClassListAdapter = new PopularClassListAdapter(mContext, arrayListPopular, new onViewClick() {
                                 @Override
                                 public void getViewClick() {
@@ -1000,9 +1005,10 @@ public class ClassDeatilScreen extends AppCompatActivity {
         Map<String, String> map = new HashMap<>();
         return map;
     }
-    public  void calculateHours(String time1, String time2) {
+
+    public void calculateHours(String time1, String time2) {
         Date date1, date2;
-        int days, hours=0, min = 0;
+        int days, hours = 0, min = 0;
         String hourstr, minstr;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
         try {
