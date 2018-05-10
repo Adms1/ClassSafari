@@ -72,7 +72,7 @@ String froncontanctStr;
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mContext = getActivity();
         ((DashBoardActivity) getActivity()).setActionBar(13, "false");
-        sessionIDStr = Utils.getPref(mContext, "SessionID");
+        sessionIDStr = Utils.getPref(mContext, "sessionID");
         Log.d("sessionID", sessionIDStr);
         initViews();
         setListners();

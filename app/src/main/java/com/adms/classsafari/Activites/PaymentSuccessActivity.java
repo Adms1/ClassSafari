@@ -80,7 +80,7 @@ public class PaymentSuccessActivity extends AppCompatActivity {
         btnNewCharge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent isearchByuser = new Intent(mContext, SearchByUser.class);
+                Intent isearchByuser = new Intent(mContext, MySession.class);
                 startActivity(isearchByuser);
             }
         });

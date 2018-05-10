@@ -33,7 +33,7 @@
             android:paddingBottom="@dimen/_5sdp"
             android:paddingLeft="@dimen/_5sdp"
             android:text="Megha Shah"
-            android:textColor="@color/text_color"
+            android:textColor="@color/blue"
             android:textSize="@dimen/_10sdp" />
 
         <TextView

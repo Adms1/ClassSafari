@@ -315,10 +315,9 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
             e.printStackTrace();
         }
 
-        if (age >= 5) {
+        if (age >= 1) {
         } else {
-//            Util.ping(mContext, "Please Enter Valid Birthdate.");
-            addFamilyBinding.dateOfBirthEdt.setError("Please Enter Valid Birthdate.");
+            addFamilyBinding.dateOfBirthEdt.setError(getResources().getString(R.string.agevalidation));
             addFamilyBinding.dateOfBirthEdt.setText("");
 
         }

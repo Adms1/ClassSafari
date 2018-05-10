@@ -36,7 +36,7 @@ public class ClassSearchScreen extends AppCompatActivity {
     Context mContext;
     SessionDetailModel dataResponse;
     List<sessionDataModel> datafilterResponse;
-    String flag, selectedSessionStr = "", selectedSessionCityStr, sessionCapacityStr, sessionTypeStr, wheretoComeStr, genderStr;
+    String flag, selectedSessionStr = "", selectedSessionCityStr, sessionCapacityStr, sessionTypeStr, wheretoComeStr, genderStr="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class ClassSearchScreen extends AppCompatActivity {
         classSearchScreenBinding = DataBindingUtil.setContentView(this, R.layout.activity_class_search_screen);
         mContext = ClassSearchScreen.this;
         flag = getIntent().getStringExtra("flag");
-        sessionTypeStr=getIntent().getStringExtra("sessionType");
+        sessionTypeStr = getIntent().getStringExtra("sessionType");
         wheretoComeStr = getIntent().getStringExtra("withOR");
         init();
         setListner();
@@ -109,7 +109,7 @@ public class ClassSearchScreen extends AppCompatActivity {
                 fillBoard();
                 fillStandard();
                 fillStream();
-                fillGender();
+//                fillGender();
 
             }
         });
@@ -201,8 +201,8 @@ public class ClassSearchScreen extends AppCompatActivity {
                     inSearchUser.putExtra("stream", classSearchScreenBinding.streamAutoTxt.getText().toString());
                     inSearchUser.putExtra("searchType", flag);
                     inSearchUser.putExtra("gender", genderStr);
-                    inSearchUser.putExtra("withOR",wheretoComeStr);
-                    inSearchUser.putExtra("sessionType",sessionTypeStr);
+                    inSearchUser.putExtra("withOR", wheretoComeStr);
+                    inSearchUser.putExtra("sessionType", sessionTypeStr);
                     startActivity(inSearchUser);
                 } else {
                     classSearchScreenBinding.sessionAutoTxt.setError("Please Select Session and location.");
@@ -274,7 +274,7 @@ public class ClassSearchScreen extends AppCompatActivity {
                             fillBoard();
                             fillStandard();
                             fillStream();
-                            fillGender();
+//                            fillGender();
                         }
                     }
                 }
@@ -304,9 +304,15 @@ public class ClassSearchScreen extends AppCompatActivity {
         selectedSessionCityStr = classSearchScreenBinding.searchAutoTxt.getText().toString();
         ArrayList<String> SesisonNameArray = new ArrayList<String>();
         for (int j = 0; j < datafilterResponse.size(); j++) {
-            if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())&&
-                    datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase(sessionTypeStr)) {
-                SesisonNameArray.add(datafilterResponse.get(j).getSessionName());
+            if (wheretoComeStr.equalsIgnoreCase("withOR")) {
+                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
+                        datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase(sessionTypeStr)) {
+                    SesisonNameArray.add(datafilterResponse.get(j).getSessionName());
+                }
+            } else {
+                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())) {
+                    SesisonNameArray.add(datafilterResponse.get(j).getSessionName());
+                }
             }
         }
         HashSet<String> hashSet = new HashSet<String>();
@@ -323,15 +329,28 @@ public class ClassSearchScreen extends AppCompatActivity {
         ArrayList<String> BoardName = new ArrayList<String>();
         for (int j = 0; j < datafilterResponse.size(); j++) {
             if (selectedSessionStr.equalsIgnoreCase("")) {
-                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())&&
-                        datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase(sessionTypeStr)) {
-                    BoardName.add(datafilterResponse.get(j).getBoard());
+                if (wheretoComeStr.equalsIgnoreCase("withOR")) {
+                    if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
+                            datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase(sessionTypeStr)) {
+                        BoardName.add(datafilterResponse.get(j).getBoard());
+                    }
+                } else {
+                    if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())) {
+                        BoardName.add(datafilterResponse.get(j).getBoard());
+                    }
                 }
             } else {
-                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
-                        datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim())&&
-                        datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase(sessionTypeStr)) {
-                    BoardName.add(datafilterResponse.get(j).getBoard());
+                if (wheretoComeStr.equalsIgnoreCase("withOR")) {
+                    if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
+                            datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim()) &&
+                            datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase(sessionTypeStr)) {
+                        BoardName.add(datafilterResponse.get(j).getBoard());
+                    }
+                } else {
+                    if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
+                            datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim())) {
+                        BoardName.add(datafilterResponse.get(j).getBoard());
+                    }
                 }
             }
 
@@ -350,13 +369,19 @@ public class ClassSearchScreen extends AppCompatActivity {
         ArrayList<String> StandardName = new ArrayList<String>();
         for (int j = 0; j < datafilterResponse.size(); j++) {
             if (selectedSessionStr.equalsIgnoreCase("")) {
-                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())&&
-                        datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase(sessionTypeStr)) {
-                    StandardName.add(datafilterResponse.get(j).getStandard());
+                if (wheretoComeStr.equalsIgnoreCase("withOR")) {
+                    if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
+                            datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase(sessionTypeStr)) {
+                        StandardName.add(datafilterResponse.get(j).getStandard());
+                    }
+                } else {
+                    if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())) {
+                        StandardName.add(datafilterResponse.get(j).getStandard());
+                    }
                 }
             } else {
                 if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
-                        datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim())&&
+                        datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim()) &&
                         datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase(sessionTypeStr)) {
                     StandardName.add(datafilterResponse.get(j).getStandard());
                 }
@@ -376,15 +401,28 @@ public class ClassSearchScreen extends AppCompatActivity {
         ArrayList<String> StreamName = new ArrayList<String>();
         for (int j = 0; j < datafilterResponse.size(); j++) {
             if (selectedSessionStr.equalsIgnoreCase("")) {
-                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr)&&
-                        datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase(sessionTypeStr)) {
-                    StreamName.add(datafilterResponse.get(j).getStream());
+                if (wheretoComeStr.equalsIgnoreCase("withOR")) {
+                    if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr) &&
+                            datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase(sessionTypeStr)) {
+                        StreamName.add(datafilterResponse.get(j).getStream());
+                    }
+                }else{
+                    if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr)){
+                        StreamName.add(datafilterResponse.get(j).getStream());
+                    }
                 }
             } else {
-                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
-                        datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim())&&
-                        datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase(sessionTypeStr)) {
-                    StreamName.add(datafilterResponse.get(j).getStream());
+                if (wheretoComeStr.equalsIgnoreCase("withOR")) {
+                    if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
+                            datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim()) &&
+                            datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase(sessionTypeStr)) {
+                        StreamName.add(datafilterResponse.get(j).getStream());
+                    }
+                }else{
+                    if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
+                            datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim())){
+                        StreamName.add(datafilterResponse.get(j).getStream());
+                    }
                 }
             }
         }
@@ -402,15 +440,28 @@ public class ClassSearchScreen extends AppCompatActivity {
 
         for (int j = 0; j < datafilterResponse.size(); j++) {
             if (selectedSessionStr.trim().equalsIgnoreCase("")) {
-                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())&&
-                        datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase(sessionTypeStr)) {
-                    LessionNameArray.add(datafilterResponse.get(j).getLessionTypeName().trim());
+                if (wheretoComeStr.equalsIgnoreCase("withOR")) {
+                    if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
+                            datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase(sessionTypeStr)) {
+                        LessionNameArray.add(datafilterResponse.get(j).getLessionTypeName().trim());
+                    }
+                }else{
+                    if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())){
+                        LessionNameArray.add(datafilterResponse.get(j).getLessionTypeName().trim());
+                    }
                 }
             } else {
-                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
-                        datafilterResponse.get(j).getSessionName().trim().equalsIgnoreCase(selectedSessionStr.trim())&&
-                        datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase(sessionTypeStr)) {
-                    LessionNameArray.add(datafilterResponse.get(j).getLessionTypeName().trim());
+                if (wheretoComeStr.equalsIgnoreCase("withOR")) {
+                    if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
+                            datafilterResponse.get(j).getSessionName().trim().equalsIgnoreCase(selectedSessionStr.trim()) &&
+                            datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase(sessionTypeStr)) {
+                        LessionNameArray.add(datafilterResponse.get(j).getLessionTypeName().trim());
+                    }
+                }else{
+                    if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
+                            datafilterResponse.get(j).getSessionName().trim().equalsIgnoreCase(selectedSessionStr.trim()) ){
+                        LessionNameArray.add(datafilterResponse.get(j).getLessionTypeName().trim());
+                    }
                 }
             }
         }
@@ -443,13 +494,24 @@ public class ClassSearchScreen extends AppCompatActivity {
             if (selectedSessionStr.equalsIgnoreCase("")) {
 
             } else {
-                if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
-                        datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim())&&
-                        datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase(sessionTypeStr)) {
-                    if (dataResponse.getData().get(j).getGenderID().equalsIgnoreCase("1")) {
-                        classSearchScreenBinding.maleChk.setChecked(true);
-                    } else {
-                        classSearchScreenBinding.femaleChk.setChecked(true);
+                if (wheretoComeStr.equalsIgnoreCase("withOR")) {
+                    if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
+                            datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim()) &&
+                            datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase(sessionTypeStr)) {
+                        if (dataResponse.getData().get(j).getGenderID().equalsIgnoreCase("1")) {
+                            classSearchScreenBinding.maleChk.setChecked(true);
+                        } else {
+                            classSearchScreenBinding.femaleChk.setChecked(true);
+                        }
+                    }
+                }else{
+                    if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
+                            datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim())){
+                        if (dataResponse.getData().get(j).getGenderID().equalsIgnoreCase("1")) {
+                            classSearchScreenBinding.maleChk.setChecked(true);
+                        } else {
+                            classSearchScreenBinding.femaleChk.setChecked(true);
+                        }
                     }
                 }
             }

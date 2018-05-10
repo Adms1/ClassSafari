@@ -69,8 +69,8 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="Theme_Dialog" parent="@android:style/Theme.Dialog">
-        <item name="android:windowMinWidthMajor">75%</item>
-        <item name="android:windowMinWidthMinor">75%</item>
+        <item name="android:windowMinWidthMajor">95%</item>
+        <item name="android:windowMinWidthMinor">95%</item>
 
         <!--<item name="@android:textColor">@android:color/primary_text_light</item>-->
     </style>

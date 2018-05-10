@@ -54,7 +54,7 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
     private DatePickerDialog datePickerDialog;
     int mYear, mMonth, mDay;
     private static boolean isFromDate = false;
-    String finalDate, startDateStr, endDateStr, flag;
+    String finalDate, startDateStr, endDateStr, flag,wheretocometypeStr;
 
     //Use for paymentreport List
     List<FamilyDetailModel> paymentReportList;
@@ -75,10 +75,13 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
         setContentView(R.layout.activity_my_account);
         mContext = this;
 
+        getIntenttValue();
         init();
         setListner();
     }
-
+    public void getIntenttValue(){
+        wheretocometypeStr=getIntent().getStringExtra("wheretocometype");
+    }
     public void init() {
         start_date_linear = (LinearLayout) findViewById(R.id.start_date_linear);
         end_date_linear = (LinearLayout) findViewById(R.id.end_date_linear);
@@ -170,8 +173,19 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
                 }
                 break;
             case R.id.back:
-                Intent isearchuser = new Intent(mContext, SearchByUser.class);
-                startActivity(isearchuser);
+                if (wheretocometypeStr.equalsIgnoreCase("mySession")) {
+                    Intent intent = new Intent(mContext, MySession.class);
+                    intent.putExtra("wheretocometype", wheretocometypeStr);
+                    startActivity(intent);
+                }else if(wheretocometypeStr.equalsIgnoreCase("myAccount")){
+                    Intent intent = new Intent(mContext, MyAccountActivity.class);
+                    intent.putExtra("wheretocometype", wheretocometypeStr);
+                    startActivity(intent);
+                }else if(wheretocometypeStr.equalsIgnoreCase("menu")){
+                    Intent intent = new Intent(mContext, SearchByUser.class);
+                    intent.putExtra("wheretocometype", wheretocometypeStr);
+                    startActivity(intent);
+                }
                 break;
             case R.id.menu:
                 menuDialog();
@@ -379,6 +393,7 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
             @Override
             public void onClick(View view) {
                 Intent imyaccount = new Intent(mContext, MyAccountActivity.class);
+                imyaccount.putExtra("wheretocometype", "myAccount");
                 startActivity(imyaccount);
             }
         });
@@ -386,6 +401,7 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
             @Override
             public void onClick(View view) {
                 Intent isession = new Intent(mContext, MySession.class);
+                isession.putExtra("wheretocometype", "myAccount");
                 startActivity(isession);
                 menuDialog.dismiss();
             }
@@ -397,23 +413,12 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
                 changePasswordDialog();
             }
         });
-        btnaddChild.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent iaddchild = new Intent(mContext, AddStudentScreen.class);
-                iaddchild.putExtra("type", "menu");
-                iaddchild.putExtra("familyNameStr", Utils.getPref(mContext, "RegisterUserName"));
-                iaddchild.putExtra("familyID",Utils.getPref(mContext, "coachTypeID"));
-                startActivity(iaddchild);
-                menuDialog.dismiss();
-            }
-        });
         btnmyfamily.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, FamilyListActivity.class);
                 intent.putExtra("froncontanct", "true");
-                intent.putExtra("type", "menu");
+                intent.putExtra("wheretocometype", "myAccount");
                 intent.putExtra("familyNameStr", Utils.getPref(mContext, "RegisterUserName"));
                 intent.putExtra("familyID", Utils.getPref(mContext, "coachTypeID"));
                 startActivity(intent);

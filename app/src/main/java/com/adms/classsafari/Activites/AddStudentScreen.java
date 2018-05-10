@@ -47,9 +47,9 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
             phonenoStr, gendarIdStr = "1", dateofbirthStr, contactTypeIDStr,
             familyIDStr, contatIDstr, orderIDStr, sessionIDStr, classStr = "Child",
             familyNameStr, paymentStatusstr, familylocationStr, familysessionStudentStr,
-            sessionDateStr, durationStr, familysessionfeesStr, familysessionnameStr,locationStr,
-            boardStr, standardStr, streamStr, searchTypeStr, subjectStr,
-            wheretoComeStr, searchByStr, genderStr;
+            sessionDateStr, durationStr, familysessionfeesStr, familysessionnameStr, locationStr,
+            boardStr, standardStr, streamStr, searchTypeStr, subjectStr, froncontanctStr,
+            wheretoComeStr, searchByStr, genderStr,wheretocometypeStr;
     Dialog confimDialog;
     TextView cancel_txt, confirm_txt, session_student_txt, session_name_txt,
             location_txt, duration_txt, time_txt, session_fee_txt, session_student_txt_view, time_txt_view;
@@ -83,7 +83,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
         familysessionfeesStr = getIntent().getStringExtra("sessionfees");
         familysessionnameStr = getIntent().getStringExtra("sessionName");
         sessionDateStr = getIntent().getStringExtra("sessiondate");
-        locationStr=getIntent().getStringExtra("city");
+        locationStr = getIntent().getStringExtra("city");
         subjectStr = getIntent().getStringExtra("lessionName");
         searchByStr = getIntent().getStringExtra("SearchBy");
         standardStr = getIntent().getStringExtra("standard");
@@ -92,7 +92,9 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
         searchTypeStr = getIntent().getStringExtra("searchType");
         genderStr = getIntent().getStringExtra("gender");
         wheretoComeStr = getIntent().getStringExtra("withOR");
-        Log.d("familyName",familyNameStr+familyIDStr);
+        froncontanctStr = getIntent().getStringExtra("froncontanct");
+        wheretocometypeStr=getIntent().getStringExtra("wheretocometype");
+        Log.d("familyName", familyNameStr + familyIDStr);
         addStudentScreenBinding.familynameTxt.setText(familyNameStr);
     }
 
@@ -104,8 +106,8 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                     Intent intent = new Intent(mContext, FamilyListActivity.class);
                     intent.putExtra("type", "book");
                     intent.putExtra("familyID", familyIDStr);
-                    intent.putExtra("familyNameStr",familyNameStr);
-                    intent.putExtra("sessionID",sessionIDStr);
+                    intent.putExtra("familyNameStr", familyNameStr);
+                    intent.putExtra("sessionID", sessionIDStr);
                     intent.putExtra("duration", durationStr);
                     intent.putExtra("sessiondate", sessionDateStr);
                     intent.putExtra("sessionName", familysessionnameStr);
@@ -123,7 +125,9 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                     intent.putExtra("withOR", wheretoComeStr);
                     startActivity(intent);
                 } else {
-                    Intent intent = new Intent(mContext, SearchByUser.class);
+                    Intent intent = new Intent(mContext, FamilyListActivity.class);
+                    intent.putExtra("froncontanct", froncontanctStr);
+                    intent.putExtra("wheretocometype", wheretocometypeStr);
                     startActivity(intent);
                 }
             }
@@ -139,13 +143,6 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                 datePickerDialog.setAccentColor(Color.parseColor("#f2552c"));
 //                datePickerDialog.setTitle("Select Date From DatePickerDialog");
                 datePickerDialog.show(getFragmentManager(), "Datepickerdialog");
-            }
-        });
-
-        addStudentScreenBinding.cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
             }
         });
         addStudentScreenBinding.emailEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -272,8 +269,8 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                     Intent intent = new Intent(mContext, FamilyListActivity.class);
                     intent.putExtra("type", "book");
                     intent.putExtra("familyID", familyIDStr);
-                    intent.putExtra("familyNameStr",familyNameStr);
-                    intent.putExtra("sessionID",sessionIDStr);
+                    intent.putExtra("familyNameStr", familyNameStr);
+                    intent.putExtra("sessionID", sessionIDStr);
                     intent.putExtra("duration", durationStr);
                     intent.putExtra("sessiondate", sessionDateStr);
                     intent.putExtra("sessionName", familysessionnameStr);
@@ -292,6 +289,8 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(mContext, FamilyListActivity.class);
+                    intent.putExtra("froncontanct", froncontanctStr);
+                    intent.putExtra("wheretocometype", wheretocometypeStr);
                     startActivity(intent);
                 }
             }
@@ -353,10 +352,10 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
             e.printStackTrace();
         }
 
-        if (age >= 5) {
+        if (age >= 1) {
         } else {
 //            Util.ping(mContext, "Please Enter Valid Birthdate.");
-            addStudentScreenBinding.dateOfBirthEdt.setError("Please Enter Valid Birthdate.");
+            addStudentScreenBinding.dateOfBirthEdt.setError(getResources().getString(R.string.agevalidation));
             addStudentScreenBinding.dateOfBirthEdt.setText("");
 
         }
@@ -453,10 +452,12 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                         Utils.setPref(mContext, "FamilyID", childInfoModel.getContactID());
                         contatIDstr = childInfoModel.getContactID();
 //                        Utils.ping(mContext, "Child Added Sucessfully.");
-                        if(type.equalsIgnoreCase("book")) {
+                        if (type.equalsIgnoreCase("book")) {
                             ConformSessionDialog();
-                        }else{
-                            Intent intent=new Intent(mContext,SearchByUser.class);
+                        } else {
+                            Intent intent = new Intent(mContext, FamilyListActivity.class);
+                            intent.putExtra("froncontanct", froncontanctStr);
+                            intent.putExtra("wheretocometype", wheretocometypeStr);
                             startActivity(intent);
                         }
                     }
@@ -477,7 +478,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
 
     private Map<String, String> getNewChildetail() {
         Map<String, String> map = new HashMap<>();
-        map.put("FamilyID", Utils.getPref(mContext,"coachTypeID"));
+        map.put("FamilyID", Utils.getPref(mContext, "coachTypeID"));
         map.put("FirstName", firstNameStr);
         map.put("LastName", lastNameStr);
         map.put("EmailAddress", emailStr);
@@ -485,7 +486,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
         map.put("GenderID", gendarIdStr);
         map.put("DateOfBirth", dateofbirthStr);
         map.put("PhoneNumber", phonenoStr);
-        map.put("ContactTypeID",contactTypeIDStr);
+        map.put("ContactTypeID", contactTypeIDStr);
         return map;
     }
 
@@ -576,7 +577,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                         Intent ipayment = new Intent(mContext, PaymentActivity.class);
                         ipayment.putExtra("orderID", orderIDStr);
                         ipayment.putExtra("amount", AppConfiguration.classsessionPrice);
-                        ipayment.putExtra("mode", "TEST");
+                        ipayment.putExtra("mode", "LIVE");
                         ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
                         ipayment.putExtra("sessionID", sessionIDStr);
                         ipayment.putExtra("contactID", Utils.getPref(mContext, "coachID"));

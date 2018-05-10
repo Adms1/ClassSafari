@@ -2,10 +2,13 @@ package com.adms.classsafari.Activites;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -22,6 +25,7 @@ import com.adms.classsafari.AppConstant.AppConfiguration;
 import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.Interface.onChlidClick;
 import com.adms.classsafari.Interface.onViewClick;
+import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.ChildDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.FamilyDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
@@ -58,8 +62,12 @@ public class FamilyListActivity extends AppCompatActivity {
             familylocationStr, familysessionStudentStr, sessionDateStr, durationStr,
             orderIDStr, contatIDstr, type, familyIdStr = "", familyNameStr = "", locationStr,
             boardStr, standardStr, streamStr, searchTypeStr, subjectStr,
-            wheretoComeStr, searchByStr, genderStr, froncontanctStr;
+            wheretoComeStr, searchByStr, genderStr, froncontanctStr, wheretocometypeStr;
     ArrayList<String> selectedId;
+
+    //Purchase dialog
+    ArrayList<String> purchaseSessionIDArray;
+    String purchaseSessionIDStr = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +99,9 @@ public class FamilyListActivity extends AppCompatActivity {
         genderStr = getIntent().getStringExtra("gender");
         wheretoComeStr = getIntent().getStringExtra("withOR");
         froncontanctStr = getIntent().getStringExtra("froncontanct");
-        familyIdStr=getIntent().getStringExtra("familyID");
-        familyNameStr=getIntent().getStringExtra("familyNameStr");
+        familyIdStr = getIntent().getStringExtra("familyID");
+        familyNameStr = getIntent().getStringExtra("familyNameStr");
+        wheretocometypeStr = getIntent().getStringExtra("wheretocometype");
     }
 
     public void init() {
@@ -127,15 +136,26 @@ public class FamilyListActivity extends AppCompatActivity {
                     intent.putExtra("withOR", wheretoComeStr);
                     startActivity(intent);
                 } else {
-                    Intent intent = new Intent(mContext, SearchByUser.class);
-                    startActivity(intent);
+                    if (wheretocometypeStr.equalsIgnoreCase("mySession")) {
+                        Intent intent = new Intent(mContext, MySession.class);
+                        intent.putExtra("wheretocometype", wheretocometypeStr);
+                        startActivity(intent);
+                    } else if (wheretocometypeStr.equalsIgnoreCase("myAccount")) {
+                        Intent intent = new Intent(mContext, MyAccountActivity.class);
+                        intent.putExtra("wheretocometype", wheretocometypeStr);
+                        startActivity(intent);
+                    } else if (wheretocometypeStr.equalsIgnoreCase("menu")) {
+                        Intent intent = new Intent(mContext, SearchByUser.class);
+                        intent.putExtra("wheretocometype", wheretocometypeStr);
+                        startActivity(intent);
+                    }
                 }
             }
         });
         addchild_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!froncontanctStr.equalsIgnoreCase("true")) {
+                if (!froncontanctStr.equalsIgnoreCase("true")) {
 //                    getFamilyID();
                     Intent addchild = new Intent(mContext, AddStudentScreen.class);
                     addchild.putExtra("type", "book");
@@ -157,10 +177,13 @@ public class FamilyListActivity extends AppCompatActivity {
                     addchild.putExtra("lessionName", subjectStr);
                     addchild.putExtra("gender", genderStr);
                     addchild.putExtra("withOR", wheretoComeStr);
+                    addchild.putExtra("froncontanct", froncontanctStr);
                     startActivity(addchild);
-                }else{
+                } else {
                     Intent addchild = new Intent(mContext, AddStudentScreen.class);
                     addchild.putExtra("familyNameStr", familyNameStr);
+                    addchild.putExtra("froncontanct", froncontanctStr);
+                    addchild.putExtra("wheretocometype", wheretocometypeStr);
                     addchild.putExtra("type", "menu");
                     startActivity(addchild);
                 }
@@ -193,12 +216,13 @@ public class FamilyListActivity extends AppCompatActivity {
                     }
                     if (familyInfoModel.getSuccess().equalsIgnoreCase("True")) {
                         finalFamilyDetail = familyInfoModel.getData();
+                        callSessionReportApi();
                         if (familyInfoModel.getData() != null) {
                             if (familyInfoModel.getData().size() > 0) {
                                 list_linear.setVisibility(View.VISIBLE);
                                 no_record_txt.setVisibility(View.GONE);
                                 fillExpLV();
-                                expandableSelectStudentListAdapter = new ExpandableSelectStudentListAdapter(mContext, listDataHeader, listDataChild,froncontanctStr, new onChlidClick() {
+                                expandableSelectStudentListAdapter = new ExpandableSelectStudentListAdapter(mContext, listDataHeader, listDataChild, froncontanctStr, new onChlidClick() {
                                     @Override
                                     public void getChilClick() {
 //                                        getFamilyID();
@@ -228,11 +252,43 @@ public class FamilyListActivity extends AppCompatActivity {
                                 }, new onViewClick() {
                                     @Override
                                     public void getViewClick() {
-                                        ConformSessionDialog();
+                                        if (purchaseSessionIDArray.size() > 0) {
+                                            for (int i = 0; i < purchaseSessionIDArray.size(); i++) {
+                                                if (sessionIDStr.equalsIgnoreCase(purchaseSessionIDArray.get(i))) {
+                                                    purchaseSessionIDStr = purchaseSessionIDArray.get(i);
+                                                }
+                                            }
+                                        }
+                                        if (purchaseSessionIDStr.equalsIgnoreCase("")) {
+                                            ConformSessionDialog();
+                                        } else {
+                                            new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                                                    .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+                                                    .setMessage("You are already purchase.")
+                                                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int which) {
+
+                                                        }
+                                                    })
+                                                    .setIcon(R.drawable.safari)
+                                                    .show();
+                                        }
                                     }
                                 });
                                 lvExpfamilylist.setAdapter(expandableSelectStudentListAdapter);
                                 lvExpfamilylist.expandGroup(0);
+                                if (!froncontanctStr.equalsIgnoreCase("true")) {
+                                    new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                                            .setCancelable(false)
+                                            .setMessage("Please Select Atleast One Student for Session Confirmation.")
+                                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                }
+                                            })
+                                            .setIcon(R.drawable.safari)
+                                            .show();
+                                }
                             } else {
                                 list_linear.setVisibility(View.GONE);
                                 no_record_txt.setVisibility(View.VISIBLE);
@@ -306,10 +362,10 @@ public class FamilyListActivity extends AppCompatActivity {
         session_fee_txt = (TextView) confimDialog.findViewById(R.id.session_fee_txt);
         confirm_txt = (TextView) confimDialog.findViewById(R.id.confirm_txt);
         cancel_txt = (TextView) confimDialog.findViewById(R.id.cancel_txt);
-        session_student_txt_view.setText("TEACHER NAME");
+//        session_student_txt_view.setText("TEACHER NAME");
 
         getsessionID();
-        session_student_txt.setText(familysessionStudentStr);
+//        session_student_txt.setText(familysessionStudentStr);
         session_name_txt.setText(familysessionnameStr);
         location_txt.setText(familylocationStr);
         duration_txt.setText(durationStr);
@@ -369,7 +425,7 @@ public class FamilyListActivity extends AppCompatActivity {
                         Intent ipayment = new Intent(mContext, PaymentActivity.class);
                         ipayment.putExtra("orderID", orderIDStr);
                         ipayment.putExtra("amount", AppConfiguration.classsessionPrice);
-                        ipayment.putExtra("mode", "TEST");
+                        ipayment.putExtra("mode", "LIVE");
                         ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
                         ipayment.putExtra("sessionID", sessionIDStr);
                         ipayment.putExtra("contactID", Utils.getPref(mContext, "coachID"));
@@ -426,7 +482,7 @@ public class FamilyListActivity extends AppCompatActivity {
                     if (sessionconfirmationInfoModel.getSuccess().equalsIgnoreCase("True")) {
                         Utils.ping(mContext, "Login Succesfully");
                         confimDialog.dismiss();
-                        Intent isearchBYuser = new Intent(mContext, SearchByUser.class);
+                        Intent isearchBYuser = new Intent(mContext, MySession.class);
                         startActivity(isearchBYuser);
 
                     }
@@ -483,4 +539,59 @@ public class FamilyListActivity extends AppCompatActivity {
             Log.d("selectedIdStr", familyIdStr);
         }
     }
+    //Use for GetSession Report
+    public void callSessionReportApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+//            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_FamilySessionList_ByContactID(getSessionReportDetail(), new retrofit.Callback<SessionDetailModel>() {
+                @Override
+                public void success(SessionDetailModel sessionModel, Response response) {
+                    Utils.dismissDialog();
+                    if (sessionModel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionModel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionModel.getSuccess().equalsIgnoreCase("false")) {
+//                        Utils.ping(mContext, getString(R.string.false_msg));
+                        purchaseSessionIDArray = new ArrayList<>();
+                        return;
+                    }
+                    if (sessionModel.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.dismissDialog();
+
+                        if (sessionModel.getData().size() > 0) {
+                            purchaseSessionIDArray = new ArrayList<>();
+                            for (int i = 0; i < sessionModel.getData().size(); i++) {
+                                purchaseSessionIDArray.add(sessionModel.getData().get(i).getSessionID());
+                            }
+                        } else {
+                        }
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getSessionReportDetail() {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("ContactID", Utils.getPref(mContext, "coachID"));
+        return map;
+    }
+
 }

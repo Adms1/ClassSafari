@@ -187,7 +187,8 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(Intent.ACTION_SEND);
-                    intent.putExtra(Intent.EXTRA_EMAIL, arrayList.get(position).getEmailAddress());
+                    String[] recipients={ arrayList.get(position).getEmailAddress()};
+                    intent.putExtra(Intent.EXTRA_EMAIL,recipients);
                     intent.setType("text/html");
                     intent.setPackage("com.google.android.gm");
                     mContext.startActivity(Intent.createChooser(intent, "Send mail"));

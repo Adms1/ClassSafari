@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_320sdp"
+    android:layout_height="wrap_content"
     android:background="@drawable/session_confirm"
     android:orientation="vertical">
 
@@ -27,10 +27,12 @@
                 android:layout_weight="1"
                 android:gravity="center_vertical|start"
                 android:paddingLeft="@dimen/_15sdp"
-                android:text="Please Confirm"
+                android:text="Session Details"
+                android:paddingBottom="@dimen/_3sdp"
                 android:textColor="@color/blue"
                 android:textSize="@dimen/_14sdp"
                 android:textStyle="bold" />
+
         </LinearLayout>
 
         <View
@@ -41,13 +43,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2.2"
+            android:layout_weight="2.57"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_2sdp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -83,16 +85,15 @@
                     android:layout_gravity="center"
                     android:gravity="start|center_vertical"
                     android:paddingLeft="@dimen/_5sdp"
+                    android:paddingRight="@dimen/_5sdp"
                     android:text="ADMS"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_13sdp"
                     android:textStyle="bold" />
             </LinearLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_33sdp"
-                android:layout_marginTop="@dimen/_1sdp"
                 android:layout_marginRight="@dimen/_1sdp"
                 android:orientation="horizontal">
 
@@ -135,26 +136,31 @@
                     android:textStyle="normal" />
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/linear_board"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_45sdp"
-                android:layout_marginTop="@dimen/_3sdp"
-                android:orientation="horizontal">
+                android:layout_height="@dimen/_33sdp"
+                android:layout_marginRight="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_1sdp"
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
-                    android:id="@+id/Location_txt_view"
+                    android:id="@+id/session_board_txt_view"
                     android:layout_width="@dimen/_105sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:gravity="start|center_vertical"
-                    android:paddingLeft="@dimen/_2sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_4sdp"
                     android:layout_marginTop="@dimen/_1sdp"
-                    android:text="LOCATION:"
+                    android:gravity="start|center_vertical"
+                    android:paddingLeft="@dimen/_2sdp"
+                    android:text="Board"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="normal" />
+
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/_25sdp"
+                    android:layout_height="@dimen/_30sdp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_4sdp"
                     android:layout_marginTop="@dimen/_1sdp"
@@ -163,39 +169,269 @@
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_11sdp"
                     android:textStyle="normal" />
+
                 <TextView
-                    android:id="@+id/location_txt"
-                    android:layout_width="@dimen/_158sdp"
-                    android:layout_height="@dimen/_48sdp"
-                    android:gravity="start|center_vertical"
+                    android:id="@+id/session_board_txt"
+                    android:layout_width="@dimen/_185sdp"
+                    android:layout_height="@dimen/_25sdp"
                     android:layout_gravity="center"
-                    android:paddingRight="@dimen/_5sdp"
+                    android:gravity="start|center_vertical"
                     android:paddingLeft="@dimen/_5sdp"
-                    android:paddingBottom="@dimen/_2sdp"
-                    android:text="604,Iscon Elegance,S.G highway,Opp.Karnavati club,Ahmedabad,Gujarat-380015."
+                    android:text="GSEB"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_10sdp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_standard"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_33sdp"
+                android:layout_marginRight="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_1sdp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/session_standard_txt_view"
+                    android:layout_width="@dimen/_105sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:gravity="start|center_vertical"
+                    android:paddingLeft="@dimen/_2sdp"
+                    android:text="Standard"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:gravity="center"
+                    android:text=":"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_11sdp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/session_standard_txt"
+                    android:layout_width="@dimen/_185sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center"
+                    android:gravity="start|center_vertical"
+                    android:paddingLeft="@dimen/_5sdp"
+                    android:text="VII"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_10sdp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_stream"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_33sdp"
+                android:layout_marginRight="@dimen/_1sdp"
+                android:layout_marginTop="@dimen/_1sdp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/session_stream_txt_view"
+                    android:layout_width="@dimen/_105sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:gravity="start|center_vertical"
+                    android:paddingLeft="@dimen/_2sdp"
+                    android:text="Stream"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:gravity="center"
+                    android:text=":"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_11sdp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/session_stream_txt"
+                    android:layout_width="@dimen/_185sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center"
+                    android:gravity="start|center_vertical"
+                    android:paddingLeft="@dimen/_5sdp"
+                    android:text="General"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_10sdp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_lession"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_33sdp"
+                android:layout_marginRight="@dimen/_1sdp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/session_lession_txt_view"
+                    android:layout_width="@dimen/_105sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:gravity="start|center_vertical"
+                    android:paddingLeft="@dimen/_2sdp"
+                    android:text="Lesson"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:gravity="center"
+                    android:text=":"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_11sdp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/session_lession_txt"
+                    android:layout_width="@dimen/_185sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center"
+                    android:gravity="start|center_vertical"
+                    android:paddingLeft="@dimen/_5sdp"
+                    android:text="English"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_10sdp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/linear_date"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_33sdp"
+                android:layout_marginRight="@dimen/_1sdp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/session_date_txt_view"
+                    android:layout_width="@dimen/_105sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:gravity="start|center_vertical"
+                    android:paddingLeft="@dimen/_2sdp"
+                    android:text="Date"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:gravity="center"
+                    android:text=":"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_11sdp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/session_date_txt"
+                    android:layout_width="@dimen/_185sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center"
+                    android:gravity="start|center_vertical"
+                    android:paddingLeft="@dimen/_5sdp"
+                    android:text="English"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_10sdp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/linear_time"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_33sdp"
+                android:layout_marginRight="@dimen/_1sdp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/session_time_txt_view"
+                    android:layout_width="@dimen/_105sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:gravity="start|center_vertical"
+                    android:paddingLeft="@dimen/_2sdp"
+                    android:text="Time"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:gravity="center"
+                    android:text=":"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_11sdp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/session_time_txt"
+                    android:layout_width="@dimen/_185sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center"
+                    android:gravity="start|center_vertical"
+                    android:paddingLeft="@dimen/_5sdp"
+                    android:text="English"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_10sdp"
                     android:textStyle="normal" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_30sdp"
-                android:layout_marginTop="@dimen/_1sdp"
+                android:layout_height="@dimen/_45sdp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/time_txt_view"
+                    android:id="@+id/Location_txt_view"
                     android:layout_width="@dimen/_105sdp"
-                    android:layout_height="@dimen/_25sdp"
-                    android:layout_gravity="center"
+                    android:layout_height="@dimen/_30sdp"
                     android:layout_marginLeft="@dimen/_4sdp"
                     android:layout_marginTop="@dimen/_1sdp"
                     android:gravity="start|center_vertical"
                     android:paddingLeft="@dimen/_2sdp"
-                    android:text="@string/time"
+                    android:text="Location"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_12sdp"
-                    android:textStyle="normal"  />
+                    android:textStyle="normal" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/_25sdp"
@@ -207,135 +443,54 @@
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_11sdp"
                     android:textStyle="normal" />
+
                 <TextView
-                    android:id="@+id/time_txt"
+                    android:id="@+id/location_txt"
                     android:layout_width="@dimen/_185sdp"
-                    android:layout_height="@dimen/_25sdp"
+                    android:layout_height="@dimen/_48sdp"
                     android:layout_gravity="center"
                     android:gravity="start|center_vertical"
+                    android:paddingBottom="@dimen/_2sdp"
                     android:paddingLeft="@dimen/_5sdp"
-                    android:text="11:00 AM - 12:00 PM"
+                    android:paddingRight="@dimen/_5sdp"
+                    android:text="604,Iscon Elegance,S.G highway,Opp.Karnavati club,Ahmedabad,Gujarat-380015."
                     android:textColor="@color/text_color"
-                    android:textSize="@dimen/_11sdp"
+                    android:textSize="@dimen/_10sdp"
                     android:textStyle="normal" />
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/dark_gray" />
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_30sdp"
-                android:layout_marginTop="@dimen/_1sdp"
-                android:orientation="horizontal">
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/_1sdp"
+                android:layout_weight="0.5"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                android:weightSum="1">
 
                 <TextView
-                    android:id="@+id/duration_txt_view"
-                    android:layout_width="@dimen/_105sdp"
-                    android:layout_height="@dimen/_25sdp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/_4sdp"
-                    android:layout_marginTop="@dimen/_1sdp"
-                    android:gravity="start|center_vertical"
-                    android:paddingLeft="@dimen/_2sdp"
-                    android:text="@string/duration"
-                    android:textColor="@color/text_color"
+                    android:id="@+id/cancel_txt"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_marginLeft="@dimen/_100sdp"
+                    android:layout_marginRight="@dimen/_1sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/register_btn"
+                    android:gravity="center_vertical|center"
+                    android:text="Cancel"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/_12sdp"
-                    android:textStyle="normal"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/_25sdp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/_4sdp"
-                    android:layout_marginTop="@dimen/_1sdp"
-                    android:gravity="center"
-                    android:text=":"
-                    android:textColor="@color/text_color"
-                    android:textSize="@dimen/_12sdp"
-                    android:textStyle="normal" />
-                <TextView
-                    android:id="@+id/duration_txt"
-                    android:layout_width="@dimen/_185sdp"
-                    android:layout_height="@dimen/_25sdp"
-                    android:layout_gravity="center"
-                    android:gravity="start|center_vertical"
-                    android:paddingLeft="@dimen/_5sdp"
-                    android:text="2 hr"
-                    android:textColor="@color/text_color"
-                    android:textSize="@dimen/_11sdp"
-                    android:textStyle="normal" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_30sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/session_fees_txt_view"
-                    android:layout_width="@dimen/_105sdp"
-                    android:layout_height="@dimen/_25sdp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/_4sdp"
-                    android:layout_marginTop="@dimen/_1sdp"
-                    android:gravity="start|center_vertical"
-                    android:paddingLeft="@dimen/_2sdp"
-                    android:text="@string/session_price"
-                    android:textColor="@color/text_color"
-                    android:textSize="@dimen/_13sdp"
                     android:textStyle="bold" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/_25sdp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/_4sdp"
-                    android:gravity="start|center_vertical"
-                    android:text=":"
-                    android:textColor="@color/text_color"
-                    android:textSize="@dimen/_12sdp"
-                    android:textStyle="normal" />
-                <TextView
-                    android:id="@+id/session_fee_txt"
-                    android:layout_width="@dimen/_185sdp"
-                    android:layout_height="@dimen/_25sdp"
-                    android:layout_gravity="center"
-                    android:gravity="start|center_vertical"
-                    android:paddingLeft="@dimen/_5sdp"
-                    android:text=""
-                    android:textColor="@color/text_color"
-                    android:textSize="@dimen/_13sdp"
-                    android:textStyle="bold" />
-                />
-
             </LinearLayout>
+
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/dark_gray" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/_1sdp"
-            android:layout_weight="0.5"
-            android:background="@color/white"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/cancel_txt"
-                android:layout_width="@dimen/_150sdp"
-                android:layout_height="@dimen/_35sdp"
-                android:layout_marginRight="@dimen/_1sdp"
-                android:background="@drawable/register_btn"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:gravity="center_vertical|center"
-                android:layout_marginLeft="@dimen/_75sdp"
-                android:text="Cancel"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp"
-                android:textAllCaps="true"
-                android:textStyle="bold" />
-        </LinearLayout>
-
     </LinearLayout>
 </LinearLayout>
-

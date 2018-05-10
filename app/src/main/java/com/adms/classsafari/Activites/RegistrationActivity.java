@@ -45,9 +45,9 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     private DatePickerDialog datePickerDialog;
     int mYear, mMonth, mDay;
     String firstNameStr, lastNameStr, emailStr, passwordStr, phonenoStr, gendarIdStr = "1", dateofbirthStr, coachTypeIDStr = "1",
-            registerTypeStr = "family", contatIDstr, type, whereTocomestr, sessionIDStr, paymentStatusstr, orderIDStr,frontloginStr,
+            registerTypeStr = "family", contatIDstr, type, whereTocomestr, sessionIDStr, paymentStatusstr, orderIDStr, frontloginStr,
             boardStr, standardStr, streamStr, locationStr, classNameStr,
-            searchTypeStr, subjectStr, genderStr,searchByStr,ratingLoginStr;
+            searchTypeStr, subjectStr, genderStr, searchByStr, ratingLoginStr;
 
     //Use for Confirmation Dialog
     Dialog confimDialog;
@@ -71,7 +71,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         searchTypeStr = getIntent().getStringExtra("searchType");
         subjectStr = getIntent().getStringExtra("lessionName");
         genderStr = getIntent().getStringExtra("gender");
-        ratingLoginStr=getIntent().getStringExtra("ratingLogin");
+        ratingLoginStr = getIntent().getStringExtra("ratingLogin");
         init();
         setListner();
     }
@@ -89,7 +89,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
             @Override
             public void onClick(View view) {
                 Intent inback = new Intent(mContext, LoginActivity.class);
-                inback.putExtra("frontLogin",frontloginStr);
+                inback.putExtra("frontLogin", frontloginStr);
                 startActivity(inback);
             }
         });
@@ -161,8 +161,8 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
             @Override
             public void onClick(View view) {
                 getInsertedValue();
-                if (!firstNameStr.equalsIgnoreCase("") && firstNameStr.length() > 3) {
-                    if (!lastNameStr.equalsIgnoreCase("") && lastNameStr.length() > 3) {
+                if (!firstNameStr.equalsIgnoreCase("")) {
+                    if (!lastNameStr.equalsIgnoreCase("")) {
                         if (!emailStr.equalsIgnoreCase("") && Utils.isValidEmaillId(emailStr)) {
                             if (!passwordStr.equalsIgnoreCase("") && passwordStr.length() >= 4 && passwordStr.length() <= 8) {
                                 if (!phonenoStr.equalsIgnoreCase("") && phonenoStr.length() >= 10) {
@@ -260,11 +260,11 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         inback.putExtra("sessionName", classNameStr);
         inback.putExtra("searchType", searchTypeStr);
         inback.putExtra("lessionName", subjectStr);
-        inback.putExtra("gender",genderStr);
-        inback.putExtra("frontLogin",frontloginStr);
-        inback.putExtra("withOR",whereTocomestr);
-        inback.putExtra("ratingLogin",ratingLoginStr);
-        inback.putExtra("frontLogin",frontloginStr);
+        inback.putExtra("gender", genderStr);
+        inback.putExtra("frontLogin", frontloginStr);
+        inback.putExtra("withOR", whereTocomestr);
+        inback.putExtra("ratingLogin", ratingLoginStr);
+        inback.putExtra("frontLogin", frontloginStr);
         startActivity(inback);
     }
 
@@ -319,10 +319,10 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
             e.printStackTrace();
         }
 
-        if (age >= 5) {
+        if (age >= 1) {
         } else {
 //            Utils.ping(mContext, "Please Enter Valid Birthdate.");
-            registrationBinding.dateOfBirthEdt.setError("Please Enter Valid Birthdate.");
+            registrationBinding.dateOfBirthEdt.setError(getResources().getString(R.string.agevalidation));
             registrationBinding.dateOfBirthEdt.setText("");
 
         }
@@ -647,7 +647,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                         Intent ipayment = new Intent(mContext, PaymentActivity.class);
                         ipayment.putExtra("orderID", orderIDStr);
                         ipayment.putExtra("amount", AppConfiguration.classsessionPrice);
-                        ipayment.putExtra("mode", "TEST");
+                        ipayment.putExtra("mode", "LIVE");
                         ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
                         ipayment.putExtra("sessionID", sessionIDStr);
                         ipayment.putExtra("contactID", Utils.getPref(mContext, "coachID"));

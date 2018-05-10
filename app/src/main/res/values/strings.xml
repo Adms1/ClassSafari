@@ -46,6 +46,7 @@
     <string name="logout">Logout</string>
     <string name="addchildsopuse">Add Family Contacts</string>
     <string name="mycontanct">My Family Contacts</string>
+    <string name="agevalidation">Date of Birth should be > 1year .</string>
 
     <string name="checkboc_text">All-inclusive price(coupon &amp; wallet applied)</string>
     <string name="payment">Payment</string>
@@ -213,7 +214,7 @@
     <!-- Class Detail String-->
     <string name="blank_value">Please Select Proper Value</string>
     <string name="location_validation">Please Select Proper Location</string>
-    <string name="rating_header">Please, Rate Session!</string>
+    <string name="rating_header">Provide. Rate Session!</string>
     <string name="rating_row">How much do you like this session?</string>
     <string name="not_loging">you are not login.</string>
 </resources>

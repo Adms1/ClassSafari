@@ -92,6 +92,7 @@ public class SearchByUser extends AppCompatActivity {
                 inClassDetail.putExtra("flag", "study");
                 inClassDetail.putExtra("withOR", "withOR");
                 inClassDetail.putExtra("sessionType", "1");
+
                 startActivity(inClassDetail);
             }
         });
@@ -271,7 +272,7 @@ public class SearchByUser extends AppCompatActivity {
             inClassDetail.putExtra("sessionName", selectedSessionNameStr);
             inClassDetail.putExtra("SearchBy", "1");
             inClassDetail.putExtra("withOR", "withOutOR");
-            inClassDetail.putExtra("searchType", "study");
+//            inClassDetail.putExtra("searchType", "study");
             startActivity(inClassDetail);
         } else {
             Utils.ping(mContext, getResources().getString(R.string.blank_value));
@@ -451,6 +452,7 @@ public class SearchByUser extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent imyaccount = new Intent(mContext, MyAccountActivity.class);
+                imyaccount.putExtra("wheretocometype", "menu");
                 startActivity(imyaccount);
             }
         });
@@ -458,6 +460,7 @@ public class SearchByUser extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent isession = new Intent(mContext, MySession.class);
+                isession.putExtra("wheretocometype", "menu");
                 startActivity(isession);
                 menuDialog.dismiss();
             }
@@ -469,23 +472,12 @@ public class SearchByUser extends AppCompatActivity {
                 changePasswordDialog();
             }
         });
-        btnaddChild.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent iaddchild = new Intent(mContext, AddStudentScreen.class);
-                iaddchild.putExtra("type", "menu");
-                iaddchild.putExtra("familyNameStr", Utils.getPref(mContext, "RegisterUserName"));
-                iaddchild.putExtra("familyID", Utils.getPref(mContext, "coachTypeID"));
-                startActivity(iaddchild);
-                menuDialog.dismiss();
-            }
-        });
         btnmyfamily.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, FamilyListActivity.class);
                 intent.putExtra("froncontanct", "true");
-                intent.putExtra("type", "menu");
+                intent.putExtra("wheretocometype", "menu");
                 intent.putExtra("familyNameStr", Utils.getPref(mContext, "RegisterUserName"));
                 intent.putExtra("familyID", Utils.getPref(mContext, "coachTypeID"));
                 startActivity(intent);
