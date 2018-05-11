@@ -220,6 +220,7 @@ public class SessionName extends AppCompatActivity {
         inback.putExtra("city", locationStr);
         inback.putExtra("sessionName", classNameStr);
         inback.putExtra("city", locationStr);
+        inback.putExtra("searchfront",searchfront);
         inback.putExtra("sessionName", classNameStr);
         inback.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(inback);

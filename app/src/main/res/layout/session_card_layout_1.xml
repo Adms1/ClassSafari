@@ -24,7 +24,7 @@
             android:layout_margin="@dimen/_2sdp"
             card_view:cardBackgroundColor="@color/white"
             card_view:cardCornerRadius="@dimen/_10sdp"
-            card_view:cardElevation="4dp"
+            card_view:cardElevation="3dp"
             card_view:cardUseCompatPadding="true">
         <LinearLayout
             android:layout_width="match_parent"
