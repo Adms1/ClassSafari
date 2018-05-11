@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -34,13 +35,13 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     List<sessionDataModel> arrayList;
     int SessionHour = 0;
     Integer SessionMinit = 0;
-    String searchByStr, locationStr, classNameStr, address, boardStr, streamStr, standardStr, searchTypeStr, wheretoComeStr;
+    String searchByStr, locationStr, classNameStr, address, boardStr, streamStr, standardStr, searchTypeStr, wheretoComeStr,searchfront;
     onViewClick onViewClick;
     private ArrayList<String> SessionDetail;
 
     public ClassDetailAdapter(Context mContext, List<sessionDataModel> arrayList, String searchByStr, String locationStr,
                               String classNameStr, String boardStr, String streamStr, String standardStr, String searchTypeStr,
-                              String wheretoComeStr, onViewClick onViewClick) {
+                              String wheretoComeStr, String searchfront, onViewClick onViewClick) {
         this.mContext = mContext;
         this.arrayList = arrayList;
         this.searchByStr = searchByStr;
@@ -51,6 +52,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
         this.standardStr = standardStr;
         this.searchTypeStr = searchTypeStr;
         this.wheretoComeStr = wheretoComeStr;
+        this.searchfront=searchfront;
         this.onViewClick = onViewClick;
     }
 
@@ -61,6 +63,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                 location_txt, duration_txt,tutor_name_txt;
         public Button monday_btn, tuesday_btn, wednesday_btn, thursday_btn, friday_btn, saturday_btn, sunday_btn;
         public RatingBar rating_bar;
+        public LinearLayout linear_click;
 
         public MyViewHolder(View view) {
             super(view);
@@ -91,6 +94,8 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
             sunday_btn = (Button) view.findViewById(R.id.sunday_btn);
 
             rating_bar = (RatingBar) view.findViewById(R.id.rating_bar);
+
+            linear_click=(LinearLayout)view.findViewById(R.id.linear_click);
         }
     }
 
@@ -120,10 +125,11 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
         holder.start_date_txt.setText(arrayList.get(position).getStartDate());
         holder.end_date_txt.setText(arrayList.get(position).getEndDate());
         holder.location_txt.setText(arrayList.get(position).getRegionName());
-        holder.session_name_txt.setOnClickListener(new View.OnClickListener() {
+        holder.linear_click.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                Intent inSession = new Intent(mContext, SessionName.class);
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    Intent inSession = new Intent(mContext, SessionName.class);
                 inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
                 inSession.putExtra("SearchBy", searchByStr);
                 inSession.putExtra("city", locationStr);
@@ -137,7 +143,50 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                 inSession.putExtra("gender", arrayList.get(position).getGenderID());
                 inSession.putExtra("searchType", searchTypeStr);
                 inSession.putExtra("withOR", wheretoComeStr);
+                inSession.putExtra("searchfront",searchfront);
                 mContext.startActivity(inSession);
+                }
+                return true;
+            }
+        });
+//        holder.linear_click.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent inSession = new Intent(mContext, SessionName.class);
+//                inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
+//                inSession.putExtra("SearchBy", searchByStr);
+//                inSession.putExtra("city", locationStr);
+//                inSession.putExtra("sessionName", classNameStr);
+//                inSession.putExtra("board", boardStr);
+//                inSession.putExtra("stream", streamStr);
+//                inSession.putExtra("standard", standardStr);
+//                inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
+//                inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() + " To " + holder.end_date_txt.getText().toString());
+//                inSession.putExtra("duration", holder.duration_txt.getText().toString());
+//                inSession.putExtra("gender", arrayList.get(position).getGenderID());
+//                inSession.putExtra("searchType", searchTypeStr);
+//                inSession.putExtra("withOR", wheretoComeStr);
+//                mContext.startActivity(inSession);
+//            }
+//        });
+        holder.session_name_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Intent inSession = new Intent(mContext, SessionName.class);
+//                inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
+//                inSession.putExtra("SearchBy", searchByStr);
+//                inSession.putExtra("city", locationStr);
+//                inSession.putExtra("sessionName", classNameStr);
+//                inSession.putExtra("board", boardStr);
+//                inSession.putExtra("stream", streamStr);
+//                inSession.putExtra("standard", standardStr);
+//                inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
+//                inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() + " To " + holder.end_date_txt.getText().toString());
+//                inSession.putExtra("duration", holder.duration_txt.getText().toString());
+//                inSession.putExtra("gender", arrayList.get(position).getGenderID());
+//                inSession.putExtra("searchType", searchTypeStr);
+//                inSession.putExtra("withOR", wheretoComeStr);
+//                mContext.startActivity(inSession);
             }
         });
         holder.rating_bar.setOnTouchListener(new View.OnTouchListener() {

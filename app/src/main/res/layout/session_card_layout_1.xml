@@ -50,6 +50,34 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/teacher_name_txt_view"
+                            android:layout_width="@dimen/_65sdp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:text="@string/teacher_detail"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_12sdp"
+                            android:textStyle="normal" />
+
+                        <TextView
+                            android:id="@+id/teacher_name_txt"
+                            android:layout_width="@dimen/_80sdp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:background="@drawable/list_line"
+                            android:hint="@string/teacher_detail"
+                            android:textColor="@color/text_color"
+                            android:textSize="@dimen/_12sdp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
                             android:id="@+id/session_name_txt_view"
                             android:layout_width="@dimen/_65sdp"
                             android:layout_height="wrap_content"
@@ -250,6 +278,7 @@
                             android:textColor="@color/text_color"
                             android:textSize="@dimen/_12sdp" />
                     </LinearLayout>
+
                 </LinearLayout>
 
                 <View
@@ -295,7 +324,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_2sdp"
-                        android:layout_marginTop="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_15sdp"
                         android:drawableLeft="@drawable/location_blue"
                         android:drawablePadding="@dimen/_4sdp"
                         android:paddingLeft="@dimen/_5sdp"
@@ -364,7 +393,33 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="@dimen/_5sdp"-->
+                <!--android:orientation="horizontal">-->
 
+                <!--<TextView-->
+                    <!--android:id="@+id/session_description_txt_view"-->
+                    <!--android:layout_width="@dimen/_65sdp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="@dimen/_15sdp"-->
+                    <!--android:text="@string/description"-->
+                    <!--android:textColor="@color/text_color"-->
+                    <!--android:textSize="@dimen/_12sdp"-->
+                    <!--android:textStyle="normal" />-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/session_description_txt"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="@dimen/_5sdp"-->
+                    <!--android:layout_marginRight="@dimen/_5sdp"-->
+                    <!--android:background="@drawable/list_line"-->
+                    <!--android:hint="@string/description"-->
+                    <!--android:textColor="@color/text_color"-->
+                    <!--android:textSize="@dimen/_12sdp" />-->
+            <!--</LinearLayout>-->
         </LinearLayout>
         </android.support.v7.widget.CardView>
     </LinearLayout>

@@ -36,7 +36,8 @@ public class ClassSearchScreen extends AppCompatActivity {
     Context mContext;
     SessionDetailModel dataResponse;
     List<sessionDataModel> datafilterResponse;
-    String flag, selectedSessionStr = "", selectedSessionCityStr, sessionCapacityStr, sessionTypeStr, wheretoComeStr, genderStr="";
+    String flag, selectedSessionStr = "", selectedSessionCityStr, sessionCapacityStr,
+            sessionTypeStr, wheretoComeStr, genderStr="",searchByStr,searchfront;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,8 @@ public class ClassSearchScreen extends AppCompatActivity {
         flag = getIntent().getStringExtra("flag");
         sessionTypeStr = getIntent().getStringExtra("sessionType");
         wheretoComeStr = getIntent().getStringExtra("withOR");
+        searchByStr=getIntent().getStringExtra("SearchBy");
+        searchfront=getIntent().getStringExtra("searchfront");
         init();
         setListner();
     }
@@ -53,14 +56,17 @@ public class ClassSearchScreen extends AppCompatActivity {
     public void init() {
         if (wheretoComeStr.equalsIgnoreCase("withOR")) {
             if (flag.equalsIgnoreCase("play")) {
+                classSearchScreenBinding.linearBg.setBackgroundResource(R.drawable.play_bg);
                 classSearchScreenBinding.boardAutoTxt.setVisibility(View.GONE);
                 classSearchScreenBinding.standardAutoTxt.setVisibility(View.GONE);
                 classSearchScreenBinding.streamAutoTxt.setVisibility(View.GONE);
+
 //                classSearchScreenBinding.gendarAutoTxt.setVisibility(View.GONE);
 //                classSearchScreenBinding.gendar1AutoTxt.setVisibility(View.VISIBLE);
 //                classSearchScreenBinding.gender1Group.setVisibility(View.VISIBLE);
                 classSearchScreenBinding.genderGroup.setVisibility(View.VISIBLE);
             } else {
+                classSearchScreenBinding.linearBg.setBackgroundResource(R.drawable.study_bg);
 //                classSearchScreenBinding.gendar1AutoTxt.setVisibility(View.GONE);
                 classSearchScreenBinding.boardAutoTxt.setVisibility(View.VISIBLE);
                 classSearchScreenBinding.standardAutoTxt.setVisibility(View.VISIBLE);
@@ -203,6 +209,8 @@ public class ClassSearchScreen extends AppCompatActivity {
                     inSearchUser.putExtra("gender", genderStr);
                     inSearchUser.putExtra("withOR", wheretoComeStr);
                     inSearchUser.putExtra("sessionType", sessionTypeStr);
+                    inSearchUser.putExtra("SearchBy",searchByStr);
+                    inSearchUser.putExtra("searchfront",searchfront);
                     startActivity(inSearchUser);
                 } else {
                     classSearchScreenBinding.sessionAutoTxt.setError("Please Select Session and location.");

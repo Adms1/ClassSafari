@@ -84,7 +84,7 @@
                     android:layout_weight="1"
                     android:background="@color/light_yello"
                     android:gravity="center"
-                    android:text="no students found."
+                    android:text="no contacts found."
                     android:textColor="@color/search_boder"
                     android:textSize="@dimen/_11sdp"
                     android:textStyle="bold" />

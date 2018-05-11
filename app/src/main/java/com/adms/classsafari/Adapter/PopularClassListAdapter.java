@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -26,17 +27,21 @@ public class PopularClassListAdapter extends RecyclerView.Adapter<PopularClassLi
     List<sessionDataModel> arrayList;
     onViewClick onViewClick;
     private ArrayList<String> SessionDetail;
+
+
     public PopularClassListAdapter(Context mContext, List<sessionDataModel> arrayList, onViewClick onViewClick) {
         this.mContext = mContext;
         this.arrayList = arrayList;
-        this.onViewClick=onViewClick;
+        this.onViewClick = onViewClick;
     }
 
+    boolean clickflag = true;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder  {
         TextView popular_session_name_txt;
         RatingBar popular_rating_bar;
         ImageView popular_Session_image_img;
+        LinearLayout main_linear;
 
         public MyViewHolder(View view) {
             super(view);
@@ -44,7 +49,10 @@ public class PopularClassListAdapter extends RecyclerView.Adapter<PopularClassLi
             popular_session_name_txt = (TextView) view.findViewById(R.id.popular_session_name_txt);
             popular_rating_bar = (RatingBar) view.findViewById(R.id.popular_rating_bar);
             popular_Session_image_img = (ImageView) view.findViewById(R.id.popular_Session_image_img);
+            main_linear = (LinearLayout) view.findViewById(R.id.main_linear);
         }
+
+
     }
 
     @Override
@@ -64,9 +72,10 @@ public class PopularClassListAdapter extends RecyclerView.Adapter<PopularClassLi
         holder.popular_Session_image_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SessionDetail=new ArrayList<>();
-                SessionDetail.add(arrayList.get(position).getSessionID());
-                onViewClick.getViewClick();
+                    holder.main_linear.setBackgroundResource(R.drawable.edit_box);
+                    SessionDetail = new ArrayList<>();
+                    SessionDetail.add(arrayList.get(position).getSessionID());
+                    onViewClick.getViewClick();
             }
         });
     }

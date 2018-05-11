@@ -61,7 +61,7 @@ public class FamilyListActivity extends AppCompatActivity {
     String paymentStatusstr, sessionIDStr, familysessionfeesStr, familysessionnameStr,
             familylocationStr, familysessionStudentStr, sessionDateStr, durationStr,
             orderIDStr, contatIDstr, type, familyIdStr = "", familyNameStr = "", locationStr,
-            boardStr, standardStr, streamStr, searchTypeStr, subjectStr,
+            boardStr, standardStr, streamStr, searchTypeStr, subjectStr,searchfront,
             wheretoComeStr, searchByStr, genderStr, froncontanctStr, wheretocometypeStr;
     ArrayList<String> selectedId;
 
@@ -101,6 +101,7 @@ public class FamilyListActivity extends AppCompatActivity {
         froncontanctStr = getIntent().getStringExtra("froncontanct");
         familyIdStr = getIntent().getStringExtra("familyID");
         familyNameStr = getIntent().getStringExtra("familyNameStr");
+        searchfront=getIntent().getStringExtra("searchfront");
         wheretocometypeStr = getIntent().getStringExtra("wheretocometype");
     }
 
@@ -134,6 +135,7 @@ public class FamilyListActivity extends AppCompatActivity {
                     intent.putExtra("lessionName", subjectStr);
                     intent.putExtra("gender", genderStr);
                     intent.putExtra("withOR", wheretoComeStr);
+                    intent.putExtra("searchfront",searchfront);
                     startActivity(intent);
                 } else {
                     if (wheretocometypeStr.equalsIgnoreCase("mySession")) {
@@ -178,12 +180,14 @@ public class FamilyListActivity extends AppCompatActivity {
                     addchild.putExtra("gender", genderStr);
                     addchild.putExtra("withOR", wheretoComeStr);
                     addchild.putExtra("froncontanct", froncontanctStr);
+                    addchild.putExtra("searchfront",searchfront);
                     startActivity(addchild);
                 } else {
                     Intent addchild = new Intent(mContext, AddStudentScreen.class);
                     addchild.putExtra("familyNameStr", familyNameStr);
                     addchild.putExtra("froncontanct", froncontanctStr);
                     addchild.putExtra("wheretocometype", wheretocometypeStr);
+                    addchild.putExtra("searchfront",searchfront);
                     addchild.putExtra("type", "menu");
                     startActivity(addchild);
                 }
@@ -425,7 +429,7 @@ public class FamilyListActivity extends AppCompatActivity {
                         Intent ipayment = new Intent(mContext, PaymentActivity.class);
                         ipayment.putExtra("orderID", orderIDStr);
                         ipayment.putExtra("amount", AppConfiguration.classsessionPrice);
-                        ipayment.putExtra("mode", "LIVE");
+                        ipayment.putExtra("mode", "TEST");
                         ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
                         ipayment.putExtra("sessionID", sessionIDStr);
                         ipayment.putExtra("contactID", Utils.getPref(mContext, "coachID"));

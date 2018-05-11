@@ -13,10 +13,12 @@ import android.text.Html;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -100,6 +102,15 @@ public class SearchByUser extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 searchByUserBinding.searchClassEdt.showDropDown();
+            }
+        });
+        searchByUserBinding.searchClassEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if(i== EditorInfo.IME_ACTION_DONE){
+                    validation();
+                }
+                return false;
             }
         });
         searchByUserBinding.searchTxt.setOnClickListener(new View.OnClickListener() {
@@ -272,6 +283,7 @@ public class SearchByUser extends AppCompatActivity {
             inClassDetail.putExtra("sessionName", selectedSessionNameStr);
             inClassDetail.putExtra("SearchBy", "1");
             inClassDetail.putExtra("withOR", "withOutOR");
+            inClassDetail.putExtra("searchfront","searchfront");
 //            inClassDetail.putExtra("searchType", "study");
             startActivity(inClassDetail);
         } else {
@@ -352,11 +364,11 @@ public class SearchByUser extends AppCompatActivity {
                         if (passWordStr.equalsIgnoreCase(confirmpassWordStr)) {
                             callChangePasswordApi();
                         } else {
-                            edtcurrentpassword.setError("Confirm Password does not match.");
+                            edtconfirmpassword.setError("Confirm Password does not match.");
                         }
                     } else {
 //                    Util.ping(mContex, "Confirm Password does not match.");
-                        edtconfirmpassword.setError("Password must be 4-8 Characters.");
+                        edtnewpassword.setError("Password must be 4-8 Characters.");
                         edtconfirmpassword.setText("");
                         edtconfirmpassword.setText("");
                     }
@@ -401,6 +413,7 @@ public class SearchByUser extends AppCompatActivity {
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("True")) {
                         Utils.ping(mContext, getResources().getString(R.string.changPassword));
+                        Utils.setPref(mContext, "Password",passWordStr);
                         changeDialog.dismiss();
                     }
                 }

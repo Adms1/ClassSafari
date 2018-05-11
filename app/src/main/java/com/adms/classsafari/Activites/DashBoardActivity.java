@@ -489,6 +489,7 @@ public class DashBoardActivity extends AppCompatActivity {
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("True")) {
                         Utils.ping(mContex, getResources().getString(R.string.changPassword));
+                        Utils.setPref(mContex, "Password",passWordStr);
                         changeDialog.dismiss();
                     }
                 }

@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -48,11 +49,13 @@ public class SessionName extends AppCompatActivity {
     List<sessionDataModel> arrayList;
     List<sessionDataModel> sessionRatingList;
     ArrayList<String> reviewarray;
+    ArrayList<String> descriptionarray;
+    ArrayList<String> descriptionviewarray;
     Dialog confimDialog;
     TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, time_txt_view, session_fee_txt;
     String sessionIDStr, searchByStr, locationStr, classNameStr, genderStr, sessionDateStr, durationStr,
             paymentStatusstr, orderIDStr, boardStr, standardStr, streamStr, searchTypeStr, subjectStr,
-            wheretoComeStr, sessionId, commentStr, ratingValueStr, purchaseSessionIDStr = "",
+            wheretoComeStr, sessionId, commentStr, ratingValueStr, purchaseSessionIDStr = "",searchfront,
             familysessionfeesStr, familysessionnameStr, familylocationStr, familysessionStudentStr;
     ;
     ArrayList<String> purchaseSessionIDArray;
@@ -76,6 +79,7 @@ public class SessionName extends AppCompatActivity {
         searchTypeStr = getIntent().getStringExtra("searchType");
         genderStr = getIntent().getStringExtra("gender");
         wheretoComeStr = getIntent().getStringExtra("withOR");
+        searchfront=getIntent().getStringExtra("searchfront");
         init();
         setListner();
     }
@@ -104,6 +108,7 @@ public class SessionName extends AppCompatActivity {
                 inback.putExtra("withOR", wheretoComeStr);
                 inback.putExtra("city", locationStr);
                 inback.putExtra("sessionName", classNameStr);
+                inback.putExtra("searchfront",searchfront);
                 startActivity(inback);
             }
         });
@@ -127,6 +132,7 @@ public class SessionName extends AppCompatActivity {
                                 .setMessage("You are not login,So Please Login.")
                                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
+                                        setDialogData();
                                         Intent intentLogin = new Intent(mContext, LoginActivity.class);
                                         intentLogin.putExtra("frontLogin", "afterLogin");
                                         intentLogin.putExtra("sessionID", sessionIDStr);
@@ -141,6 +147,8 @@ public class SessionName extends AppCompatActivity {
                                         intentLogin.putExtra("gender", genderStr);
                                         intentLogin.putExtra("withOR", wheretoComeStr);
                                         intentLogin.putExtra("ratingLogin", "false");
+                                        intentLogin.putExtra("location", familylocationStr);
+                                        intentLogin.putExtra("searchfront",searchfront);
                                         startActivity(intentLogin);
                                         finish();
                                     }
@@ -174,6 +182,7 @@ public class SessionName extends AppCompatActivity {
                         intent.putExtra("gender", genderStr);
                         intent.putExtra("withOR", wheretoComeStr);
                         intent.putExtra("froncontanct", "false");
+                        intent.putExtra("searchfront",searchfront);
                         startActivity(intent);
                     }
                 } else {
@@ -385,6 +394,9 @@ public class SessionName extends AppCompatActivity {
 
     public void setData() {
         arrayList = new ArrayList<sessionDataModel>();
+        descriptionarray = new ArrayList<>();
+        descriptionviewarray = new ArrayList<String>();
+
 
         for (int i = 0; i < dataResponse.getData().size(); i++) {
             arrayList.add(dataResponse.getData().get(i));
@@ -407,10 +419,18 @@ public class SessionName extends AppCompatActivity {
             AppConfiguration.classsessionDate = sessionDateStr;
             AppConfiguration.classsessionDuration = durationStr;
 
+            descriptionviewarray.add(dataResponse.getData().get(i).getDescription());
 
         }
 
-        sessionDetailAdapter = new SessionDetailAdapter(mContext, arrayList, reviewarray, sessionRatingList, new onViewClick() {
+        if(!descriptionviewarray.get(0).equalsIgnoreCase("")){
+            descriptionarray.add("Description");
+        }else{
+            descriptionarray=new ArrayList<>();
+            descriptionviewarray=new ArrayList<>();
+        }
+        //,descriptionarray
+        sessionDetailAdapter = new SessionDetailAdapter(mContext, arrayList,descriptionviewarray, reviewarray, sessionRatingList, new onViewClick() {
             @Override
             public void getViewClick() {
                 if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
@@ -437,6 +457,7 @@ public class SessionName extends AppCompatActivity {
                                     intentLogin.putExtra("gender", genderStr);
                                     intentLogin.putExtra("withOR", wheretoComeStr);
                                     intentLogin.putExtra("ratingLogin", "ratingLoginSession");
+                                    intentLogin.putExtra("searchfront",searchfront);
                                     startActivity(intentLogin);
                                     finish();
                                 }
@@ -520,7 +541,7 @@ public class SessionName extends AppCompatActivity {
                         Intent ipayment = new Intent(mContext, PaymentActivity.class);
                         ipayment.putExtra("orderID", orderIDStr);
                         ipayment.putExtra("amount", AppConfiguration.classsessionPrice);
-                        ipayment.putExtra("mode", "LIVE");
+                        ipayment.putExtra("mode", "TEST");
                         ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
                         ipayment.putExtra("sessionID", sessionIDStr);
                         ipayment.putExtra("contactID", Utils.getPref(mContext, "coachID"));
@@ -649,43 +670,47 @@ public class SessionName extends AppCompatActivity {
                 }
             }
         });
-        android.app.AlertDialog.Builder alert = new android.app.AlertDialog.Builder(this);
-        // this is set the view from XML inside AlertDialog
-        alert.setView(alertLayout);
-        // disallow cancel of AlertDialog on click of back button and outside touch
-        alert.setCancelable(false);
-        alert.setNegativeButton("Not Now", new DialogInterface.OnClickListener() {
+       android.app.AlertDialog.Builder sayWindows = new android.app.AlertDialog.Builder(
+               mContext);
+
+        sayWindows.setPositiveButton("Rate", null);
+        sayWindows.setNegativeButton("Not Now", null);
+        sayWindows.setView(alertLayout);
+
+        final android.app.AlertDialog mAlertDialog = sayWindows.create();
+        mAlertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
 
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-//                Toast.makeText(getBaseContext(), "Cancel clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
+            public void onShow(DialogInterface dialog) {
 
-        alert.setPositiveButton("Rate", new DialogInterface.OnClickListener() {
+                Button b = mAlertDialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-//                String rating = String.valueOf(ratingBar.getRating());
+                    @Override
+                    public void onClick(View view) {
+                        // TODO Do something
+                        String rating = String.valueOf(ratingBar.getRating());
 //                Toast.makeText(getApplicationContext(), rating, Toast.LENGTH_LONG).show();
-                commentStr = comment_edt.getText().toString();
-                if (commentStr.equalsIgnoreCase("")) {
-                    commentStr = session_rating_view_txt.getText().toString();
-                }
-                ratingValueStr = String.valueOf(ratingBar.getRating());
-                if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
-                    if (!ratingValueStr.equalsIgnoreCase("")) {
-                        callAddrating();
-                    } else {
-                        Utils.ping(mContext, "Please Select Rate.");
+                        commentStr = comment_edt.getText().toString();
+                        if (commentStr.equalsIgnoreCase("")) {
+                            commentStr = session_rating_view_txt.getText().toString();
+                        }
+                        ratingValueStr = String.valueOf(ratingBar.getRating());
+                        if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
+                            if (!ratingValueStr.equalsIgnoreCase("0.0")) {
+                                callAddrating();
+                                mAlertDialog.dismiss();
+                            } else {
+                                Utils.ping(mContext, "Please Select Rate.");
+                            }
+                        } else {
+                            Utils.ping(mContext, getResources().getString(R.string.not_loging));
+                        }
                     }
-                } else {
-                    Utils.ping(mContext, getResources().getString(R.string.not_loging));
-                }
+                });
             }
         });
-        android.app.AlertDialog dialog = alert.create();
-        dialog.show();
+        mAlertDialog.show();
     }
 
     //Use for AddRating

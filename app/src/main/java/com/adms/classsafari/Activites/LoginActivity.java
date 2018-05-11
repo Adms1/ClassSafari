@@ -41,13 +41,13 @@ public class LoginActivity extends AppCompatActivity {
     String usernameStr, passwordStr, sessionIDStr, contatIDstr,
             whereTocomestr, orderIDStr, checkStr, paymentStatusstr,
             boardStr, standardStr, streamStr, locationStr, classNameStr,
-            searchTypeStr, subjectStr, genderStr, frontloginStr, ratingLoginStr;
+            searchTypeStr, subjectStr, genderStr, frontloginStr, ratingLoginStr,searchfront;
 
     //    Use for Dialog
     Dialog forgotDialog;
     EditText edtEmail;
     TextView btnSendRegEmail, cancel_txt;
-    String EmailIdStr, type, searchByStr;
+    String EmailIdStr, type, searchByStr,familylocationStr;
 
     //Use for Confirmation dialog
     Dialog confimDialog;
@@ -74,6 +74,9 @@ public class LoginActivity extends AppCompatActivity {
         genderStr = getIntent().getStringExtra("gender");
         frontloginStr = getIntent().getStringExtra("frontLogin");
         ratingLoginStr = getIntent().getStringExtra("ratingLogin");
+        familylocationStr=getIntent().getStringExtra("location");
+        searchfront=getIntent().getStringExtra("searchfront");
+
 
         if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
             checkUnmPwd();
@@ -107,6 +110,7 @@ public class LoginActivity extends AppCompatActivity {
                 inregister.putExtra("gender", genderStr);
                 inregister.putExtra("withOR", whereTocomestr);
                 inregister.putExtra("ratingLogin", ratingLoginStr);
+                inregister.putExtra("searchfront",searchfront);
                 startActivity(inregister);
             }
         });
@@ -239,6 +243,7 @@ public class LoginActivity extends AppCompatActivity {
             intent.putExtra("gender", genderStr);
             intent.putExtra("withOR", whereTocomestr);
             intent.putExtra("ratingLogin", ratingLoginStr);
+            intent.putExtra("searchfront",searchfront);
             intent.addCategory(Intent.CATEGORY_HOME);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -297,6 +302,7 @@ public class LoginActivity extends AppCompatActivity {
                                     iSearchByUser.putExtra("lessionName", subjectStr);
                                     iSearchByUser.putExtra("gender", genderStr);
                                     iSearchByUser.putExtra("withOR", whereTocomestr);
+                                    iSearchByUser.putExtra("searchfront",searchfront);
                                     startActivity(iSearchByUser);
                                 } else if (ratingLoginStr.equalsIgnoreCase("ratingLoginSession")) {
                                     Intent iSearchByUser = new Intent(mContext, SessionName.class);
@@ -313,6 +319,7 @@ public class LoginActivity extends AppCompatActivity {
                                     iSearchByUser.putExtra("gender", genderStr);
                                     iSearchByUser.putExtra("withOR", whereTocomestr);
                                     iSearchByUser.putExtra("ratingLogin", "false");
+                                    iSearchByUser.putExtra("searchfront",searchfront);
                                     startActivity(iSearchByUser);
                                 } else {
 //                                    ConformSessionDialog(); session_student_txt.setText(AppConfiguration.classteacherSessionName);
@@ -343,6 +350,8 @@ public class LoginActivity extends AppCompatActivity {
                                     iFamilyList.putExtra("lessionName", subjectStr);
                                     iFamilyList.putExtra("gender", genderStr);
                                     iFamilyList.putExtra("withOR", whereTocomestr);
+                                    iFamilyList.putExtra("location",familylocationStr);
+                                    iFamilyList.putExtra("searchfront",searchfront);
                                     startActivity(iFamilyList);
                                 }
                             }
@@ -620,7 +629,7 @@ public class LoginActivity extends AppCompatActivity {
                         Intent ipayment = new Intent(mContext, PaymentActivity.class);
                         ipayment.putExtra("orderID", orderIDStr);
                         ipayment.putExtra("amount", AppConfiguration.classsessionPrice);
-                        ipayment.putExtra("mode", "LIVE");
+                        ipayment.putExtra("mode", "TEST");
                         ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
                         ipayment.putExtra("sessionID", sessionIDStr);
                         ipayment.putExtra("contactID", Utils.getPref(mContext, "coachID"));

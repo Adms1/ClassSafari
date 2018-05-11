@@ -4,6 +4,7 @@
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/linear_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/class_search_bg"
@@ -236,6 +237,7 @@
                         android:layout_marginTop="@dimen/_5sdp"
                         android:layout_weight="1"
                         android:orientation="horizontal"
+                        android:imeOptions="actionDone"
                         android:weightSum="2">
 
                         <RadioButton

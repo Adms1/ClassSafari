@@ -20,8 +20,9 @@
     <string name="filter">FILTER</string>
     <string name="tutor">Tutor / Tution Class</string>
     <string name="session_detail">Session</string>
+    <string name="teacher_detail">Teacher Name</string>
     <string name="session_type">Type</string>
-    <string name="session_detail_name">Lession Name</string>
+    <string name="session_detail_name">Lesson Name</string>
     <string name="session_stream">Stream</string>
     <string name="email">Email id</string>
     <string name="phone">Phone</string>
@@ -214,7 +215,7 @@
     <!-- Class Detail String-->
     <string name="blank_value">Please Select Proper Value</string>
     <string name="location_validation">Please Select Proper Location</string>
-    <string name="rating_header">Provide. Rate Session!</string>
+    <string name="rating_header">Provide, Rate Session!</string>
     <string name="rating_row">How much do you like this session?</string>
     <string name="not_loging">you are not login.</string>
 </resources>

@@ -26,6 +26,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.RadioButton;
@@ -89,7 +90,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
     //Use for sortDialog
     RadioGroup range_status_rg, user_rating_status_rg;
     RadioButton low_high_rb, high_low_rb, lowest_first_user_rb, highest_first_user_rb;
-    String rangestatusStr = "", afterfilterresult, pricewiseStr = "", ratingStr = "", sessionType;
+    String rangestatusStr = "", afterfilterresult, pricewiseStr = "", ratingStr = "", sessionType, searchfront;
     int count = 0, result = 0;
     TextView result_txt, result1_txt;
     int SessionHour = 0;
@@ -118,6 +119,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
         wheretoComeStr = getIntent().getStringExtra("withOR");
         genderStr = getIntent().getStringExtra("gender");
         sessionType = getIntent().getStringExtra("sessionType");
+        searchfront = getIntent().getStringExtra("searchfront");
         Utils.setPref(mContext, "location", locationStr.trim());
         Utils.setPref(mContext, "classname", classNameStr.trim());
         BottomNavigationViewHelper.removeShiftMode(binding.bottomNavigationView);
@@ -184,8 +186,8 @@ public class ClassDeatilScreen extends AppCompatActivity {
                 Intent insession = new Intent(mContext, ClassSearchScreen.class);
                 insession.putExtra("flag", searchTypeStr);
                 insession.putExtra("withOR", wheretoComeStr);
-//                insession.putExtra("sessionType", sessionType);
-
+                insession.putExtra("SearchBy", searchByStr);
+                insession.putExtra("searchfront", "searchunder");
                 startActivity(insession);
             }
         });
@@ -343,6 +345,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                     inSession.putExtra("gender", populargenderStr);
                     inSession.putExtra("searchType", searchTypeStr);
                     inSession.putExtra("withOR", wheretoComeStr);
+                    inSession.putExtra("searchfront",searchfront);
                     mContext.startActivity(inSession);
                     popularDialog.dismiss();
                 } else {
@@ -484,67 +487,67 @@ public class ClassDeatilScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 //                if (!pricewiseStr.equalsIgnoreCase("")) {
-                    if (pricewiseStr.equalsIgnoreCase("price")) {
-                        if (!rangestatusStr.equalsIgnoreCase("")) {
-                            if (rangestatusStr.equalsIgnoreCase("low")) {
-                                List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-                                for (sessionDataModel arrayObj : dataResponse.getData()) {
-                                    if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                                            arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-                                        filterFinalArray.add(arrayObj);
-                                        Collections.sort(filterFinalArray, new LowToHighSortSessionPrice());
-                                    }
-                                }
-                                fillData(filterFinalArray);
-                                sortDialog.dismiss();
-                                pricewiseStr = "";
-                            } else {
-                                List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-                                for (sessionDataModel arrayObj : dataResponse.getData()) {
-                                    if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                                            arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-                                        filterFinalArray.add(arrayObj);
-                                        Collections.sort(filterFinalArray, new HightToLowSortSessionPrice());
-                                    }
-                                }
-                                fillData(filterFinalArray);
-                                sortDialog.dismiss();
-                                pricewiseStr = "";
+                if (pricewiseStr.equalsIgnoreCase("price")) {
+//                        if (!rangestatusStr.equalsIgnoreCase("")) {
+                    if (rangestatusStr.equalsIgnoreCase("low")) {
+                        List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                        for (sessionDataModel arrayObj : dataResponse.getData()) {
+                            if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+                                    arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+                                filterFinalArray.add(arrayObj);
+                                Collections.sort(filterFinalArray, new LowToHighSortSessionPrice());
                             }
-                        } else {
-                            Utils.ping(mContext, "Please Select One Option");
                         }
+                        fillData(filterFinalArray);
+                        sortDialog.dismiss();
+                        pricewiseStr = "";
                     } else {
-                        if (!ratingStr.equalsIgnoreCase("")) {
-                            if (ratingStr.equalsIgnoreCase("low")) {
-                                List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-                                for (sessionDataModel arrayObj : dataResponse.getData()) {
-                                    if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                                            arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-                                        filterFinalArray.add(arrayObj);
-                                        Collections.sort(filterFinalArray, new LowToHighSortRating());
-                                    }
-                                }
-                                fillData(filterFinalArray);
-                                sortDialog.dismiss();
-                                pricewiseStr = "";
-                            } else {
-                                List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-                                for (sessionDataModel arrayObj : dataResponse.getData()) {
-                                    if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                                            arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-                                        filterFinalArray.add(arrayObj);
-                                        Collections.sort(filterFinalArray, new HighToLowSortRating());
-                                    }
-                                }
-                                fillData(filterFinalArray);
-                                sortDialog.dismiss();
-                                pricewiseStr = "";
+                        List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                        for (sessionDataModel arrayObj : dataResponse.getData()) {
+                            if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+                                    arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+                                filterFinalArray.add(arrayObj);
+                                Collections.sort(filterFinalArray, new HightToLowSortSessionPrice());
                             }
-                        } else {
-                            Utils.ping(mContext, "Please Select One Option");
                         }
+                        fillData(filterFinalArray);
+                        sortDialog.dismiss();
+                        pricewiseStr = "";
                     }
+//                        } else {
+//                            Utils.ping(mContext, "Please Select One Option");
+//                        }
+                } else {
+//                        if (!ratingStr.equalsIgnoreCase("")) {
+                    if (ratingStr.equalsIgnoreCase("low")) {
+                        List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                        for (sessionDataModel arrayObj : dataResponse.getData()) {
+                            if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+                                    arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+                                filterFinalArray.add(arrayObj);
+                                Collections.sort(filterFinalArray, new LowToHighSortRating());
+                            }
+                        }
+                        fillData(filterFinalArray);
+                        sortDialog.dismiss();
+                        pricewiseStr = "";
+                    } else {
+                        List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                        for (sessionDataModel arrayObj : dataResponse.getData()) {
+                            if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+                                    arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+                                filterFinalArray.add(arrayObj);
+                                Collections.sort(filterFinalArray, new HighToLowSortRating());
+                            }
+                        }
+                        fillData(filterFinalArray);
+                        sortDialog.dismiss();
+                        pricewiseStr = "";
+                    }
+//                        } else {
+//                            Utils.ping(mContext, "Please Select One Option");
+//                        }
+                }
 
 //                } else {
 //                    Utils.ping(mContext, "Please Select One Option");
@@ -619,26 +622,31 @@ public class ClassDeatilScreen extends AppCompatActivity {
                             dataResponse = sessionInfo;
                             fillArea();
                             if (searchByStr.equalsIgnoreCase("1")) {
-                                List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-                                for (sessionDataModel arrayObj : dataResponse.getData()) {
-                                    if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim())
-                                            && arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-                                        filterFinalArray.add(arrayObj);
-                                        result = filterFinalArray.size();
+                                if (searchfront.equalsIgnoreCase("searchfront")) {
+                                    List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                                    for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                        if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim())
+                                                && arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+                                            filterFinalArray.add(arrayObj);
+                                            Collections.sort(filterFinalArray, new HighToLowSortRating());
+                                            result = filterFinalArray.size();
+                                        }
+                                        fillData(filterFinalArray);
                                     }
-                                    fillData(filterFinalArray);
-                                }
-
-                            } else {
-                                if (searchTypeStr.equalsIgnoreCase("play")) {
-                                    if (!subjectStr.equalsIgnoreCase("") && !genderStr.equalsIgnoreCase("")) {
+                                } else {
+                                    if (!subjectStr.equalsIgnoreCase("") && !boardStr.equalsIgnoreCase("") &&
+                                            !standardStr.equalsIgnoreCase("") && !streamStr.equalsIgnoreCase("")) {
                                         List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                                         for (sessionDataModel arrayObj : dataResponse.getData()) {
                                             if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
                                                     arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
                                                     arrayObj.getLessionTypeName().trim().equalsIgnoreCase(subjectStr.trim()) &&
+                                                    arrayObj.getBoard().trim().equalsIgnoreCase(boardStr.trim()) &&
+                                                    arrayObj.getStandard().trim().equalsIgnoreCase(standardStr.trim()) &&
+                                                    arrayObj.getStream().trim().equalsIgnoreCase(streamStr.trim()) &&
                                                     arrayObj.getGenderID().trim().equalsIgnoreCase(genderStr.trim())) {
                                                 filterFinalArray.add(arrayObj);
+                                                Collections.sort(filterFinalArray, new HighToLowSortRating());
                                                 result = filterFinalArray.size();
                                             }
                                             fillData(filterFinalArray);
@@ -651,6 +659,43 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                                         arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
                                                         arrayObj.getLessionTypeName().trim().equalsIgnoreCase(subjectStr.trim())) {
                                                     filterFinalArray.add(arrayObj);
+                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
+                                                    result = filterFinalArray.size();
+                                                }
+                                                fillData(filterFinalArray);
+                                            }
+                                        } else if (!boardStr.equalsIgnoreCase("")) {
+                                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+                                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
+                                                        arrayObj.getBoard().trim().equalsIgnoreCase(boardStr.trim())) {
+                                                    filterFinalArray.add(arrayObj);
+                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
+                                                    result = filterFinalArray.size();
+                                                }
+                                                fillData(filterFinalArray);
+                                            }
+                                        } else if (!standardStr.equalsIgnoreCase("")) {
+                                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+                                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
+                                                        arrayObj.getStandard().trim().equalsIgnoreCase(standardStr.trim())) {
+                                                    filterFinalArray.add(arrayObj);
+                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
+                                                    result = filterFinalArray.size();
+                                                }
+                                                fillData(filterFinalArray);
+                                            }
+                                        } else if (!streamStr.equalsIgnoreCase("")) {
+                                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+                                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
+                                                        arrayObj.getStream().trim().equalsIgnoreCase(streamStr.trim())) {
+                                                    filterFinalArray.add(arrayObj);
+                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
                                                     result = filterFinalArray.size();
                                                 }
                                                 fillData(filterFinalArray);
@@ -662,6 +707,61 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                                         arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
                                                         arrayObj.getGenderID().trim().equalsIgnoreCase(genderStr.trim())) {
                                                     filterFinalArray.add(arrayObj);
+                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
+                                                    result = filterFinalArray.size();
+                                                }
+                                                fillData(filterFinalArray);
+                                            }
+                                        } else {
+                                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+                                                        arrayObj.getSessionName().trim().toLowerCase().equalsIgnoreCase(classNameStr.trim().toLowerCase())) {
+                                                    filterFinalArray.add(arrayObj);
+                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
+                                                    result = filterFinalArray.size();
+                                                }
+                                                fillData(filterFinalArray);
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                if (searchTypeStr.equalsIgnoreCase("play")) {
+                                    if (!subjectStr.equalsIgnoreCase("") && !genderStr.equalsIgnoreCase("")) {
+                                        List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                                        for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                            if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+                                                    arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
+                                                    arrayObj.getLessionTypeName().trim().equalsIgnoreCase(subjectStr.trim()) &&
+                                                    arrayObj.getGenderID().trim().equalsIgnoreCase(genderStr.trim())) {
+                                                filterFinalArray.add(arrayObj);
+                                                Collections.sort(filterFinalArray, new HighToLowSortRating());
+                                                result = filterFinalArray.size();
+                                            }
+                                            fillData(filterFinalArray);
+                                        }
+                                    } else {
+                                        if (!subjectStr.equalsIgnoreCase("")) {
+                                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+                                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
+                                                        arrayObj.getLessionTypeName().trim().equalsIgnoreCase(subjectStr.trim())) {
+                                                    filterFinalArray.add(arrayObj);
+                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
+                                                    result = filterFinalArray.size();
+                                                }
+                                                fillData(filterFinalArray);
+                                            }
+                                        } else if (!genderStr.equalsIgnoreCase("")) {
+                                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+                                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
+                                                        arrayObj.getGenderID().trim().equalsIgnoreCase(genderStr.trim())) {
+                                                    filterFinalArray.add(arrayObj);
+                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
                                                     result = filterFinalArray.size();
                                                 }
                                                 fillData(filterFinalArray);
@@ -672,6 +772,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                                 if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
                                                         arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim())) {
                                                     filterFinalArray.add(arrayObj);
+                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
                                                     result = filterFinalArray.size();
                                                 }
                                                 fillData(filterFinalArray);
@@ -692,6 +793,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                                     arrayObj.getStream().trim().equalsIgnoreCase(streamStr.trim()) &&
                                                     arrayObj.getGenderID().trim().equalsIgnoreCase(genderStr.trim())) {
                                                 filterFinalArray.add(arrayObj);
+                                                Collections.sort(filterFinalArray, new HighToLowSortRating());
                                                 result = filterFinalArray.size();
                                             }
                                             fillData(filterFinalArray);
@@ -704,6 +806,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                                         arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
                                                         arrayObj.getLessionTypeName().trim().equalsIgnoreCase(subjectStr.trim())) {
                                                     filterFinalArray.add(arrayObj);
+                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
                                                     result = filterFinalArray.size();
                                                 }
                                                 fillData(filterFinalArray);
@@ -715,6 +818,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                                         arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
                                                         arrayObj.getBoard().trim().equalsIgnoreCase(boardStr.trim())) {
                                                     filterFinalArray.add(arrayObj);
+                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
                                                     result = filterFinalArray.size();
                                                 }
                                                 fillData(filterFinalArray);
@@ -726,6 +830,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                                         arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
                                                         arrayObj.getStandard().trim().equalsIgnoreCase(standardStr.trim())) {
                                                     filterFinalArray.add(arrayObj);
+                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
                                                     result = filterFinalArray.size();
                                                 }
                                                 fillData(filterFinalArray);
@@ -737,6 +842,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                                         arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
                                                         arrayObj.getStream().trim().equalsIgnoreCase(streamStr.trim())) {
                                                     filterFinalArray.add(arrayObj);
+                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
                                                     result = filterFinalArray.size();
                                                 }
                                                 fillData(filterFinalArray);
@@ -748,6 +854,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                                         arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
                                                         arrayObj.getGenderID().trim().equalsIgnoreCase(genderStr.trim())) {
                                                     filterFinalArray.add(arrayObj);
+                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
                                                     result = filterFinalArray.size();
                                                 }
                                                 fillData(filterFinalArray);
@@ -758,6 +865,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                                 if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
                                                         arrayObj.getSessionName().trim().toLowerCase().equalsIgnoreCase(classNameStr.trim().toLowerCase())) {
                                                     filterFinalArray.add(arrayObj);
+                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
                                                     result = filterFinalArray.size();
                                                 }
                                                 fillData(filterFinalArray);
@@ -795,7 +903,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
 //                                    }
                             }
                             if (result < 10) {
-                                binding.countTxt.setText("0" +String.valueOf(result));
+                                binding.countTxt.setText("0" + String.valueOf(result));
                             } else {
                                 binding.countTxt.setText(String.valueOf(result));
                             }
@@ -833,7 +941,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
 //            }
 //        }
         classDetailAdapter = new ClassDetailAdapter(mContext, array, searchByStr, locationStr,
-                classNameStr, boardStr, streamStr, standardStr, searchTypeStr, wheretoComeStr, new onViewClick() {
+                classNameStr, boardStr, streamStr, standardStr, searchTypeStr, wheretoComeStr,searchfront, new onViewClick() {
             @Override
             public void getViewClick() {
                 if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
@@ -860,6 +968,7 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                     intentLogin.putExtra("gender", genderStr);
                                     intentLogin.putExtra("withOR", wheretoComeStr);
                                     intentLogin.putExtra("ratingLogin", "ratingLoginclass");
+                                    intentLogin.putExtra("searchfront",searchfront);
                                     startActivity(intentLogin);
                                     finish();
                                 }
@@ -946,43 +1055,89 @@ public class ClassDeatilScreen extends AppCompatActivity {
                 }
             }
         });
-        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        // this is set the view from XML inside AlertDialog
-        alert.setView(alertLayout);
-        // disallow cancel of AlertDialog on click of back button and outside touch
-        alert.setCancelable(false);
-        alert.setNegativeButton("Not Now", new DialogInterface.OnClickListener() {
+//        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+//        // this is set the view from XML inside AlertDialog
+//
+//
+//        alert.setView(alertLayout);
+//        // disallow cancel of AlertDialog on click of back button and outside touch
+//        alert.setCancelable(false);
+//        alert.setNegativeButton("Not Now", new DialogInterface.OnClickListener() {
+//
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+////                Toast.makeText(getBaseContext(), "Cancel clicked", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        alert.setPositiveButton("Rate", new DialogInterface.OnClickListener() {
+//
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+////                String rating = String.valueOf(ratingBar.getRating());
+////                Toast.makeText(getApplicationContext(), rating, Toast.LENGTH_LONG).show();
+//                commentStr = comment_edt.getText().toString();
+//                if (commentStr.equalsIgnoreCase("")) {
+//                    commentStr = session_rating_view_txt.getText().toString();
+//                }
+//                ratingValueStr = String.valueOf(ratingBar.getRating());
+//                if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
+//                    if (!ratingValueStr.equalsIgnoreCase("0.0")) {
+//                        callAddrating();
+//                    } else {
+//                        Utils.ping(mContext, "Please Select Rate.");
+//                    }
+//                } else {
+//                    Utils.ping(mContext, getResources().getString(R.string.not_loging));
+//                }
+//            }
+//        });
+//        final AlertDialog dialog = alert.create();
+//
+//        dialog.show();
+
+        AlertDialog.Builder sayWindows = new AlertDialog.Builder(
+                mContext);
+
+        sayWindows.setPositiveButton("Rate", null);
+        sayWindows.setNegativeButton("Not Now", null);
+        sayWindows.setView(alertLayout);
+
+        final AlertDialog mAlertDialog = sayWindows.create();
+        mAlertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
 
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-//                Toast.makeText(getBaseContext(), "Cancel clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
+            public void onShow(DialogInterface dialog) {
 
-        alert.setPositiveButton("Rate", new DialogInterface.OnClickListener() {
+                Button b = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-//                String rating = String.valueOf(ratingBar.getRating());
+                    @Override
+                    public void onClick(View view) {
+                        // TODO Do something
+                        String rating = String.valueOf(ratingBar.getRating());
 //                Toast.makeText(getApplicationContext(), rating, Toast.LENGTH_LONG).show();
-                commentStr = comment_edt.getText().toString();
-                if (commentStr.equalsIgnoreCase("")) {
-                    commentStr = session_rating_view_txt.getText().toString();
-                }
-                ratingValueStr = String.valueOf(ratingBar.getRating());
-                if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
-                    if (!ratingValueStr.equalsIgnoreCase("0.0")) {
-                        callAddrating();
-                    } else {
-                        Utils.ping(mContext, "Please Select Rate.");
+                        commentStr = comment_edt.getText().toString();
+                        if (commentStr.equalsIgnoreCase("")) {
+                            commentStr = session_rating_view_txt.getText().toString();
+                        }
+                        ratingValueStr = String.valueOf(ratingBar.getRating());
+                        if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
+                            if (!ratingValueStr.equalsIgnoreCase("0.0")) {
+                                callAddrating();
+                                mAlertDialog.dismiss();
+                            } else {
+                                Utils.ping(mContext, "Please Select Rate.");
+                            }
+                        } else {
+                            Utils.ping(mContext, getResources().getString(R.string.not_loging));
+                        }
                     }
-                } else {
-                    Utils.ping(mContext, getResources().getString(R.string.not_loging));
-                }
+                });
             }
         });
-        AlertDialog dialog = alert.create();
-        dialog.show();
+        mAlertDialog.show();
+
     }
 
     //Use for AddRating
@@ -1066,9 +1221,9 @@ public class ClassDeatilScreen extends AppCompatActivity {
                                 arrayListPopular.add(populardataresponse.getData().get(i));
                             }
                             count = arrayListPopular.size();
-                            if(count<10){
-                                result_txt.setText("0"+String.valueOf(count));
-                            }else{
+                            if (count < 10) {
+                                result_txt.setText("0" + String.valueOf(count));
+                            } else {
                                 result_txt.setText(String.valueOf(count));
                             }
 //                            result_txt.setText(arrayListPopular.size());

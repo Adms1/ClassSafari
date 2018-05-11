@@ -55,7 +55,7 @@
 
                 <TextView
                     android:id="@+id/familyname_txt_view"
-                    android:layout_width="@dimen/_90sdp"
+                    android:layout_width="wrap_content"
                     android:layout_height="@dimen/_25sdp"
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:text="@string/add_familyname"
@@ -65,6 +65,7 @@
                     android:layout_width="@dimen/_4sdp"
                     android:layout_height="@dimen/_25sdp"
                     android:text=":"
+                    android:layout_marginLeft="@dimen/_3sdp"
                     android:textColor="@color/white"
                     android:visibility="visible" />
                 <TextView

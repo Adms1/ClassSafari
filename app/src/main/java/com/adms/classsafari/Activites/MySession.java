@@ -95,7 +95,8 @@ public class MySession extends AppCompatActivity {
         no_record_txt = (TextView) findViewById(R.id.no_record_txt);
         back = (ImageView) findViewById(R.id.back);
         menu = (ImageView) findViewById(R.id.menu);
-        callSessionReportApi();
+        callSessionListApi();
+
 
     }
 
@@ -130,7 +131,7 @@ public class MySession extends AppCompatActivity {
     public void callSessionReportApi() {
         if (Utils.isNetworkConnected(mContext)) {
 
-            Utils.showDialog(mContext);
+//            Utils.showDialog(mContext);
             ApiHandler.getApiService().get_FamilySessionList_ByContactID(getSessionReportDetail(), new retrofit.Callback<SessionDetailModel>() {
                 @Override
                 public void success(SessionDetailModel sessionModel, Response response) {
@@ -148,15 +149,16 @@ public class MySession extends AppCompatActivity {
                         return;
                     }
                     if (sessionModel.getSuccess().equalsIgnoreCase("True")) {
-                        Utils.dismissDialog();
+
                         sessionList = sessionModel.getData();
-                        callSessionListApi();
+
                         if (sessionModel.getData().size() > 0) {
                             header_linear.setVisibility(View.VISIBLE);
                             fillSessionList();
                         } else {
                             header_linear.setVisibility(View.GONE);
                         }
+                        Utils.dismissDialog();
                     }
                 }
 
@@ -285,7 +287,7 @@ public class MySession extends AppCompatActivity {
                         Intent ipayment = new Intent(mContext, PaymentActivity.class);
                         ipayment.putExtra("orderID", orderIDStr);
                         ipayment.putExtra("amount", sessionPriceStr);
-                        ipayment.putExtra("mode", "LIVE");
+                        ipayment.putExtra("mode", "TEST");
                         ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
                         ipayment.putExtra("sessionID", selectedsessionIDStr);
                         ipayment.putExtra("contactID", Utils.getPref(mContext, "coachID"));
@@ -372,7 +374,7 @@ public class MySession extends AppCompatActivity {
     //Use for SessionList
     public void callSessionListApi() {
         if (Utils.checkNetwork(mContext)) {
-
+            Utils.showDialog(mContext);
             ApiHandler.getApiService().get_SessionList(getSessionListDetail(), new retrofit.Callback<SessionDetailModel>() {
                 @Override
                 public void success(SessionDetailModel sessionInfo, Response response) {
@@ -390,8 +392,11 @@ public class MySession extends AppCompatActivity {
                         return;
                     }
                     if (sessionInfo.getSuccess().equalsIgnoreCase("True")) {
-                        Utils.dismissDialog();
+
                         dataResponse = sessionInfo;
+                        callSessionReportApi();
+                        Utils.dismissDialog();
+
                     }
                 }
 

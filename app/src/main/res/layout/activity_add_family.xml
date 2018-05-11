@@ -46,7 +46,7 @@
         android:layout_height="@dimen/_28sdp"
         android:background="@drawable/add_child_btn"
         android:paddingBottom="@dimen/_2sdp"
-        android:text="Add Contancts"
+        android:text="Add Contact"
         android:layout_marginRight="@dimen/_15sdp"
         android:layout_marginTop="@dimen/_5sdp"
         android:layout_gravity="end"

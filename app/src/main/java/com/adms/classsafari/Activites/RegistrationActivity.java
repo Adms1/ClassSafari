@@ -47,7 +47,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     String firstNameStr, lastNameStr, emailStr, passwordStr, phonenoStr, gendarIdStr = "1", dateofbirthStr, coachTypeIDStr = "1",
             registerTypeStr = "family", contatIDstr, type, whereTocomestr, sessionIDStr, paymentStatusstr, orderIDStr, frontloginStr,
             boardStr, standardStr, streamStr, locationStr, classNameStr,
-            searchTypeStr, subjectStr, genderStr, searchByStr, ratingLoginStr;
+            searchTypeStr, subjectStr, genderStr, searchByStr, ratingLoginStr,searchfront;
 
     //Use for Confirmation Dialog
     Dialog confimDialog;
@@ -72,6 +72,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         subjectStr = getIntent().getStringExtra("lessionName");
         genderStr = getIntent().getStringExtra("gender");
         ratingLoginStr = getIntent().getStringExtra("ratingLogin");
+        searchfront=getIntent().getStringExtra("searchfront");
         init();
         setListner();
     }
@@ -90,6 +91,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
             public void onClick(View view) {
                 Intent inback = new Intent(mContext, LoginActivity.class);
                 inback.putExtra("frontLogin", frontloginStr);
+                inback.putExtra("searchfront",searchfront);
                 startActivity(inback);
             }
         });
@@ -265,6 +267,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         inback.putExtra("withOR", whereTocomestr);
         inback.putExtra("ratingLogin", ratingLoginStr);
         inback.putExtra("frontLogin", frontloginStr);
+        inback.putExtra("searchfront",searchfront);
         startActivity(inback);
     }
 
@@ -647,7 +650,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                         Intent ipayment = new Intent(mContext, PaymentActivity.class);
                         ipayment.putExtra("orderID", orderIDStr);
                         ipayment.putExtra("amount", AppConfiguration.classsessionPrice);
-                        ipayment.putExtra("mode", "LIVE");
+                        ipayment.putExtra("mode", "TEST");
                         ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
                         ipayment.putExtra("sessionID", sessionIDStr);
                         ipayment.putExtra("contactID", Utils.getPref(mContext, "coachID"));
