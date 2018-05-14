@@ -46,7 +46,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     int mYear, mMonth, mDay;
     String firstNameStr, lastNameStr, emailStr, passwordStr, phonenoStr, gendarIdStr = "1", dateofbirthStr, coachTypeIDStr = "1",
             registerTypeStr = "family", contatIDstr, type, whereTocomestr, sessionIDStr, paymentStatusstr, orderIDStr, frontloginStr,
-            boardStr, standardStr, streamStr, locationStr, classNameStr,
+            boardStr, standardStr, streamStr, locationStr, classNameStr,sessionType,
             searchTypeStr, subjectStr, genderStr, searchByStr, ratingLoginStr,searchfront;
 
     //Use for Confirmation Dialog
@@ -73,6 +73,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         genderStr = getIntent().getStringExtra("gender");
         ratingLoginStr = getIntent().getStringExtra("ratingLogin");
         searchfront=getIntent().getStringExtra("searchfront");
+        sessionType=getIntent().getStringExtra("sessionType");
         init();
         setListner();
     }
@@ -92,6 +93,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                 Intent inback = new Intent(mContext, LoginActivity.class);
                 inback.putExtra("frontLogin", frontloginStr);
                 inback.putExtra("searchfront",searchfront);
+                inback.putExtra("sessionType",sessionType);
                 startActivity(inback);
             }
         });
@@ -268,6 +270,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         inback.putExtra("ratingLogin", ratingLoginStr);
         inback.putExtra("frontLogin", frontloginStr);
         inback.putExtra("searchfront",searchfront);
+        inback.putExtra("sessionType",sessionType);
         startActivity(inback);
     }
 

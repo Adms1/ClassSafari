@@ -56,7 +56,7 @@ public class SessionName extends AppCompatActivity {
     String sessionIDStr, searchByStr, locationStr, classNameStr, genderStr, sessionDateStr, durationStr,
             paymentStatusstr, orderIDStr, boardStr, standardStr, streamStr, searchTypeStr, subjectStr,
             wheretoComeStr, sessionId, commentStr, ratingValueStr, purchaseSessionIDStr = "",searchfront,
-            familysessionfeesStr, familysessionnameStr, familylocationStr, familysessionStudentStr;
+            familysessionfeesStr, familysessionnameStr, familylocationStr, familysessionStudentStr,sessionType;
     ;
     ArrayList<String> purchaseSessionIDArray;
     SessionDetailModel dataResponse, dataResponseRating;
@@ -80,6 +80,7 @@ public class SessionName extends AppCompatActivity {
         genderStr = getIntent().getStringExtra("gender");
         wheretoComeStr = getIntent().getStringExtra("withOR");
         searchfront=getIntent().getStringExtra("searchfront");
+        sessionType=getIntent().getStringExtra("sessionType");
         init();
         setListner();
     }
@@ -109,6 +110,7 @@ public class SessionName extends AppCompatActivity {
                 inback.putExtra("city", locationStr);
                 inback.putExtra("sessionName", classNameStr);
                 inback.putExtra("searchfront",searchfront);
+                inback.putExtra("sessionType",sessionType);
                 startActivity(inback);
             }
         });
@@ -149,6 +151,7 @@ public class SessionName extends AppCompatActivity {
                                         intentLogin.putExtra("ratingLogin", "false");
                                         intentLogin.putExtra("location", familylocationStr);
                                         intentLogin.putExtra("searchfront",searchfront);
+                                        intentLogin.putExtra("sessionType",sessionType);
                                         startActivity(intentLogin);
                                         finish();
                                     }
@@ -183,6 +186,7 @@ public class SessionName extends AppCompatActivity {
                         intent.putExtra("withOR", wheretoComeStr);
                         intent.putExtra("froncontanct", "false");
                         intent.putExtra("searchfront",searchfront);
+                        intent.putExtra("sessionType",sessionType);
                         startActivity(intent);
                     }
                 } else {
@@ -222,6 +226,7 @@ public class SessionName extends AppCompatActivity {
         inback.putExtra("city", locationStr);
         inback.putExtra("searchfront",searchfront);
         inback.putExtra("sessionName", classNameStr);
+        inback.putExtra("sessionType",sessionType);
         inback.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(inback);
     }
@@ -459,6 +464,7 @@ public class SessionName extends AppCompatActivity {
                                     intentLogin.putExtra("withOR", wheretoComeStr);
                                     intentLogin.putExtra("ratingLogin", "ratingLoginSession");
                                     intentLogin.putExtra("searchfront",searchfront);
+                                    intentLogin.putExtra("sessionType",sessionType);
                                     startActivity(intentLogin);
                                     finish();
                                 }

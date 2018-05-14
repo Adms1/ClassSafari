@@ -128,6 +128,13 @@ public interface WebServices {
     @POST("/Get_SessionList")
     public void get_SessionList(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
 
+    @FormUrlEncoded
+    @POST("/Get_SessionList_Search_Criteria")
+    public void get_SessionList_Search_Criteria(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
+
+    @FormUrlEncoded
+    @POST("/Get_SessionList_Automplated")
+    public void get_SessionList_Automplated(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
 
     @FormUrlEncoded
     @POST("/Get_SessionBySessionID")

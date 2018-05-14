@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     String usernameStr, passwordStr, sessionIDStr, contatIDstr,
             whereTocomestr, orderIDStr, checkStr, paymentStatusstr,
             boardStr, standardStr, streamStr, locationStr, classNameStr,
-            searchTypeStr, subjectStr, genderStr, frontloginStr, ratingLoginStr,searchfront;
+            searchTypeStr, subjectStr, genderStr, frontloginStr, ratingLoginStr,searchfront,sessionType;
 
     //    Use for Dialog
     Dialog forgotDialog;
@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
         ratingLoginStr = getIntent().getStringExtra("ratingLogin");
         familylocationStr=getIntent().getStringExtra("location");
         searchfront=getIntent().getStringExtra("searchfront");
-
+        sessionType=getIntent().getStringExtra("sessionType");
 
         if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
             checkUnmPwd();
@@ -111,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
                 inregister.putExtra("withOR", whereTocomestr);
                 inregister.putExtra("ratingLogin", ratingLoginStr);
                 inregister.putExtra("searchfront",searchfront);
+                inregister.putExtra("sessionType",sessionType);
                 startActivity(inregister);
             }
         });
@@ -244,6 +245,7 @@ public class LoginActivity extends AppCompatActivity {
             intent.putExtra("withOR", whereTocomestr);
             intent.putExtra("ratingLogin", ratingLoginStr);
             intent.putExtra("searchfront",searchfront);
+            intent.putExtra("sessionType",sessionType);
             intent.addCategory(Intent.CATEGORY_HOME);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -303,6 +305,7 @@ public class LoginActivity extends AppCompatActivity {
                                     iSearchByUser.putExtra("gender", genderStr);
                                     iSearchByUser.putExtra("withOR", whereTocomestr);
                                     iSearchByUser.putExtra("searchfront",searchfront);
+                                    iSearchByUser.putExtra("sessionType",sessionType);
                                     startActivity(iSearchByUser);
                                 } else if (ratingLoginStr.equalsIgnoreCase("ratingLoginSession")) {
                                     Intent iSearchByUser = new Intent(mContext, SessionName.class);
@@ -320,6 +323,7 @@ public class LoginActivity extends AppCompatActivity {
                                     iSearchByUser.putExtra("withOR", whereTocomestr);
                                     iSearchByUser.putExtra("ratingLogin", "false");
                                     iSearchByUser.putExtra("searchfront",searchfront);
+                                    iSearchByUser.putExtra("sessionType",sessionType);
                                     startActivity(iSearchByUser);
                                 } else {
 //                                    ConformSessionDialog(); session_student_txt.setText(AppConfiguration.classteacherSessionName);
@@ -352,6 +356,7 @@ public class LoginActivity extends AppCompatActivity {
                                     iFamilyList.putExtra("withOR", whereTocomestr);
                                     iFamilyList.putExtra("location",familylocationStr);
                                     iFamilyList.putExtra("searchfront",searchfront);
+                                    iFamilyList.putExtra("sessionType",sessionType);
                                     startActivity(iFamilyList);
                                 }
                             }

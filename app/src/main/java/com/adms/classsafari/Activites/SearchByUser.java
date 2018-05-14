@@ -29,6 +29,7 @@ import android.widget.TextView;
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.AppConfiguration;
 import com.adms.classsafari.AppConstant.Utils;
+import com.adms.classsafari.Model.SelectedDataModel;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
@@ -47,8 +48,6 @@ public class SearchByUser extends AppCompatActivity {
     Context mContext;
     SessionDetailModel dataResponse;
     String selectedSessionNameStr = "", selectedLocationStr = "", sessionName = "";
-    private PopupWindow popupWindow;
-
     String passWordStr, confirmpassWordStr, currentpasswordStr;
     EditText edtnewpassword, edtconfirmpassword, edtcurrentpassword;
     Button changepwd_btn, cancel_btn;
@@ -56,6 +55,8 @@ public class SearchByUser extends AppCompatActivity {
     Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily;
     TextView user_name_txt;
     Dialog changeDialog;
+    SelectedDataModel selectedDataModel=new SelectedDataModel();
+    private PopupWindow popupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +94,9 @@ public class SearchByUser extends AppCompatActivity {
                 Intent inClassDetail = new Intent(mContext, ClassSearchScreen.class);
                 inClassDetail.putExtra("flag", "study");
                 inClassDetail.putExtra("withOR", "withOR");
+                inClassDetail.putExtra("SearchBy", "2");
                 inClassDetail.putExtra("sessionType", "1");
-
+                inClassDetail.putExtra("firsttimesearch","true");
                 startActivity(inClassDetail);
             }
         });
@@ -107,7 +109,7 @@ public class SearchByUser extends AppCompatActivity {
         searchByUserBinding.searchClassEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if(i== EditorInfo.IME_ACTION_DONE){
+                if (i == EditorInfo.IME_ACTION_DONE) {
                     validation();
                 }
                 return false;
@@ -126,7 +128,9 @@ public class SearchByUser extends AppCompatActivity {
                 Intent inClassDetail = new Intent(mContext, ClassSearchScreen.class);
                 inClassDetail.putExtra("flag", "play");
                 inClassDetail.putExtra("withOR", "withOR");
+                inClassDetail.putExtra("SearchBy", "2");
                 inClassDetail.putExtra("sessionType", "2");
+                inClassDetail.putExtra("firsttimesearch","true");
                 startActivity(inClassDetail);
             }
         });
@@ -179,12 +183,61 @@ public class SearchByUser extends AppCompatActivity {
 
     }
 
+//    //Use for SessionList
+//    public void callSessionListApi() {
+//        if (Utils.checkNetwork(mContext)) {
+//
+//            Utils.showDialog(mContext);
+//            ApiHandler.getApiService().get_SessionList(getSessionListDetail(), new retrofit.Callback<SessionDetailModel>() {
+//                @Override
+//                public void success(SessionDetailModel cityInfo, Response response) {
+//                    Utils.dismissDialog();
+//                    if (cityInfo == null) {
+//                        Utils.ping(mContext, getString(R.string.something_wrong));
+//                        return;
+//                    }
+//                    if (cityInfo.getSuccess() == null) {
+//                        Utils.ping(mContext, getString(R.string.something_wrong));
+//                        return;
+//                    }
+//                    if (cityInfo.getSuccess().equalsIgnoreCase("false")) {
+//                        Utils.ping(mContext, getString(R.string.false_msg));
+//                        return;
+//                    }
+//                    if (cityInfo.getSuccess().equalsIgnoreCase("True")) {
+//                        Utils.dismissDialog();
+//                        if (cityInfo.getData().size() > 0) {
+//                            dataResponse = cityInfo;
+//                            fillCity();
+//                            fillSessionList();
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void failure(RetrofitError error) {
+//                    Utils.dismissDialog();
+//                    error.printStackTrace();
+//                    error.getMessage();
+//                    Utils.ping(mContext, getString(R.string.something_wrong));
+//                }
+//            });
+//        } else {
+//            Utils.ping(mContext, getString(R.string.internet_connection_error));
+//        }
+//    }
+//
+//    private Map<String, String> getSessionListDetail() {
+//        Map<String, String> map = new HashMap<>();
+//        return map;
+//    }
+
     //Use for SessionList
     public void callSessionListApi() {
         if (Utils.checkNetwork(mContext)) {
 
             Utils.showDialog(mContext);
-            ApiHandler.getApiService().get_SessionList(getSessionListDetail(), new retrofit.Callback<SessionDetailModel>() {
+            ApiHandler.getApiService().get_SessionList_Automplated(getSessionListDetail(), new retrofit.Callback<SessionDetailModel>() {
                 @Override
                 public void success(SessionDetailModel cityInfo, Response response) {
                     Utils.dismissDialog();
@@ -283,7 +336,7 @@ public class SearchByUser extends AppCompatActivity {
             inClassDetail.putExtra("sessionName", selectedSessionNameStr);
             inClassDetail.putExtra("SearchBy", "1");
             inClassDetail.putExtra("withOR", "withOutOR");
-            inClassDetail.putExtra("searchfront","searchfront");
+            inClassDetail.putExtra("searchfront", "searchfront");
 //            inClassDetail.putExtra("searchType", "study");
             startActivity(inClassDetail);
         } else {
@@ -413,7 +466,7 @@ public class SearchByUser extends AppCompatActivity {
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("True")) {
                         Utils.ping(mContext, getResources().getString(R.string.changPassword));
-                        Utils.setPref(mContext, "Password",passWordStr);
+                        Utils.setPref(mContext, "Password", passWordStr);
                         changeDialog.dismiss();
                     }
                 }

@@ -224,7 +224,7 @@
                         android:layout_width="0dp"
                         android:layout_height="@dimen/_30sdp"
                         android:layout_weight="1"
-                        android:imeOptions="actionDone"
+                        android:imeOptions="actionNext"
                         android:hint="@string/search_stream" />
 
                     <RadioGroup

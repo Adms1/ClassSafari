@@ -49,7 +49,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
             familyNameStr, paymentStatusstr, familylocationStr, familysessionStudentStr,
             sessionDateStr, durationStr, familysessionfeesStr, familysessionnameStr, locationStr,
             boardStr, standardStr, streamStr, searchTypeStr, subjectStr, froncontanctStr,
-            wheretoComeStr, searchByStr, genderStr, wheretocometypeStr, searchfront;
+            wheretoComeStr, searchByStr, genderStr, wheretocometypeStr, searchfront,sessionType;
     Dialog confimDialog;
     TextView cancel_txt, confirm_txt, session_student_txt, session_name_txt,
             location_txt, duration_txt, time_txt, session_fee_txt, session_student_txt_view, time_txt_view;
@@ -95,6 +95,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
         froncontanctStr = getIntent().getStringExtra("froncontanct");
         wheretocometypeStr = getIntent().getStringExtra("wheretocometype");
         searchfront = getIntent().getStringExtra("searchfront");
+        sessionType=getIntent().getStringExtra("sessionType");
         Log.d("familyName", familyNameStr + familyIDStr);
         addStudentScreenBinding.familynameTxt.setText(familyNameStr);
     }
@@ -125,6 +126,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                     intent.putExtra("gender", genderStr);
                     intent.putExtra("withOR", wheretoComeStr);
                     intent.putExtra("searchfront",searchfront);
+                    intent.putExtra("sessionType",sessionType);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(mContext, FamilyListActivity.class);
@@ -290,6 +292,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                     intent.putExtra("gender", genderStr);
                     intent.putExtra("withOR", wheretoComeStr);
                     intent.putExtra("searchfront",searchfront);
+                    intent.putExtra("sessionType",sessionType);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(mContext, FamilyListActivity.class);

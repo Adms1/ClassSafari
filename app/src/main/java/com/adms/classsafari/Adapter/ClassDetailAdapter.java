@@ -35,13 +35,13 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     List<sessionDataModel> arrayList;
     int SessionHour = 0;
     Integer SessionMinit = 0;
-    String searchByStr, locationStr, classNameStr, address, boardStr, streamStr, standardStr, searchTypeStr, wheretoComeStr,searchfront;
+    String searchByStr, locationStr, classNameStr, address, boardStr, streamStr, standardStr, searchTypeStr, wheretoComeStr,searchfront,sessionType;
     onViewClick onViewClick;
     private ArrayList<String> SessionDetail;
 
     public ClassDetailAdapter(Context mContext, List<sessionDataModel> arrayList, String searchByStr, String locationStr,
                               String classNameStr, String boardStr, String streamStr, String standardStr, String searchTypeStr,
-                              String wheretoComeStr, String searchfront, onViewClick onViewClick) {
+                              String wheretoComeStr, String searchfront, String sessionType, onViewClick onViewClick) {
         this.mContext = mContext;
         this.arrayList = arrayList;
         this.searchByStr = searchByStr;
@@ -54,6 +54,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
         this.wheretoComeStr = wheretoComeStr;
         this.searchfront=searchfront;
         this.onViewClick = onViewClick;
+        this.sessionType=sessionType;
     }
 
 
@@ -144,6 +145,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                 inSession.putExtra("searchType", searchTypeStr);
                 inSession.putExtra("withOR", wheretoComeStr);
                 inSession.putExtra("searchfront",searchfront);
+                inSession.putExtra("sessionType",sessionType);
                 mContext.startActivity(inSession);
                 }
                 return true;

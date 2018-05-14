@@ -62,7 +62,7 @@ public class FamilyListActivity extends AppCompatActivity {
             familylocationStr, familysessionStudentStr, sessionDateStr, durationStr,
             orderIDStr, contatIDstr, type, familyIdStr = "", familyNameStr = "", locationStr,
             boardStr, standardStr, streamStr, searchTypeStr, subjectStr,searchfront,
-            wheretoComeStr, searchByStr, genderStr, froncontanctStr, wheretocometypeStr;
+            wheretoComeStr, searchByStr, genderStr, froncontanctStr, wheretocometypeStr,sessionType;
     ArrayList<String> selectedId;
 
     //Purchase dialog
@@ -103,6 +103,7 @@ public class FamilyListActivity extends AppCompatActivity {
         familyNameStr = getIntent().getStringExtra("familyNameStr");
         searchfront=getIntent().getStringExtra("searchfront");
         wheretocometypeStr = getIntent().getStringExtra("wheretocometype");
+        sessionType=getIntent().getStringExtra("sessionType");
     }
 
     public void init() {
@@ -136,6 +137,7 @@ public class FamilyListActivity extends AppCompatActivity {
                     intent.putExtra("gender", genderStr);
                     intent.putExtra("withOR", wheretoComeStr);
                     intent.putExtra("searchfront",searchfront);
+                    intent.putExtra("sessionType",sessionType);
                     startActivity(intent);
                 } else {
                     if (wheretocometypeStr.equalsIgnoreCase("mySession")) {
@@ -181,6 +183,7 @@ public class FamilyListActivity extends AppCompatActivity {
                     addchild.putExtra("withOR", wheretoComeStr);
                     addchild.putExtra("froncontanct", froncontanctStr);
                     addchild.putExtra("searchfront",searchfront);
+                    addchild.putExtra("sessionType",sessionType);
                     startActivity(addchild);
                 } else {
                     Intent addchild = new Intent(mContext, AddStudentScreen.class);
