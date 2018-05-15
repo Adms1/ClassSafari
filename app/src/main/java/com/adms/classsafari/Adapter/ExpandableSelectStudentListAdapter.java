@@ -228,6 +228,7 @@ public class ExpandableSelectStudentListAdapter extends BaseExpandableListAdapte
         groupbinding.noTxt.setText(spiltValue[2]);
         FamilyID = spiltValue[3];
         if(!froncontanctStr.equalsIgnoreCase("true")) {
+            groupbinding.arrowImg.setVisibility(View.VISIBLE);
             groupbinding.familynameRb.setChecked(false);
             groupbinding.familynameRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
@@ -245,6 +246,7 @@ public class ExpandableSelectStudentListAdapter extends BaseExpandableListAdapte
             });
         }else{
             groupbinding.familynameRb.setChecked(true);
+            groupbinding.arrowImg.setVisibility(View.GONE);
         }
         groupbinding.addchildTxt.setOnClickListener(new View.OnClickListener() {
             @Override

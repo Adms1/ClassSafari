@@ -7,11 +7,11 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.AppConfiguration;
@@ -19,6 +19,8 @@ import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivityLoginBinding;
+import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
+import com.adms.classsafari.databinding.ForgotPasswordDialogBinding;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +35,8 @@ import retrofit.client.Response;
 public class LoginActivity extends AppCompatActivity {
 
     ActivityLoginBinding loginScreenBinding;
+    ForgotPasswordDialogBinding forgotPasswordDialogBinding;
+    ConfirmSessionDialogBinding confirmSessionDialogBinding;
     Context mContext;
     //    CallbackManager callbackManager;
 //    private LoginManager mLoginManager;
@@ -44,16 +48,9 @@ public class LoginActivity extends AppCompatActivity {
             searchTypeStr, subjectStr, genderStr, frontloginStr, ratingLoginStr,searchfront,sessionType;
 
     //    Use for Dialog
-    Dialog forgotDialog;
-    EditText edtEmail;
-    TextView btnSendRegEmail, cancel_txt;
+    Dialog forgotDialog,confimDialog;
     String EmailIdStr, type, searchByStr,familylocationStr;
 
-    //Use for Confirmation dialog
-    Dialog confimDialog;
-    TextView confirm_txt, session_student_txt, session_student_txt_view,
-            session_name_txt, location_txt, duration_txt, time_txt,
-            time_txt_view, session_fee_txt;
 
 
     @Override
@@ -405,6 +402,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void forgotPasswordDialog() {
+        forgotPasswordDialogBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContext), R.layout.forgot_password_dialog, (ViewGroup) loginScreenBinding.getRoot(), false);
+
         forgotDialog = new Dialog(mContext, R.style.Theme_Dialog);
         Window window = forgotDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -416,16 +416,14 @@ public class LoginActivity extends AppCompatActivity {
 
         forgotDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         forgotDialog.setCancelable(false);
-        forgotDialog.setContentView(R.layout.forgot_password_dialog);
+        forgotDialog.setContentView(forgotPasswordDialogBinding.getRoot());
 
-        cancel_txt = (TextView) forgotDialog.findViewById(R.id.cancel_txt);
-        btnSendRegEmail = (TextView) forgotDialog.findViewById(R.id.btnSendRegEmail);
-        edtEmail = (EditText) forgotDialog.findViewById(R.id.edtEmail);
 
-        btnSendRegEmail.setOnClickListener(new View.OnClickListener() {
+
+        forgotPasswordDialogBinding.btnSendRegEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EmailIdStr = edtEmail.getText().toString();
+                EmailIdStr = forgotPasswordDialogBinding.edtEmail.getText().toString();
                 if (!EmailIdStr.equalsIgnoreCase("") && Utils.isValidEmaillId(EmailIdStr)) {
                     callCheckEmailIdApi();
                 } else {
@@ -435,7 +433,7 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-        cancel_txt.setOnClickListener(new View.OnClickListener() {
+        forgotPasswordDialogBinding.cancelTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 forgotDialog.dismiss();
@@ -547,6 +545,11 @@ public class LoginActivity extends AppCompatActivity {
 
     //Use for Payment Conrfimation Dialog
     public void ConformSessionDialog() {
+
+        confirmSessionDialogBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContext), R.layout.confirm_session_dialog, (ViewGroup) loginScreenBinding.getRoot(), false);
+
+
         confimDialog = new Dialog(mContext, R.style.Theme_Dialog);
         Window window = confimDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -558,40 +561,28 @@ public class LoginActivity extends AppCompatActivity {
 
         confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         confimDialog.setCancelable(false);
-        confimDialog.setContentView(R.layout.confirm_session_dialog);
+        confimDialog.setContentView(confirmSessionDialogBinding.getRoot());
+        confirmSessionDialogBinding.sessionStudentTxtView.setText("TEACHER NAME");
 
-
-        session_student_txt_view = (TextView) confimDialog.findViewById(R.id.session_student_txt_view);
-        session_student_txt = (TextView) confimDialog.findViewById(R.id.session_student_txt);
-        session_name_txt = (TextView) confimDialog.findViewById(R.id.session_name_txt);
-        location_txt = (TextView) confimDialog.findViewById(R.id.location_txt);
-        duration_txt = (TextView) confimDialog.findViewById(R.id.duration_txt);
-        time_txt = (TextView) confimDialog.findViewById(R.id.time_txt);
-        time_txt_view = (TextView) confimDialog.findViewById(R.id.time_txt_view);
-        session_fee_txt = (TextView) confimDialog.findViewById(R.id.session_fee_txt);
-        confirm_txt = (TextView) confimDialog.findViewById(R.id.confirm_txt);
-        cancel_txt = (TextView) confimDialog.findViewById(R.id.cancel_txt);
-        session_student_txt_view.setText("TEACHER NAME");
-
-        session_student_txt.setText(AppConfiguration.classteacherSessionName);
-        session_name_txt.setText(AppConfiguration.classSessionName);
-        location_txt.setText(AppConfiguration.classsessionLocation);
-        duration_txt.setText(AppConfiguration.classsessionDuration);
-        time_txt.setText(AppConfiguration.classsessionDate);
+        confirmSessionDialogBinding.sessionStudentTxt.setText(AppConfiguration.classteacherSessionName);
+        confirmSessionDialogBinding.sessionNameTxt.setText(AppConfiguration.classSessionName);
+        confirmSessionDialogBinding.locationTxt.setText(AppConfiguration.classsessionLocation);
+        confirmSessionDialogBinding.durationTxt.setText(AppConfiguration.classsessionDuration);
+        confirmSessionDialogBinding.timeTxt.setText(AppConfiguration.classsessionDate);
         if (AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
-            session_fee_txt.setText("Free");
+            confirmSessionDialogBinding.sessionFeeTxt.setText("Free");
         } else {
-            session_fee_txt.setText("₹ " + AppConfiguration.classsessionPrice);
+            confirmSessionDialogBinding.sessionFeeTxt.setText("₹ " + AppConfiguration.classsessionPrice);
         }
 
 
-        cancel_txt.setOnClickListener(new View.OnClickListener() {
+        confirmSessionDialogBinding.cancelTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 confimDialog.dismiss();
             }
         });
-        confirm_txt.setOnClickListener(new View.OnClickListener() {
+        confirmSessionDialogBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
@@ -634,7 +625,7 @@ public class LoginActivity extends AppCompatActivity {
                         Intent ipayment = new Intent(mContext, PaymentActivity.class);
                         ipayment.putExtra("orderID", orderIDStr);
                         ipayment.putExtra("amount", AppConfiguration.classsessionPrice);
-                        ipayment.putExtra("mode", "TEST");
+                        ipayment.putExtra("mode", "LIVE");
                         ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
                         ipayment.putExtra("sessionID", sessionIDStr);
                         ipayment.putExtra("contactID", Utils.getPref(mContext, "coachID"));

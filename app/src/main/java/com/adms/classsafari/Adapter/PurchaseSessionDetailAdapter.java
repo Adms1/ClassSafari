@@ -21,11 +21,7 @@ import com.adms.classsafari.databinding.SessionReviewCardLayout1Binding;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by admsandroid on 3/5/2018.
- */
-
-public class SessionDetailAdapter extends RecyclerView.Adapter {
+public class PurchaseSessionDetailAdapter extends RecyclerView.Adapter {
 
     private final static int HEADER_VIEW = 0;
     private final static int ROW_VIEW = 2;
@@ -45,7 +41,7 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private ArrayList<String> SessionDetail;
 
-    public SessionDetailAdapter(Context mContext, List<sessionDataModel> arrayList,
+    public PurchaseSessionDetailAdapter(Context mContext, List<sessionDataModel> arrayList,
                                 ArrayList<String> descriptionviewarray, ArrayList<String> reviewarray, List<sessionDataModel> sessionRatingList, onViewClick onViewClick) {
         this.mContext = mContext;
         this.arrayList = arrayList;
@@ -62,22 +58,22 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
 
             sessionCardLayout1Binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.session_card_layout_1, parent, false);
             view = sessionCardLayout1Binding.getRoot();
-            return new SessionCard(view);
+            return new PurchaseSessionDetailAdapter.SessionCard(view);
         }
         if (viewType == DESCRIPTION_VIEW) {
             descriptionItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.session_description_item, parent, false);
             view = descriptionItemBinding.getRoot();
-            return new DescriptionView(view);
+            return new PurchaseSessionDetailAdapter.DescriptionView(view);
         }
         if (viewType == ROW_VIEW) {
             itemReviewsBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_reviews, parent, false);
             view = itemReviewsBinding.getRoot();
-            return new RowView(view);
+            return new PurchaseSessionDetailAdapter.RowView(view);
         }
         if (viewType == CONTENT_VIEW) {
             reviewCardLayout1Binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.session_review_card_layout_1, parent, false);
             view = reviewCardLayout1Binding.getRoot();
-            return new ReviewCard(view);
+            return new PurchaseSessionDetailAdapter.ReviewCard(view);
         }
         return null;
     }
@@ -159,7 +155,7 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
             final DescriptionView descriptionHolder = (DescriptionView) holder;
             descriptionItemBinding.descriptionTxt.setText(descriptionviewarray.get(position - arrayList.size()));
         }
-        if (holder instanceof RowView) {
+        if (holder instanceof SessionDetailAdapter.RowView) {
 
         }
         if (holder instanceof ReviewCard) {

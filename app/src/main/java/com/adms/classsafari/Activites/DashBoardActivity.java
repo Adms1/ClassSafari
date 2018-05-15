@@ -43,37 +43,37 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class DashBoardActivity extends AppCompatActivity {
-    private NavigationView navigationView;
-    private DrawerLayout drawer;
-    private View navHeader;
-    private ImageView imgNavHeaderBg, imgProfile;
-    private TextView txtName, txtWebsite;
-    private Toolbar toolbar;
-    Context mContex;
-
     private static final String TAG_Session = "Session";
     private static final String TAG_Add_Session = "Add Session";
     private static final String TAG_Payment_Report = "Payment Report";
     private static final String TAG_Logout = "Logout";
     private static final String TAG_CHANGE_PASSWORD = "Change Password";
     private static final String TAG_Student_Attendance = "Student Attendance";
-
     public static String CURRENT_TAG = TAG_Session;
-//    public static String CURRENT_TAG = TAG_Calendar;
-//    public static String CURRENT_TAG = TAG_Student_Attendance;
-
     public static int navItemIndex = 0;
+    Context mContex;
+    //Use for dialog
+    Dialog changeDialog;
+    EditText edtnewpassword, edtconfirmpassword, edtcurrentpassword;
+    Button changepwd_btn, cancel_btn;
+    String EmailIdStr, passWordStr, confirmpassWordStr, currentpasswordStr, whereTocomestr;
+    ImageView session_cal;
+    //    public static String CURRENT_TAG = TAG_Calendar;
+//    public static String CURRENT_TAG = TAG_Student_Attendance;
+    Fragment fragment = null;
+    int myid;
+    boolean first_time_trans = true;
+    private NavigationView navigationView;
+    private DrawerLayout drawer;
+    private View navHeader;
+    private ImageView imgNavHeaderBg, imgProfile;
+    private TextView txtName, txtWebsite;
+    private Toolbar toolbar;
     private String[] activityTitles;
     private int drawerLayoutGravity = Gravity.LEFT;
     // flag to load home fragment when user presses back key
     private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
-    //Use for dialog
-    Dialog changeDialog;
-    EditText edtnewpassword, edtconfirmpassword, edtcurrentpassword;
-    Button changepwd_btn, cancel_btn;
-    String EmailIdStr, passWordStr, confirmpassWordStr, currentpasswordStr,whereTocomestr;
-    ImageView session_cal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -188,9 +188,6 @@ public class DashBoardActivity extends AppCompatActivity {
     private void selectNavMenu() {
         navigationView.getMenu().getItem(navItemIndex).setChecked(true);
     }
-    Fragment fragment = null;
-    int myid;
-    boolean first_time_trans = true;
 
     public void displayView(int position) {
         switch (position) {
@@ -227,7 +224,7 @@ public class DashBoardActivity extends AppCompatActivity {
                                 Utils.setPref(mContex, "RegisterUserName", "");
                                 Utils.setPref(mContex, "RegisterEmail", "");
                                 Intent intentLogin = new Intent(DashBoardActivity.this, SearchByUser.class);
-                                intentLogin.putExtra("frontLogin",whereTocomestr);
+                                intentLogin.putExtra("frontLogin", whereTocomestr);
                                 startActivity(intentLogin);
                                 finish();
                             }
@@ -343,30 +340,35 @@ public class DashBoardActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawers();
-            return;
-        }
 
-        // This code loads home fragment when back key is pressed
-        // when user is in other fragment than home
-        if (shouldLoadHomeFragOnBackPress) {
-            // checking if user is on other navigation menu
-            // rather than home
-            if (navItemIndex != 0) {
-                navItemIndex = 0;
-                CURRENT_TAG = TAG_Session;
-                loadHomeFragment();
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawers();
                 return;
-            } else {
+            }
+
+            // This code loads home fragment when back key is pressed
+            // when user is in other fragment than home
+            if (shouldLoadHomeFragOnBackPress) {
+                // checking if user is on other navigation menu
+                // rather than home
+                if (navItemIndex != 0) {
+                    navItemIndex = 0;
+                    CURRENT_TAG = TAG_Session;
+                    loadHomeFragment();
+                    return;
+                } else {
+
 //                loadHomeFragment();
                 Utils.ping(mContex, "Press again to exist.");
+//                Intent intent = new Intent(mContex, SearchByUser.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
                 finish();
                 System.exit(0);
+                }
             }
-        }
+            super.onBackPressed();
 
-        super.onBackPressed();
+
     }
 
     public void setActionBar(int session, String flag) {
@@ -402,7 +404,7 @@ public class DashBoardActivity extends AppCompatActivity {
 //            getSupportActionBar().setTitle("Payment Report");
 //        }
         else {
-            if(session==0){
+            if (session == 0) {
                 session_cal.setVisibility(View.GONE);
             }
             getSupportActionBar().setTitle(activityTitles[session]);
@@ -489,7 +491,7 @@ public class DashBoardActivity extends AppCompatActivity {
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("True")) {
                         Utils.ping(mContex, getResources().getString(R.string.changPassword));
-                        Utils.setPref(mContex, "Password",passWordStr);
+                        Utils.setPref(mContex, "Password", passWordStr);
                         changeDialog.dismiss();
                     }
                 }

@@ -56,7 +56,7 @@ public class OldFamilyListFragment extends Fragment {
     ExpandableSelectStudentListAdapter expandableSelectStudentListAdapter;
 
     Dialog confimDialog;
-    TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, session_fee_txt;
+    TextView cancel_txt, confirm_txt, session_student_txt,session_teacher_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, session_fee_txt;
     String familyIdStr = "", contatIDstr, orderIDStr, sessionIDStr, type, familyNameStr = "",paymentStatusstr;
     ArrayList<String> selectedId;
 String froncontanctStr;
@@ -141,7 +141,7 @@ String froncontanctStr;
         confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         confimDialog.setCancelable(false);
         confimDialog.setContentView(R.layout.confirm_session_dialog);
-
+        session_teacher_txt=(TextView)confimDialog.findViewById(R.id.session_teacher_txt);
         session_student_txt_view = (TextView) confimDialog.findViewById(R.id.session_student_txt_view);
         session_student_txt = (TextView) confimDialog.findViewById(R.id.session_student_txt);
         session_name_txt = (TextView) confimDialog.findViewById(R.id.session_name_txt);
@@ -159,6 +159,7 @@ String froncontanctStr;
         } else {
             session_fee_txt.setText("₹ " + AppConfiguration.SessionPrice);
         }
+        session_teacher_txt.setText(Utils.getPref(mContext, "RegisterUserName"));
         session_name_txt.setText(AppConfiguration.SessionName);
         location_txt.setText(AppConfiguration.SessionLocation);
         duration_txt.setText(AppConfiguration.SessionDuration);

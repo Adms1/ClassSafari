@@ -57,7 +57,7 @@ public class SessionName extends AppCompatActivity {
             paymentStatusstr, orderIDStr, boardStr, standardStr, streamStr, searchTypeStr, subjectStr,
             wheretoComeStr, sessionId, commentStr, ratingValueStr, purchaseSessionIDStr = "",searchfront,
             familysessionfeesStr, familysessionnameStr, familylocationStr, familysessionStudentStr,sessionType;
-    ;
+
     ArrayList<String> purchaseSessionIDArray;
     SessionDetailModel dataResponse, dataResponseRating;
 
@@ -548,7 +548,7 @@ public class SessionName extends AppCompatActivity {
                         Intent ipayment = new Intent(mContext, PaymentActivity.class);
                         ipayment.putExtra("orderID", orderIDStr);
                         ipayment.putExtra("amount", AppConfiguration.classsessionPrice);
-                        ipayment.putExtra("mode", "TEST");
+                        ipayment.putExtra("mode", "LIVE");
                         ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
                         ipayment.putExtra("sessionID", sessionIDStr);
                         ipayment.putExtra("contactID", Utils.getPref(mContext, "coachID"));

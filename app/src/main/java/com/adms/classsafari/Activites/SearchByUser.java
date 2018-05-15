@@ -16,24 +16,25 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.AppConfiguration;
 import com.adms.classsafari.AppConstant.Utils;
-import com.adms.classsafari.Model.SelectedDataModel;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivitySearchByUserBinding;
+import com.adms.classsafari.databinding.ChangePasswordDialogBinding;
+import com.adms.classsafari.databinding.LayoutMenuBinding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,17 +46,18 @@ import retrofit.client.Response;
 
 public class SearchByUser extends AppCompatActivity {
     ActivitySearchByUserBinding searchByUserBinding;
+    LayoutMenuBinding menuBinding;
+    ChangePasswordDialogBinding changePasswordDialogBinding;
+
     Context mContext;
     SessionDetailModel dataResponse;
     String selectedSessionNameStr = "", selectedLocationStr = "", sessionName = "";
     String passWordStr, confirmpassWordStr, currentpasswordStr;
-    EditText edtnewpassword, edtconfirmpassword, edtcurrentpassword;
-    Button changepwd_btn, cancel_btn;
-    Dialog menuDialog;
+    Dialog menuDialog, changeDialog;
+    //Use for Menu Dialog
     Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily;
-    TextView user_name_txt;
-    Dialog changeDialog;
-    SelectedDataModel selectedDataModel=new SelectedDataModel();
+    TextView userNameTxt;
+
     private PopupWindow popupWindow;
 
     @Override
@@ -96,7 +98,7 @@ public class SearchByUser extends AppCompatActivity {
                 inClassDetail.putExtra("withOR", "withOR");
                 inClassDetail.putExtra("SearchBy", "2");
                 inClassDetail.putExtra("sessionType", "1");
-                inClassDetail.putExtra("firsttimesearch","true");
+                inClassDetail.putExtra("firsttimesearch", "true");
                 startActivity(inClassDetail);
             }
         });
@@ -130,7 +132,7 @@ public class SearchByUser extends AppCompatActivity {
                 inClassDetail.putExtra("withOR", "withOR");
                 inClassDetail.putExtra("SearchBy", "2");
                 inClassDetail.putExtra("sessionType", "2");
-                inClassDetail.putExtra("firsttimesearch","true");
+                inClassDetail.putExtra("firsttimesearch", "true");
                 startActivity(inClassDetail);
             }
         });
@@ -358,26 +360,22 @@ public class SearchByUser extends AppCompatActivity {
 //        popupWindow.showAtLocation(searchByUserBinding.linearLogin, Gravity.LEFT, 300, 0);
         popupWindow.setContentView(view);
 
-        btnMyReport = (Button) view.findViewById(R.id.btnMyReport);
-        btnMySession = (Button) view.findViewById(R.id.btnMySession);
-        btnChangePassword = (Button) view.findViewById(R.id.btnChangePassword);
 
-
-        btnMyReport.setOnClickListener(new View.OnClickListener() {
+        menuBinding.btnMyReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent imyaccount = new Intent(mContext, MyAccountActivity.class);
                 startActivity(imyaccount);
             }
         });
-        btnMySession.setOnClickListener(new View.OnClickListener() {
+        menuBinding.btnMySession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent isession = new Intent(mContext, MySession.class);
                 startActivity(isession);
             }
         });
-        btnChangePassword.setOnClickListener(new View.OnClickListener() {
+        menuBinding.btnChangePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 changePasswordDialog();
@@ -387,6 +385,9 @@ public class SearchByUser extends AppCompatActivity {
     }
 
     public void changePasswordDialog() {
+        changePasswordDialogBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContext), R.layout.change_password_dialog, (ViewGroup) searchByUserBinding.getRoot(), false);
+
         changeDialog = new Dialog(mContext, R.style.Theme_Dialog);
         Window window = changeDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -398,41 +399,33 @@ public class SearchByUser extends AppCompatActivity {
 
         changeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         changeDialog.setCancelable(false);
-        changeDialog.setContentView(R.layout.change_password_dialog);
+        changeDialog.setContentView(changePasswordDialogBinding.getRoot());
 
-        cancel_btn = (Button) changeDialog.findViewById(R.id.cancel_btn);
-        changepwd_btn = (Button) changeDialog.findViewById(R.id.changepwd_btn);
-        edtconfirmpassword = (EditText) changeDialog.findViewById(R.id.edtconfirmpassword);
-        edtnewpassword = (EditText) changeDialog.findViewById(R.id.edtnewpassword);
-        edtcurrentpassword = (EditText) changeDialog.findViewById(R.id.edtcurrentpassword);
-
-        changepwd_btn.setOnClickListener(new View.OnClickListener() {
+        changePasswordDialogBinding.changepwdBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentpasswordStr = edtcurrentpassword.getText().toString();
-                confirmpassWordStr = edtconfirmpassword.getText().toString();
-                passWordStr = edtnewpassword.getText().toString();
+                currentpasswordStr = changePasswordDialogBinding.edtcurrentpassword.getText().toString();
+                confirmpassWordStr = changePasswordDialogBinding.edtconfirmpassword.getText().toString();
+                passWordStr = changePasswordDialogBinding.edtnewpassword.getText().toString();
                 if (currentpasswordStr.equalsIgnoreCase(Utils.getPref(mContext, "Password"))) {
                     if (!passWordStr.equalsIgnoreCase("") && passWordStr.length() >= 4 && passWordStr.length() <= 8) {
                         if (passWordStr.equalsIgnoreCase(confirmpassWordStr)) {
                             callChangePasswordApi();
                         } else {
-                            edtconfirmpassword.setError("Confirm Password does not match.");
+                            changePasswordDialogBinding.edtcurrentpassword.setError("Confirm Password does not match.");
                         }
                     } else {
-//                    Util.ping(mContex, "Confirm Password does not match.");
-                        edtnewpassword.setError("Password must be 4-8 Characters.");
-                        edtconfirmpassword.setText("");
-                        edtconfirmpassword.setText("");
+                        changePasswordDialogBinding.edtconfirmpassword.setError("Password must be 4-8 Characters.");
+                        changePasswordDialogBinding.edtconfirmpassword.setText("");
+                        changePasswordDialogBinding.edtconfirmpassword.setText("");
                     }
                 } else {
-                    edtcurrentpassword.setError("Password does not match to current password.");
+                    changePasswordDialogBinding.edtcurrentpassword.setError("Password does not match to current password.");
                 }
-
 
             }
         });
-        cancel_btn.setOnClickListener(new View.OnClickListener() {
+        changePasswordDialogBinding.cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 changeDialog.dismiss();
@@ -493,6 +486,9 @@ public class SearchByUser extends AppCompatActivity {
     }
 
     public void menuDialog() {
+//        menuBinding = DataBindingUtil.
+//                inflate(LayoutInflater.from(mContext), R.layout.layout_menu, (ViewGroup) searchByUserBinding.getRoot(), false);
+
         menuDialog = new Dialog(mContext, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -503,7 +499,9 @@ public class SearchByUser extends AppCompatActivity {
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         menuDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         menuDialog.setCanceledOnTouchOutside(true);
+//        menuDialog.setContentView(menuBinding.getRoot());
         menuDialog.setContentView(R.layout.layout_menu);
+
         btnMyReport = (Button) menuDialog.findViewById(R.id.btnMyReport);
         btnMySession = (Button) menuDialog.findViewById(R.id.btnMySession);
         btnChangePassword = (Button) menuDialog.findViewById(R.id.btnChangePassword);
@@ -511,9 +509,8 @@ public class SearchByUser extends AppCompatActivity {
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
 
-        user_name_txt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
-
-        user_name_txt.setText(Utils.getPref(mContext, "RegisterUserName"));
+        userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
+        userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
         btnMyReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -585,6 +582,80 @@ public class SearchByUser extends AppCompatActivity {
                         .show();
             }
         });
+
+
+//        menuBinding.userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
+//        menuBinding.btnMyReport.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent imyaccount = new Intent(mContext, MyAccountActivity.class);
+//                imyaccount.putExtra("wheretocometype", "menu");
+//                startActivity(imyaccount);
+//            }
+//        });
+//        menuBinding.btnMySession.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent isession = new Intent(mContext, MySession.class);
+//                isession.putExtra("wheretocometype", "menu");
+//                startActivity(isession);
+//                menuDialog.dismiss();
+//            }
+//        });
+//        menuBinding.btnChangePassword.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                menuDialog.dismiss();
+//                changePasswordDialog();
+//            }
+//        });
+//        menuBinding.btnmyfamily.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(mContext, FamilyListActivity.class);
+//                intent.putExtra("froncontanct", "true");
+//                intent.putExtra("wheretocometype", "menu");
+//                intent.putExtra("familyNameStr", Utils.getPref(mContext, "RegisterUserName"));
+//                intent.putExtra("familyID", Utils.getPref(mContext, "coachTypeID"));
+//                startActivity(intent);
+//            }
+//        });
+//        menuBinding.btnLogout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                menuDialog.dismiss();
+//                new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+//                        .setCancelable(false)
+//                        .setTitle("Logout")
+//                        .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+//                        .setMessage("Are you sure you want to logout?")
+//                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                Utils.setPref(mContext, "coachID", "");
+//                                Utils.setPref(mContext, "coachTypeID", "");
+//                                Utils.setPref(mContext, "RegisterUserName", "");
+//                                Utils.setPref(mContext, "RegisterEmail", "");
+//                                Utils.setPref(mContext, "LoginType", "");
+//                                Utils.setPref(mContext, "Password", "");
+//                                Utils.setPref(mContext, "FamilyID", "");
+//                                Utils.setPref(mContext, "location", "");
+//                                Utils.setPref(mContext, "sessionName", "");
+//                                Intent intentLogin = new Intent(mContext, SearchByUser.class);
+//                                intentLogin.putExtra("frontLogin", "beforeLogin");
+//                                startActivity(intentLogin);
+//                                finish();
+//                            }
+//                        })
+//                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                // do nothing
+//
+//                            }
+//                        })
+//                        .setIcon(R.drawable.safari)
+//                        .show();
+//            }
+//        });
         menuDialog.show();
     }
 }

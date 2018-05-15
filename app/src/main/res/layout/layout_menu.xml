@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/_170sdp"
     android:layout_height="wrap_content"
@@ -85,11 +86,11 @@
         android:textColor="@color/text_color"
         android:textSize="@dimen/_12sdp"
         android:visibility="visible" />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:layout_marginRight="@dimen/_3sdp"
-        android:background="@color/gray" />
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0.1dp"-->
+        <!--android:layout_marginRight="@dimen/_3sdp"-->
+        <!--android:background="@color/gray" />-->
 
 
     <Button
@@ -147,3 +148,4 @@
         android:textSize="@dimen/_12sdp"
         android:visibility="visible" />
 </LinearLayout>
+</layout>

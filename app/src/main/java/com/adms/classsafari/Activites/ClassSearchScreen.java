@@ -31,7 +31,7 @@ import java.util.Map;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class ClassSearchScreen extends AppCompatActivity {
+public class ClassSearchScreen extends AppCompatActivity implements View.OnClickListener {
 
     ActivityClassSearchScreenBinding classSearchScreenBinding;
     Context mContext;
@@ -40,7 +40,7 @@ public class ClassSearchScreen extends AppCompatActivity {
     String flag, selectedSessionStr = "", selectedSessionCityStr, sessionCapacityStr,
             sessionTypeStr, wheretoComeStr, genderStr = "",
             searchByStr, searchfront, locationStr,
-            classNameStr,firsttimesearch,boardStr,standardStr,streamStr,lessionNameStr;
+            classNameStr, firsttimesearch, boardStr, standardStr, streamStr, lessionNameStr;
     SelectedDataModel selectedDataModel = new SelectedDataModel();
 
     @Override
@@ -55,12 +55,12 @@ public class ClassSearchScreen extends AppCompatActivity {
         searchfront = getIntent().getStringExtra("searchfront");
         locationStr = getIntent().getStringExtra("city");
         classNameStr = getIntent().getStringExtra("sessionName");
-        firsttimesearch=getIntent().getStringExtra("firsttimesearch");
-        boardStr=getIntent().getStringExtra("board");
-        standardStr=getIntent().getStringExtra("standard");
-        streamStr=getIntent().getStringExtra("stream");
+        firsttimesearch = getIntent().getStringExtra("firsttimesearch");
+        boardStr = getIntent().getStringExtra("board");
+        standardStr = getIntent().getStringExtra("standard");
+        streamStr = getIntent().getStringExtra("stream");
 //        genderStr=getIntent().getStringExtra("gender");
-        lessionNameStr=getIntent().getStringExtra("lessionName");
+        lessionNameStr = getIntent().getStringExtra("lessionName");
 //        selectedDataModel=getIntent().getParcelableExtra("selectedDataModel");
         init();
         setListner();
@@ -254,7 +254,7 @@ public class ClassSearchScreen extends AppCompatActivity {
                     inSearchUser.putExtra("SearchBy", searchByStr);
                     inSearchUser.putExtra("searchfront", searchfront);
 //                    inSearchUser.putExtra("selectedDataModel", selectedDataModel);
-                    inSearchUser.putExtra("firsttimesearch","false");
+                    inSearchUser.putExtra("firsttimesearch", "false");
                     startActivity(inSearchUser);
                 } else {
                     classSearchScreenBinding.sessionAutoTxt.setError("Please Select Session and location.");
@@ -278,7 +278,7 @@ public class ClassSearchScreen extends AppCompatActivity {
         selectedDataModel.setLessionName(classSearchScreenBinding.classAutoTxt.getText().toString());
         selectedDataModel.setBoard(classSearchScreenBinding.boardAutoTxt.getText().toString());
         selectedDataModel.setStandard(classSearchScreenBinding.standardAutoTxt.getText().toString());
-        selectedDataModel.setStream( classSearchScreenBinding.streamAutoTxt.getText().toString());
+        selectedDataModel.setStream(classSearchScreenBinding.streamAutoTxt.getText().toString());
         selectedDataModel.setGender(genderStr);
     }
 
@@ -583,6 +583,13 @@ public class ClassSearchScreen extends AppCompatActivity {
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+
         }
     }
 }

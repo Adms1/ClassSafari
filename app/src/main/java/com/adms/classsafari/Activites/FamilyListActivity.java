@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,10 +14,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ExpandableListView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.adms.classsafari.Adapter.ExpandableSelectStudentListAdapter;
@@ -30,6 +27,7 @@ import com.adms.classsafari.Model.TeacherInfo.ChildDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.FamilyDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
+import com.adms.classsafari.databinding.ActivityAddFamilyBinding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,24 +39,26 @@ import retrofit.client.Response;
 
 public class FamilyListActivity extends AppCompatActivity {
 
+    ActivityAddFamilyBinding familyBinding;
     public Context mContext;
-    ImageView back;
-    LinearLayout list_linear;
-    ExpandableListView lvExpfamilylist;
-    TextView no_record_txt;
+//    ImageView back;
+//    LinearLayout list_linear;
+//    ExpandableListView lvExpfamilylist;
+//    TextView no_record_txt;
+//    Button addchild_txt;
+
 
     List<FamilyDetailModel> finalFamilyDetail;
     List<String> listDataHeader;
     HashMap<String, List<ChildDetailModel>> listDataChild;
     private int lastExpandedPosition = -1;
     ExpandableSelectStudentListAdapter expandableSelectStudentListAdapter;
-    Button addchild_txt;
 
     //Conformation Dialog
     Dialog confimDialog;
-    TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view,
+    TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view,session_teacher_txt,
             session_name_txt, location_txt, duration_txt, time_txt, time_txt_view, session_fee_txt;
-    String paymentStatusstr, sessionIDStr, familysessionfeesStr, familysessionnameStr,
+    String paymentStatusstr, sessionIDStr, familysessionfeesStr, familysessionnameStr,teahcerNameStr,
             familylocationStr, familysessionStudentStr, sessionDateStr, durationStr,
             orderIDStr, contatIDstr, type, familyIdStr = "", familyNameStr = "", locationStr,
             boardStr, standardStr, streamStr, searchTypeStr, subjectStr,searchfront,
@@ -72,12 +72,13 @@ public class FamilyListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_family);
+        familyBinding= DataBindingUtil.setContentView(this,R.layout.activity_add_family);
 
         mContext = this;
         getIntenetValue();
         init();
-        setListner();
+        setListner();callSessionReportApi();
+
         callFamilyListApi();
     }
 
@@ -107,15 +108,15 @@ public class FamilyListActivity extends AppCompatActivity {
     }
 
     public void init() {
-        back = (ImageView) findViewById(R.id.back);
-        list_linear = (LinearLayout) findViewById(R.id.list_linear);
-        lvExpfamilylist = (ExpandableListView) findViewById(R.id.lvExpfamilylist);
-        no_record_txt = (TextView) findViewById(R.id.no_record_txt);
-        addchild_txt = (Button) findViewById(R.id.addchild_txt);
+//        back = (ImageView) findViewById(R.id.back);
+//        list_linear = (LinearLayout) findViewById(R.id.list_linear);
+//        lvExpfamilylist = (ExpandableListView) findViewById(R.id.lvExpfamilylist);
+//        no_record_txt = (TextView) findViewById(R.id.no_record_txt);
+//        addchild_txt = (Button) findViewById(R.id.addchild_txt);
     }
 
     public void setListner() {
-        back.setOnClickListener(new View.OnClickListener() {
+        familyBinding.back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!froncontanctStr.equalsIgnoreCase("true")) {
@@ -156,7 +157,7 @@ public class FamilyListActivity extends AppCompatActivity {
                 }
             }
         });
-        addchild_txt.setOnClickListener(new View.OnClickListener() {
+        familyBinding.addchildTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!froncontanctStr.equalsIgnoreCase("true")) {
@@ -217,17 +218,17 @@ public class FamilyListActivity extends AppCompatActivity {
                         return;
                     }
                     if (familyInfoModel.getSuccess().equalsIgnoreCase("false")) {
-                        list_linear.setVisibility(View.GONE);
-                        no_record_txt.setVisibility(View.VISIBLE);
+                        familyBinding.listLinear.setVisibility(View.GONE);
+                        familyBinding.noRecordTxt.setVisibility(View.VISIBLE);
                         return;
                     }
                     if (familyInfoModel.getSuccess().equalsIgnoreCase("True")) {
                         finalFamilyDetail = familyInfoModel.getData();
-                        callSessionReportApi();
+//                        callSessionReportApi();
                         if (familyInfoModel.getData() != null) {
                             if (familyInfoModel.getData().size() > 0) {
-                                list_linear.setVisibility(View.VISIBLE);
-                                no_record_txt.setVisibility(View.GONE);
+                                familyBinding.listLinear.setVisibility(View.VISIBLE);
+                                familyBinding.noRecordTxt.setVisibility(View.GONE);
                                 fillExpLV();
                                 expandableSelectStudentListAdapter = new ExpandableSelectStudentListAdapter(mContext, listDataHeader, listDataChild, froncontanctStr, new onChlidClick() {
                                     @Override
@@ -282,8 +283,8 @@ public class FamilyListActivity extends AppCompatActivity {
                                         }
                                     }
                                 });
-                                lvExpfamilylist.setAdapter(expandableSelectStudentListAdapter);
-                                lvExpfamilylist.expandGroup(0);
+                                familyBinding.lvExpfamilylist.setAdapter(expandableSelectStudentListAdapter);
+                                familyBinding.lvExpfamilylist.expandGroup(0);
                                 if (!froncontanctStr.equalsIgnoreCase("true")) {
                                     new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
                                             .setCancelable(false)
@@ -297,8 +298,8 @@ public class FamilyListActivity extends AppCompatActivity {
                                             .show();
                                 }
                             } else {
-                                list_linear.setVisibility(View.GONE);
-                                no_record_txt.setVisibility(View.VISIBLE);
+                                familyBinding.listLinear.setVisibility(View.GONE);
+                                familyBinding.noRecordTxt.setVisibility(View.VISIBLE);
                             }
                         }
                     }
@@ -358,7 +359,7 @@ public class FamilyListActivity extends AppCompatActivity {
         confimDialog.setCancelable(false);
         confimDialog.setContentView(R.layout.confirm_session_dialog);
 
-
+        session_teacher_txt=(TextView)confimDialog.findViewById(R.id.session_teacher_txt);
         session_student_txt_view = (TextView) confimDialog.findViewById(R.id.session_student_txt_view);
         session_student_txt = (TextView) confimDialog.findViewById(R.id.session_student_txt);
         session_name_txt = (TextView) confimDialog.findViewById(R.id.session_name_txt);
@@ -377,6 +378,7 @@ public class FamilyListActivity extends AppCompatActivity {
         location_txt.setText(familylocationStr);
         duration_txt.setText(durationStr);
         time_txt.setText(sessionDateStr);
+        session_teacher_txt.setText(familysessionStudentStr);
 
         if (familysessionfeesStr.equalsIgnoreCase("0.00")) {
             session_fee_txt.setText("Free");
@@ -432,7 +434,7 @@ public class FamilyListActivity extends AppCompatActivity {
                         Intent ipayment = new Intent(mContext, PaymentActivity.class);
                         ipayment.putExtra("orderID", orderIDStr);
                         ipayment.putExtra("amount", AppConfiguration.classsessionPrice);
-                        ipayment.putExtra("mode", "TEST");
+                        ipayment.putExtra("mode", "LIVE");
                         ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
                         ipayment.putExtra("sessionID", sessionIDStr);
                         ipayment.putExtra("contactID", Utils.getPref(mContext, "coachID"));

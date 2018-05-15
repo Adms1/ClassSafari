@@ -2,19 +2,17 @@ package com.adms.classsafari.Activites;
 
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.AppConfiguration;
 import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
+import com.adms.classsafari.databinding.ActivityPaymentSuccessBinding;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,58 +24,59 @@ import static android.view.View.GONE;
 
 public class PaymentSuccessActivity extends AppCompatActivity {
 
+    ActivityPaymentSuccessBinding paymentSuccessBinding;
     Context mContext;
     String status;
-    TextView txtTransactionID, txtValue, txtSucessFailDesc, txtSucessFail, txtUserName;
-    RelativeLayout rlInnerBox;
-    ImageView imvSuccessFail;
-    Button btnNewCharge;
+//    TextView txtTransactionID, txtValue, txtSucessFailDesc, txtSucessFail, txtUserName;
+//    RelativeLayout rlInnerBox;
+//    ImageView imvSuccessFail;
+//    Button btnNewCharge;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment_success);
+        paymentSuccessBinding= DataBindingUtil.setContentView(this,R.layout.activity_payment_success);
         mContext = this;
         init();
         setListner();
     }
 
     public void init() {
-        txtTransactionID = (TextView) findViewById(R.id.txtTransactionID);
-        txtValue = (TextView) findViewById(R.id.txtValue);
-        txtSucessFailDesc = (TextView) findViewById(R.id.txtSucessFailDesc);
-        txtSucessFail = (TextView) findViewById(R.id.txtSucessFail);
-        imvSuccessFail = (ImageView) findViewById(R.id.imvSuccessFail);
-        btnNewCharge = (Button) findViewById(R.id.btnNewCharge);
-        txtUserName = (TextView) findViewById(R.id.txtUserName);
+//        txtTransactionID = (TextView) findViewById(R.id.txtTransactionID);
+//        txtValue = (TextView) findViewById(R.id.txtValue);
+//        txtSucessFailDesc = (TextView) findViewById(R.id.txtSucessFailDesc);
+//        txtSucessFail = (TextView) findViewById(R.id.txtSucessFail);
+//        imvSuccessFail = (ImageView) findViewById(R.id.imvSuccessFail);
+//        btnNewCharge = (Button) findViewById(R.id.btnNewCharge);
+//        txtUserName = (TextView) findViewById(R.id.txtUserName);
 
-        txtUserName.setText(AppConfiguration.famliyName);
+        paymentSuccessBinding.txtUserName.setText(AppConfiguration.famliyName);
         if (getIntent().getStringExtra("responseCode").equalsIgnoreCase("0")) {
             status = "success";
-            imvSuccessFail.setImageResource(R.drawable.circle_sucess);
-            txtSucessFail.setText("Success");
-            txtSucessFailDesc.setText("Your transaction was successful");
-            txtTransactionID.setText(getIntent().getStringExtra("transactionId"));
-            txtValue.setText(getIntent().getStringExtra("amount"));
-            btnNewCharge.setText("Done");
+            paymentSuccessBinding.imvSuccessFail.setImageResource(R.drawable.circle_sucess);
+            paymentSuccessBinding.txtSucessFail.setText("Success");
+            paymentSuccessBinding.txtSucessFailDesc.setText("Your transaction was successful");
+            paymentSuccessBinding.txtTransactionID.setText(getIntent().getStringExtra("transactionId"));
+            paymentSuccessBinding.txtValue.setText(getIntent().getStringExtra("amount"));
+            paymentSuccessBinding.btnNewCharge.setText("Done");
         } else {
-            imvSuccessFail.setImageResource(R.drawable.failer);
+            paymentSuccessBinding.imvSuccessFail.setImageResource(R.drawable.failer);
             status = "fail";
-            txtSucessFail.setTextColor(getResources().getColor(R.color.absent));
-            txtSucessFail.setText("Failure");
-            txtSucessFailDesc.setTextColor(getResources().getColor(R.color.text_color));
-            txtSucessFailDesc.setText("Your transaction was not successful\nPlease try again.");
-            txtTransactionID.setVisibility(GONE);
-            txtValue.setVisibility(GONE);
-            btnNewCharge.setText("Try Again");
+            paymentSuccessBinding.txtSucessFail.setTextColor(getResources().getColor(R.color.absent));
+            paymentSuccessBinding.txtSucessFail.setText("Failure");
+            paymentSuccessBinding.txtSucessFailDesc.setTextColor(getResources().getColor(R.color.text_color));
+            paymentSuccessBinding.txtSucessFailDesc.setText("Your transaction was not successful\nPlease try again.");
+            paymentSuccessBinding.txtTransactionID.setVisibility(GONE);
+            paymentSuccessBinding.txtValue.setVisibility(GONE);
+            paymentSuccessBinding.btnNewCharge.setText("Try Again");
         }
 
         callSessionPaymentApi();
     }
 
     public void setListner() {
-        btnNewCharge.setOnClickListener(new View.OnClickListener() {
+        paymentSuccessBinding.btnNewCharge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent isearchByuser = new Intent(mContext, MySession.class);

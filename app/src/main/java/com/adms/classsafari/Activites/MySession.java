@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -14,13 +15,12 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.adms.classsafari.Adapter.UserSessionListAdapter;
@@ -31,6 +31,11 @@ import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.Session.sessionDataModel;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
+import com.adms.classsafari.databinding.ActivityMySessionBinding;
+import com.adms.classsafari.databinding.ChangePasswordDialogBinding;
+import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
+import com.adms.classsafari.databinding.DialogSessionDetailBinding;
+import com.adms.classsafari.databinding.LayoutMenuBinding;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,38 +50,35 @@ import retrofit.client.Response;
 
 public class MySession extends AppCompatActivity {
 
-    LinearLayout header_linear, list_linear;
-    RecyclerView session_rcList;
-    TextView no_record_txt;
-    ImageView back, menu;
+
+    ActivityMySessionBinding mySessionBinding;
+    ConfirmSessionDialogBinding confirmSessionDialogBinding;
+    DialogSessionDetailBinding dialogSessionDetailBinding;
+    LayoutMenuBinding menuBinding;
+    ChangePasswordDialogBinding changePasswordDialogBinding;
+
     Context mContext;
     UserSessionListAdapter userSessionListAdapter;
     List<sessionDataModel> sessionList;
+
     //Use for Dialog
-    Dialog confimDialog, sessionDetailDialog;
-    TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view,
-            session_name_txt, location_txt, duration_txt, time_txt, time_txt_view,
-            session_fee_txt, session_board_txt, session_standard_txt, session_stream_txt,
-            session_lession_txt, session_date_txt, session_time_txt;
-    LinearLayout linear_board, linear_standard, linear_stream, linear_lession;
-    String paymentStatusstr, sessionIDStr, selectedsessionIDStr, sessionPriceStr, orderIDStr, flag;
+    Dialog confimDialog, sessionDetailDialog,changeDialog;
+    String paymentStatusstr, sessionIDStr, selectedsessionIDStr, sessionPriceStr, orderIDStr, flag, sessionNameStr;
     SessionDetailModel dataResponse;
     int SessionHour = 0;
     Integer SessionMinit = 0;
 
-    //Use for menu
+    //Use for Menu Dialog
     String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr;
-    EditText edtnewpassword, edtconfirmpassword, edtcurrentpassword;
-    Button changepwd_btn, cancel_btn;
     Dialog menuDialog;
     Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily;
-    TextView user_name_txt;
-    Dialog changeDialog;
+    TextView userNameTxt;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_session);
+        mySessionBinding = DataBindingUtil.setContentView(this, R.layout.activity_my_session);
 
         mContext = this;
         getIntenttValue();
@@ -89,19 +91,11 @@ public class MySession extends AppCompatActivity {
     }
 
     public void init() {
-        header_linear = (LinearLayout) findViewById(R.id.header_linear);
-        list_linear = (LinearLayout) findViewById(R.id.list_linear);
-        session_rcList = (RecyclerView) findViewById(R.id.session_rcList);
-        no_record_txt = (TextView) findViewById(R.id.no_record_txt);
-        back = (ImageView) findViewById(R.id.back);
-        menu = (ImageView) findViewById(R.id.menu);
         callSessionListApi();
-
-
     }
 
     public void setListner() {
-        back.setOnClickListener(new View.OnClickListener() {
+        mySessionBinding.back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                if (wheretocometypeStr.equalsIgnoreCase("mySession")) {
@@ -119,7 +113,7 @@ public class MySession extends AppCompatActivity {
 //                }
             }
         });
-        menu.setOnClickListener(new View.OnClickListener() {
+        mySessionBinding.menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 menuDialog();
@@ -153,10 +147,10 @@ public class MySession extends AppCompatActivity {
                         sessionList = sessionModel.getData();
 
                         if (sessionModel.getData().size() > 0) {
-                            header_linear.setVisibility(View.VISIBLE);
+                            mySessionBinding.headerLinear.setVisibility(View.VISIBLE);
                             fillSessionList();
                         } else {
-                            header_linear.setVisibility(View.GONE);
+                            mySessionBinding.headerLinear.setVisibility(View.GONE);
                         }
                         Utils.dismissDialog();
                     }
@@ -197,19 +191,27 @@ public class MySession extends AppCompatActivity {
                 }
 
                 if (flag.equalsIgnoreCase("1")) {
-                    SessionDetailDialog();
+//                    SessionDetailDialog();
+                    Intent intent = new Intent(mContext, SessionDetailActivity.class);
+                    intent.putExtra("wheretocometype", wheretocometypeStr);
+                    intent.putExtra("sessionID", sessionIDStr);
+                    startActivity(intent);
                 } else {
                     ConformSessionDialog();
                 }
             }
         });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
-        session_rcList.setLayoutManager(mLayoutManager);
-        session_rcList.setItemAnimator(new DefaultItemAnimator());
-        session_rcList.setAdapter(userSessionListAdapter);
+        mySessionBinding.sessionRcList.setLayoutManager(mLayoutManager);
+        mySessionBinding.sessionRcList.setItemAnimator(new DefaultItemAnimator());
+        mySessionBinding.sessionRcList.setAdapter(userSessionListAdapter);
     }
 
     public void ConformSessionDialog() {
+
+        confirmSessionDialogBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContext), R.layout.confirm_session_dialog, (ViewGroup) mySessionBinding.getRoot(), false);
+
         confimDialog = new Dialog(mContext, R.style.Theme_Dialog);
         Window window = confimDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -221,28 +223,18 @@ public class MySession extends AppCompatActivity {
 
         confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         confimDialog.setCancelable(false);
-        confimDialog.setContentView(R.layout.confirm_session_dialog);
+        confimDialog.setContentView(confirmSessionDialogBinding.getRoot());
 
-
-        session_student_txt_view = (TextView) confimDialog.findViewById(R.id.session_student_txt_view);
-        session_student_txt = (TextView) confimDialog.findViewById(R.id.session_student_txt);
-        session_name_txt = (TextView) confimDialog.findViewById(R.id.session_name_txt);
-        location_txt = (TextView) confimDialog.findViewById(R.id.location_txt);
-        duration_txt = (TextView) confimDialog.findViewById(R.id.duration_txt);
-        time_txt = (TextView) confimDialog.findViewById(R.id.time_txt);
-        time_txt_view = (TextView) confimDialog.findViewById(R.id.time_txt_view);
-        session_fee_txt = (TextView) confimDialog.findViewById(R.id.session_fee_txt);
-        confirm_txt = (TextView) confimDialog.findViewById(R.id.confirm_txt);
-        cancel_txt = (TextView) confimDialog.findViewById(R.id.cancel_txt);
-        session_student_txt_view.setText("TEACHER NAME");
+        confirmSessionDialogBinding.sessionStudentTxtView.setText("TEACHER NAME");
+        confirmSessionDialogBinding.linear.setVisibility(View.GONE);
         setDialogData();
-        cancel_txt.setOnClickListener(new View.OnClickListener() {
+        confirmSessionDialogBinding.cancelTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 confimDialog.dismiss();
             }
         });
-        confirm_txt.setOnClickListener(new View.OnClickListener() {
+        confirmSessionDialogBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("") &&
@@ -287,7 +279,7 @@ public class MySession extends AppCompatActivity {
                         Intent ipayment = new Intent(mContext, PaymentActivity.class);
                         ipayment.putExtra("orderID", orderIDStr);
                         ipayment.putExtra("amount", sessionPriceStr);
-                        ipayment.putExtra("mode", "TEST");
+                        ipayment.putExtra("mode", "LIVE");
                         ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
                         ipayment.putExtra("sessionID", selectedsessionIDStr);
                         ipayment.putExtra("contactID", Utils.getPref(mContext, "coachID"));
@@ -415,29 +407,37 @@ public class MySession extends AppCompatActivity {
 
     private Map<String, String> getSessionListDetail() {
         Map<String, String> map = new HashMap<>();
+//        map.put("SessionName", sessionNameStr);
+//        map.put("AddressCity", "");
+//        map.put("LessonTypeName", "");
+//        map.put("BoardName", "");
+//        map.put("StandardName", "");
+//        map.put("StreamName", "");
+//        map.put("Gender_ID", "");
+//        map.put("CoachType_ID", "");
         return map;
     }
 
     public void setDialogData() {
         if (!flag.equalsIgnoreCase("1")) {
-            time_txt_view.setText("Date");
+            confirmSessionDialogBinding.timeTxtView.setText("Date");
             for (int i = 0; i < dataResponse.getData().size(); i++) {
                 if (sessionIDStr.equalsIgnoreCase(dataResponse.getData().get(i).getSessionID())) {
                     selectedsessionIDStr = dataResponse.getData().get(i).getSessionID();
                     if (dataResponse.getData().get(i).getSessionAmount().equalsIgnoreCase("0.00")) {
-                        session_fee_txt.setText("Free");
+                        confirmSessionDialogBinding.sessionFeeTxt.setText("Free");
                     } else {
-                        session_fee_txt.setText("₹ " + dataResponse.getData().get(i).getSessionAmount() + " /-");
+                        confirmSessionDialogBinding.sessionFeeTxt.setText("₹ " + dataResponse.getData().get(i).getSessionAmount() + " /-");
                     }
                     sessionPriceStr = dataResponse.getData().get(i).getSessionAmount();
-                    session_name_txt.setText(dataResponse.getData().get(i).getSessionName());
-                    location_txt.setText(dataResponse.getData().get(i).getAddressLine1()
+                    confirmSessionDialogBinding.sessionNameTxt.setText(dataResponse.getData().get(i).getSessionName());
+                    confirmSessionDialogBinding.locationTxt.setText(dataResponse.getData().get(i).getAddressLine1()
                             + ", " + dataResponse.getData().get(i).getRegionName()
                             + ", " + dataResponse.getData().get(i).getAddressCity()
                             + ", " + dataResponse.getData().get(i).getAddressState()
                             + "- " + dataResponse.getData().get(i).getAddressZipCode());
-                    session_student_txt.setText(dataResponse.getData().get(i).getName());
-                    duration_txt.setText(dataResponse.getData().get(i).getStartDate() + " To " + dataResponse.getData().get(i).getEndDate());
+                    confirmSessionDialogBinding.sessionStudentTxt.setText(dataResponse.getData().get(i).getName());
+                    confirmSessionDialogBinding.durationTxt.setText(dataResponse.getData().get(i).getStartDate() + " To " + dataResponse.getData().get(i).getEndDate());
                     String[] spiltPipes = dataResponse.getData().get(i).getSchedule().split("\\|");
                     String[] spiltComma;
                     String[] spiltDash;
@@ -447,7 +447,7 @@ public class MySession extends AppCompatActivity {
                         spiltDash = spiltComma[1].split("\\-");
                         calculateHours(spiltDash[0], spiltDash[1]);
                     }
-                    time_txt.setText(SessionHour + " hr " + SessionMinit + " min");
+                    confirmSessionDialogBinding.timeTxt.setText(SessionHour + " hr " + SessionMinit + " min");
 
                 }
             }
@@ -455,26 +455,28 @@ public class MySession extends AppCompatActivity {
             for (int i = 0; i < dataResponse.getData().size(); i++) {
                 if (sessionIDStr.equalsIgnoreCase(dataResponse.getData().get(i).getSessionID())) {
                     if (!dataResponse.getData().get(i).getCoachTypeID().equalsIgnoreCase("1")) {
-                        linear_board.setVisibility(View.GONE);
-                        linear_standard.setVisibility(View.GONE);
-                        linear_stream.setVisibility(View.GONE);
+                        dialogSessionDetailBinding.linearBoard.setVisibility(View.GONE);
+                        dialogSessionDetailBinding.linearStandard.setVisibility(View.GONE);
+                        dialogSessionDetailBinding.linearStream.setVisibility(View.GONE);
+
+
                     } else {
-                        linear_board.setVisibility(View.VISIBLE);
-                        linear_standard.setVisibility(View.VISIBLE);
-                        linear_stream.setVisibility(View.VISIBLE);
+                        dialogSessionDetailBinding.linearBoard.setVisibility(View.VISIBLE);
+                        dialogSessionDetailBinding.linearStandard.setVisibility(View.VISIBLE);
+                        dialogSessionDetailBinding.linearStream.setVisibility(View.VISIBLE);
                     }
-                    session_name_txt.setText(dataResponse.getData().get(i).getSessionName());
-                    session_student_txt.setText(dataResponse.getData().get(i).getName());
-                    session_board_txt.setText(dataResponse.getData().get(i).getBoard());
-                    session_standard_txt.setText(dataResponse.getData().get(i).getStandard());
-                    session_stream_txt.setText(dataResponse.getData().get(i).getStream());
-                    session_lession_txt.setText(dataResponse.getData().get(i).getLessionTypeName());
-                    location_txt.setText(dataResponse.getData().get(i).getAddressLine1()
+                    dialogSessionDetailBinding.sessionNameTxt.setText(dataResponse.getData().get(i).getSessionName());
+                    dialogSessionDetailBinding.sessionStudentTxt.setText(dataResponse.getData().get(i).getName());
+                    dialogSessionDetailBinding.sessionBoardTxt.setText(dataResponse.getData().get(i).getBoard());
+                    dialogSessionDetailBinding.sessionStandardTxt.setText(dataResponse.getData().get(i).getStandard());
+                    dialogSessionDetailBinding.sessionStreamTxt.setText(dataResponse.getData().get(i).getStream());
+                    dialogSessionDetailBinding.sessionLessionTxt.setText(dataResponse.getData().get(i).getLessionTypeName());
+                    dialogSessionDetailBinding.locationTxt.setText(dataResponse.getData().get(i).getAddressLine1()
                             + ", " + dataResponse.getData().get(i).getRegionName()
                             + ", " + dataResponse.getData().get(i).getAddressCity()
                             + ", " + dataResponse.getData().get(i).getAddressState()
                             + "- " + dataResponse.getData().get(i).getAddressZipCode());
-                    session_date_txt.setText(dataResponse.getData().get(i).getStartDate() + " To " + dataResponse.getData().get(i).getEndDate());
+                    dialogSessionDetailBinding.sessionDateTxt.setText(dataResponse.getData().get(i).getStartDate() + " To " + dataResponse.getData().get(i).getEndDate());
                     String[] spiltPipes = dataResponse.getData().get(i).getSchedule().split("\\|");
                     String[] spiltComma;
                     String[] spiltDash;
@@ -484,7 +486,7 @@ public class MySession extends AppCompatActivity {
                         spiltDash = spiltComma[1].split("\\-");
                         calculateHours(spiltDash[0], spiltDash[1]);
                     }
-                    session_time_txt.setText(SessionHour + " hr " + SessionMinit + " min");
+                    dialogSessionDetailBinding.sessionTimeTxt.setText(SessionHour + " hr " + SessionMinit + " min");
                 }
             }
         }
@@ -517,6 +519,10 @@ public class MySession extends AppCompatActivity {
 
 
     public void SessionDetailDialog() {
+        dialogSessionDetailBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContext), R.layout.dialog_session_detail, (ViewGroup) mySessionBinding.getRoot(), false);
+
+
         sessionDetailDialog = new Dialog(mContext, R.style.Theme_Dialog);
         Window window = sessionDetailDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -528,29 +534,12 @@ public class MySession extends AppCompatActivity {
 
         sessionDetailDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         sessionDetailDialog.setCancelable(false);
-        sessionDetailDialog.setContentView(R.layout.dialog_session_detail);
+        sessionDetailDialog.setContentView(dialogSessionDetailBinding.getRoot());
 
-
-        session_board_txt = (TextView) sessionDetailDialog.findViewById(R.id.session_board_txt);
-        session_standard_txt = (TextView) sessionDetailDialog.findViewById(R.id.session_standard_txt);
-        session_stream_txt = (TextView) sessionDetailDialog.findViewById(R.id.session_stream_txt);
-        session_lession_txt = (TextView) sessionDetailDialog.findViewById(R.id.session_lession_txt);
-        session_student_txt_view = (TextView) sessionDetailDialog.findViewById(R.id.session_student_txt_view);
-        session_student_txt = (TextView) sessionDetailDialog.findViewById(R.id.session_student_txt);
-        session_name_txt = (TextView) sessionDetailDialog.findViewById(R.id.session_name_txt);
-        location_txt = (TextView) sessionDetailDialog.findViewById(R.id.location_txt);
-        cancel_txt = (TextView) sessionDetailDialog.findViewById(R.id.cancel_txt);
-        session_date_txt = (TextView) sessionDetailDialog.findViewById(R.id.session_date_txt);
-        session_time_txt = (TextView) sessionDetailDialog.findViewById(R.id.session_time_txt);
-        linear_board = (LinearLayout) sessionDetailDialog.findViewById(R.id.linear_board);
-        linear_standard = (LinearLayout) sessionDetailDialog.findViewById(R.id.linear_standard);
-        linear_stream = (LinearLayout) sessionDetailDialog.findViewById(R.id.linear_stream);
-        linear_lession = (LinearLayout) sessionDetailDialog.findViewById(R.id.linear_lession);
-
-        session_student_txt_view.setText("TEACHER NAME");
+        dialogSessionDetailBinding.sessionStudentTxtView.setText("TEACHER NAME");
         setDialogData();
 
-        cancel_txt.setOnClickListener(new View.OnClickListener() {
+        dialogSessionDetailBinding.cancelTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sessionDetailDialog.dismiss();
@@ -563,6 +552,9 @@ public class MySession extends AppCompatActivity {
 
 
     public void changePasswordDialog() {
+        changePasswordDialogBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContext), R.layout.change_password_dialog, (ViewGroup) mySessionBinding.getRoot(), false);
+
         changeDialog = new Dialog(mContext, R.style.Theme_Dialog);
         Window window = changeDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -574,41 +566,34 @@ public class MySession extends AppCompatActivity {
 
         changeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         changeDialog.setCancelable(false);
-        changeDialog.setContentView(R.layout.change_password_dialog);
+        changeDialog.setContentView(changePasswordDialogBinding.getRoot());
 
-        cancel_btn = (Button) changeDialog.findViewById(R.id.cancel_btn);
-        changepwd_btn = (Button) changeDialog.findViewById(R.id.changepwd_btn);
-        edtconfirmpassword = (EditText) changeDialog.findViewById(R.id.edtconfirmpassword);
-        edtnewpassword = (EditText) changeDialog.findViewById(R.id.edtnewpassword);
-        edtcurrentpassword = (EditText) changeDialog.findViewById(R.id.edtcurrentpassword);
-
-        changepwd_btn.setOnClickListener(new View.OnClickListener() {
+        changePasswordDialogBinding.changepwdBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentpasswordStr = edtcurrentpassword.getText().toString();
-                confirmpassWordStr = edtconfirmpassword.getText().toString();
-                passWordStr = edtnewpassword.getText().toString();
+                currentpasswordStr = changePasswordDialogBinding.edtcurrentpassword.getText().toString();
+                confirmpassWordStr = changePasswordDialogBinding.edtconfirmpassword.getText().toString();
+                passWordStr = changePasswordDialogBinding.edtnewpassword.getText().toString();
                 if (currentpasswordStr.equalsIgnoreCase(Utils.getPref(mContext, "Password"))) {
                     if (!passWordStr.equalsIgnoreCase("") && passWordStr.length() >= 4 && passWordStr.length() <= 8) {
                         if (passWordStr.equalsIgnoreCase(confirmpassWordStr)) {
                             callChangePasswordApi();
                         } else {
-                            edtcurrentpassword.setError("Confirm Password does not match.");
+                            changePasswordDialogBinding.edtcurrentpassword.setError("Confirm Password does not match.");
                         }
                     } else {
-//                    Util.ping(mContex, "Confirm Password does not match.");
-                        edtconfirmpassword.setError("Password must be 4-8 Characters.");
-                        edtconfirmpassword.setText("");
-                        edtconfirmpassword.setText("");
+                        changePasswordDialogBinding.edtconfirmpassword.setError("Password must be 4-8 Characters.");
+                        changePasswordDialogBinding.edtconfirmpassword.setText("");
+                        changePasswordDialogBinding.edtconfirmpassword.setText("");
                     }
                 } else {
-                    edtcurrentpassword.setError("Password does not match to current password.");
+                    changePasswordDialogBinding.edtcurrentpassword.setError("Password does not match to current password.");
                 }
 
 
             }
         });
-        cancel_btn.setOnClickListener(new View.OnClickListener() {
+        changePasswordDialogBinding.cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 changeDialog.dismiss();
@@ -642,6 +627,7 @@ public class MySession extends AppCompatActivity {
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("True")) {
                         Utils.ping(mContext, getResources().getString(R.string.changPassword));
+                        Utils.setPref(mContext, "Password", passWordStr);
                         changeDialog.dismiss();
                     }
                 }
@@ -678,21 +664,23 @@ public class MySession extends AppCompatActivity {
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         menuDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         menuDialog.setCanceledOnTouchOutside(true);
+//        menuDialog.setContentView(menuBinding.getRoot());
         menuDialog.setContentView(R.layout.layout_menu);
+
         btnMyReport = (Button) menuDialog.findViewById(R.id.btnMyReport);
         btnMySession = (Button) menuDialog.findViewById(R.id.btnMySession);
         btnChangePassword = (Button) menuDialog.findViewById(R.id.btnChangePassword);
         btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
-        user_name_txt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
 
-        user_name_txt.setText(Utils.getPref(mContext, "RegisterUserName"));
+        userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
+        userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
         btnMyReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent imyaccount = new Intent(mContext, MyAccountActivity.class);
-                imyaccount.putExtra("wheretocometype", "mySession");
+                imyaccount.putExtra("wheretocometype", "menu");
                 startActivity(imyaccount);
             }
         });
@@ -700,7 +688,7 @@ public class MySession extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent isession = new Intent(mContext, MySession.class);
-                isession.putExtra("wheretocometype", "mySession");
+                isession.putExtra("wheretocometype", "menu");
                 startActivity(isession);
                 menuDialog.dismiss();
             }
@@ -717,7 +705,7 @@ public class MySession extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, FamilyListActivity.class);
                 intent.putExtra("froncontanct", "true");
-                intent.putExtra("wheretocometype", "mySession");
+                intent.putExtra("wheretocometype", "menu");
                 intent.putExtra("familyNameStr", Utils.getPref(mContext, "RegisterUserName"));
                 intent.putExtra("familyID", Utils.getPref(mContext, "coachTypeID"));
                 startActivity(intent);
@@ -759,6 +747,93 @@ public class MySession extends AppCompatActivity {
                         .show();
             }
         });
+//        menuBinding = DataBindingUtil.
+//                inflate(LayoutInflater.from(mContext), R.layout.layout_menu, (ViewGroup) mySessionBinding.getRoot(), false);
+//
+//        menuDialog = new Dialog(mContext, R.style.Theme_Dialog);
+//        Window window = menuDialog.getWindow();
+//        WindowManager.LayoutParams wlp = window.getAttributes();
+//        menuDialog.getWindow().getAttributes().verticalMargin = 0.1F;
+//        wlp.gravity = Gravity.TOP;
+//        window.setAttributes(wlp);
+//
+//        menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+//        menuDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        menuDialog.setCanceledOnTouchOutside(true);
+//        menuDialog.setContentView(menuBinding.getRoot());
+//
+//        menuBinding.userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
+//        menuBinding.btnMyReport.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent imyaccount = new Intent(mContext, MyAccountActivity.class);
+//                imyaccount.putExtra("wheretocometype", "mySession");
+//                startActivity(imyaccount);
+//            }
+//        });
+//        menuBinding.btnMySession.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent isession = new Intent(mContext, MySession.class);
+//                isession.putExtra("wheretocometype", "mySession");
+//                startActivity(isession);
+//                menuDialog.dismiss();
+//            }
+//        });
+//        menuBinding.btnChangePassword.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                menuDialog.dismiss();
+//                changePasswordDialog();
+//            }
+//        });
+//        menuBinding.btnmyfamily.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(mContext, FamilyListActivity.class);
+//                intent.putExtra("froncontanct", "true");
+//                intent.putExtra("wheretocometype", "mySession");
+//                intent.putExtra("familyNameStr", Utils.getPref(mContext, "RegisterUserName"));
+//                intent.putExtra("familyID", Utils.getPref(mContext, "coachTypeID"));
+//                startActivity(intent);
+//            }
+//        });
+//        menuBinding.btnLogout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                menuDialog.dismiss();
+//                new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+//                        .setCancelable(false)
+//                        .setTitle("Logout")
+//                        .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+//                        .setMessage("Are you sure you want to logout?")
+//                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                Utils.setPref(mContext, "coachID", "");
+//                                Utils.setPref(mContext, "coachTypeID", "");
+//                                Utils.setPref(mContext, "RegisterUserName", "");
+//                                Utils.setPref(mContext, "RegisterEmail", "");
+//                                Utils.setPref(mContext, "LoginType", "");
+//                                Utils.setPref(mContext, "Password", "");
+//                                Utils.setPref(mContext, "FamilyID", "");
+//                                Utils.setPref(mContext, "location", "");
+//                                Utils.setPref(mContext, "sessionName", "");
+//                                Intent intentLogin = new Intent(mContext, SearchByUser.class);
+//                                intentLogin.putExtra("frontLogin", "beforeLogin");
+//                                startActivity(intentLogin);
+//                                finish();
+//                            }
+//                        })
+//                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                // do nothing
+//
+//                            }
+//                        })
+//                        .setIcon(R.drawable.safari)
+//                        .show();
+//            }
+//        });
         menuDialog.show();
     }
 }
