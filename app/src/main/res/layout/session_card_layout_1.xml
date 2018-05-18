@@ -319,9 +319,9 @@
                             android:layout_marginLeft="@dimen/_2sdp"
                             android:layout_marginTop="@dimen/_5sdp"
                             android:paddingLeft="@dimen/_5sdp"
-                            android:textColor="@color/rating_bar"
+                            android:textColor="@color/text_color"
                             android:textSize="@dimen/_12sdp"
-                            android:visibility="gone"/>
+                            android:visibility="visible"/>
                     </LinearLayout>
                     <TextView
                         android:id="@+id/adress_txt_view"

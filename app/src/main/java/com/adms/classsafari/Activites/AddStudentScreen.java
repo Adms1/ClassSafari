@@ -10,7 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -23,6 +25,7 @@ import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivityAddStudentScreenBinding;
+import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.ParseException;
@@ -37,6 +40,7 @@ import retrofit.client.Response;
 
 public class AddStudentScreen extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     ActivityAddStudentScreenBinding addStudentScreenBinding;
+    ConfirmSessionDialogBinding confirmSessionDialogBinding;
     Context mContext;
     String MonthInt;
     int Year, Month, Day;
@@ -49,10 +53,10 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
             familyNameStr, paymentStatusstr, familylocationStr, familysessionStudentStr,
             sessionDateStr, durationStr, familysessionfeesStr, familysessionnameStr, locationStr,
             boardStr, standardStr, streamStr, searchTypeStr, subjectStr, froncontanctStr,
-            wheretoComeStr, searchByStr, genderStr, wheretocometypeStr, searchfront,sessionType;
+            wheretoComeStr, searchByStr, genderStr, wheretocometypeStr, searchfront,sessionType,firsttimesearch;
     Dialog confimDialog;
-    TextView cancel_txt, confirm_txt, session_student_txt, session_name_txt,
-            location_txt, duration_txt, time_txt, session_fee_txt, session_student_txt_view, time_txt_view;
+//    TextView cancel_txt, confirm_txt, session_student_txt, session_name_txt,session_teacher_txt,
+//            location_txt, duration_txt, time_txt, session_fee_txt, session_student_txt_view, time_txt_view;
     TeacherInfoModel classListInfo;
 
 
@@ -96,8 +100,9 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
         wheretocometypeStr = getIntent().getStringExtra("wheretocometype");
         searchfront = getIntent().getStringExtra("searchfront");
         sessionType=getIntent().getStringExtra("sessionType");
+        firsttimesearch=getIntent().getStringExtra("firsttimesearch");
         Log.d("familyName", familyNameStr + familyIDStr);
-        addStudentScreenBinding.familynameTxt.setText(familyNameStr);
+        addStudentScreenBinding.familynameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
     }
 
     public void setListner() {
@@ -127,12 +132,16 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                     intent.putExtra("withOR", wheretoComeStr);
                     intent.putExtra("searchfront",searchfront);
                     intent.putExtra("sessionType",sessionType);
+                    intent.putExtra("froncontanct",froncontanctStr);
+                    intent.putExtra("firsttimesearch",firsttimesearch);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(mContext, FamilyListActivity.class);
                     intent.putExtra("froncontanct", froncontanctStr);
                     intent.putExtra("wheretocometype", wheretocometypeStr);
                     intent.putExtra("searchfront",searchfront);
+                    intent.putExtra("froncontanct",froncontanctStr);
+                    intent.putExtra("firsttimesearch",firsttimesearch);
                     startActivity(intent);
                 }
             }
@@ -293,12 +302,15 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                     intent.putExtra("withOR", wheretoComeStr);
                     intent.putExtra("searchfront",searchfront);
                     intent.putExtra("sessionType",sessionType);
+                    intent.putExtra("froncontanct",froncontanctStr);
+                    intent.putExtra("firsttimesearch",firsttimesearch);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(mContext, FamilyListActivity.class);
                     intent.putExtra("froncontanct", froncontanctStr);
                     intent.putExtra("wheretocometype", wheretocometypeStr);
                     intent.putExtra("searchfront",searchfront);
+                    intent.putExtra("firsttimesearch",firsttimesearch);
                     startActivity(intent);
                 }
             }
@@ -499,6 +511,10 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
     }
 
     public void ConformSessionDialog() {
+
+        confirmSessionDialogBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContext), R.layout.confirm_session_dialog, (ViewGroup) addStudentScreenBinding.getRoot(), false);
+
         confimDialog = new Dialog(mContext, R.style.Theme_Dialog);
         Window window = confimDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -510,39 +526,29 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
 
         confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         confimDialog.setCancelable(false);
-        confimDialog.setContentView(R.layout.confirm_session_dialog);
+        confimDialog.setContentView(confirmSessionDialogBinding.getRoot());
 
+//        session_student_txt_view.setText("TEACHER NAME");
 
-        session_student_txt_view = (TextView) confimDialog.findViewById(R.id.session_student_txt_view);
-        session_student_txt = (TextView) confimDialog.findViewById(R.id.session_student_txt);
-        session_name_txt = (TextView) confimDialog.findViewById(R.id.session_name_txt);
-        location_txt = (TextView) confimDialog.findViewById(R.id.location_txt);
-        duration_txt = (TextView) confimDialog.findViewById(R.id.duration_txt);
-        time_txt = (TextView) confimDialog.findViewById(R.id.time_txt);
-        time_txt_view = (TextView) confimDialog.findViewById(R.id.time_txt_view);
-        session_fee_txt = (TextView) confimDialog.findViewById(R.id.session_fee_txt);
-        confirm_txt = (TextView) confimDialog.findViewById(R.id.confirm_txt);
-        cancel_txt = (TextView) confimDialog.findViewById(R.id.cancel_txt);
-        session_student_txt_view.setText("TEACHER NAME");
-
-        session_student_txt.setText(familysessionStudentStr);
-        session_name_txt.setText(familysessionnameStr);
-        location_txt.setText(familylocationStr);
-        duration_txt.setText(durationStr);
-        time_txt.setText(sessionDateStr);
+        confirmSessionDialogBinding.sessionTeacherTxt.setText(familysessionStudentStr);
+        confirmSessionDialogBinding.sessionStudentTxt.setText(firstNameStr + " " + lastNameStr);
+        confirmSessionDialogBinding.sessionNameTxt.setText(familysessionnameStr);
+        confirmSessionDialogBinding.locationTxt.setText(familylocationStr);
+        confirmSessionDialogBinding.durationTxt.setText(durationStr);
+        confirmSessionDialogBinding.timeTxt.setText(sessionDateStr);
 
         if (familysessionfeesStr.equalsIgnoreCase("0.00")) {
-            session_fee_txt.setText("Free");
+            confirmSessionDialogBinding.sessionFeeTxt.setText("Free");
         } else {
-            session_fee_txt.setText("₹ " + familysessionfeesStr + " /-");
+            confirmSessionDialogBinding.sessionFeeTxt.setText("₹ " + familysessionfeesStr + " /-");
         }
-        cancel_txt.setOnClickListener(new View.OnClickListener() {
+        confirmSessionDialogBinding.cancelTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 confimDialog.dismiss();
             }
         });
-        confirm_txt.setOnClickListener(new View.OnClickListener() {
+        confirmSessionDialogBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !familysessionfeesStr.equalsIgnoreCase("0.00")) {

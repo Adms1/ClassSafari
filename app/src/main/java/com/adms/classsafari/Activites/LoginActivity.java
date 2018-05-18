@@ -7,11 +7,14 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.AppConfiguration;
@@ -32,26 +35,24 @@ import retrofit.client.Response;
 //import com.facebook.CallbackManager;
 //import com.facebook.login.LoginManager;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener, TextView.OnEditorActionListener {
 
     ActivityLoginBinding loginScreenBinding;
     ForgotPasswordDialogBinding forgotPasswordDialogBinding;
     ConfirmSessionDialogBinding confirmSessionDialogBinding;
     Context mContext;
+    String usernameStr, passwordStr, sessionIDStr, contatIDstr,
+            whereTocomestr, orderIDStr, checkStr, paymentStatusstr,
+            boardStr, standardStr, streamStr, locationStr, classNameStr,
+            searchTypeStr, subjectStr, genderStr, frontloginStr,
+            ratingLoginStr, searchfront, sessionType, durationStr, sessionDateStr;
+    //    Use for Dialog
+    Dialog forgotDialog, confimDialog;
+    String EmailIdStr, type, searchByStr, familylocationStr, familysessionStudentStr,firsttimesearch;
     //    CallbackManager callbackManager;
 //    private LoginManager mLoginManager;
 //    private AccessTokenTracker mAccessTokenTracker;
     private boolean loggedin;
-    String usernameStr, passwordStr, sessionIDStr, contatIDstr,
-            whereTocomestr, orderIDStr, checkStr, paymentStatusstr,
-            boardStr, standardStr, streamStr, locationStr, classNameStr,
-            searchTypeStr, subjectStr, genderStr, frontloginStr, ratingLoginStr,searchfront,sessionType;
-
-    //    Use for Dialog
-    Dialog forgotDialog,confimDialog;
-    String EmailIdStr, type, searchByStr,familylocationStr;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +72,13 @@ public class LoginActivity extends AppCompatActivity {
         genderStr = getIntent().getStringExtra("gender");
         frontloginStr = getIntent().getStringExtra("frontLogin");
         ratingLoginStr = getIntent().getStringExtra("ratingLogin");
-        familylocationStr=getIntent().getStringExtra("location");
-        searchfront=getIntent().getStringExtra("searchfront");
-        sessionType=getIntent().getStringExtra("sessionType");
-
+        familylocationStr = getIntent().getStringExtra("location");
+        searchfront = getIntent().getStringExtra("searchfront");
+        sessionType = getIntent().getStringExtra("sessionType");
+        sessionDateStr = getIntent().getStringExtra("sessiondate");
+        durationStr = getIntent().getStringExtra("duration");
+        familysessionStudentStr = getIntent().getStringExtra("sessionStudent");
+        firsttimesearch = getIntent().getStringExtra("firsttimesearch");
         if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
             checkUnmPwd();
         }
@@ -90,9 +94,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void setListner() {
-        loginScreenBinding.registerTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        loginScreenBinding.registerTxt.setOnClickListener(this);
+        loginScreenBinding.passwordEdt.setOnEditorActionListener(this);
+        loginScreenBinding.loginBtn.setOnClickListener(this);
+        loginScreenBinding.facebookImg.setOnClickListener(this);
+        loginScreenBinding.forgotPassTxt.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.register_txt:
                 Intent inregister = new Intent(mContext, RegistrationActivity.class);
                 inregister.putExtra("sessionID", sessionIDStr);
                 inregister.putExtra("frontLogin", frontloginStr);
@@ -107,27 +119,24 @@ public class LoginActivity extends AppCompatActivity {
                 inregister.putExtra("gender", genderStr);
                 inregister.putExtra("withOR", whereTocomestr);
                 inregister.putExtra("ratingLogin", ratingLoginStr);
-                inregister.putExtra("searchfront",searchfront);
-                inregister.putExtra("sessionType",sessionType);
+                inregister.putExtra("searchfront", searchfront);
+                inregister.putExtra("sessionType", sessionType);
+                inregister.putExtra("duration", durationStr);
+                inregister.putExtra("sessiondate", sessionDateStr);
+                inregister.putExtra("sessionStudent", familysessionStudentStr);
+                inregister.putExtra("firsttimesearch", firsttimesearch);
                 startActivity(inregister);
-            }
-        });
-        loginScreenBinding.loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.login_btn:
                 getInsertedValue();
                 if (!EmailIdStr.equalsIgnoreCase("") && Utils.isValidEmaillId(EmailIdStr) && !passwordStr.equalsIgnoreCase("") && passwordStr.length() >= 4 && passwordStr.length() <= 8) {
                     checkStr = "login";
-//                    callCheckEmailIdApi();
                     callTeacherLoginApi();
                 } else {
                     Utils.ping(mContext, "Invalid Email Address or Password.");
                 }
-            }
-        });
-        loginScreenBinding.facebookImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.facebook_img:
 //                if (loggedin) {
 //                    LoginManager.getInstance().logOut();
 //                    loggedin = false;
@@ -135,14 +144,30 @@ public class LoginActivity extends AppCompatActivity {
 //                    mAccessTokenTracker.startTracking();
 //                    mLoginManager.logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", "email", "user_birthday"));
 //                }
-            }
-        });
-        loginScreenBinding.forgotPassTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.forgot_pass_txt:
                 forgotPasswordDialog();
-            }
-        });
+                break;
+
+        }
+    }
+
+    @Override
+    public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        switch (textView.getId()) {
+            case R.id.password_edt:
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    getInsertedValue();
+                    if (!EmailIdStr.equalsIgnoreCase("") && Utils.isValidEmaillId(EmailIdStr) && !passwordStr.equalsIgnoreCase("") && passwordStr.length() >= 4 && passwordStr.length() <= 8) {
+                        checkStr = "login";
+                        callTeacherLoginApi();
+                    } else {
+                        Utils.ping(mContext, "Invalid Email Address or Password.");
+                    }
+                }
+                break;
+        }
+        return false;
     }
 
     private void setupInit() {
@@ -241,8 +266,12 @@ public class LoginActivity extends AppCompatActivity {
             intent.putExtra("gender", genderStr);
             intent.putExtra("withOR", whereTocomestr);
             intent.putExtra("ratingLogin", ratingLoginStr);
-            intent.putExtra("searchfront",searchfront);
-            intent.putExtra("sessionType",sessionType);
+            intent.putExtra("searchfront", searchfront);
+            intent.putExtra("sessionType", sessionType);
+            intent.putExtra("duration", durationStr);
+            intent.putExtra("sessiondate", sessionDateStr);
+            intent.putExtra("sessionStudent", familysessionStudentStr);
+            intent.putExtra("firsttimesearch", firsttimesearch);
             intent.addCategory(Intent.CATEGORY_HOME);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -301,8 +330,9 @@ public class LoginActivity extends AppCompatActivity {
                                     iSearchByUser.putExtra("lessionName", subjectStr);
                                     iSearchByUser.putExtra("gender", genderStr);
                                     iSearchByUser.putExtra("withOR", whereTocomestr);
-                                    iSearchByUser.putExtra("searchfront",searchfront);
-                                    iSearchByUser.putExtra("sessionType",sessionType);
+                                    iSearchByUser.putExtra("searchfront", searchfront);
+                                    iSearchByUser.putExtra("sessionType", sessionType);
+                                    iSearchByUser.putExtra("firsttimesearch", firsttimesearch);
                                     startActivity(iSearchByUser);
                                 } else if (ratingLoginStr.equalsIgnoreCase("ratingLoginSession")) {
                                     Intent iSearchByUser = new Intent(mContext, SessionName.class);
@@ -319,8 +349,9 @@ public class LoginActivity extends AppCompatActivity {
                                     iSearchByUser.putExtra("gender", genderStr);
                                     iSearchByUser.putExtra("withOR", whereTocomestr);
                                     iSearchByUser.putExtra("ratingLogin", "false");
-                                    iSearchByUser.putExtra("searchfront",searchfront);
-                                    iSearchByUser.putExtra("sessionType",sessionType);
+                                    iSearchByUser.putExtra("searchfront", searchfront);
+                                    iSearchByUser.putExtra("sessionType", sessionType);
+                                    iSearchByUser.putExtra("firsttimesearch", firsttimesearch);
                                     startActivity(iSearchByUser);
                                 } else {
 //                                    ConformSessionDialog(); session_student_txt.setText(AppConfiguration.classteacherSessionName);
@@ -336,13 +367,13 @@ public class LoginActivity extends AppCompatActivity {
 
                                     Intent iFamilyList = new Intent(mContext, FamilyListActivity.class);
                                     iFamilyList.putExtra("sessionfees", AppConfiguration.classsessionPrice);
-                                    iFamilyList.putExtra("sessionName",classNameStr);
+                                    iFamilyList.putExtra("sessionName", classNameStr);
 //                                    iFamilyList.putExtra("location",locationStr);
                                     iFamilyList.putExtra("duration", AppConfiguration.classsessionDuration);
                                     iFamilyList.putExtra("sessiondate", AppConfiguration.classsessionDate);
                                     iFamilyList.putExtra("froncontanct", "false");
-                                    iFamilyList.putExtra("SearchBy",searchByStr);
-                                    iFamilyList.putExtra("sessionID",sessionIDStr);
+                                    iFamilyList.putExtra("SearchBy", searchByStr);
+                                    iFamilyList.putExtra("sessionID", sessionIDStr);
                                     iFamilyList.putExtra("board", boardStr);
                                     iFamilyList.putExtra("stream", streamStr);
                                     iFamilyList.putExtra("standard", standardStr);
@@ -351,9 +382,11 @@ public class LoginActivity extends AppCompatActivity {
                                     iFamilyList.putExtra("lessionName", subjectStr);
                                     iFamilyList.putExtra("gender", genderStr);
                                     iFamilyList.putExtra("withOR", whereTocomestr);
-                                    iFamilyList.putExtra("location",familylocationStr);
-                                    iFamilyList.putExtra("searchfront",searchfront);
-                                    iFamilyList.putExtra("sessionType",sessionType);
+                                    iFamilyList.putExtra("location", familylocationStr);
+                                    iFamilyList.putExtra("searchfront", searchfront);
+                                    iFamilyList.putExtra("sessionType", sessionType);
+                                    iFamilyList.putExtra("sessionStudent", familysessionStudentStr);
+                                    iFamilyList.putExtra("firsttimesearch", firsttimesearch);
                                     startActivity(iFamilyList);
                                 }
                             }
@@ -417,7 +450,6 @@ public class LoginActivity extends AppCompatActivity {
         forgotDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         forgotDialog.setCancelable(false);
         forgotDialog.setContentView(forgotPasswordDialogBinding.getRoot());
-
 
 
         forgotPasswordDialogBinding.btnSendRegEmail.setOnClickListener(new View.OnClickListener() {
@@ -562,13 +594,14 @@ public class LoginActivity extends AppCompatActivity {
         confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         confimDialog.setCancelable(false);
         confimDialog.setContentView(confirmSessionDialogBinding.getRoot());
-        confirmSessionDialogBinding.sessionStudentTxtView.setText("TEACHER NAME");
+//        confirmSessionDialogBinding.sessionStudentTxtView.setText("TEACHER NAME");
 
-        confirmSessionDialogBinding.sessionStudentTxt.setText(AppConfiguration.classteacherSessionName);
+//        confirmSessionDialogBinding.sessionStudentTxt.setText();
         confirmSessionDialogBinding.sessionNameTxt.setText(AppConfiguration.classSessionName);
         confirmSessionDialogBinding.locationTxt.setText(AppConfiguration.classsessionLocation);
         confirmSessionDialogBinding.durationTxt.setText(AppConfiguration.classsessionDuration);
         confirmSessionDialogBinding.timeTxt.setText(AppConfiguration.classsessionDate);
+        confirmSessionDialogBinding.sessionTeacherTxt.setText(AppConfiguration.classteacherSessionName);
         if (AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
             confirmSessionDialogBinding.sessionFeeTxt.setText("Free");
         } else {
@@ -625,7 +658,7 @@ public class LoginActivity extends AppCompatActivity {
                         Intent ipayment = new Intent(mContext, PaymentActivity.class);
                         ipayment.putExtra("orderID", orderIDStr);
                         ipayment.putExtra("amount", AppConfiguration.classsessionPrice);
-                        ipayment.putExtra("mode", "LIVE");
+                        ipayment.putExtra("mode", "TEST");
                         ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
                         ipayment.putExtra("sessionID", sessionIDStr);
                         ipayment.putExtra("contactID", Utils.getPref(mContext, "coachID"));
@@ -709,4 +742,6 @@ public class LoginActivity extends AppCompatActivity {
         map.put("PaymentStatus", paymentStatusstr);
         return map;
     }
+
+
 }

@@ -107,6 +107,7 @@
                 android:inputType="textPassword"
                 android:paddingLeft="@dimen/_5sdp"
                 android:paddingRight="@dimen/_10sdp"
+                android:imeOptions="actionDone"
                 android:textSize="@dimen/_10sdp" />
 
             <Button

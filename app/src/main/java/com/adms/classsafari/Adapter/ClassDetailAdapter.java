@@ -32,7 +32,10 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     List<sessionDataModel> arrayList;
     int SessionHour = 0;
     Integer SessionMinit = 0;
-    String searchByStr, locationStr, classNameStr, address, boardStr, streamStr, standardStr, searchTypeStr, wheretoComeStr, searchfront, sessionType;
+    String searchByStr, locationStr, classNameStr,
+            address, boardStr, streamStr, standardStr,
+            searchTypeStr, wheretoComeStr, searchfront,
+            sessionType, firsttimesearch;
     onViewClick onViewClick;
     CardLayoutBinding cardLayoutBinding;
 
@@ -41,7 +44,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
 
     public ClassDetailAdapter(Context mContext, List<sessionDataModel> arrayList, String searchByStr, String locationStr,
                               String classNameStr, String boardStr, String streamStr, String standardStr, String searchTypeStr,
-                              String wheretoComeStr, String searchfront, String sessionType, onViewClick onViewClick) {
+                              String wheretoComeStr, String searchfront, String sessionType, String firsttimesearch, onViewClick onViewClick) {
         this.mContext = mContext;
         this.arrayList = arrayList;
         this.searchByStr = searchByStr;
@@ -55,6 +58,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
         this.searchfront = searchfront;
         this.onViewClick = onViewClick;
         this.sessionType = sessionType;
+        this.firsttimesearch = firsttimesearch;
     }
 
     @Override
@@ -63,16 +67,21 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
 //        View itemView = LayoutInflater.from(parent.getContext())
 //                .inflate(R.layout.card_layout, parent, false);
 
-        cardLayoutBinding= DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),R.layout.card_layout,parent,false);
+        cardLayoutBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.card_layout, parent, false);
 
-        View itemView=cardLayoutBinding.getRoot();
+        View itemView = cardLayoutBinding.getRoot();
 
         return new MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-
+        if (arrayList.get(position).getTotalRatingUser().equalsIgnoreCase("0")) {
+            cardLayoutBinding.ratingUserTxt.setVisibility(View.GONE);
+        } else {
+            cardLayoutBinding.ratingUserTxt.setVisibility(View.VISIBLE);
+            cardLayoutBinding.ratingUserTxt.setText("(" + arrayList.get(position).getTotalRatingUser() + ")");
+        }
         cardLayoutBinding.ratingBar.setRating(Float.parseFloat(arrayList.get(position).getRating()));
         address = arrayList.get(position).getAddressLine1() +
                 "," + arrayList.get(position).getRegionName() +
@@ -101,13 +110,14 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                     inSession.putExtra("stream", streamStr);
                     inSession.putExtra("standard", standardStr);
                     inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
-                    inSession.putExtra("sessiondate", cardLayoutBinding.startDateTxt.getText().toString() + " To " +cardLayoutBinding.endDateTxt.getText().toString());
+                    inSession.putExtra("sessiondate", cardLayoutBinding.startDateTxt.getText().toString() + " To " + cardLayoutBinding.endDateTxt.getText().toString());
                     inSession.putExtra("duration", cardLayoutBinding.durationTxt.getText().toString());
                     inSession.putExtra("gender", arrayList.get(position).getGenderID());
                     inSession.putExtra("searchType", searchTypeStr);
                     inSession.putExtra("withOR", wheretoComeStr);
                     inSession.putExtra("searchfront", searchfront);
                     inSession.putExtra("sessionType", sessionType);
+                    inSession.putExtra("firsttimesearch", firsttimesearch);
                     mContext.startActivity(inSession);
                 }
                 return true;
@@ -136,21 +146,22 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
         cardLayoutBinding.sessionNameTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent inSession = new Intent(mContext, SessionName.class);
-//                inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
-//                inSession.putExtra("SearchBy", searchByStr);
-//                inSession.putExtra("city", locationStr);
-//                inSession.putExtra("sessionName", classNameStr);
-//                inSession.putExtra("board", boardStr);
-//                inSession.putExtra("stream", streamStr);
-//                inSession.putExtra("standard", standardStr);
-//                inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
-//                inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() + " To " + holder.end_date_txt.getText().toString());
-//                inSession.putExtra("duration", holder.duration_txt.getText().toString());
-//                inSession.putExtra("gender", arrayList.get(position).getGenderID());
-//                inSession.putExtra("searchType", searchTypeStr);
-//                inSession.putExtra("withOR", wheretoComeStr);
-//                mContext.startActivity(inSession);
+                Intent inSession = new Intent(mContext, SessionName.class);
+                inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
+                inSession.putExtra("SearchBy", searchByStr);
+                inSession.putExtra("city", locationStr);
+                inSession.putExtra("sessionName", classNameStr);
+                inSession.putExtra("board", boardStr);
+                inSession.putExtra("stream", streamStr);
+                inSession.putExtra("standard", standardStr);
+                inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
+                inSession.putExtra("sessiondate", cardLayoutBinding.startDateTxt.getText().toString() + " To " + cardLayoutBinding.endDateTxt.getText().toString());
+                inSession.putExtra("duration", cardLayoutBinding.durationTxt.getText().toString());
+                inSession.putExtra("gender", arrayList.get(position).getGenderID());
+                inSession.putExtra("searchType", searchTypeStr);
+                inSession.putExtra("withOR", wheretoComeStr);
+                inSession.putExtra("firsttimesearch", firsttimesearch);
+                mContext.startActivity(inSession);
             }
         });
         cardLayoutBinding.ratingBar.setOnTouchListener(new View.OnTouchListener() {

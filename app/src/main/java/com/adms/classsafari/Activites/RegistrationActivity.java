@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -23,6 +25,7 @@ import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivityRegistrationBinding;
+import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.ParseException;
@@ -35,24 +38,24 @@ import java.util.Map;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class RegistrationActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class RegistrationActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,
+        View.OnClickListener, TextView.OnEditorActionListener, RadioGroup.OnCheckedChangeListener {
 
     ActivityRegistrationBinding registrationBinding;
+    ConfirmSessionDialogBinding confirmSessionDialogBinding;
     Context mContext;
     String finalDate;
     int Year, Month, Day;
     Calendar calendar;
-    private DatePickerDialog datePickerDialog;
     int mYear, mMonth, mDay;
     String firstNameStr, lastNameStr, emailStr, passwordStr, phonenoStr, gendarIdStr = "1", dateofbirthStr, coachTypeIDStr = "1",
             registerTypeStr = "family", contatIDstr, type, whereTocomestr, sessionIDStr, paymentStatusstr, orderIDStr, frontloginStr,
-            boardStr, standardStr, streamStr, locationStr, classNameStr,sessionType,
-            searchTypeStr, subjectStr, genderStr, searchByStr, ratingLoginStr,searchfront;
-
+            boardStr, standardStr, streamStr, locationStr, classNameStr, sessionType,durationStr,sessionDateStr,
+            searchTypeStr, subjectStr, genderStr, searchByStr, ratingLoginStr, searchfront,firsttimesearch;
     //Use for Confirmation Dialog
     Dialog confimDialog;
-    TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, time_txt_view, session_fee_txt;
-
+    //    TextView cancel_txt, confirm_txt, session_student_txt, session_teacher_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, time_txt_view, session_fee_txt;
+    private DatePickerDialog datePickerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +75,11 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         subjectStr = getIntent().getStringExtra("lessionName");
         genderStr = getIntent().getStringExtra("gender");
         ratingLoginStr = getIntent().getStringExtra("ratingLogin");
-        searchfront=getIntent().getStringExtra("searchfront");
-        sessionType=getIntent().getStringExtra("sessionType");
+        searchfront = getIntent().getStringExtra("searchfront");
+        sessionType = getIntent().getStringExtra("sessionType");
+        sessionDateStr = getIntent().getStringExtra("sessiondate");
+        durationStr = getIntent().getStringExtra("duration");
+        firsttimesearch = getIntent().getStringExtra("firsttimesearch");
         init();
         setListner();
     }
@@ -87,19 +93,46 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     }
 
     public void setListner() {
-        registrationBinding.back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent inback = new Intent(mContext, LoginActivity.class);
-                inback.putExtra("frontLogin", frontloginStr);
-                inback.putExtra("searchfront",searchfront);
-                inback.putExtra("sessionType",sessionType);
-                startActivity(inback);
-            }
-        });
-        registrationBinding.registerTypeRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+        registrationBinding.back.setOnClickListener(this);
+        registrationBinding.registerBtn.setOnClickListener(this);
+        registrationBinding.dateOfBirthEdt.setOnClickListener(this);
+
+        registrationBinding.emailEdt.setOnEditorActionListener(this);
+        registrationBinding.passwordEdt.setOnEditorActionListener(this);
+        registrationBinding.phoneNoEdt.setOnEditorActionListener(this);
+
+        registrationBinding.genderGroup.setOnCheckedChangeListener(this);
+        registrationBinding.session1TypeRg.setOnCheckedChangeListener(this);
+        registrationBinding.registerTypeRg.setOnCheckedChangeListener(this);
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+        switch (radioGroup.getId()) {
+            case R.id.session1_type_rg:
+                int radioButtonId = registrationBinding.session1TypeRg.getCheckedRadioButtonId();
+                switch (radioButtonId) {
+                    case R.id.Academic_rb:
+                        coachTypeIDStr = registrationBinding.AcademicRb.getTag().toString();
+                        break;
+                    case R.id.play_rb:
+                        coachTypeIDStr = registrationBinding.playRb.getTag().toString();
+                        break;
+                }
+                break;
+            case R.id.gender_group:
+                int radioButtonId1 = registrationBinding.genderGroup.getCheckedRadioButtonId();
+                switch (radioButtonId1) {
+                    case R.id.male_chk:
+                        gendarIdStr = registrationBinding.maleChk.getTag().toString();
+                        break;
+                    case R.id.female_chk:
+                        gendarIdStr = registrationBinding.femaleChk.getTag().toString();
+                        break;
+                    default:
+                }
+                break;
+            case R.id.register_type_rg:
                 int radioButtonID = registrationBinding.registerTypeRg.getCheckedRadioButtonId();
                 switch (radioButtonID) {
                     case R.id.family_rb:
@@ -113,57 +146,24 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                         break;
 
                 }
-            }
-        });
-        registrationBinding.emailEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                emailStr = registrationBinding.emailEdt.getText().toString();
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    if (!emailStr.equalsIgnoreCase("") && Utils.isValidEmaillId(emailStr)) {
-//                        callCheckEmailIdApi();
-                    } else {
-                        registrationBinding.emailEdt.setError("Please Enter Valid Email Address.");
-                    }
-                }
-                return false;
-            }
-        });
-        registrationBinding.passwordEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                passwordStr = registrationBinding.passwordEdt.getText().toString();
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    if (!passwordStr.equalsIgnoreCase("") && passwordStr.length() >= 4 && passwordStr.length() <= 8) {
-                    } else {
-                        registrationBinding.passwordEdt.setError("Password must be 4-8 Characters.");
-                    }
-                }
-                return false;
-            }
-        });
-        registrationBinding.phoneNoEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
-                    registrationBinding.dateOfBirthEdt.setError(null);
-                    datePickerDialog = com.wdullaer.materialdatetimepicker.date.DatePickerDialog.newInstance(RegistrationActivity.this, Year, Month, Day);
-                    datePickerDialog.setThemeDark(false);
-                    datePickerDialog.setOkText("Done");
-                    datePickerDialog.showYearPickerFirst(false);
-                    datePickerDialog.setAccentColor(Color.parseColor("#f2552c"));
-//                datePickerDialog.setTitle("Select Date From DatePickerDialog");
-                    datePickerDialog.show(getFragmentManager(), "Datepickerdialog");
-                }
+                break;
+        }
+    }
 
-                return false;
-            }
-        });
-        registrationBinding.registerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.date_of_birth_edt:
+                registrationBinding.dateOfBirthEdt.setError(null);
+                datePickerDialog = com.wdullaer.materialdatetimepicker.date.DatePickerDialog.newInstance(RegistrationActivity.this, Year, Month, Day);
+                datePickerDialog.setThemeDark(false);
+                datePickerDialog.setOkText("Done");
+                datePickerDialog.showYearPickerFirst(false);
+                datePickerDialog.setAccentColor(Color.parseColor("#f2552c"));
+//                datePickerDialog.setTitle("Select Date From DatePickerDialog");
+                datePickerDialog.show(getFragmentManager(), "Datepickerdialog");
+                break;
+            case R.id.register_btn:
                 getInsertedValue();
                 if (!firstNameStr.equalsIgnoreCase("")) {
                     if (!lastNameStr.equalsIgnoreCase("")) {
@@ -194,50 +194,71 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                 } else {
                     registrationBinding.firstNameEdt.setError("Please Enter FirstName.");
                 }
-            }
-        });
-        registrationBinding.dateOfBirthEdt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                registrationBinding.dateOfBirthEdt.setError(null);
-                datePickerDialog = com.wdullaer.materialdatetimepicker.date.DatePickerDialog.newInstance(RegistrationActivity.this, Year, Month, Day);
-                datePickerDialog.setThemeDark(false);
-                datePickerDialog.setOkText("Done");
-                datePickerDialog.showYearPickerFirst(false);
-                datePickerDialog.setAccentColor(Color.parseColor("#f2552c"));
+                break;
+            case R.id.back:
+                Intent inback = new Intent(mContext, LoginActivity.class);
+                inback.putExtra("frontLogin", frontloginStr);
+                inback.putExtra("searchfront", searchfront);
+                inback.putExtra("sessionType", sessionType);
+                inback.putExtra("SearchBy", searchByStr);
+                inback.putExtra("sessionID", sessionIDStr);
+                inback.putExtra("board", boardStr);
+                inback.putExtra("stream", streamStr);
+                inback.putExtra("standard", standardStr);
+                inback.putExtra("city", locationStr);
+                inback.putExtra("sessionName", classNameStr);
+                inback.putExtra("searchType", searchTypeStr);
+                inback.putExtra("lessionName", subjectStr);
+                inback.putExtra("gender", genderStr);
+                inback.putExtra("frontLogin", frontloginStr);
+                inback.putExtra("withOR", whereTocomestr);
+                inback.putExtra("ratingLogin", ratingLoginStr);
+                inback.putExtra("duration", durationStr);
+                inback.putExtra("sessiondate", sessionDateStr);
+                inback.putExtra("firsttimesearch", firsttimesearch);
+                startActivity(inback);
+                break;
+        }
+    }
+
+    @Override
+    public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+        switch (textView.getId()) {
+            case R.id.email_edt:
+                emailStr = registrationBinding.emailEdt.getText().toString();
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    if (!emailStr.equalsIgnoreCase("") && Utils.isValidEmaillId(emailStr)) {
+//                        callCheckEmailIdApi();
+                    } else {
+                        registrationBinding.emailEdt.setError("Please Enter Valid Email Address.");
+                    }
+                }
+                break;
+            case R.id.password_edt:
+                passwordStr = registrationBinding.passwordEdt.getText().toString();
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    if (!passwordStr.equalsIgnoreCase("") && passwordStr.length() >= 4 && passwordStr.length() <= 8) {
+                    } else {
+                        registrationBinding.passwordEdt.setError("Password must be 4-8 Characters.");
+                    }
+                }
+                break;
+            case R.id.phone_no_edt:
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
+                    registrationBinding.dateOfBirthEdt.setError(null);
+                    datePickerDialog = com.wdullaer.materialdatetimepicker.date.DatePickerDialog.newInstance(RegistrationActivity.this, Year, Month, Day);
+                    datePickerDialog.setThemeDark(false);
+                    datePickerDialog.setOkText("Done");
+                    datePickerDialog.showYearPickerFirst(false);
+                    datePickerDialog.setAccentColor(Color.parseColor("#f2552c"));
 //                datePickerDialog.setTitle("Select Date From DatePickerDialog");
-                datePickerDialog.show(getFragmentManager(), "Datepickerdialog");
-            }
-        });
-        registrationBinding.genderGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
-                int radioButtonId = registrationBinding.genderGroup.getCheckedRadioButtonId();
-                switch (radioButtonId) {
-                    case R.id.male_chk:
-                        gendarIdStr = registrationBinding.maleChk.getTag().toString();
-                        break;
-                    case R.id.female_chk:
-                        gendarIdStr = registrationBinding.femaleChk.getTag().toString();
-                        break;
-                    default:
+                    datePickerDialog.show(getFragmentManager(), "Datepickerdialog");
                 }
-            }
-        });
-        registrationBinding.session1TypeRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                int radioButtonId = registrationBinding.session1TypeRg.getCheckedRadioButtonId();
-                switch (radioButtonId) {
-                    case R.id.Academic_rb:
-                        coachTypeIDStr = registrationBinding.AcademicRb.getTag().toString();
-                        break;
-                    case R.id.play_rb:
-                        coachTypeIDStr = registrationBinding.playRb.getTag().toString();
-                        break;
-                }
-            }
-        });
+                break;
+        }
+        return false;
     }
 
     public void getInsertedValue() {
@@ -269,8 +290,11 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         inback.putExtra("withOR", whereTocomestr);
         inback.putExtra("ratingLogin", ratingLoginStr);
         inback.putExtra("frontLogin", frontloginStr);
-        inback.putExtra("searchfront",searchfront);
-        inback.putExtra("sessionType",sessionType);
+        inback.putExtra("searchfront", searchfront);
+        inback.putExtra("sessionType", sessionType);
+        inback.putExtra("duration", durationStr);
+        inback.putExtra("sessiondate", sessionDateStr);
+        inback.putExtra("firsttimesearch", firsttimesearch);
         startActivity(inback);
     }
 
@@ -514,7 +538,8 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     }
 
     //Use for New Family
-    public void callFamilyApi() {
+    public void
+    callFamilyApi() {
         if (Utils.isNetworkConnected(mContext)) {
 
             Utils.showDialog(mContext);
@@ -568,6 +593,9 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     }
 
     public void ConformSessionDialog() {
+        confirmSessionDialogBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContext), R.layout.confirm_session_dialog, (ViewGroup) registrationBinding.getRoot(), false);
+
         confimDialog = new Dialog(mContext, R.style.Theme_Dialog);
         Window window = confimDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -579,38 +607,30 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
 
         confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         confimDialog.setCancelable(false);
-        confimDialog.setContentView(R.layout.confirm_session_dialog);
+        confimDialog.setContentView(confirmSessionDialogBinding.getRoot());
 
 
-        session_student_txt_view = (TextView) confimDialog.findViewById(R.id.session_student_txt_view);
-        session_student_txt = (TextView) confimDialog.findViewById(R.id.session_student_txt);
-        session_name_txt = (TextView) confimDialog.findViewById(R.id.session_name_txt);
-        location_txt = (TextView) confimDialog.findViewById(R.id.location_txt);
-        duration_txt = (TextView) confimDialog.findViewById(R.id.duration_txt);
-        time_txt = (TextView) confimDialog.findViewById(R.id.time_txt);
-        time_txt_view = (TextView) confimDialog.findViewById(R.id.time_txt_view);
-        session_fee_txt = (TextView) confimDialog.findViewById(R.id.session_fee_txt);
-        confirm_txt = (TextView) confimDialog.findViewById(R.id.confirm_txt);
-        cancel_txt = (TextView) confimDialog.findViewById(R.id.cancel_txt);
-        session_student_txt_view.setText("TEACHER NAME");
-
-        session_student_txt.setText(AppConfiguration.classteacherSessionName);
-        session_name_txt.setText(AppConfiguration.classSessionName);
-        location_txt.setText(AppConfiguration.classsessionLocation);
-        duration_txt.setText(AppConfiguration.classsessionDuration);
-        time_txt.setText(AppConfiguration.classsessionDate);
+        confirmSessionDialogBinding.sessionTeacherTxt.setText(AppConfiguration.classteacherSessionName);
+        confirmSessionDialogBinding.sessionStudentTxt.setText(firstNameStr + " " + lastNameStr);
+        confirmSessionDialogBinding.sessionNameTxt.setText(AppConfiguration.classSessionName);
+        confirmSessionDialogBinding.locationTxt.setText(AppConfiguration.classsessionLocation);
+        confirmSessionDialogBinding.durationTxt.setText(AppConfiguration.classsessionDuration);
+        confirmSessionDialogBinding.timeTxt.setText(AppConfiguration.classsessionDate);
         if (AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
-            session_fee_txt.setText("Free");
+            confirmSessionDialogBinding.sessionFeeTxt.setText("Free");
         } else {
-            session_fee_txt.setText("₹ " + AppConfiguration.classsessionPrice);
+            confirmSessionDialogBinding.sessionFeeTxt.setText("₹ " + AppConfiguration.classsessionPrice);
         }
-        cancel_txt.setOnClickListener(new View.OnClickListener() {
+        confirmSessionDialogBinding.cancelTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Utils.ping(mContext,"Your session is canceled.");
+                Intent intent=new Intent(mContext,SearchByUser.class);
+                startActivity(intent);
                 confimDialog.dismiss();
             }
         });
-        confirm_txt.setOnClickListener(new View.OnClickListener() {
+        confirmSessionDialogBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
@@ -737,4 +757,6 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         map.put("PaymentStatus", paymentStatusstr);
         return map;
     }
+
+
 }

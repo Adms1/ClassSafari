@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.Interface.onViewClick;
 import com.adms.classsafari.Model.Session.sessionDataModel;
 import com.adms.classsafari.R;
@@ -111,15 +112,17 @@ public class PurchaseSessionDetailAdapter extends RecyclerView.Adapter {
             sessionCardLayout1Binding.phoneTxt.setText(arrayList.get(position).getContactPhoneNumber());
             sessionCardLayout1Binding.teacherNameTxt.setText(arrayList.get(position).getName());
 
-            sessionCardLayout1Binding.phoneTxt.setOnClickListener(new View.OnClickListener() {
+            sessionCardLayout1Binding.phoneTxtView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (Utils.checkAndRequestPermissions(mContext)) {
+                    }
                     Intent intent = new Intent(Intent.ACTION_DIAL);
                     intent.setData(Uri.fromParts("tel", sessionCardLayout1Binding.phoneTxt.getText().toString(), null));
                     mContext.startActivity(intent);
                 }
             });
-            sessionCardLayout1Binding.addressTxt.setOnClickListener(new View.OnClickListener() {
+            sessionCardLayout1Binding.adressTxtView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(address));
@@ -139,7 +142,7 @@ public class PurchaseSessionDetailAdapter extends RecyclerView.Adapter {
                     return true;
                 }
             });
-            sessionCardLayout1Binding.emailTxt.setOnClickListener(new View.OnClickListener() {
+            sessionCardLayout1Binding.emailTxtView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(Intent.ACTION_SEND);

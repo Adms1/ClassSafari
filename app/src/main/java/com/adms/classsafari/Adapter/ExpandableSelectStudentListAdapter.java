@@ -33,25 +33,26 @@ import java.util.List;
 
 public class ExpandableSelectStudentListAdapter extends BaseExpandableListAdapter {
 
+    String FamilyID;
+    ArrayList<String> value;
+    String froncontanctStr, arraowStr;
     private Context mContext;
     private List<String> _listDataHeader;
     private HashMap<String, List<ChildDetailModel>> _listDataChild;
     private onViewClick onViewClick;
     private onChlidClick onChlidClick;
-    String FamilyID;
     private ArrayList<String> familyIdCheck;
     private ArrayList<String> sesionDeatil;
-    ArrayList<String> value;
-    String froncontanctStr;
 
     public ExpandableSelectStudentListAdapter(Context mContext, List<String> listDataHeader,
-                                              HashMap<String, List<ChildDetailModel>> listDataChild, String froncontanctStr, onChlidClick onChlidClick, onViewClick session) {
+                                              HashMap<String, List<ChildDetailModel>> listDataChild, String froncontanctStr, String arraowStr, onChlidClick onChlidClick, onViewClick session) {
         this.mContext = mContext;
         this._listDataChild = listDataChild;
         this._listDataHeader = listDataHeader;
         this.onViewClick = session;
         this.onChlidClick = onChlidClick;
         this.froncontanctStr = froncontanctStr;
+        this.arraowStr = arraowStr;
     }
 
 
@@ -109,7 +110,7 @@ public class ExpandableSelectStudentListAdapter extends BaseExpandableListAdapte
             Log.d("age", ageS);
             itembinding.ageTxt.setText(ageS);
             itembinding.phoneNoTxt.setText(childDetail.getContactPhoneNumber());
-            if(!froncontanctStr.equalsIgnoreCase("true")) {
+            if (!froncontanctStr.equalsIgnoreCase("true")) {
                 itembinding.nameRb.setChecked(false);
                 itembinding.nameRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     @Override
@@ -126,7 +127,7 @@ public class ExpandableSelectStudentListAdapter extends BaseExpandableListAdapte
 
                     }
                 });
-            }else{
+            } else {
                 itembinding.nameRb.setChecked(true);
             }
             itembinding.phoneNoTxt.setOnClickListener(new View.OnClickListener() {
@@ -227,8 +228,15 @@ public class ExpandableSelectStudentListAdapter extends BaseExpandableListAdapte
         groupbinding.familynameRb.setText(spiltValue[0] + " " + spiltValue[1]);
         groupbinding.noTxt.setText(spiltValue[2]);
         FamilyID = spiltValue[3];
-        if(!froncontanctStr.equalsIgnoreCase("true")) {
+        if (arraowStr.equalsIgnoreCase("Activity")) {
+            groupbinding.arrowImg.setVisibility(View.GONE);
+            groupbinding.addchildTxt.setVisibility(View.GONE);
+        } else {
             groupbinding.arrowImg.setVisibility(View.VISIBLE);
+            groupbinding.addchildTxt.setVisibility(View.VISIBLE);
+        }
+        if (!froncontanctStr.equalsIgnoreCase("true")) {
+
             groupbinding.familynameRb.setChecked(false);
             groupbinding.familynameRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
@@ -244,9 +252,9 @@ public class ExpandableSelectStudentListAdapter extends BaseExpandableListAdapte
                     }
                 }
             });
-        }else{
+        } else {
             groupbinding.familynameRb.setChecked(true);
-            groupbinding.arrowImg.setVisibility(View.GONE);
+
         }
         groupbinding.addchildTxt.setOnClickListener(new View.OnClickListener() {
             @Override

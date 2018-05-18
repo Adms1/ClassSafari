@@ -73,7 +73,7 @@ public class UserSessionListAdapter extends RecyclerView.Adapter<UserSessionList
             @Override
             public void onClick(View view) {
                 familyIdCheck = new ArrayList<String>();
-                familyIdCheck.add(arrayList.get(position).getSessionID()+"|"+"1");
+                familyIdCheck.add(arrayList.get(position).getSessionID()+"|"+"1"+"|"+arrayList.get(position).getSessionName());
                 onViewClick.getViewClick();
             }
         });
@@ -86,7 +86,7 @@ public class UserSessionListAdapter extends RecyclerView.Adapter<UserSessionList
                 @Override
                 public void onClick(View view) {
                     familyIdCheck = new ArrayList<String>();
-                    familyIdCheck.add(arrayList.get(position).getSessionID()+"|"+"2");
+                    familyIdCheck.add(arrayList.get(position).getSessionID()+"|"+"2"+"|"+arrayList.get(position).getSessionName());
                     onViewClick.getViewClick();
                 }
             });

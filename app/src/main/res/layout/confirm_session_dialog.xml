@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_320sdp"
+    android:layout_height="@dimen/_355sdp"
     android:background="@drawable/session_confirm"
     android:orientation="vertical">
 
@@ -17,7 +17,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.4"
+            android:layout_weight="0.3"
             android:orientation="horizontal">
 
             <TextView
@@ -41,7 +41,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2.2"
+            android:layout_weight="2.3"
             android:orientation="vertical">
 
             <LinearLayout
@@ -309,7 +309,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_1sdp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -379,7 +379,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12sdp"
                 android:textAllCaps="true"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/confirm_txt"

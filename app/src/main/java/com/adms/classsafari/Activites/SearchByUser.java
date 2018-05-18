@@ -44,7 +44,7 @@ import java.util.Map;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class SearchByUser extends AppCompatActivity {
+public class SearchByUser extends AppCompatActivity implements View.OnClickListener,TextView.OnEditorActionListener {
     ActivitySearchByUserBinding searchByUserBinding;
     LayoutMenuBinding menuBinding;
     ChangePasswordDialogBinding changePasswordDialogBinding;
@@ -89,60 +89,23 @@ public class SearchByUser extends AppCompatActivity {
 
     public void setListner() {
         callSessionListApi();
-        searchByUserBinding.letsStudyTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AppConfiguration.ClassLocation = searchByUserBinding.locationEdt.getText().toString();
-                Intent inClassDetail = new Intent(mContext, ClassSearchScreen.class);
-                inClassDetail.putExtra("flag", "study");
-                inClassDetail.putExtra("withOR", "withOR");
-                inClassDetail.putExtra("SearchBy", "2");
-                inClassDetail.putExtra("sessionType", "1");
-                inClassDetail.putExtra("firsttimesearch", "true");
-                startActivity(inClassDetail);
-            }
-        });
-        searchByUserBinding.searchClassEdt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                searchByUserBinding.searchClassEdt.showDropDown();
-            }
-        });
-        searchByUserBinding.searchClassEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                if (i == EditorInfo.IME_ACTION_DONE) {
-                    validation();
-                }
-                return false;
-            }
-        });
-        searchByUserBinding.searchTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                validation();
-            }
-        });
-        searchByUserBinding.letsPlayTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AppConfiguration.ClassLocation = searchByUserBinding.locationEdt.getText().toString();
-                Intent inClassDetail = new Intent(mContext, ClassSearchScreen.class);
-                inClassDetail.putExtra("flag", "play");
-                inClassDetail.putExtra("withOR", "withOR");
-                inClassDetail.putExtra("SearchBy", "2");
-                inClassDetail.putExtra("sessionType", "2");
-                inClassDetail.putExtra("firsttimesearch", "true");
-                startActivity(inClassDetail);
-            }
-        });
+        searchByUserBinding.letsStudyTxt.setOnClickListener(this);
+        searchByUserBinding.searchClassEdt.setOnClickListener(this);
+        searchByUserBinding.searchTxt.setOnClickListener(this);
+        searchByUserBinding.letsPlayTxt.setOnClickListener(this);
+        searchByUserBinding.loginTxt.setOnClickListener(this);
+        searchByUserBinding.locationEdt.setOnClickListener(this);
+//        searchByUserBinding.locationEdt.setOnItemClickListener(this);
+//        searchByUserBinding.searchClassEdt.setOnItemClickListener(this);
+        searchByUserBinding.searchClassEdt.setOnEditorActionListener(this);
+
+
         searchByUserBinding.locationEdt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 selectedLocationStr = String.valueOf(adapterView.getItemAtPosition(i));
                 searchByUserBinding.searchClassEdt.setText("");
                 fillSessionList();
-
             }
         });
         searchByUserBinding.searchClassEdt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -151,40 +114,95 @@ public class SearchByUser extends AppCompatActivity {
                 sessionName = String.valueOf(adapterView.getItemAtPosition(i));
                 Log.d("session", sessionName);
                 fillCity();
-
             }
         });
-        searchByUserBinding.loginTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.lets_study_txt:
+                AppConfiguration.ClassLocation = searchByUserBinding.locationEdt.getText().toString();
+                Intent inClassDetail = new Intent(mContext, ClassSearchScreen.class);
+                inClassDetail.putExtra("flag", "study");
+                inClassDetail.putExtra("withOR", "withOR");
+                inClassDetail.putExtra("SearchBy", "2");
+                inClassDetail.putExtra("sessionType", "1");
+                inClassDetail.putExtra("firsttimesearch", "true");
+                startActivity(inClassDetail);
+                break;
+            case R.id.search_class_edt:
+                searchByUserBinding.searchClassEdt.showDropDown();
+                break;
+            case R.id.search_txt:
+                validation();
+                break;
+            case R.id.lets_play_txt:
+                AppConfiguration.ClassLocation = searchByUserBinding.locationEdt.getText().toString();
+                Intent inClassDetail1 = new Intent(mContext, ClassSearchScreen.class);
+                inClassDetail1.putExtra("flag", "play");
+                inClassDetail1.putExtra("withOR", "withOR");
+                inClassDetail1.putExtra("SearchBy", "2");
+                inClassDetail1.putExtra("sessionType", "2");
+                inClassDetail1.putExtra("firsttimesearch", "true");
+                startActivity(inClassDetail1);
+                break;
+            case R.id.login_txt:
                 if (!Utils.getPref(mContext, "RegisterUserName").equalsIgnoreCase("")) {
 //                    PopupWindow popupwindow_obj = popupDisplay();
 //                    popupwindow_obj.showAsDropDown(searchByUserBinding.linearLogin, 250, 10);
                     menuDialog();
                 } else {
-                    Intent inClassDetail = new Intent(mContext, LoginActivity.class);
-                    inClassDetail.putExtra("frontLogin", "beforeLogin");
-                    inClassDetail.putExtra("ratingLogin", "false");
-                    startActivity(inClassDetail);
+                    Intent inClassDetail2 = new Intent(mContext, LoginActivity.class);
+                    inClassDetail2.putExtra("frontLogin", "beforeLogin");
+                    inClassDetail2.putExtra("ratingLogin", "false");
+                    startActivity(inClassDetail2);
                 }
-            }
-        });
-        searchByUserBinding.locationEdt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.location_edt:
                 searchByUserBinding.locationEdt.showDropDown();
-            }
-        });
-        searchByUserBinding.logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
-
+                break;
+        }
     }
 
+//    @Override
+//    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//        if(view.getId()==R.id.search_class_edt){
+//            sessionName = String.valueOf(adapterView.getItemAtPosition(i));
+//                Log.d("session", sessionName);
+//                fillCity();
+//        }else if(view.getId()==R.id.location_edt){
+//            selectedLocationStr = String.valueOf(adapterView.getItemAtPosition(i));
+//                searchByUserBinding.searchClassEdt.setText("");
+//                fillSessionList();
+//        }
+
+//        switch (view.getId()) {
+//            case R.id.search_class_edt:
+//                sessionName = String.valueOf(adapterView.getItemAtPosition(i));
+//                Log.d("session", sessionName);
+//                fillCity();
+//                break;
+//            case R.id.location_edt:
+//                selectedLocationStr = String.valueOf(adapterView.getItemAtPosition(i));
+//                searchByUserBinding.searchClassEdt.setText("");
+//                fillSessionList();
+//                break;
+//                default:
+//                    break;
+//        }
+//    }
+    @Override
+    public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        switch (textView.getId()){
+            case R.id.search_class_edt:
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    validation();
+                }
+                break;
+        }
+        return false;
+    }
 //    //Use for SessionList
 //    public void callSessionListApi() {
 //        if (Utils.checkNetwork(mContext)) {
@@ -658,4 +676,7 @@ public class SearchByUser extends AppCompatActivity {
 //        });
         menuDialog.show();
     }
+
+
+
 }

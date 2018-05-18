@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ExpandableListView;
-import android.widget.TextView;
 
 import com.adms.classsafari.Activites.DashBoardActivity;
 import com.adms.classsafari.Adapter.ExpandableSelectStudentListAdapter;
@@ -30,6 +29,7 @@ import com.adms.classsafari.Model.TeacherInfo.ChildDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.FamilyDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
+import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
 import com.adms.classsafari.databinding.FragmentOldFamilyListBinding;
 
 import java.util.ArrayList;
@@ -44,6 +44,7 @@ import retrofit.client.Response;
 public class OldFamilyListFragment extends Fragment {
 
     private FragmentOldFamilyListBinding oldFamilyListBinding;
+    ConfirmSessionDialogBinding confirmSessionDialogBinding;
     private View rootView;
     private Context mContext;
     private Fragment fragment = null;
@@ -56,8 +57,8 @@ public class OldFamilyListFragment extends Fragment {
     ExpandableSelectStudentListAdapter expandableSelectStudentListAdapter;
 
     Dialog confimDialog;
-    TextView cancel_txt, confirm_txt, session_student_txt,session_teacher_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, session_fee_txt;
-    String familyIdStr = "", contatIDstr, orderIDStr, sessionIDStr, type, familyNameStr = "",paymentStatusstr;
+//    TextView cancel_txt, confirm_txt, session_student_txt,session_teacher_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, session_fee_txt;
+    String familyIdStr = "", contatIDstr, orderIDStr, sessionIDStr, type, familyNameStr = "",paymentStatusstr,arraowStr;
     ArrayList<String> selectedId;
 String froncontanctStr;
     public OldFamilyListFragment() {
@@ -71,6 +72,7 @@ String froncontanctStr;
         rootView = oldFamilyListBinding.getRoot();
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mContext = getActivity();
+        arraowStr="Fragment";
         ((DashBoardActivity) getActivity()).setActionBar(13, "false");
         sessionIDStr = Utils.getPref(mContext, "sessionID");
         Log.d("sessionID", sessionIDStr);
@@ -97,6 +99,7 @@ String froncontanctStr;
                 Bundle args = new Bundle();
                 args.putString("session", "10");
                 args.putString("type", "Family");
+                args.putString("sessionID",sessionIDStr);
                 fragment.setArguments(args);
                 fragmentTransaction.replace(R.id.frame, fragment);
                 fragmentTransaction.addToBackStack(null);
@@ -129,6 +132,10 @@ String froncontanctStr;
 
 
     public void ConformationDialog() {
+
+        confirmSessionDialogBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContext), R.layout.confirm_session_dialog, (ViewGroup) oldFamilyListBinding.getRoot(), false);
+
         confimDialog = new Dialog(getActivity(), R.style.Theme_Dialog);
         Window window = confimDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -140,39 +147,31 @@ String froncontanctStr;
 
         confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         confimDialog.setCancelable(false);
-        confimDialog.setContentView(R.layout.confirm_session_dialog);
-        session_teacher_txt=(TextView)confimDialog.findViewById(R.id.session_teacher_txt);
-        session_student_txt_view = (TextView) confimDialog.findViewById(R.id.session_student_txt_view);
-        session_student_txt = (TextView) confimDialog.findViewById(R.id.session_student_txt);
-        session_name_txt = (TextView) confimDialog.findViewById(R.id.session_name_txt);
-        location_txt = (TextView) confimDialog.findViewById(R.id.location_txt);
-        duration_txt = (TextView) confimDialog.findViewById(R.id.duration_txt);
-        time_txt = (TextView) confimDialog.findViewById(R.id.time_txt);
-        session_fee_txt = (TextView) confimDialog.findViewById(R.id.session_fee_txt);
-        confirm_txt = (TextView) confimDialog.findViewById(R.id.confirm_txt);
-        cancel_txt = (TextView) confimDialog.findViewById(R.id.cancel_txt);
+
+        confimDialog.setContentView(confirmSessionDialogBinding.getRoot());
 
         getsessionID();
 
         if (AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
-            session_fee_txt.setText("Free");
+            confirmSessionDialogBinding.sessionFeeTxt.setText("Free");
         } else {
-            session_fee_txt.setText("₹ " + AppConfiguration.SessionPrice);
+            confirmSessionDialogBinding.sessionFeeTxt.setText("₹ " + AppConfiguration.SessionPrice);
         }
-        session_teacher_txt.setText(Utils.getPref(mContext, "RegisterUserName"));
-        session_name_txt.setText(AppConfiguration.SessionName);
-        location_txt.setText(AppConfiguration.SessionLocation);
-        duration_txt.setText(AppConfiguration.SessionDuration);
-        time_txt.setText(AppConfiguration.SessionTime);
-        AppConfiguration.UserName = session_student_txt.getText().toString();
+        confirmSessionDialogBinding.sessionTeacherTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
+//        confirmSessionDialogBinding.sessionStudentTxt.setText(familyNameStr);
+        confirmSessionDialogBinding.sessionNameTxt.setText(AppConfiguration.SessionName);
+        confirmSessionDialogBinding.locationTxt.setText(AppConfiguration.SessionLocation);
+        confirmSessionDialogBinding.durationTxt.setText(AppConfiguration.SessionDuration);
+        confirmSessionDialogBinding.timeTxt.setText(AppConfiguration.SessionTime);
+        AppConfiguration.UserName = confirmSessionDialogBinding.sessionStudentTxt.getText().toString();
 
-        cancel_txt.setOnClickListener(new View.OnClickListener() {
+        confirmSessionDialogBinding.cancelTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 confimDialog.dismiss();
             }
         });
-        confirm_txt.setOnClickListener(new View.OnClickListener() {
+        confirmSessionDialogBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -219,7 +218,7 @@ String froncontanctStr;
                                 oldFamilyListBinding.listLinear.setVisibility(View.VISIBLE);
                                 oldFamilyListBinding.noRecordTxt.setVisibility(View.GONE);
                                 fillExpLV();
-                                expandableSelectStudentListAdapter = new ExpandableSelectStudentListAdapter(getActivity(), listDataHeader, listDataChild, froncontanctStr, new onChlidClick() {
+                                expandableSelectStudentListAdapter = new ExpandableSelectStudentListAdapter(getActivity(), listDataHeader, listDataChild, froncontanctStr,arraowStr, new onChlidClick() {
                                     @Override
                                     public void getChilClick() {
                                         getFamilyID();
@@ -306,6 +305,7 @@ String froncontanctStr;
             familyIdStr = spiltValue[0];
             familyNameStr = spiltValue[1] + " " + spiltValue[2];
             Log.d("selectedIdStr", familyIdStr);
+            Log.d("familyname",familyNameStr);
         }
     }
 
@@ -319,8 +319,8 @@ String froncontanctStr;
             String[] spilt = selectedId.get(i).split("\\|");
             contatIDstr = spilt[2];
             Utils.setPref(mContext, "FamilyID", contatIDstr);
-            session_student_txt.setText(spilt[0] + " " + spilt[1]);
-            session_student_txt_view.setText(spilt[3]);
+            confirmSessionDialogBinding.sessionStudentTxt.setText(spilt[0] + " " + spilt[1]);
+            confirmSessionDialogBinding.sessionStudentTxtView.setText(spilt[3]);
             type = spilt[4];
             Utils.setPref(mContext,"Type",type);
             Log.d("selectedIdStr", contatIDstr);
@@ -416,7 +416,7 @@ String froncontanctStr;
                         args.putString("orderID", orderIDStr);
                         args.putString("amount", AppConfiguration.SessionPrice);
                         args.putString("mode", "LIVE");
-                        args.putString("username", session_student_txt.getText().toString());
+                        args.putString("username", confirmSessionDialogBinding.sessionStudentTxt.getText().toString());
                         args.putString("sessionID", sessionIDStr);
                         args.putString("contactID", contatIDstr);
                         args.putString("type", type);

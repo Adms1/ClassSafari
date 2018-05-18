@@ -48,7 +48,7 @@ import java.util.Map;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class MySession extends AppCompatActivity {
+public class MySession extends AppCompatActivity implements View.OnClickListener {
 
 
     ActivityMySessionBinding mySessionBinding;
@@ -62,7 +62,7 @@ public class MySession extends AppCompatActivity {
     List<sessionDataModel> sessionList;
 
     //Use for Dialog
-    Dialog confimDialog, sessionDetailDialog,changeDialog;
+    Dialog confimDialog, sessionDetailDialog, changeDialog;
     String paymentStatusstr, sessionIDStr, selectedsessionIDStr, sessionPriceStr, orderIDStr, flag, sessionNameStr;
     SessionDetailModel dataResponse;
     int SessionHour = 0;
@@ -91,14 +91,20 @@ public class MySession extends AppCompatActivity {
     }
 
     public void init() {
-        callSessionListApi();
+        callSessionReportApi();
+//        callSessionListApi();
     }
 
     public void setListner() {
-        mySessionBinding.back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                if (wheretocometypeStr.equalsIgnoreCase("mySession")) {
+        mySessionBinding.back.setOnClickListener(this);
+        mySessionBinding.menu.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.back:
+                //                if (wheretocometypeStr.equalsIgnoreCase("mySession")) {
 //                    Intent intent = new Intent(mContext, MySession.class);
 //                    intent.putExtra("wheretocometype", wheretocometypeStr);
 //                    startActivity(intent);
@@ -111,21 +117,18 @@ public class MySession extends AppCompatActivity {
                 intent.putExtra("wheretocometype", wheretocometypeStr);
                 startActivity(intent);
 //                }
-            }
-        });
-        mySessionBinding.menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.menu:
                 menuDialog();
-            }
-        });
+                break;
+        }
     }
 
     //Use for GetSession Report
     public void callSessionReportApi() {
         if (Utils.isNetworkConnected(mContext)) {
 
-//            Utils.showDialog(mContext);
+            Utils.showDialog(mContext);
             ApiHandler.getApiService().get_FamilySessionList_ByContactID(getSessionReportDetail(), new retrofit.Callback<SessionDetailModel>() {
                 @Override
                 public void success(SessionDetailModel sessionModel, Response response) {
@@ -148,8 +151,10 @@ public class MySession extends AppCompatActivity {
 
                         if (sessionModel.getData().size() > 0) {
                             mySessionBinding.headerLinear.setVisibility(View.VISIBLE);
+                            mySessionBinding.noRecordTxt.setVisibility(View.GONE);
                             fillSessionList();
                         } else {
+                            mySessionBinding.noRecordTxt.setVisibility(View.VISIBLE);
                             mySessionBinding.headerLinear.setVisibility(View.GONE);
                         }
                         Utils.dismissDialog();
@@ -188,6 +193,7 @@ public class MySession extends AppCompatActivity {
                     String[] spilt = selectedId.get(i).split("\\|");
                     sessionIDStr = spilt[0];
                     flag = spilt[1];
+                    sessionNameStr=spilt[2];
                 }
 
                 if (flag.equalsIgnoreCase("1")) {
@@ -197,7 +203,8 @@ public class MySession extends AppCompatActivity {
                     intent.putExtra("sessionID", sessionIDStr);
                     startActivity(intent);
                 } else {
-                    ConformSessionDialog();
+                    callSessionListApi();
+//                    ConformSessionDialog();
                 }
             }
         });
@@ -225,8 +232,9 @@ public class MySession extends AppCompatActivity {
         confimDialog.setCancelable(false);
         confimDialog.setContentView(confirmSessionDialogBinding.getRoot());
 
-        confirmSessionDialogBinding.sessionStudentTxtView.setText("TEACHER NAME");
-        confirmSessionDialogBinding.linear.setVisibility(View.GONE);
+        confirmSessionDialogBinding.sessionStudentTxtView.setText("FAMILY NAME");
+        confirmSessionDialogBinding.sessionStudentTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
+//        confirmSessionDialogBinding.linear.setVisibility(View.GONE);
         setDialogData();
         confirmSessionDialogBinding.cancelTxt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -366,8 +374,8 @@ public class MySession extends AppCompatActivity {
     //Use for SessionList
     public void callSessionListApi() {
         if (Utils.checkNetwork(mContext)) {
-            Utils.showDialog(mContext);
-            ApiHandler.getApiService().get_SessionList(getSessionListDetail(), new retrofit.Callback<SessionDetailModel>() {
+//            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_SessionList_Search_Criteria(getSessionListDetail(), new retrofit.Callback<SessionDetailModel>() {
                 @Override
                 public void success(SessionDetailModel sessionInfo, Response response) {
                     Utils.dismissDialog();
@@ -386,7 +394,9 @@ public class MySession extends AppCompatActivity {
                     if (sessionInfo.getSuccess().equalsIgnoreCase("True")) {
 
                         dataResponse = sessionInfo;
-                        callSessionReportApi();
+//                        callSessionReportApi();
+
+                        ConformSessionDialog();
                         Utils.dismissDialog();
 
                     }
@@ -407,14 +417,14 @@ public class MySession extends AppCompatActivity {
 
     private Map<String, String> getSessionListDetail() {
         Map<String, String> map = new HashMap<>();
-//        map.put("SessionName", sessionNameStr);
-//        map.put("AddressCity", "");
-//        map.put("LessonTypeName", "");
-//        map.put("BoardName", "");
-//        map.put("StandardName", "");
-//        map.put("StreamName", "");
-//        map.put("Gender_ID", "");
-//        map.put("CoachType_ID", "");
+        map.put("SessionName", sessionNameStr);
+        map.put("AddressCity", "");
+        map.put("LessonTypeName", "");
+        map.put("BoardName", "");
+        map.put("StandardName", "");
+        map.put("StreamName", "");
+        map.put("Gender_ID", "");
+        map.put("CoachType_ID", "");
         return map;
     }
 
@@ -436,7 +446,7 @@ public class MySession extends AppCompatActivity {
                             + ", " + dataResponse.getData().get(i).getAddressCity()
                             + ", " + dataResponse.getData().get(i).getAddressState()
                             + "- " + dataResponse.getData().get(i).getAddressZipCode());
-                    confirmSessionDialogBinding.sessionStudentTxt.setText(dataResponse.getData().get(i).getName());
+                    confirmSessionDialogBinding.sessionTeacherTxt.setText(dataResponse.getData().get(i).getName());
                     confirmSessionDialogBinding.durationTxt.setText(dataResponse.getData().get(i).getStartDate() + " To " + dataResponse.getData().get(i).getEndDate());
                     String[] spiltPipes = dataResponse.getData().get(i).getSchedule().split("\\|");
                     String[] spiltComma;
@@ -676,6 +686,8 @@ public class MySession extends AppCompatActivity {
 
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
+        btnMySession.setVisibility(View.GONE);
+
         btnMyReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -836,4 +848,6 @@ public class MySession extends AppCompatActivity {
 //        });
         menuDialog.show();
     }
+
+
 }

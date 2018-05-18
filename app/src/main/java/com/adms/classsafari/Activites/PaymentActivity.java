@@ -328,7 +328,11 @@ public class PaymentActivity extends AppCompatActivity {
                         return;
                     }
                     if (sessionconfirmationInfoModel.getSuccess().equalsIgnoreCase("True")) {
-                        Utils.ping(mContext,"Payment Successfully.");
+                        if(paymentStatusstr.equalsIgnoreCase("1")) {
+                            Utils.ping(mContext, "Payment Successfully.");
+                        }else{
+                            Utils.ping(mContext, "Payment not done.");
+                        }
                     }
                 }
 

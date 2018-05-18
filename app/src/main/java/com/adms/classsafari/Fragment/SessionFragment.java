@@ -34,6 +34,7 @@ import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.Session.sessionDataModel;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
+import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
 import com.adms.classsafari.databinding.FragmentCalendarBinding;
 import com.github.tibolte.agendacalendarview.CalendarPickerController;
 import com.github.tibolte.agendacalendarview.models.CalendarEvent;
@@ -55,11 +56,10 @@ import retrofit.client.Response;
 
 public class SessionFragment extends Fragment implements CalendarPickerController {
 
-    FragmentCalendarBinding calendarBinding;
-    private View rootView;
     public static SessionFragment fragment;
-    private Context mContext;
     public Dialog sessionDialog;
+    FragmentCalendarBinding calendarBinding;
+    ConfirmSessionDialogBinding confirmSessionDialogBinding;
     Button cancel_btn, add_attendance_btn, edit_session_btn, add_student_btn;
     String sessionnameStr, sessionstrattimeStr = "", sessionendtimeStr = "", sessionDateStr = "", sessionIDStr, sessionDetailIDStr, priceStr;
     TextView start_time_txt, end_time_txt, session_title_txt, date_txt, total_spot_txt, spot_left_txt, no_record_txt;
@@ -78,12 +78,13 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
     Calendar calendar;
     String dateStr;
     int k;
-
     //Use for PaymentConfirmation Dialog
     Dialog confimDialog;
-    TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, session_fee_txt;
+    //    TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, session_fee_txt;
     String contatIDstr, orderIDStr, familyNameStr;
     ArrayList<String> selectedId;
+    private View rootView;
+    private Context mContext;
 
     public SessionFragment() {
     }
@@ -246,7 +247,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                         AppConfiguration.SessionTime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime();
                         AppConfiguration.SessionPrice = String.valueOf(Math.round(Float.parseFloat(finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionPrice())));
 //                        AppConfiguration.SessionPrice=finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionPrice();
-                        Log.d("price",AppConfiguration.SessionPrice);
+                        Log.d("price", AppConfiguration.SessionPrice);
                         Utils.setPref(mContext, "sessionID", sessionIDStr);
                     }
 
@@ -520,7 +521,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
     //Use for Get SessionStudent Detail
     public void callGetSessionStudentDetailApi() {
         if (Utils.isNetworkConnected(mContext)) {
-            
+
             ApiHandler.getApiService().get_Session_StudentDetail(getsessionStudentDetail(), new retrofit.Callback<SessionDetailModel>() {
                 @Override
                 public void success(SessionDetailModel sessionStudentInfo, Response response) {
@@ -640,6 +641,9 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
     }
 
     public void ConformationDialog() {
+
+        confirmSessionDialogBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContext), R.layout.confirm_session_dialog, (ViewGroup) calendarBinding.getRoot(), false);
         confimDialog = new Dialog(getActivity(), R.style.Theme_Dialog);
         Window window = confimDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -651,39 +655,29 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
 
         confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         confimDialog.setCancelable(false);
-        confimDialog.setContentView(R.layout.confirm_session_dialog);
-
-        session_student_txt_view = (TextView) confimDialog.findViewById(R.id.session_student_txt_view);
-        session_student_txt = (TextView) confimDialog.findViewById(R.id.session_student_txt);
-        session_name_txt = (TextView) confimDialog.findViewById(R.id.session_name_txt);
-        location_txt = (TextView) confimDialog.findViewById(R.id.location_txt);
-        duration_txt = (TextView) confimDialog.findViewById(R.id.duration_txt);
-        time_txt = (TextView) confimDialog.findViewById(R.id.time_txt);
-        session_fee_txt = (TextView) confimDialog.findViewById(R.id.session_fee_txt);
-        confirm_txt = (TextView) confimDialog.findViewById(R.id.confirm_txt);
-        cancel_txt = (TextView) confimDialog.findViewById(R.id.cancel_txt);
+        confimDialog.setContentView(confirmSessionDialogBinding.getRoot());
 
 
         if (AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
-            session_fee_txt.setText("Free");
+            confirmSessionDialogBinding.sessionFeeTxt.setText("Free");
         } else {
-            session_fee_txt.setText("₹ " + AppConfiguration.SessionPrice);
+            confirmSessionDialogBinding.sessionFeeTxt.setText("₹ " + AppConfiguration.SessionPrice);
         }
+        confirmSessionDialogBinding.sessionTeacherTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
+        confirmSessionDialogBinding.sessionStudentTxt.setText(familyNameStr);
+        confirmSessionDialogBinding.sessionNameTxt.setText(AppConfiguration.SessionName);
+        confirmSessionDialogBinding.locationTxt.setText(AppConfiguration.SessionLocation);
+        confirmSessionDialogBinding.durationTxt.setText(AppConfiguration.SessionDuration);
+        confirmSessionDialogBinding.timeTxt.setText(AppConfiguration.SessionTime);
+        AppConfiguration.UserName = confirmSessionDialogBinding.sessionStudentTxt.getText().toString();
 
-        session_student_txt.setText(familyNameStr);
-        session_name_txt.setText(AppConfiguration.SessionName);
-        location_txt.setText(AppConfiguration.SessionLocation);
-        duration_txt.setText(AppConfiguration.SessionDuration);
-        time_txt.setText(AppConfiguration.SessionTime);
-        AppConfiguration.UserName = session_student_txt.getText().toString();
-
-        cancel_txt.setOnClickListener(new View.OnClickListener() {
+        confirmSessionDialogBinding.cancelTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 confimDialog.dismiss();
             }
         });
-        confirm_txt.setOnClickListener(new View.OnClickListener() {
+        confirmSessionDialogBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -727,8 +721,8 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                         Bundle args = new Bundle();
                         args.putString("orderID", orderIDStr);
                         args.putString("amount", AppConfiguration.SessionPrice);
-                        args.putString("mode", "TEST");
-                        args.putString("username", session_student_txt.getText().toString());
+                        args.putString("mode", "LIVE");
+                        args.putString("username", confirmSessionDialogBinding.sessionStudentTxt.getText().toString());
                         args.putString("sessionID", sessionIDStr);
                         args.putString("contactID", contatIDstr);
                         args.putString("type", Utils.getPref(mContext, "Type"));

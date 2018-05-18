@@ -27,12 +27,6 @@ public class PaymentSuccessActivity extends AppCompatActivity {
     ActivityPaymentSuccessBinding paymentSuccessBinding;
     Context mContext;
     String status;
-//    TextView txtTransactionID, txtValue, txtSucessFailDesc, txtSucessFail, txtUserName;
-//    RelativeLayout rlInnerBox;
-//    ImageView imvSuccessFail;
-//    Button btnNewCharge;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,14 +37,6 @@ public class PaymentSuccessActivity extends AppCompatActivity {
     }
 
     public void init() {
-//        txtTransactionID = (TextView) findViewById(R.id.txtTransactionID);
-//        txtValue = (TextView) findViewById(R.id.txtValue);
-//        txtSucessFailDesc = (TextView) findViewById(R.id.txtSucessFailDesc);
-//        txtSucessFail = (TextView) findViewById(R.id.txtSucessFail);
-//        imvSuccessFail = (ImageView) findViewById(R.id.imvSuccessFail);
-//        btnNewCharge = (Button) findViewById(R.id.btnNewCharge);
-//        txtUserName = (TextView) findViewById(R.id.txtUserName);
-
         paymentSuccessBinding.txtUserName.setText(AppConfiguration.famliyName);
         if (getIntent().getStringExtra("responseCode").equalsIgnoreCase("0")) {
             status = "success";

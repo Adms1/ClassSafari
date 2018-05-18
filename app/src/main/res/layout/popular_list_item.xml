@@ -18,7 +18,7 @@
             android:layout_gravity="center|center_horizontal"
             android:text="Cycling"
             android:textColor="@color/dark_gray"
-            android:textSize="@dimen/_11sdp" />
+            android:textSize="@dimen/_10sdp" />
 
         <RatingBar
             android:id="@+id/popular_rating_bar"
@@ -36,11 +36,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="center|center_vertical">
-    <ImageView
-        android:id="@+id/popular_Session_image_img"
-        android:layout_width="@dimen/_85sdp"
-        android:layout_height="@dimen/_85sdp"
-        android:layout_gravity="center"
-        android:src="@drawable/football"/>
+
+        <ImageView
+            android:id="@+id/popular_Session_image_img"
+            android:layout_width="@dimen/_113sdp"
+            android:layout_height="@dimen/_113sdp"
+            android:layout_gravity="center"
+            android:src="@drawable/football" />
     </LinearLayout>
 </LinearLayout>

@@ -37,6 +37,12 @@
             android:textColor="@color/white"
             android:textSize="@dimen/_15sdp"
             android:textStyle="bold" />
+        <ImageView
+            android:id="@+id/menu"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/menubar"
+            android:layout_marginLeft="@dimen/_120sdp"/>
     </android.support.v7.widget.Toolbar>
 
     <Button

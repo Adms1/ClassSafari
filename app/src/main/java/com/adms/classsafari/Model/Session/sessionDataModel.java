@@ -268,6 +268,9 @@ public class sessionDataModel{
     @SerializedName("CoachType_ID")
     @Expose
     private String coachTypeID;
+    @SerializedName("TotalRatingUser")
+    @Expose
+    private String totalRatingUser;
 
     public String getCoachTypeID() {
         return coachTypeID;
@@ -339,6 +342,14 @@ public class sessionDataModel{
 
     public void setContactPhoneNumber(String contactPhoneNumber) {
         this.contactPhoneNumber = contactPhoneNumber;
+    }
+
+    public String getTotalRatingUser() {
+        return totalRatingUser;
+    }
+
+    public void setTotalRatingUser(String totalRatingUser) {
+        this.totalRatingUser = totalRatingUser;
     }
 
     //    =======================================================

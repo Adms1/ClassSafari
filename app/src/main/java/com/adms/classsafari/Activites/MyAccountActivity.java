@@ -376,6 +376,8 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
 
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
+
+        btnMyReport.setVisibility(View.GONE);
         btnMyReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
