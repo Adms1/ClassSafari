@@ -69,7 +69,7 @@
                 android:id="@+id/arrow_img"
                 android:layout_width="@dimen/_15sdp"
                 android:layout_height="@dimen/_15sdp"
-                android:layout_marginLeft="@dimen/_70sdp"
+                android:layout_marginLeft="@dimen/_7sdp"
                 android:layout_gravity="center|center_vertical"
                 android:textColor="@color/blue"
                 android:textSize="@dimen/_14sdp"

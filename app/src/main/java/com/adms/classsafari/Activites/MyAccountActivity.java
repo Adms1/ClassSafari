@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -36,6 +37,7 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -61,12 +63,14 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
 
     //Use for menu
     String passWordStr, confirmpassWordStr, currentpasswordStr;
-    Dialog menuDialog,changeDialog;
+    Dialog menuDialog, changeDialog;
     Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily;
     TextView userNameTxt;
-
+    //
+    Calendar[] daysArray;
+    List<Calendar> dayslist = new LinkedList<Calendar>();
+    int startDay, startMonth, startYear;
     private DatePickerDialog datePickerDialog;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,10 +96,51 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
 
         myAccountBinding.txtStartDate.setText(Utils.getPriviousDate());
         myAccountBinding.txtEndDate.setText(Utils.getTodaysDate());
+
+        String[]spilt=myAccountBinding.txtStartDate.getText().toString().split("/");
+
+        int y=Integer.parseInt(spilt[2]);
+        int m =Integer.parseInt(spilt[1]);
+        int d= Integer.parseInt(spilt[0]);
+
+
+        int year = 2018;
+        int month =4;
+        int date = 18;
+
+//        calendar.set(year, month, date);
+
+        calendar.set(Calendar.YEAR,year);
+        calendar.set(Calendar.MONTH,month);
+        calendar.set(Calendar.DATE,date);
+
+        Year = calendar.get(Calendar.YEAR);
+        Month = calendar.get(Calendar.MONTH);
+        Day = calendar.get(Calendar.DATE);
+        Log.d("StartDate:",""+Year+"/"+Month+"/"+Day);
+
+
         callPaymentReportApi();
     }
 
     public void setListner() {
+//        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+//        Calendar cal = Calendar.getInstance();
+//        startYear=2018;
+//        startMonth=04;
+//        startDay=18;
+//        try {
+//            cal.setTime(df.parse(myAccountBinding.txtStartDate.getText().toString()));
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        dayslist.add(cal);
+//        daysArray = new Calendar[dayslist.size()];
+//        for (int i = 0; i < daysArray.length; i++) {
+//            daysArray[i] = dayslist.get(i);
+//        }
+
+
         myAccountBinding.back.setOnClickListener(this);
         myAccountBinding.startDateLinear.setOnClickListener(this);
         myAccountBinding.endDateLinear.setOnClickListener(this);
@@ -143,6 +188,16 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
                 datePickerDialog.show(getFragmentManager(), "Datepickerdialog");
                 break;
             case R.id.end_date_linear:
+//                String[]spilt1=myAccountBinding.txtEndDate.getText().toString().split("/");
+//                int year1 = Integer.parseInt(spilt1[2]);
+//                int month1 =Integer.parseInt(spilt1[1]);
+//                int date1 = Integer.parseInt(spilt1[0]);
+//
+//                calendar.set(year1, month1, date1);
+//                Year = calendar.get(Calendar.YEAR);
+//                Month = calendar.get(Calendar.MONTH);
+//                Day = calendar.get(Calendar.DATE);
+
                 isFromDate = false;
                 datePickerDialog = com.wdullaer.materialdatetimepicker.date.DatePickerDialog.newInstance(MyAccountActivity.this, Year, Month, Day);
                 datePickerDialog.setThemeDark(false);

@@ -573,7 +573,7 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
                         Bundle args = new Bundle();
                         args.putString("orderID", orderIDStr);
                         args.putString("amount", AppConfiguration.SessionPrice);
-                        args.putString("mode", "LIVE");
+                        args.putString("mode",AppConfiguration.Mode);
                         args.putString("username", confirmSessionTeacherBinding.sessionStudentTxt.getText().toString());
                         args.putString("sessionID", sessionIDStr);
                         args.putString("contactID", contatIDstr);

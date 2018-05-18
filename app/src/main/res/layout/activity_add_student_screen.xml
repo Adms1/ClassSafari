@@ -181,12 +181,22 @@
 
             <Button
                 android:id="@+id/date_of_birth_edt"
-                style="@style/AutoComplete"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:drawableRight="@drawable/dob"
-                android:hint="@string/dob" />
+                android:hint="@string/dob"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:background="@drawable/edit_line"
+                android:gravity="start|center_vertical"
+                android:imeOptions="actionNext"
+                android:paddingLeft="@dimen/_5sdp"
+                android:paddingRight="@dimen/_5sdp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textSize="@dimen/_10sdp"
+                android:textStyle="normal"/>
 
             <RadioGroup
                 android:id="@+id/gender_group"

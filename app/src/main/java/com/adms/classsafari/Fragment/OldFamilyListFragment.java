@@ -415,7 +415,7 @@ String froncontanctStr;
                         Bundle args = new Bundle();
                         args.putString("orderID", orderIDStr);
                         args.putString("amount", AppConfiguration.SessionPrice);
-                        args.putString("mode", "LIVE");
+                        args.putString("mode",AppConfiguration.Mode);
                         args.putString("username", confirmSessionDialogBinding.sessionStudentTxt.getText().toString());
                         args.putString("sessionID", sessionIDStr);
                         args.putString("contactID", contatIDstr);

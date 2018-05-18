@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.adms.classsafari.Adapter.UserSessionListAdapter;
 import com.adms.classsafari.AppConstant.ApiHandler;
+import com.adms.classsafari.AppConstant.AppConfiguration;
 import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.Interface.onViewClick;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
@@ -287,7 +288,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                         Intent ipayment = new Intent(mContext, PaymentActivity.class);
                         ipayment.putExtra("orderID", orderIDStr);
                         ipayment.putExtra("amount", sessionPriceStr);
-                        ipayment.putExtra("mode", "LIVE");
+                        ipayment.putExtra("mode", AppConfiguration.Mode);
                         ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
                         ipayment.putExtra("sessionID", selectedsessionIDStr);
                         ipayment.putExtra("contactID", Utils.getPref(mContext, "coachID"));

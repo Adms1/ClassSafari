@@ -215,7 +215,14 @@ public class ExpandableSelectStudentListAdapter extends BaseExpandableListAdapte
                 R.layout.list_group_family_list, parent, false);
         convertView = groupbinding.getRoot();
 
-
+        if (arraowStr.equalsIgnoreCase("Activity")) {
+            groupbinding.arrowImg.setVisibility(View.GONE);
+            groupbinding.addchildTxt.setVisibility(View.GONE);
+        } else {
+            groupbinding.arrowImg.setVisibility(View.VISIBLE);
+            groupbinding.addchildTxt.setVisibility(View.VISIBLE);
+            groupbinding.arrowImg.setImageResource(R.drawable.down_add_family);
+        }
         if (isExpanded) {
             convertView.setBackgroundResource(R.drawable.selected_header);
 //            groupbinding.arrowImg.setBackgroundResource(R.drawable.round_yello);
@@ -228,13 +235,7 @@ public class ExpandableSelectStudentListAdapter extends BaseExpandableListAdapte
         groupbinding.familynameRb.setText(spiltValue[0] + " " + spiltValue[1]);
         groupbinding.noTxt.setText(spiltValue[2]);
         FamilyID = spiltValue[3];
-        if (arraowStr.equalsIgnoreCase("Activity")) {
-            groupbinding.arrowImg.setVisibility(View.GONE);
-            groupbinding.addchildTxt.setVisibility(View.GONE);
-        } else {
-            groupbinding.arrowImg.setVisibility(View.VISIBLE);
-            groupbinding.addchildTxt.setVisibility(View.VISIBLE);
-        }
+
         if (!froncontanctStr.equalsIgnoreCase("true")) {
 
             groupbinding.familynameRb.setChecked(false);
