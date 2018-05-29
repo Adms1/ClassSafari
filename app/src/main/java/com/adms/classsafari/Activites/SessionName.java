@@ -903,11 +903,11 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                         if (passWordStr.equalsIgnoreCase(confirmpassWordStr)) {
                             callChangePasswordApi();
                         } else {
-                            changePasswordDialogBinding.edtcurrentpassword.setError("Confirm Password does not match.");
+                            changePasswordDialogBinding.edtconfirmpassword.setError("Confirm Password does not match.");
                         }
                     } else {
-                        changePasswordDialogBinding.edtconfirmpassword.setError("Password must be 4-8 Characters.");
-                        changePasswordDialogBinding.edtconfirmpassword.setText("");
+                        changePasswordDialogBinding.edtnewpassword.setError("Password must be 4-8 Characters.");
+                        changePasswordDialogBinding.edtnewpassword.setText("");
                         changePasswordDialogBinding.edtconfirmpassword.setText("");
                     }
                 } else {

@@ -48,6 +48,7 @@
     <string name="addchildsopuse">Add Family Contacts</string>
     <string name="mycontanct">My Family Contacts</string>
     <string name="agevalidation">Date of Birth should be > 1year .</string>
+    <string name="close">Close</string>
 
     <string name="checkboc_text">All-inclusive price(coupon &amp; wallet applied)</string>
     <string name="payment">Payment</string>

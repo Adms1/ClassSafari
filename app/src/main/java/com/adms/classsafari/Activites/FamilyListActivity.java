@@ -442,7 +442,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                         ipayment.putExtra("mode", AppConfiguration.Mode);
                         ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
                         ipayment.putExtra("sessionID", sessionIDStr);
-                        ipayment.putExtra("contactID", Utils.getPref(mContext, "coachID"));
+                        ipayment.putExtra("contactID",contatIDstr );//Utils.getPref(mContext, "coachID")
                         ipayment.putExtra("type", Utils.getPref(mContext, "LoginType"));
                         startActivity(ipayment);
                     }
@@ -464,7 +464,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
     private Map<String, String> getpaymentRequestdetail() {
 
         Map<String, String> map = new HashMap<>();
-        map.put("ContactID", Utils.getPref(mContext, "coachID"));
+        map.put("ContactID",contatIDstr);//contatIDstr  // Utils.getPref(mContext, "coachID")
         map.put("SessionID", sessionIDStr);
         map.put("Amount", familysessionfeesStr);
 
@@ -518,7 +518,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
     private Map<String, String> getSessionConfirmationdetail() {
         Map<String, String> map = new HashMap<>();
         map.put("SessionID", sessionIDStr);
-        map.put("ContactID", Utils.getPref(mContext, "coachID"));
+        map.put("ContactID", Utils.getPref(mContext, "coachID"));//contatIDstr  //Utils.getPref(mContext, "coachID")
         map.put("PaymentStatus", paymentStatusstr);
         return map;
     }
@@ -626,7 +626,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
     private Map<String, String> getSessionReportDetail() {
 
         Map<String, String> map = new HashMap<>();
-        map.put("ContactID", Utils.getPref(mContext, "coachID"));
+        map.put("ContactID", contatIDstr);//contatIDstr  //Utils.getPref(mContext, "coachID")
         return map;
     }
 
@@ -659,11 +659,11 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                         if (passWordStr.equalsIgnoreCase(confirmpassWordStr)) {
                             callChangePasswordApi();
                         } else {
-                            changePasswordDialogBinding.edtcurrentpassword.setError("Confirm Password does not match.");
+                            changePasswordDialogBinding.edtconfirmpassword.setError("Confirm Password does not match.");
                         }
                     } else {
-                        changePasswordDialogBinding.edtconfirmpassword.setError("Password must be 4-8 Characters.");
-                        changePasswordDialogBinding.edtconfirmpassword.setText("");
+                        changePasswordDialogBinding.edtnewpassword.setError("Password must be 4-8 Characters.");
+                        changePasswordDialogBinding.edtnewpassword.setText("");
                         changePasswordDialogBinding.edtconfirmpassword.setText("");
                     }
                 } else {

@@ -616,7 +616,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
     private Map<String, String> getpaymentRequestdetail() {
 
         Map<String, String> map = new HashMap<>();
-        map.put("ContactID", Utils.getPref(mContext, "coachID"));
+        map.put("ContactID",contatIDstr); // Utils.getPref(mContext, "coachID")
         map.put("SessionID", sessionIDStr);
         map.put("Amount", familysessionfeesStr);
 

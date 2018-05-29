@@ -222,7 +222,6 @@ public class PaymentActivity extends AppCompatActivity {
         paymentBinding.webView.setWebViewClient(new WebViewClient());
         paymentBinding.webView.postUrl("https://biz.traknpay.in/v1/paymentrequest", postData.getBytes());
         paymentBinding.webView.addJavascriptInterface(new MyJavaScriptInterface(this), "Android");
-
     }
 
     /**

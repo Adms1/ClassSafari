@@ -253,6 +253,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                 Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(address));
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
                 mapIntent.setPackage("com.google.android.apps.maps");
+
                 mContext.startActivity(mapIntent);
             }
         });
@@ -303,44 +304,10 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-//        public TextView session_name_txt, price_txt, start_date_txt, end_date_txt,
-//                mon_time_txt, tues_time_txt, wed_time_txt, thur_time_txt, fri_time_txt, sat_time_txt, sun_time_txt,
-//                location_txt, duration_txt, tutor_name_txt;
-//        public Button monday_btn, tuesday_btn, wednesday_btn, thursday_btn, friday_btn, saturday_btn, sunday_btn;
-//        public RatingBar rating_bar;
-//        public LinearLayout linear_click;
 
         public MyViewHolder(View view) {
             super(view);
-//            session_name_txt = (TextView) view.findViewById(R.id.session_name_txt);
-//            price_txt = (TextView) view.findViewById(R.id.price_txt);
-//            start_date_txt = (TextView) view.findViewById(R.id.start_date_txt);
-//            end_date_txt = (TextView) view.findViewById(R.id.end_date_txt);
-//
-//            mon_time_txt = (TextView) view.findViewById(R.id.mon_time_txt);
-//            tues_time_txt = (TextView) view.findViewById(R.id.tues_time_txt);
-//            wed_time_txt = (TextView) view.findViewById(R.id.wed_time_txt);
-//            thur_time_txt = (TextView) view.findViewById(R.id.thur_time_txt);
-//            fri_time_txt = (TextView) view.findViewById(R.id.fri_time_txt);
-//            sat_time_txt = (TextView) view.findViewById(R.id.sat_time_txt);
-//            sun_time_txt = (TextView) view.findViewById(R.id.sun_time_txt);
 
-
-//            location_txt = (TextView) view.findViewById(R.id.location_txt);
-//            duration_txt = (TextView) view.findViewById(R.id.duration_txt);
-//            tutor_name_txt = (TextView) view.findViewById(R.id.tutor_name_txt);
-//
-//            monday_btn = (Button) view.findViewById(R.id.monday_btn);
-//            tuesday_btn = (Button) view.findViewById(R.id.tuesday_btn);
-//            wednesday_btn = (Button) view.findViewById(R.id.wednesday_btn);
-//            thursday_btn = (Button) view.findViewById(R.id.thursday_btn);
-//            friday_btn = (Button) view.findViewById(R.id.friday_btn);
-//            saturday_btn = (Button) view.findViewById(R.id.saturday_btn);
-//            sunday_btn = (Button) view.findViewById(R.id.sunday_btn);
-//
-//            rating_bar = (RatingBar) view.findViewById(R.id.rating_bar);
-//
-//            linear_click = (LinearLayout) view.findViewById(R.id.linear_click);
         }
     }
 }

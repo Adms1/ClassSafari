@@ -84,7 +84,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 
     String subjectStr, boardStr = "", standardStr = "", streamStr = "",
             locationStr, classNameStr, searchByStr, searchTypeStr,
-            wheretoComeStr, genderStr = "", maxpriceStr, minpriceStr,
+            wheretoComeStr, genderStr = "", maxpriceStr = "", minpriceStr = "",
             sessionId, commentStr, ratingValueStr, popularsessionID = "",
             populardurationStr = "", populargenderStr = "", popluarsessiondateStr = "", firsttimesearch;
     SessionDetailModel dataResponse, populardataresponse;
@@ -148,19 +148,19 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                 //  || ) {
                 binding.boardTxt.setVisibility(View.VISIBLE);
                 binding.boardTxt.setText("\u2022" + boardStr);
-            }else{
+            } else {
                 binding.boardTxt.setVisibility(View.GONE);
             }
-            if(!standardStr.equalsIgnoreCase("")) {
+            if (!standardStr.equalsIgnoreCase("")) {
                 binding.standardTxt.setVisibility(View.VISIBLE);
                 binding.standardTxt.setText("\u2022" + standardStr);
-            }else{
+            } else {
                 binding.standardTxt.setVisibility(View.GONE);
             }
-            if(!streamStr.equalsIgnoreCase("")) {
+            if (!streamStr.equalsIgnoreCase("")) {
                 binding.streamTxt.setVisibility(View.VISIBLE);
                 binding.streamTxt.setText("\u2022" + streamStr);
-            }else{
+            } else {
                 binding.streamTxt.setVisibility(View.GONE);
             }
         }
@@ -198,7 +198,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         binding.backImg.setOnClickListener(this);
         binding.searchImg.setOnClickListener(this);
         binding.multiautocompe.setOnClickListener(this);
-//        binding.multiautocompe.setOnItemClickListener(this);
         binding.multiautocompe.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -319,15 +318,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         }
     }
 
-//    @Override
-//    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//        switch (view.getId()) {
-//            case R.id.multiautocompe:
-//
-//                break;
-//        }
-//    }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -443,30 +433,34 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 
             Object objmax = Collections.max(priceList);
             Object objmin = Collections.min(priceList);
-
-            priceBinding.rangeSeekbar.setMaxValue((Float) objmax);
-            priceBinding.rangeSeekbar.setMinValue((Float) objmin);
+//            if (!maxpriceStr.equalsIgnoreCase("") && !minpriceStr.equalsIgnoreCase("")) {
+//                priceBinding.rangeSeekbar.setMaxStartValue(Float.parseFloat(maxpriceStr));
+//                priceBinding.rangeSeekbar.setMinStartValue(Float.parseFloat(minpriceStr));
+//            } else {
+                priceBinding.rangeSeekbar.setMaxValue((Float) objmax);
+                priceBinding.rangeSeekbar.setMinValue((Float) objmin);
+//            }
         }
         priceBinding.doneTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String[] maxsplit = priceBinding.priceRange2Txt.getText().toString().split("\\s+");
-                String[] minsplit = priceBinding.priceRange1Txt.getText().toString().split("\\s+");
-                maxpriceStr = maxsplit[1];
-                minpriceStr = minsplit[1];
-                if (dataResponse.getData().size() >= 0) {
-                    List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-                    for (sessionDataModel arrayObj : dataResponse.getData()) {
-                        if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim())
-                                && arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-                            if (Float.parseFloat(arrayObj.getSessionAmount()) >= Integer.parseInt(minpriceStr) &&
-                                    Float.parseFloat(arrayObj.getSessionAmount()) <= Integer.parseInt(maxpriceStr)) {
-                                filterFinalArray.add(arrayObj);
-                            }
-                        }
-                    }
-                    fillData(filterFinalArray);
-                }
+//                String[] maxsplit = priceBinding.priceRange2Txt.getText().toString().split("\\s+");
+//                String[] minsplit = priceBinding.priceRange1Txt.getText().toString().split("\\s+");
+//                maxpriceStr = maxsplit[1];
+//                minpriceStr = minsplit[1];
+//                if (dataResponse.getData().size() >= 0) {
+//                    List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+//                    for (sessionDataModel arrayObj : dataResponse.getData()) {
+//                        if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim())
+//                                && arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+//                            if (Float.parseFloat(arrayObj.getSessionAmount()) >= Integer.parseInt(minpriceStr) &&
+//                                    Float.parseFloat(arrayObj.getSessionAmount()) <= Integer.parseInt(maxpriceStr)) {
+//                                filterFinalArray.add(arrayObj);
+//                            }
+//                        }
+//                    }
+//                    fillData(filterFinalArray);
+//                }
                 priceDialog.dismiss();
 
 
@@ -491,6 +485,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                             }
                         }
                     }
+                    fillData(filterFinalArray);
                 }
             }
         });
@@ -863,13 +858,110 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         sortDialog.setContentView(sortBinding.getRoot());
 
         sortBinding.resultTxt.setText(String.valueOf(result));
+
+        if (!rangestatusStr.equalsIgnoreCase("")) {
+            if (rangestatusStr.equalsIgnoreCase("low")) {
+                sortBinding.lowHighRb.setChecked(true);
+            } else {
+                sortBinding.highLowRb.setChecked(true);
+            }
+        }
+        if (!ratingStr.equalsIgnoreCase("")) {
+            if (ratingStr.equalsIgnoreCase("low")) {
+                sortBinding.lowestFirstUserRb.setChecked(true);
+            } else {
+                sortBinding.highestFirstUserRb.setChecked(true);
+            }
+        }
+
         sortBinding.doneTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (!pricewiseStr.equalsIgnoreCase("")) {
-                if (pricewiseStr.equalsIgnoreCase("price")) {
-//                        if (!rangestatusStr.equalsIgnoreCase("")) {
-                    if (rangestatusStr.equalsIgnoreCase("low")) {
+//                if (pricewiseStr.equalsIgnoreCase("price")) {
+//                    if (rangestatusStr.equalsIgnoreCase("low")) {
+//                        if (dataResponse.getData().size() >= 0) {
+//                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+//                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+//                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+//                                        arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+//                                    filterFinalArray.add(arrayObj);
+//                                    Collections.sort(filterFinalArray, new LowToHighSortSessionPrice());
+//                                }
+//                            }
+//                            fillData(filterFinalArray);
+//                            sortDialog.dismiss();
+//                            pricewiseStr = "";
+//                        }
+//                    } else {
+//                        if (dataResponse.getData().size() >= 0) {
+//                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+//                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+//                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+//                                        arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+//                                    filterFinalArray.add(arrayObj);
+//                                    Collections.sort(filterFinalArray, new HightToLowSortSessionPrice());
+//                                }
+//                            }
+//                            fillData(filterFinalArray);
+//                            sortDialog.dismiss();
+//                            pricewiseStr = "";
+//                        }
+//                    }
+////                        } else {
+////                            Utils.ping(mContext, "Please Select One Option");
+////                        }
+//                } else {
+////                        if (!ratingStr.equalsIgnoreCase("")) {
+//                    if (ratingStr.equalsIgnoreCase("low")) {
+//                        if (dataResponse.getData().size() >= 0) {
+//                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+//                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+//                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+//                                        arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+//                                    filterFinalArray.add(arrayObj);
+//                                    Collections.sort(filterFinalArray, new LowToHighSortRating());
+//                                }
+//                            }
+//                            fillData(filterFinalArray);
+//                            sortDialog.dismiss();
+//                            pricewiseStr = "";
+//                        }
+//                    } else {
+//                        List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+//                        if (dataResponse.getData().size() >= 0) {
+//                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+//                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+//                                        arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+//                                    filterFinalArray.add(arrayObj);
+//                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
+//                                }
+//                            }
+//                            fillData(filterFinalArray);
+//                            sortDialog.dismiss();
+//                            pricewiseStr = "";
+//                        }
+//                    }
+////                        } else {
+////                            Utils.ping(mContext, "Please Select One Option");
+////                        }
+//                }
+
+//                } else {
+//                    Utils.ping(mContext, "Please Select One Option");
+//                }
+
+                sortDialog.dismiss();
+            }
+        });
+        sortBinding.rangeStatusRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                int radioButtonID = sortBinding.rangeStatusRg.getCheckedRadioButtonId();
+                switch (radioButtonID) {
+                    case R.id.low_high_rb:
+                        ratingStr="";
+                        rangestatusStr = "low";
+                        pricewiseStr = "price";
                         if (dataResponse.getData().size() >= 0) {
                             List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                             for (sessionDataModel arrayObj : dataResponse.getData()) {
@@ -883,7 +975,11 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                             sortDialog.dismiss();
                             pricewiseStr = "";
                         }
-                    } else {
+                        break;
+                    case R.id.high_low_rb:
+                        ratingStr="";
+                        rangestatusStr = "high";
+                        pricewiseStr = "price";
                         if (dataResponse.getData().size() >= 0) {
                             List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                             for (sessionDataModel arrayObj : dataResponse.getData()) {
@@ -897,63 +993,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                             sortDialog.dismiss();
                             pricewiseStr = "";
                         }
-                    }
-//                        } else {
-//                            Utils.ping(mContext, "Please Select One Option");
-//                        }
-                } else {
-//                        if (!ratingStr.equalsIgnoreCase("")) {
-                    if (ratingStr.equalsIgnoreCase("low")) {
-                        if (dataResponse.getData().size() >= 0) {
-                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                                        arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-                                    filterFinalArray.add(arrayObj);
-                                    Collections.sort(filterFinalArray, new LowToHighSortRating());
-                                }
-                            }
-                            fillData(filterFinalArray);
-                            sortDialog.dismiss();
-                            pricewiseStr = "";
-                        }
-                    } else {
-                        List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-                        if (dataResponse.getData().size() >= 0) {
-                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                                        arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-                                    filterFinalArray.add(arrayObj);
-                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
-                                }
-                            }
-                            fillData(filterFinalArray);
-                            sortDialog.dismiss();
-                            pricewiseStr = "";
-                        }
-                    }
-//                        } else {
-//                            Utils.ping(mContext, "Please Select One Option");
-//                        }
-                }
-
-//                } else {
-//                    Utils.ping(mContext, "Please Select One Option");
-//                }
-            }
-        });
-        sortBinding.rangeStatusRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                int radioButtonID = sortBinding.rangeStatusRg.getCheckedRadioButtonId();
-                switch (radioButtonID) {
-                    case R.id.low_high_rb:
-                        rangestatusStr = "low";
-                        pricewiseStr = "price";
-                        break;
-                    case R.id.high_low_rb:
-                        rangestatusStr = "high";
-                        pricewiseStr = "price";
                         break;
                     default:
                         break;
@@ -967,12 +1006,40 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                 int radioButtonRating = sortBinding.userRatingStatusRg.getCheckedRadioButtonId();
                 switch (radioButtonRating) {
                     case R.id.lowest_first_user_rb:
+                        rangestatusStr="";
                         ratingStr = "low";
                         pricewiseStr = "rating";
+                        if (dataResponse.getData().size() >= 0) {
+                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+                                        arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+                                    filterFinalArray.add(arrayObj);
+                                    Collections.sort(filterFinalArray, new LowToHighSortRating());
+                                }
+                            }
+                            fillData(filterFinalArray);
+                            sortDialog.dismiss();
+                            pricewiseStr = "";
+                        }
                         break;
                     case R.id.highest_first_user_rb:
+                        rangestatusStr="";
                         ratingStr = "high";
                         pricewiseStr = "rating";
+                        List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                        if (dataResponse.getData().size() >= 0) {
+                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+                                        arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+                                    filterFinalArray.add(arrayObj);
+                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
+                                }
+                            }
+                            fillData(filterFinalArray);
+                            sortDialog.dismiss();
+                            pricewiseStr = "";
+                        }
                         break;
                     default:
                         break;
@@ -1084,7 +1151,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                                     intentLogin.putExtra("withOR", wheretoComeStr);
                                     intentLogin.putExtra("ratingLogin", "ratingLoginclass");
                                     intentLogin.putExtra("searchfront", searchfront);
-                                    intentLogin.putExtra("sessionType",sessionType);
+                                    intentLogin.putExtra("sessionType", sessionType);
                                     intentLogin.putExtra("firsttimesearch", firsttimesearch);
                                     startActivity(intentLogin);
                                     finish();
@@ -1172,46 +1239,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                 }
             }
         });
-//        AlertDialog.Builder alert = new AlertDialog.Builder(this);
-//        // this is set the view from XML inside AlertDialog
-//
-//
-//        alert.setView(alertLayout);
-//        // disallow cancel of AlertDialog on click of back button and outside touch
-//        alert.setCancelable(false);
-//        alert.setNegativeButton("Not Now", new DialogInterface.OnClickListener() {
-//
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-////                Toast.makeText(getBaseContext(), "Cancel clicked", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//        alert.setPositiveButton("Rate", new DialogInterface.OnClickListener() {
-//
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-////                String rating = String.valueOf(ratingBar.getRating());
-////                Toast.makeText(getApplicationContext(), rating, Toast.LENGTH_LONG).show();
-//                commentStr = comment_edt.getText().toString();
-//                if (commentStr.equalsIgnoreCase("")) {
-//                    commentStr = session_rating_view_txt.getText().toString();
-//                }
-//                ratingValueStr = String.valueOf(ratingBar.getRating());
-//                if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
-//                    if (!ratingValueStr.equalsIgnoreCase("0.0")) {
-//                        callAddrating();
-//                    } else {
-//                        Utils.ping(mContext, "Please Select Rate.");
-//                    }
-//                } else {
-//                    Utils.ping(mContext, getResources().getString(R.string.not_loging));
-//                }
-//            }
-//        });
-//        final AlertDialog dialog = alert.create();
-//
-//        dialog.show();
 
         AlertDialog.Builder sayWindows = new AlertDialog.Builder(
                 mContext);
