@@ -129,7 +129,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.login_btn:
                 getInsertedValue();
-                if (!EmailIdStr.equalsIgnoreCase("") && Utils.isValidEmaillId(EmailIdStr) && !passwordStr.equalsIgnoreCase("") && passwordStr.length() >= 4 && passwordStr.length() <= 8) {
+                if (!EmailIdStr.equalsIgnoreCase("") && Utils.isValidEmaillId(EmailIdStr)
+                        && !passwordStr.equalsIgnoreCase("") && passwordStr.length() >= 4 && passwordStr.length() <= 8) {
                     checkStr = "login";
                     callTeacherLoginApi();
                 } else {
@@ -408,7 +409,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             });
         } else {
-            Utils.ping(mContext, getString(R.string.internet_connection_error));
+//            Utils.showCustomDialog(getResources().getString(R.string.app_name),getResources().getString(R.string.internet_connection_error),);
+            Utils.ping(mContext,getResources().getString(R.string.internet_connection_error));
         }
     }
 

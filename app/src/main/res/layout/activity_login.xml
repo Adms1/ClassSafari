@@ -52,8 +52,7 @@
                         android:id="@+id/facebook_img"
                         android:layout_width="@dimen/_37sdp"
                         android:layout_height="@dimen/_37sdp"
-                        android:layout_margin="@dimen/_5sdp"
-                        android:background="@drawable/fb" />
+                        android:layout_margin="@dimen/_5sdp" />
                 </LinearLayout>
 
                 <Button
@@ -63,8 +62,7 @@
                     android:layout_marginBottom="@dimen/_10sdp"
                     android:layout_marginLeft="@dimen/_15sdp"
                     android:layout_marginRight="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:background="@drawable/google" />
+                    android:layout_marginTop="@dimen/_5sdp" />
             </LinearLayout>
 
             <TextView

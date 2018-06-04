@@ -428,12 +428,5 @@
         </android.support.v7.widget.CardView>
     </LinearLayout>
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_4sdp"
-        android:background="@drawable/dropshadow"
-        android:visibility="gone" />
-
 </LinearLayout>
 </layout>

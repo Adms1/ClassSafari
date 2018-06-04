@@ -144,75 +144,75 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                 fragmentTransaction.commit();
             }
         });
-        calendarBinding.forwadTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                calendar = Calendar.getInstance();
-
-                SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy");
-                String d = calendarBinding.monthYearTxt.getText().toString();
-                Date date = null;
-                try {
-                    date = new Date(sdf.parse(d).getTime());
-                    date.setMonth(date.getMonth() + 1);
-                    dateStr = String.valueOf(date);
-                    Log.d("dateStr", dateStr);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                String inputPattern = "EEE MMM d HH:mm:ss zzz yyyy";
-                String outputPattern = "MMMM yyyy";
-
-                SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
-                SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
-
-                Date date1 = null;
-                String str = null;
-                try {
-                    date1 = inputFormat.parse(dateStr);
-                    str = outputFormat.format(date1);
-
-                    Log.i("mini", "Month:" + str);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                calendarBinding.monthYearTxt.setText(str);
-            }
-        });
-
-        calendarBinding.backTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy");
-                String d = calendarBinding.monthYearTxt.getText().toString();
-                Date date = null;
-                try {
-                    date = new Date(sdf.parse(d).getTime());
-                    date.setMonth(date.getMonth() - 1);
-                    dateStr = String.valueOf(date);
-                    Log.d("dateStr", dateStr);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                String inputPattern = "EEE MMM d HH:mm:ss zzz yyyy";
-                String outputPattern = "MMMM yyyy";
-
-                SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
-                SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
-
-                Date date1 = null;
-                String str = null;
-                try {
-                    date1 = inputFormat.parse(dateStr);
-                    str = outputFormat.format(date1);
-
-                    Log.i("mini", "Month:" + str);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                calendarBinding.monthYearTxt.setText(str);
-            }
-        });
+//        calendarBinding.forwadTxt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                calendar = Calendar.getInstance();
+//
+//                SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy");
+//                String d = calendarBinding.monthYearTxt.getText().toString();
+//                Date date = null;
+//                try {
+//                    date = new Date(sdf.parse(d).getTime());
+//                    date.setMonth(date.getMonth() + 1);
+//                    dateStr = String.valueOf(date);
+//                    Log.d("dateStr", dateStr);
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//                String inputPattern = "EEE MMM d HH:mm:ss zzz yyyy";
+//                String outputPattern = "MMMM yyyy";
+//
+//                SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
+//                SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
+//
+//                Date date1 = null;
+//                String str = null;
+//                try {
+//                    date1 = inputFormat.parse(dateStr);
+//                    str = outputFormat.format(date1);
+//
+//                    Log.i("mini", "Month:" + str);
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//                calendarBinding.monthYearTxt.setText(str);
+//            }
+//        });
+//
+//        calendarBinding.backTxt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy");
+//                String d = calendarBinding.monthYearTxt.getText().toString();
+//                Date date = null;
+//                try {
+//                    date = new Date(sdf.parse(d).getTime());
+//                    date.setMonth(date.getMonth() - 1);
+//                    dateStr = String.valueOf(date);
+//                    Log.d("dateStr", dateStr);
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//                String inputPattern = "EEE MMM d HH:mm:ss zzz yyyy";
+//                String outputPattern = "MMMM yyyy";
+//
+//                SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
+//                SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
+//
+//                Date date1 = null;
+//                String str = null;
+//                try {
+//                    date1 = inputFormat.parse(dateStr);
+//                    str = outputFormat.format(date1);
+//
+//                    Log.i("mini", "Month:" + str);
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//                calendarBinding.monthYearTxt.setText(str);
+//            }
+//        });
     }
 
     @Override

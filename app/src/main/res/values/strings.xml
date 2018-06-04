@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">ClassSafari</string>
-    <string name="search_user">Search anyclass...</string>
+    <string name="search_user">Search Activity/Subject</string>
     <string name="location">Location</string>
     <string name="lets_play">LETS PLAY!</string>
     <string name="lets_study">LETS STUDY!</string>
@@ -29,12 +29,12 @@
     <string name="session_reviews">Reviews</string>
     <string name="user_name">Felicia Richi Bwown</string>
     <string name="book_session">BOOK SESSION</string>
-    <string name="class_search">CLASS SEARCH</string>
-    <string name="search_string">Search City</string>
-    <string name="search_session">Session Name</string>
+    <string name="class_search">SEARCH</string>
+    <string name="search_string">City</string>
+    <string name="search_session">Subject</string>
     <string name="search_stream">Stream</string>
     <string name="search_MF">M/F</string>
-    <string name="search_class">Lesson Name</string>
+    <string name="search_class">Class Name</string>
     <string name="comment_hint">Write Your Comment</string>
     <string name="login"><u><b>Login or Register</b></u></string>
     <string name="sortby">SORT BY</string>

@@ -124,7 +124,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_5sdp"
-                    android:drawableLeft="@drawable/rs_sort"
+                    android:drawableLeft="@drawable/rs"
                     android:drawablePadding="@dimen/_2sdp"
                     android:gravity="center"
                     android:paddingLeft="@dimen/_5sdp"

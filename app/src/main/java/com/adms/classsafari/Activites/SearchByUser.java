@@ -6,6 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +30,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.AppConfiguration;
@@ -39,25 +45,27 @@ import com.adms.classsafari.databinding.LayoutMenuBinding;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class SearchByUser extends AppCompatActivity implements View.OnClickListener,TextView.OnEditorActionListener {
+public class SearchByUser extends AppCompatActivity implements View.OnClickListener, TextView.OnEditorActionListener, LocationListener {
+    public final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
     ActivitySearchByUserBinding searchByUserBinding;
     LayoutMenuBinding menuBinding;
     ChangePasswordDialogBinding changePasswordDialogBinding;
-
+    LocationManager locationManager;
     Context mContext;
     SessionDetailModel dataResponse;
     String selectedSessionNameStr = "", selectedLocationStr = "", sessionName = "";
-    String passWordStr, confirmpassWordStr, currentpasswordStr;
+    String passWordStr, confirmpassWordStr, currentpasswordStr, cityName = "";
     Dialog menuDialog, changeDialog;
     //Use for Menu Dialog
     Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily;
     TextView userNameTxt;
-
     private PopupWindow popupWindow;
 
     @Override
@@ -70,8 +78,9 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
     }
 
     public void init() {
+//        getLocation();
+
         searchByUserBinding.locationEdt.setText("Ahmedabad");
-//        selectedLocationStr = searchByUserBinding.searchClassEdt.getText().toString();
         if (!Utils.getPref(mContext, "RegisterUserName").equalsIgnoreCase("")) {
             if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Coach")) {
                 Intent iDash = new Intent(mContext, DashBoardActivity.class);
@@ -83,8 +92,10 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
 
         } else {
             searchByUserBinding.loginTxt.setText(Html.fromHtml("<u><b>Login or Register<u></b>"));
-            searchByUserBinding.logout.setVisibility(View.GONE);
+//            searchByUserBinding.logout.setVisibility(View.GONE);
         }
+
+
     }
 
     public void setListner() {
@@ -113,7 +124,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 sessionName = String.valueOf(adapterView.getItemAtPosition(i));
                 Log.d("session", sessionName);
-                fillCity();
+//                fillCity();
             }
         });
     }
@@ -165,36 +176,9 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-//    @Override
-//    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//        if(view.getId()==R.id.search_class_edt){
-//            sessionName = String.valueOf(adapterView.getItemAtPosition(i));
-//                Log.d("session", sessionName);
-//                fillCity();
-//        }else if(view.getId()==R.id.location_edt){
-//            selectedLocationStr = String.valueOf(adapterView.getItemAtPosition(i));
-//                searchByUserBinding.searchClassEdt.setText("");
-//                fillSessionList();
-//        }
-
-//        switch (view.getId()) {
-//            case R.id.search_class_edt:
-//                sessionName = String.valueOf(adapterView.getItemAtPosition(i));
-//                Log.d("session", sessionName);
-//                fillCity();
-//                break;
-//            case R.id.location_edt:
-//                selectedLocationStr = String.valueOf(adapterView.getItemAtPosition(i));
-//                searchByUserBinding.searchClassEdt.setText("");
-//                fillSessionList();
-//                break;
-//                default:
-//                    break;
-//        }
-//    }
     @Override
     public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-        switch (textView.getId()){
+        switch (textView.getId()) {
             case R.id.search_class_edt:
                 if (i == EditorInfo.IME_ACTION_DONE) {
                     validation();
@@ -203,54 +187,6 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
         }
         return false;
     }
-//    //Use for SessionList
-//    public void callSessionListApi() {
-//        if (Utils.checkNetwork(mContext)) {
-//
-//            Utils.showDialog(mContext);
-//            ApiHandler.getApiService().get_SessionList(getSessionListDetail(), new retrofit.Callback<SessionDetailModel>() {
-//                @Override
-//                public void success(SessionDetailModel cityInfo, Response response) {
-//                    Utils.dismissDialog();
-//                    if (cityInfo == null) {
-//                        Utils.ping(mContext, getString(R.string.something_wrong));
-//                        return;
-//                    }
-//                    if (cityInfo.getSuccess() == null) {
-//                        Utils.ping(mContext, getString(R.string.something_wrong));
-//                        return;
-//                    }
-//                    if (cityInfo.getSuccess().equalsIgnoreCase("false")) {
-//                        Utils.ping(mContext, getString(R.string.false_msg));
-//                        return;
-//                    }
-//                    if (cityInfo.getSuccess().equalsIgnoreCase("True")) {
-//                        Utils.dismissDialog();
-//                        if (cityInfo.getData().size() > 0) {
-//                            dataResponse = cityInfo;
-//                            fillCity();
-//                            fillSessionList();
-//                        }
-//                    }
-//                }
-//
-//                @Override
-//                public void failure(RetrofitError error) {
-//                    Utils.dismissDialog();
-//                    error.printStackTrace();
-//                    error.getMessage();
-//                    Utils.ping(mContext, getString(R.string.something_wrong));
-//                }
-//            });
-//        } else {
-//            Utils.ping(mContext, getString(R.string.internet_connection_error));
-//        }
-//    }
-//
-//    private Map<String, String> getSessionListDetail() {
-//        Map<String, String> map = new HashMap<>();
-//        return map;
-//    }
 
     //Use for SessionList
     public void callSessionListApi() {
@@ -315,6 +251,16 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
         searchByUserBinding.locationEdt.setThreshold(1);
         searchByUserBinding.locationEdt.setAdapter(adapterTerm);
         searchByUserBinding.locationEdt.setSelection(searchByUserBinding.locationEdt.getText().length());
+
+//        for (int i = 0; i < CityName.size(); i++) {
+//            if (!cityName.equalsIgnoreCase("")) {
+//                if (cityName.equalsIgnoreCase(CityName.get(i))) {
+//                    searchByUserBinding.locationEdt.setText(CityName.get(i));
+//                }
+//            }
+//        }
+
+
     }
 
     public void fillSessionList() {
@@ -362,44 +308,6 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
         } else {
             Utils.ping(mContext, getResources().getString(R.string.blank_value));
         }
-    }
-
-    public PopupWindow popupDisplay() {
-
-        popupWindow = new PopupWindow(this);
-
-        // inflate your layout or dynamically add view
-        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        View view = inflater.inflate(R.layout.layout_menu, null);
-        popupWindow.setFocusable(true);
-        popupWindow.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-        popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-//        popupWindow.showAtLocation(searchByUserBinding.linearLogin, Gravity.LEFT, 300, 0);
-        popupWindow.setContentView(view);
-
-
-        menuBinding.btnMyReport.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent imyaccount = new Intent(mContext, MyAccountActivity.class);
-                startActivity(imyaccount);
-            }
-        });
-        menuBinding.btnMySession.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent isession = new Intent(mContext, MySession.class);
-                startActivity(isession);
-            }
-        });
-        menuBinding.btnChangePassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                changePasswordDialog();
-            }
-        });
-        return popupWindow;
     }
 
     public void changePasswordDialog() {
@@ -504,8 +412,6 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
     }
 
     public void menuDialog() {
-//        menuBinding = DataBindingUtil.
-//                inflate(LayoutInflater.from(mContext), R.layout.layout_menu, (ViewGroup) searchByUserBinding.getRoot(), false);
 
         menuDialog = new Dialog(mContext, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();
@@ -517,7 +423,6 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         menuDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         menuDialog.setCanceledOnTouchOutside(true);
-//        menuDialog.setContentView(menuBinding.getRoot());
         menuDialog.setContentView(R.layout.layout_menu);
 
         btnMyReport = (Button) menuDialog.findViewById(R.id.btnMyReport);
@@ -600,83 +505,93 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
                         .show();
             }
         });
-
-
-//        menuBinding.userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
-//        menuBinding.btnMyReport.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent imyaccount = new Intent(mContext, MyAccountActivity.class);
-//                imyaccount.putExtra("wheretocometype", "menu");
-//                startActivity(imyaccount);
-//            }
-//        });
-//        menuBinding.btnMySession.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent isession = new Intent(mContext, MySession.class);
-//                isession.putExtra("wheretocometype", "menu");
-//                startActivity(isession);
-//                menuDialog.dismiss();
-//            }
-//        });
-//        menuBinding.btnChangePassword.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                menuDialog.dismiss();
-//                changePasswordDialog();
-//            }
-//        });
-//        menuBinding.btnmyfamily.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(mContext, FamilyListActivity.class);
-//                intent.putExtra("froncontanct", "true");
-//                intent.putExtra("wheretocometype", "menu");
-//                intent.putExtra("familyNameStr", Utils.getPref(mContext, "RegisterUserName"));
-//                intent.putExtra("familyID", Utils.getPref(mContext, "coachTypeID"));
-//                startActivity(intent);
-//            }
-//        });
-//        menuBinding.btnLogout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                menuDialog.dismiss();
-//                new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
-//                        .setCancelable(false)
-//                        .setTitle("Logout")
-//                        .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
-//                        .setMessage("Are you sure you want to logout?")
-//                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                Utils.setPref(mContext, "coachID", "");
-//                                Utils.setPref(mContext, "coachTypeID", "");
-//                                Utils.setPref(mContext, "RegisterUserName", "");
-//                                Utils.setPref(mContext, "RegisterEmail", "");
-//                                Utils.setPref(mContext, "LoginType", "");
-//                                Utils.setPref(mContext, "Password", "");
-//                                Utils.setPref(mContext, "FamilyID", "");
-//                                Utils.setPref(mContext, "location", "");
-//                                Utils.setPref(mContext, "sessionName", "");
-//                                Intent intentLogin = new Intent(mContext, SearchByUser.class);
-//                                intentLogin.putExtra("frontLogin", "beforeLogin");
-//                                startActivity(intentLogin);
-//                                finish();
-//                            }
-//                        })
-//                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                // do nothing
-//
-//                            }
-//                        })
-//                        .setIcon(R.drawable.safari)
-//                        .show();
-//            }
-//        });
         menuDialog.show();
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        try {
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            cityName = addresses.get(0).getLocality();
 
+//            Toast.makeText(mContext,cityName,Toast.LENGTH_LONG).show();
+            Log.d("cityName", cityName);
 
+        } catch (Exception e) {
+
+        }
+
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+        Toast.makeText(mContext, "Please Enable GPS and Internet", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
+    }
+//    private static boolean hasPermissions(Context context, String... permissions) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+//            for (String permission : permissions) {
+//                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+//                    return false;
+//                }
+//            }
+//        }
+//        return true;
+//    }
+//    public  static final int REQUEST = 112;
+//
+//    public void getLocation() {
+//        if (Build.VERSION.SDK_INT >= 23) {
+//            String[] PERMISSIONS = {android.Manifest.permission.ACCESS_COARSE_LOCATION,android.Manifest.permission.ACCESS_FINE_LOCATION};
+//            if (!hasPermissions(mContext, PERMISSIONS)) {
+//                ActivityCompat.requestPermissions((Activity) mContext, PERMISSIONS, REQUEST );
+//            } else {
+//                try {
+//                    locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, this);
+//                }
+//                catch(SecurityException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        } else {
+//            try {
+//                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, this);
+//            }
+//            catch(SecurityException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+//
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        switch (requestCode) {
+//            case REQUEST: {
+//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    try {
+//                        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, this);
+//                    }
+//                    catch(SecurityException e) {
+//                        e.printStackTrace();
+//                    }
+//                } else {
+//                    Toast.makeText(mContext, "The app was not allowed to access your location", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        }
+//    }
 }

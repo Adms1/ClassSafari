@@ -73,8 +73,10 @@ public class PaymentReportFragment extends Fragment implements DatePickerDialog.
         Month = calendar.get(Calendar.MONTH);
         Day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        paymentReportBinding.txtStartDate.setText("dd/MM/yyyy");
-        paymentReportBinding.txtEndDate.setText("dd/MM/yyyy");
+        paymentReportBinding.txtStartDate.setText(Utils.getPriviousDate());
+        paymentReportBinding.txtEndDate.setText(Utils.getTodaysDate());
+
+        callPaymentReportApi();
     }
 
     public void setListners() {

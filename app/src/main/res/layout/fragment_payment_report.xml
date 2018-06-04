@@ -24,17 +24,17 @@
             <LinearLayout
                 android:id="@+id/start_date_linear"
                 android:layout_width="@dimen/_110sdp"
-                android:layout_height="@dimen/_40sdp"
-                android:background="@color/white"
+                android:layout_height="@dimen/_30sdp"
+                android:background="@color/blue"
                 android:gravity="center|center_vertical"
                 android:orientation="horizontal"
                 android:padding="@dimen/_3sdp">
 
                 <ImageView
                     android:id="@+id/imgStartDate"
-                    android:layout_width="@dimen/_30sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:src="@drawable/orange_cala" />
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:src="@drawable/s_cal" />
 
                 <TextView
                     android:id="@+id/txtStartDate"
@@ -52,17 +52,18 @@
             <LinearLayout
                 android:id="@+id/end_date_linear"
                 android:layout_width="@dimen/_110sdp"
-                android:layout_height="@dimen/_40sdp"
-                android:background="@color/white"
+                android:layout_height="@dimen/_30sdp"
+                android:background="@color/blue"
                 android:gravity="center_vertical"
+                android:layout_marginLeft="@dimen/_5sdp"
                 android:orientation="horizontal"
                 android:padding="@dimen/_3sdp">
                 <ImageView
                     android:id="@+id/imgEndDate"
-                    android:layout_width="@dimen/_30sdp"
-                    android:layout_height="@dimen/_30sdp"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
                     android:layout_marginLeft="@dimen/_5sdp"
-                    android:src="@drawable/orange_cala" />
+                    android:src="@drawable/s_cal" />
                 <TextView
                     android:id="@+id/txtEndDate"
                     android:layout_width="match_parent"

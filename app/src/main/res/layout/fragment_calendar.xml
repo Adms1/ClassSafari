@@ -15,16 +15,6 @@
             android:layout_height="@dimen/_35sdp"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/back_txt"
-                android:layout_width="@dimen/_32sdp"
-                android:layout_height="@dimen/_32sdp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/_70sdp"
-                android:gravity="center|center_vertical"
-                android:src="@drawable/back"
-                android:textSize="@dimen/_14sdp"
-                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/month_year_txt"
@@ -37,14 +27,6 @@
                 android:textColor="@color/blue"
                 android:textSize="@dimen/_14sdp" />
 
-            <ImageView
-                android:id="@+id/forwad_txt"
-                android:layout_width="@dimen/_32sdp"
-                android:layout_height="@dimen/_32sdp"
-                android:layout_gravity="center"
-                android:gravity="center|center_vertical"
-                android:src="@drawable/forwad"
-                android:visibility="gone" />
         </LinearLayout>
 
         <com.github.tibolte.agendacalendarview.AgendaCalendarView

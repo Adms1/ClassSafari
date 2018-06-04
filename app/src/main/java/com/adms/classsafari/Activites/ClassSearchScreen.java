@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.RadioGroup;
 
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.AppConfiguration;
@@ -74,13 +73,13 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
                 classSearchScreenBinding.boardAutoTxt.setVisibility(View.GONE);
                 classSearchScreenBinding.standardAutoTxt.setVisibility(View.GONE);
                 classSearchScreenBinding.streamAutoTxt.setVisibility(View.GONE);
-                classSearchScreenBinding.genderGroup.setVisibility(View.VISIBLE);
+//                classSearchScreenBinding.genderGroup.setVisibility(View.VISIBLE);
             } else {
                 classSearchScreenBinding.linearBg.setBackgroundResource(R.drawable.study_bg);
                 classSearchScreenBinding.boardAutoTxt.setVisibility(View.VISIBLE);
                 classSearchScreenBinding.standardAutoTxt.setVisibility(View.VISIBLE);
                 classSearchScreenBinding.streamAutoTxt.setVisibility(View.VISIBLE);
-                classSearchScreenBinding.genderGroup.setVisibility(View.VISIBLE);
+//                classSearchScreenBinding.genderGroup.setVisibility(View.VISIBLE);
             }
             if (!firsttimesearch.equalsIgnoreCase("true")) {
                 genderStr=getIntent().getStringExtra("gender");
@@ -101,13 +100,13 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
                     classSearchScreenBinding.streamAutoTxt.setText(streamStr);
                 }
 
-                if(!genderStr.equalsIgnoreCase("")){
-                    if(genderStr.equalsIgnoreCase("1")){
-                        classSearchScreenBinding.maleChk.setChecked(true);
-                    }else{
-                        classSearchScreenBinding.femaleChk.setChecked(true);
-                    }
-                }
+//                if(!genderStr.equalsIgnoreCase("")){
+//                    if(genderStr.equalsIgnoreCase("1")){
+//                        classSearchScreenBinding.maleChk.setChecked(true);
+//                    }else{
+//                        classSearchScreenBinding.femaleChk.setChecked(true);
+//                    }
+//                }
             }
 
         }
@@ -147,7 +146,6 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
                 classSearchScreenBinding.boardAutoTxt.setText("");
                 classSearchScreenBinding.standardAutoTxt.setText("");
                 classSearchScreenBinding.streamAutoTxt.setText("");
-                classSearchScreenBinding.countStudentTxt.setText("");
                 fillSession();
             }
         });
@@ -166,7 +164,6 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
                     classSearchScreenBinding.boardAutoTxt.setText("");
                     classSearchScreenBinding.standardAutoTxt.setText("");
                     classSearchScreenBinding.streamAutoTxt.setText("");
-                    classSearchScreenBinding.countStudentTxt.setText("");
                 }else{
                     fillSession();
                 }
@@ -198,21 +195,21 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
 
             }
         });
-        classSearchScreenBinding.genderGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                int radiobuttonID = classSearchScreenBinding.genderGroup.getCheckedRadioButtonId();
-                switch (radiobuttonID) {
-                    case R.id.male_chk:
-                        genderStr = "1";
-                        break;
-                    case R.id.female_chk:
-                        genderStr = "2";
-                        break;
-                    default:
-                }
-            }
-        });
+//        classSearchScreenBinding.genderGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+//                int radiobuttonID = classSearchScreenBinding.genderGroup.getCheckedRadioButtonId();
+//                switch (radiobuttonID) {
+//                    case R.id.male_chk:
+//                        genderStr = "1";
+//                        break;
+//                    case R.id.female_chk:
+//                        genderStr = "2";
+//                        break;
+//                    default:
+//                }
+//            }
+//        });
 
 
 
@@ -512,36 +509,6 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         classSearchScreenBinding.searchAutoTxt.setThreshold(1);
         classSearchScreenBinding.searchAutoTxt.setAdapter(adapterTerm);
     }
-
-    public void fillGender() {
-        for (int j = 0; j < datafilterResponse.size(); j++) {
-            if (selectedSessionStr.equalsIgnoreCase("")) {
-
-            } else {
-                if (wheretoComeStr.equalsIgnoreCase("withOR")) {
-                    if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
-                            datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim()) &&
-                            datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase(sessionTypeStr)) {
-                        if (dataResponse.getData().get(j).getGenderID().equalsIgnoreCase("1")) {
-                            classSearchScreenBinding.maleChk.setChecked(true);
-                        } else {
-                            classSearchScreenBinding.femaleChk.setChecked(true);
-                        }
-                    }
-                } else {
-                    if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
-                            datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim())) {
-                        if (dataResponse.getData().get(j).getGenderID().equalsIgnoreCase("1")) {
-                            classSearchScreenBinding.maleChk.setChecked(true);
-                        } else {
-                            classSearchScreenBinding.femaleChk.setChecked(true);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -590,7 +557,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
                 classSearchScreenBinding.sessionAutoTxt.showDropDown();
                 break;
             case R.id.search_auto_txt:
-                classSearchScreenBinding.searchAutoTxt.showDropDown();
+//                classSearchScreenBinding.searchAutoTxt.showDropDown();
                 break;
         }
     }

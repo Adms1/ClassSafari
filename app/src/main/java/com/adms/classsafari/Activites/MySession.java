@@ -35,7 +35,6 @@ import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivityMySessionBinding;
 import com.adms.classsafari.databinding.ChangePasswordDialogBinding;
 import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
-import com.adms.classsafari.databinding.DialogSessionDetailBinding;
 import com.adms.classsafari.databinding.LayoutMenuBinding;
 
 import java.text.ParseException;
@@ -54,7 +53,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
 
     ActivityMySessionBinding mySessionBinding;
     ConfirmSessionDialogBinding confirmSessionDialogBinding;
-    DialogSessionDetailBinding dialogSessionDetailBinding;
+
     LayoutMenuBinding menuBinding;
     ChangePasswordDialogBinding changePasswordDialogBinding;
 
@@ -462,45 +461,46 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
 
                 }
             }
-        } else {
-            for (int i = 0; i < dataResponse.getData().size(); i++) {
-                if (sessionIDStr.equalsIgnoreCase(dataResponse.getData().get(i).getSessionID())) {
-                    if (!dataResponse.getData().get(i).getCoachTypeID().equalsIgnoreCase("1")) {
-                        dialogSessionDetailBinding.linearBoard.setVisibility(View.GONE);
-                        dialogSessionDetailBinding.linearStandard.setVisibility(View.GONE);
-                        dialogSessionDetailBinding.linearStream.setVisibility(View.GONE);
-
-
-                    } else {
-                        dialogSessionDetailBinding.linearBoard.setVisibility(View.VISIBLE);
-                        dialogSessionDetailBinding.linearStandard.setVisibility(View.VISIBLE);
-                        dialogSessionDetailBinding.linearStream.setVisibility(View.VISIBLE);
-                    }
-                    dialogSessionDetailBinding.sessionNameTxt.setText(dataResponse.getData().get(i).getSessionName());
-                    dialogSessionDetailBinding.sessionStudentTxt.setText(dataResponse.getData().get(i).getName());
-                    dialogSessionDetailBinding.sessionBoardTxt.setText(dataResponse.getData().get(i).getBoard());
-                    dialogSessionDetailBinding.sessionStandardTxt.setText(dataResponse.getData().get(i).getStandard());
-                    dialogSessionDetailBinding.sessionStreamTxt.setText(dataResponse.getData().get(i).getStream());
-                    dialogSessionDetailBinding.sessionLessionTxt.setText(dataResponse.getData().get(i).getLessionTypeName());
-                    dialogSessionDetailBinding.locationTxt.setText(dataResponse.getData().get(i).getAddressLine1()
-                            + ", " + dataResponse.getData().get(i).getRegionName()
-                            + ", " + dataResponse.getData().get(i).getAddressCity()
-                            + ", " + dataResponse.getData().get(i).getAddressState()
-                            + "- " + dataResponse.getData().get(i).getAddressZipCode());
-                    dialogSessionDetailBinding.sessionDateTxt.setText(dataResponse.getData().get(i).getStartDate() + " To " + dataResponse.getData().get(i).getEndDate());
-                    String[] spiltPipes = dataResponse.getData().get(i).getSchedule().split("\\|");
-                    String[] spiltComma;
-                    String[] spiltDash;
-                    Log.d("spilt", "" + spiltPipes.toString());
-                    for (int j = 0; j < spiltPipes.length; j++) {
-                        spiltComma = spiltPipes[j].split("\\,");
-                        spiltDash = spiltComma[1].split("\\-");
-                        calculateHours(spiltDash[0], spiltDash[1]);
-                    }
-                    dialogSessionDetailBinding.sessionTimeTxt.setText(SessionHour + " hr " + SessionMinit + " min");
-                }
-            }
         }
+//        else {
+//            for (int i = 0; i < dataResponse.getData().size(); i++) {
+//                if (sessionIDStr.equalsIgnoreCase(dataResponse.getData().get(i).getSessionID())) {
+//                    if (!dataResponse.getData().get(i).getCoachTypeID().equalsIgnoreCase("1")) {
+//                        dialogSessionDetailBinding.linearBoard.setVisibility(View.GONE);
+//                        dialogSessionDetailBinding.linearStandard.setVisibility(View.GONE);
+//                        dialogSessionDetailBinding.linearStream.setVisibility(View.GONE);
+//
+//
+//                    } else {
+//                        dialogSessionDetailBinding.linearBoard.setVisibility(View.VISIBLE);
+//                        dialogSessionDetailBinding.linearStandard.setVisibility(View.VISIBLE);
+//                        dialogSessionDetailBinding.linearStream.setVisibility(View.VISIBLE);
+//                    }
+//                    dialogSessionDetailBinding.sessionNameTxt.setText(dataResponse.getData().get(i).getSessionName());
+//                    dialogSessionDetailBinding.sessionStudentTxt.setText(dataResponse.getData().get(i).getName());
+//                    dialogSessionDetailBinding.sessionBoardTxt.setText(dataResponse.getData().get(i).getBoard());
+//                    dialogSessionDetailBinding.sessionStandardTxt.setText(dataResponse.getData().get(i).getStandard());
+//                    dialogSessionDetailBinding.sessionStreamTxt.setText(dataResponse.getData().get(i).getStream());
+//                    dialogSessionDetailBinding.sessionLessionTxt.setText(dataResponse.getData().get(i).getLessionTypeName());
+//                    dialogSessionDetailBinding.locationTxt.setText(dataResponse.getData().get(i).getAddressLine1()
+//                            + ", " + dataResponse.getData().get(i).getRegionName()
+//                            + ", " + dataResponse.getData().get(i).getAddressCity()
+//                            + ", " + dataResponse.getData().get(i).getAddressState()
+//                            + "- " + dataResponse.getData().get(i).getAddressZipCode());
+//                    dialogSessionDetailBinding.sessionDateTxt.setText(dataResponse.getData().get(i).getStartDate() + " To " + dataResponse.getData().get(i).getEndDate());
+//                    String[] spiltPipes = dataResponse.getData().get(i).getSchedule().split("\\|");
+//                    String[] spiltComma;
+//                    String[] spiltDash;
+//                    Log.d("spilt", "" + spiltPipes.toString());
+//                    for (int j = 0; j < spiltPipes.length; j++) {
+//                        spiltComma = spiltPipes[j].split("\\,");
+//                        spiltDash = spiltComma[1].split("\\-");
+//                        calculateHours(spiltDash[0], spiltDash[1]);
+//                    }
+//                    dialogSessionDetailBinding.sessionTimeTxt.setText(SessionHour + " hr " + SessionMinit + " min");
+//                }
+//            }
+//        }
     }
 
     public void calculateHours(String time1, String time2) {
@@ -529,37 +529,37 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
     }
 
 
-    public void SessionDetailDialog() {
-        dialogSessionDetailBinding = DataBindingUtil.
-                inflate(LayoutInflater.from(mContext), R.layout.dialog_session_detail, (ViewGroup) mySessionBinding.getRoot(), false);
-
-
-        sessionDetailDialog = new Dialog(mContext, R.style.Theme_Dialog);
-        Window window = sessionDetailDialog.getWindow();
-        WindowManager.LayoutParams wlp = window.getAttributes();
-        sessionDetailDialog.getWindow().getAttributes().verticalMargin = 0.20f;
-        wlp.gravity = Gravity.TOP;
-        window.setAttributes(wlp);
-
-        sessionDetailDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-
-        sessionDetailDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        sessionDetailDialog.setCancelable(false);
-        sessionDetailDialog.setContentView(dialogSessionDetailBinding.getRoot());
-
-        dialogSessionDetailBinding.sessionStudentTxtView.setText("TEACHER NAME");
-        setDialogData();
-
-        dialogSessionDetailBinding.cancelTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sessionDetailDialog.dismiss();
-            }
-        });
-
-
-        sessionDetailDialog.show();
-    }
+//    public void SessionDetailDialog() {
+//        dialogSessionDetailBinding = DataBindingUtil.
+//                inflate(LayoutInflater.from(mContext), R.layout.dialog_session_detail, (ViewGroup) mySessionBinding.getRoot(), false);
+//
+//
+//        sessionDetailDialog = new Dialog(mContext, R.style.Theme_Dialog);
+//        Window window = sessionDetailDialog.getWindow();
+//        WindowManager.LayoutParams wlp = window.getAttributes();
+//        sessionDetailDialog.getWindow().getAttributes().verticalMargin = 0.20f;
+//        wlp.gravity = Gravity.TOP;
+//        window.setAttributes(wlp);
+//
+//        sessionDetailDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+//
+//        sessionDetailDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        sessionDetailDialog.setCancelable(false);
+//        sessionDetailDialog.setContentView(dialogSessionDetailBinding.getRoot());
+//
+//        dialogSessionDetailBinding.sessionStudentTxtView.setText("TEACHER NAME");
+//        setDialogData();
+//
+//        dialogSessionDetailBinding.cancelTxt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                sessionDetailDialog.dismiss();
+//            }
+//        });
+//
+//
+//        sessionDetailDialog.show();
+//    }
 
 
     public void changePasswordDialog() {

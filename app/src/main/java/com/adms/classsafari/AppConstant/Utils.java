@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -277,6 +278,9 @@ public class Utils {
         int receiveSMS = ContextCompat.checkSelfPermission(context, Manifest.permission.RECEIVE_SMS);
         int readSMS = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_SMS);
         int callPhone = ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE);
+        int FineLocation =ContextCompat.checkSelfPermission(context,Manifest.permission.ACCESS_FINE_LOCATION);
+        int CorseLocation=ContextCompat.checkSelfPermission(context,Manifest.permission.ACCESS_COARSE_LOCATION);
+
         List<String> listPermissionsNeeded = new ArrayList<>();
 
         if (callPhone != PackageManager.PERMISSION_GRANTED) {
@@ -291,10 +295,15 @@ public class Utils {
         if (permissionSendMessage != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.SEND_SMS);
         }
+        if (FineLocation !=PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        if (CorseLocation !=PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        }
         if (!listPermissionsNeeded.isEmpty()) {
-            android.support.v13.app.ActivityCompat.requestPermissions((Activity) context,
-                    listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),
-                    REQUEST_ID_MULTIPLE_PERMISSIONS);
+           ActivityCompat.requestPermissions((Activity) context,
+                    listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_MULTIPLE_PERMISSIONS);
             return false;
         }
         return true;
