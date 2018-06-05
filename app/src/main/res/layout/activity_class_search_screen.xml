@@ -75,10 +75,17 @@
                     style="@style/AutoComplete"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_30sdp"
-                    android:hint="Location"
+                    android:hint="City"
                     android:textSize="@dimen/_25sdp"
                     android:visibility="visible" />
-
+                <AutoCompleteTextView
+                    android:id="@+id/region_name_txt"
+                    style="@style/AutoComplete"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_30sdp"
+                    android:hint="Location"
+                    android:visibility="visible"
+                    android:imeOptions="actionNext"/>
                 <AutoCompleteTextView
                     android:id="@+id/session_auto_txt"
                     style="@style/AutoComplete"
@@ -113,7 +120,7 @@
                         style="@style/AutoComplete"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_30sdp"
-                        android:imeOptions="actionNext"
+                        android:imeOptions="actionSearch"
                         android:hint="@string/search_stream" />
             </LinearLayout>
 

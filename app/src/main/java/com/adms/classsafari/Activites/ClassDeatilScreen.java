@@ -86,7 +86,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
             locationStr, classNameStr, searchByStr, searchTypeStr,
             wheretoComeStr, genderStr = "", maxpriceStr = "", minpriceStr = "",
             sessionId, commentStr, ratingValueStr, popularsessionID = "",
-            populardurationStr = "", populargenderStr = "", popluarsessiondateStr = "", firsttimesearch;
+            populardurationStr = "", populargenderStr = "", popluarsessiondateStr = "", firsttimesearch, RegionName;
     SessionDetailModel dataResponse, populardataresponse;
     List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
     boolean arrayfirst = true;
@@ -134,6 +134,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
             sessionType = getIntent().getStringExtra("sessionType");
             genderStr = getIntent().getStringExtra("gender");
             firsttimesearch = getIntent().getStringExtra("firsttimesearch");
+            RegionName = getIntent().getStringExtra("RegionName");
         } else {
             subjectStr = "";
             standardStr = "";
@@ -142,6 +143,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
             sessionType = "";
             genderStr = "";
             firsttimesearch = "";
+            RegionName = "";
         }
         if (!searchByStr.equalsIgnoreCase("1")) {
             if (!boardStr.equalsIgnoreCase("")) { //||
@@ -209,34 +211,42 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                 Log.d("valueOf OnTextChange", "" + charSequence + i + i1);
                 if (charSequence.length() == 0) {
                     binding.inforTxt.setVisibility(View.VISIBLE);
-                    if (dataResponse.getData().size() >= 0) {
-                        List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-                        for (sessionDataModel arrayObj : dataResponse.getData()) {
-                            if (arrayObj.getAddressCity().trim().toLowerCase().contains(locationStr.trim().toLowerCase()) &&
-                                    arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-                                filterFinalArray.add(arrayObj);
-                            }
-                        }
-                        fillData(filterFinalArray);
-                    }
-                    arrayfirst = true;
-
-                } else {
-                    if (dataResponse.getData().size() >= 0) {
-                        String[] spilt = charSequence.toString().trim().split("\\,");
-                        Log.d("spiltOnText", "" + spilt.length);
-                        for (int k = 0; k < spilt.length; k++) {
+                    if (dataResponse.getSuccess().equalsIgnoreCase("True")) {
+                        if (dataResponse.getData().size() >= 0) {
                             List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                             for (sessionDataModel arrayObj : dataResponse.getData()) {
                                 if (arrayObj.getAddressCity().trim().toLowerCase().contains(locationStr.trim().toLowerCase()) &&
                                         arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-                                    if (arrayObj.getRegionName().trim().toLowerCase().contains(spilt[k].trim().toLowerCase())) {
-                                        filterFinalArray.add(arrayObj);
-                                    }
+                                    filterFinalArray.add(arrayObj);
                                 }
                             }
                             fillData(filterFinalArray);
                         }
+                    }else{
+                        Utils.ping(mContext,"Location not found.");
+                    }
+                    arrayfirst = true;
+
+                } else {
+                    if (dataResponse.getSuccess().equalsIgnoreCase("True")) {
+                        if (dataResponse.getData().size() >= 0) {
+                            String[] spilt = charSequence.toString().trim().split("\\,");
+                            Log.d("spiltOnText", "" + spilt.length);
+                            for (int k = 0; k < spilt.length; k++) {
+                                List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                                for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                    if (arrayObj.getAddressCity().trim().toLowerCase().contains(locationStr.trim().toLowerCase()) &&
+                                            arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+                                        if (arrayObj.getRegionName().trim().toLowerCase().contains(spilt[k].trim().toLowerCase())) {
+                                            filterFinalArray.add(arrayObj);
+                                        }
+                                    }
+                                }
+                                fillData(filterFinalArray);
+                            }
+                        }
+                    }else{
+                        Utils.ping(mContext,"Location not found.");
                     }
                 }
             }
@@ -292,22 +302,43 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                 startActivity(inSearchUser);
                 break;
             case R.id.search_img:
-                Intent insession = new Intent(mContext, ClassSearchScreen.class);
-                insession.putExtra("flag", searchTypeStr);
-                insession.putExtra("withOR", wheretoComeStr);
-                insession.putExtra("SearchBy", searchByStr);
-                insession.putExtra("searchfront", "searchunder");
-                insession.putExtra("city", locationStr);
-                insession.putExtra("sessionName", classNameStr);
-                insession.putExtra("sessionType", sessionType);
-                insession.putExtra("lessionName", subjectStr);
-                insession.putExtra("board", boardStr);
-                insession.putExtra("standard", standardStr);
-                insession.putExtra("stream", streamStr);
-                insession.putExtra("gender", genderStr);
-                insession.putExtra("firsttimesearch", firsttimesearch);
+                if(wheretoComeStr.equalsIgnoreCase("withOR")) {
+                    Intent insession = new Intent(mContext, ClassSearchScreen.class);
+                    insession.putExtra("flag", searchTypeStr);
+                    insession.putExtra("withOR", wheretoComeStr);
+                    insession.putExtra("SearchBy", searchByStr);
+                    insession.putExtra("searchfront", "searchunder");
+                    insession.putExtra("city", locationStr);
+                    insession.putExtra("sessionName", classNameStr);
+                    insession.putExtra("sessionType", sessionType);
+                    insession.putExtra("lessionName", subjectStr);
+                    insession.putExtra("board", boardStr);
+                    insession.putExtra("standard", standardStr);
+                    insession.putExtra("stream", streamStr);
+                    insession.putExtra("gender", genderStr);
+                    insession.putExtra("firsttimesearch", firsttimesearch);
+                    insession.putExtra("RegionName", RegionName);
 //                insession.putExtra("selectedDataModel",selectedDataModel);
-                startActivity(insession);
+                    startActivity(insession);
+                }else{
+                    Intent insession = new Intent(mContext, ClassSearchScreen.class);
+                    insession.putExtra("flag", dataResponse.getData().get(0).getCoachTypeID());
+                    insession.putExtra("withOR", wheretoComeStr);
+                    insession.putExtra("SearchBy", searchByStr);
+                    insession.putExtra("searchfront", "searchunder");
+                    insession.putExtra("city", locationStr);
+                    insession.putExtra("sessionName", classNameStr);
+                    insession.putExtra("sessionType", sessionType);
+                    insession.putExtra("lessionName", subjectStr);
+                    insession.putExtra("board", boardStr);
+                    insession.putExtra("standard", standardStr);
+                    insession.putExtra("stream", streamStr);
+                    insession.putExtra("gender", genderStr);
+                    insession.putExtra("firsttimesearch", firsttimesearch);
+                    insession.putExtra("RegionName", RegionName);
+//                insession.putExtra("selectedDataModel",selectedDataModel);
+                    startActivity(insession);
+                }
                 break;
             case R.id.multiautocompe:
                 binding.multiautocompe.showDropDown();
@@ -437,8 +468,8 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 //                priceBinding.rangeSeekbar.setMaxStartValue(Float.parseFloat(maxpriceStr));
 //                priceBinding.rangeSeekbar.setMinStartValue(Float.parseFloat(minpriceStr));
 //            } else {
-                priceBinding.rangeSeekbar.setMaxValue((Float) objmax);
-                priceBinding.rangeSeekbar.setMinValue((Float) objmin);
+            priceBinding.rangeSeekbar.setMaxValue((Float) objmax);
+            priceBinding.rangeSeekbar.setMinValue((Float) objmin);
 //            }
         }
         priceBinding.doneTxt.setOnClickListener(new View.OnClickListener() {
@@ -501,344 +532,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 
 
     }
-
-
-    //    //Use for SessionList
-//    public void callSessionListApi() {
-//        if (Utils.checkNetwork(mContext)) {
-//
-//            Utils.showDialog(mContext);
-//            ApiHandler.getApiService().get_SessionList(getSessionListDetail(), new retrofit.Callback<SessionDetailModel>() {
-//                @Override
-//                public void success(SessionDetailModel sessionInfo, Response response) {
-//                    Utils.dismissDialog();
-//                    if (sessionInfo == null) {
-//                        Utils.ping(mContext, getString(R.string.something_wrong));
-//                        return;
-//                    }
-//                    if (sessionInfo.getSuccess() == null) {
-//                        Utils.ping(mContext, getString(R.string.something_wrong));
-//                        return;
-//                    }
-//                    if (sessionInfo.getSuccess().equalsIgnoreCase("false")) {
-//                        Utils.ping(mContext, getString(R.string.false_msg));
-//                        return;
-//                    }
-//                    if (sessionInfo.getSuccess().equalsIgnoreCase("True")) {
-//                        Utils.dismissDialog();
-//                        if (sessionInfo.getData().size() > 0) {
-//                            dataResponse = sessionInfo;
-//                            fillArea();
-//                            if (searchByStr.equalsIgnoreCase("1")) {
-//                                if (searchfront.equalsIgnoreCase("searchfront")) {
-//                                    List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                                    for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                        if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim())
-//                                                && arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-//                                            filterFinalArray.add(arrayObj);
-//                                            Collections.sort(filterFinalArray, new HighToLowSortRating());
-//                                            result = filterFinalArray.size();
-//                                        }
-//                                        fillData(filterFinalArray);
-//                                    }
-//                                } else {
-//                                    if (!subjectStr.equalsIgnoreCase("") && !boardStr.equalsIgnoreCase("") &&
-//                                            !standardStr.equalsIgnoreCase("") && !streamStr.equalsIgnoreCase("")) {
-//                                        List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                                        for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                            if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                                    arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
-//                                                    arrayObj.getLessionTypeName().trim().equalsIgnoreCase(subjectStr.trim()) &&
-//                                                    arrayObj.getBoard().trim().equalsIgnoreCase(boardStr.trim()) &&
-//                                                    arrayObj.getStandard().trim().equalsIgnoreCase(standardStr.trim()) &&
-//                                                    arrayObj.getStream().trim().equalsIgnoreCase(streamStr.trim()) &&
-//                                                    arrayObj.getGenderID().trim().equalsIgnoreCase(genderStr.trim())) {
-//                                                filterFinalArray.add(arrayObj);
-//                                                Collections.sort(filterFinalArray, new HighToLowSortRating());
-//                                                result = filterFinalArray.size();
-//                                            }
-//                                            fillData(filterFinalArray);
-//                                        }
-//                                    } else {
-//                                        if (!subjectStr.equalsIgnoreCase("")) {
-//                                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
-//                                                        arrayObj.getLessionTypeName().trim().equalsIgnoreCase(subjectStr.trim())) {
-//                                                    filterFinalArray.add(arrayObj);
-//                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
-//                                                    result = filterFinalArray.size();
-//                                                }
-//                                                fillData(filterFinalArray);
-//                                            }
-//                                        } else if (!boardStr.equalsIgnoreCase("")) {
-//                                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
-//                                                        arrayObj.getBoard().trim().equalsIgnoreCase(boardStr.trim())) {
-//                                                    filterFinalArray.add(arrayObj);
-//                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
-//                                                    result = filterFinalArray.size();
-//                                                }
-//                                                fillData(filterFinalArray);
-//                                            }
-//                                        } else if (!standardStr.equalsIgnoreCase("")) {
-//                                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
-//                                                        arrayObj.getStandard().trim().equalsIgnoreCase(standardStr.trim())) {
-//                                                    filterFinalArray.add(arrayObj);
-//                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
-//                                                    result = filterFinalArray.size();
-//                                                }
-//                                                fillData(filterFinalArray);
-//                                            }
-//                                        } else if (!streamStr.equalsIgnoreCase("")) {
-//                                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
-//                                                        arrayObj.getStream().trim().equalsIgnoreCase(streamStr.trim())) {
-//                                                    filterFinalArray.add(arrayObj);
-//                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
-//                                                    result = filterFinalArray.size();
-//                                                }
-//                                                fillData(filterFinalArray);
-//                                            }
-//                                        } else if (!genderStr.equalsIgnoreCase("")) {
-//                                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
-//                                                        arrayObj.getGenderID().trim().equalsIgnoreCase(genderStr.trim())) {
-//                                                    filterFinalArray.add(arrayObj);
-//                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
-//                                                    result = filterFinalArray.size();
-//                                                }
-//                                                fillData(filterFinalArray);
-//                                            }
-//                                        } else {
-//                                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                                        arrayObj.getSessionName().trim().toLowerCase().equalsIgnoreCase(classNameStr.trim().toLowerCase())) {
-//                                                    filterFinalArray.add(arrayObj);
-//                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
-//                                                    result = filterFinalArray.size();
-//                                                }
-//                                                fillData(filterFinalArray);
-//                                            }
-//                                        }
-//                                    }
-//                                }
-//                            } else {
-//                                if (searchTypeStr.equalsIgnoreCase("play")) {
-//                                    if (!subjectStr.equalsIgnoreCase("") && !genderStr.equalsIgnoreCase("")) {
-//                                        List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                                        for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                            if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                                    arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
-//                                                    arrayObj.getLessionTypeName().trim().equalsIgnoreCase(subjectStr.trim()) &&
-//                                                    arrayObj.getGenderID().trim().equalsIgnoreCase(genderStr.trim())) {
-//                                                filterFinalArray.add(arrayObj);
-//                                                Collections.sort(filterFinalArray, new HighToLowSortRating());
-//                                                result = filterFinalArray.size();
-//                                            }
-//                                            fillData(filterFinalArray);
-//                                        }
-//                                    } else {
-//                                        if (!subjectStr.equalsIgnoreCase("")) {
-//                                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
-//                                                        arrayObj.getLessionTypeName().trim().equalsIgnoreCase(subjectStr.trim())) {
-//                                                    filterFinalArray.add(arrayObj);
-//                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
-//                                                    result = filterFinalArray.size();
-//                                                }
-//                                                fillData(filterFinalArray);
-//                                            }
-//                                        } else if (!genderStr.equalsIgnoreCase("")) {
-//                                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
-//                                                        arrayObj.getGenderID().trim().equalsIgnoreCase(genderStr.trim())) {
-//                                                    filterFinalArray.add(arrayObj);
-//                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
-//                                                    result = filterFinalArray.size();
-//                                                }
-//                                                fillData(filterFinalArray);
-//                                            }
-//                                        } else {
-//                                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim())) {
-//                                                    filterFinalArray.add(arrayObj);
-//                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
-//                                                    result = filterFinalArray.size();
-//                                                }
-//                                                fillData(filterFinalArray);
-//                                            }
-//                                        }
-//                                    }
-//
-//                                } else {
-//                                    if (!subjectStr.equalsIgnoreCase("") && !boardStr.equalsIgnoreCase("") &&
-//                                            !standardStr.equalsIgnoreCase("") && !streamStr.equalsIgnoreCase("")) {
-//                                        List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                                        for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                            if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                                    arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
-//                                                    arrayObj.getLessionTypeName().trim().equalsIgnoreCase(subjectStr.trim()) &&
-//                                                    arrayObj.getBoard().trim().equalsIgnoreCase(boardStr.trim()) &&
-//                                                    arrayObj.getStandard().trim().equalsIgnoreCase(standardStr.trim()) &&
-//                                                    arrayObj.getStream().trim().equalsIgnoreCase(streamStr.trim()) &&
-//                                                    arrayObj.getGenderID().trim().equalsIgnoreCase(genderStr.trim())) {
-//                                                filterFinalArray.add(arrayObj);
-//                                                Collections.sort(filterFinalArray, new HighToLowSortRating());
-//                                                result = filterFinalArray.size();
-//                                            }
-//                                            fillData(filterFinalArray);
-//                                        }
-//                                    } else {
-//                                        if (!subjectStr.equalsIgnoreCase("")) {
-//                                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
-//                                                        arrayObj.getLessionTypeName().trim().equalsIgnoreCase(subjectStr.trim())) {
-//                                                    filterFinalArray.add(arrayObj);
-//                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
-//                                                    result = filterFinalArray.size();
-//                                                }
-//                                                fillData(filterFinalArray);
-//                                            }
-//                                        } else if (!boardStr.equalsIgnoreCase("")) {
-//                                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
-//                                                        arrayObj.getBoard().trim().equalsIgnoreCase(boardStr.trim())) {
-//                                                    filterFinalArray.add(arrayObj);
-//                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
-//                                                    result = filterFinalArray.size();
-//                                                }
-//                                                fillData(filterFinalArray);
-//                                            }
-//                                        } else if (!standardStr.equalsIgnoreCase("")) {
-//                                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
-//                                                        arrayObj.getStandard().trim().equalsIgnoreCase(standardStr.trim())) {
-//                                                    filterFinalArray.add(arrayObj);
-//                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
-//                                                    result = filterFinalArray.size();
-//                                                }
-//                                                fillData(filterFinalArray);
-//                                            }
-//                                        } else if (!streamStr.equalsIgnoreCase("")) {
-//                                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
-//                                                        arrayObj.getStream().trim().equalsIgnoreCase(streamStr.trim())) {
-//                                                    filterFinalArray.add(arrayObj);
-//                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
-//                                                    result = filterFinalArray.size();
-//                                                }
-//                                                fillData(filterFinalArray);
-//                                            }
-//                                        } else if (!genderStr.equalsIgnoreCase("")) {
-//                                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                                        arrayObj.getSessionName().trim().equalsIgnoreCase(classNameStr.trim()) &&
-//                                                        arrayObj.getGenderID().trim().equalsIgnoreCase(genderStr.trim())) {
-//                                                    filterFinalArray.add(arrayObj);
-//                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
-//                                                    result = filterFinalArray.size();
-//                                                }
-//                                                fillData(filterFinalArray);
-//                                            }
-//                                        } else {
-//                                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                                        arrayObj.getSessionName().trim().toLowerCase().equalsIgnoreCase(classNameStr.trim().toLowerCase())) {
-//                                                    filterFinalArray.add(arrayObj);
-//                                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
-//                                                    result = filterFinalArray.size();
-//                                                }
-//                                                fillData(filterFinalArray);
-//                                            }
-//                                        }
-//                                    }
-//                                }
-////                                    } else if (!subjectStr.equalsIgnoreCase("") || !boardStr.equalsIgnoreCase("") ||
-////                                            !standardStr.equalsIgnoreCase("") || !streamStr.equalsIgnoreCase("")) {
-////                                        List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-////                                        for (sessionDataModel arrayObj : dataResponse.getData()) {
-////                                            if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-////                                                    arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-////                                                if (arrayObj.getLessionTypeName().trim().equalsIgnoreCase(subjectStr.trim()) ||
-////                                                        arrayObj.getBoard().equalsIgnoreCase(boardStr.trim()) ||
-////                                                        arrayObj.getStandard().equalsIgnoreCase(standardStr.trim()) ||
-////                                                        arrayObj.getStream().equalsIgnoreCase(streamStr.trim()) ||
-////                                                        arrayObj.getGenderID().equalsIgnoreCase(genderStr)) {
-////                                                    filterFinalArray.add(arrayObj);
-////                                                    result = String.valueOf(filterFinalArray.size());
-////                                                }
-////                                            }
-////                                            fillData(filterFinalArray);
-////                                        }
-////                                    } else {
-////                                        List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-////                                        for (sessionDataModel arrayObj : dataResponse.getData()) {
-////                                            if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-////                                                    arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-////                                                filterFinalArray.add(arrayObj);
-////                                                result = String.valueOf(filterFinalArray.size());
-////                                            }
-////                                            fillData(filterFinalArray);
-////                                        }
-////                                    }
-//                            }
-//                            if (result < 10) {
-//                                binding.countTxt.setText("0" + String.valueOf(result));
-//                            } else {
-//                                binding.countTxt.setText(String.valueOf(result));
-//                            }
-//                        }
-//
-//                    }
-//
-//                }
-//
-//                @Override
-//                public void failure(RetrofitError error) {
-//                    Utils.dismissDialog();
-//                    error.printStackTrace();
-//                    error.getMessage();
-//                    Utils.ping(mContext, getString(R.string.something_wrong));
-//                }
-//            });
-//        } else {
-//            Utils.ping(mContext, getString(R.string.internet_connection_error));
-//        }
-//    }
-//
-//    private Map<String, String> getSessionListDetail() {
-//        Map<String, String> map = new HashMap<>();
-//        return map;
-//    }
-///================================
 
     public void SortDialog() {
         sortBinding = DataBindingUtil.
@@ -959,7 +652,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                 int radioButtonID = sortBinding.rangeStatusRg.getCheckedRadioButtonId();
                 switch (radioButtonID) {
                     case R.id.low_high_rb:
-                        ratingStr="";
+                        ratingStr = "";
                         rangestatusStr = "low";
                         pricewiseStr = "price";
                         if (dataResponse.getData().size() >= 0) {
@@ -977,7 +670,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                         }
                         break;
                     case R.id.high_low_rb:
-                        ratingStr="";
+                        ratingStr = "";
                         rangestatusStr = "high";
                         pricewiseStr = "price";
                         if (dataResponse.getData().size() >= 0) {
@@ -1006,7 +699,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                 int radioButtonRating = sortBinding.userRatingStatusRg.getCheckedRadioButtonId();
                 switch (radioButtonRating) {
                     case R.id.lowest_first_user_rb:
-                        rangestatusStr="";
+                        rangestatusStr = "";
                         ratingStr = "low";
                         pricewiseStr = "rating";
                         if (dataResponse.getData().size() >= 0) {
@@ -1024,7 +717,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                         }
                         break;
                     case R.id.highest_first_user_rb:
-                        rangestatusStr="";
+                        rangestatusStr = "";
                         ratingStr = "high";
                         pricewiseStr = "rating";
                         List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
@@ -1067,7 +760,9 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                         return;
                     }
                     if (sessionInfo.getSuccess().equalsIgnoreCase("false")) {
-                        Utils.ping(mContext, getString(R.string.false_msg));
+                        Utils.ping(mContext, "Session not found.");
+                        dataResponse = sessionInfo;
+
                         return;
                     }
                     if (sessionInfo.getSuccess().equalsIgnoreCase("True")) {
@@ -1115,6 +810,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         map.put("StreamName", streamStr);
         map.put("Gender_ID", genderStr);
         map.put("CoachType_ID", sessionType);
+        map.put("RegionName", RegionName);
 
 
         return map;
@@ -1123,7 +819,8 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 
     public void fillData(List<sessionDataModel> array) {
         classDetailAdapter = new ClassDetailAdapter(mContext, array, searchByStr, locationStr,
-                classNameStr, boardStr, streamStr, standardStr, searchTypeStr, wheretoComeStr, searchfront, sessionType, firsttimesearch, new onViewClick() {
+                classNameStr, boardStr, streamStr, standardStr, searchTypeStr, wheretoComeStr,
+                searchfront, sessionType, firsttimesearch, RegionName, new onViewClick() {
             @Override
             public void getViewClick() {
                 if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
@@ -1153,6 +850,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                                     intentLogin.putExtra("searchfront", searchfront);
                                     intentLogin.putExtra("sessionType", sessionType);
                                     intentLogin.putExtra("firsttimesearch", firsttimesearch);
+                                    intentLogin.putExtra("RegionName", RegionName);
                                     startActivity(intentLogin);
                                     finish();
                                 }
@@ -1177,13 +875,13 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 
     public void fillArea() {
         ArrayList<String> AreaName = new ArrayList<String>();
-
         for (int j = 0; j < dataResponse.getData().size(); j++) {
-            if (locationStr.trim().toLowerCase().contains(dataResponse.getData().get(j).getAddressCity().trim().toLowerCase())
-                    && classNameStr.trim().toLowerCase().contains(dataResponse.getData().get(j).getSessionName().trim().toLowerCase())) {
+            if (dataResponse.getData().get(j).getAddressCity().trim().toLowerCase().contains(locationStr.trim().toLowerCase())
+                    && dataResponse.getData().get(j).getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
                 AreaName.add(dataResponse.getData().get(j).getRegionName());
             }
         }
+
         HashSet<String> hashSet = new HashSet<String>();
         hashSet.addAll(AreaName);
         AreaName.clear();

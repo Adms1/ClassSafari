@@ -67,7 +67,8 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
     String sessionIDStr, searchByStr, locationStr, classNameStr, genderStr, sessionDateStr, durationStr,
             paymentStatusstr, orderIDStr, boardStr, standardStr, streamStr, searchTypeStr, subjectStr,
             wheretoComeStr, sessionId, commentStr="", ratingValueStr, purchaseSessionIDStr = "", searchfront,
-            familysessionfeesStr, familysessionnameStr, familylocationStr, familysessionStudentStr, sessionType, firsttimesearch;
+            familysessionfeesStr, familysessionnameStr, familylocationStr, familysessionStudentStr, sessionType,
+            firsttimesearch,RegionName;
 
     ArrayList<String> purchaseSessionIDArray;
     SessionDetailModel dataResponse, dataResponseRating;
@@ -100,6 +101,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         searchfront = getIntent().getStringExtra("searchfront");
         sessionType = getIntent().getStringExtra("sessionType");
         firsttimesearch = getIntent().getStringExtra("firsttimesearch");
+        RegionName=getIntent().getStringExtra("RegionName");
         init();
         setListner();
     }
@@ -126,14 +128,6 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.book_session_btn:
-//                if (purchaseSessionIDArray.size() > 0) {
-//                    for (int i = 0; i < purchaseSessionIDArray.size(); i++) {
-//                        if (sessionIDStr.equalsIgnoreCase(purchaseSessionIDArray.get(i))) {
-//                            purchaseSessionIDStr = purchaseSessionIDArray.get(i);
-//                        }
-//                    }
-//                }
-//                if (purchaseSessionIDStr.equalsIgnoreCase("")) {
                     if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
                         new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
                                 .setCancelable(false)
@@ -164,6 +158,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                                         intentLogin.putExtra("duration", durationStr);
                                         intentLogin.putExtra("sessiondate", sessionDateStr);
                                         intentLogin.putExtra("sessionStudent", familysessionStudentStr);
+                                        intentLogin.putExtra("RegionName",RegionName);
                                         startActivity(intentLogin);
                                         finish();
                                     }
@@ -200,6 +195,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                         intent.putExtra("searchfront", searchfront);
                         intent.putExtra("sessionType", sessionType);
                         intent.putExtra("firsttimesearch", firsttimesearch);
+                        intent.putExtra("RegionName",RegionName);
                         startActivity(intent);
                     }
 //                } else {
@@ -232,6 +228,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                 inback.putExtra("searchfront", searchfront);
                 inback.putExtra("sessionType", sessionType);
                 inback.putExtra("firsttimesearch", firsttimesearch);
+                inback.putExtra("RegionName",RegionName);
                 startActivity(inback);
                 break;
             case R.id.menu:
@@ -263,6 +260,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         inback.putExtra("sessionName", classNameStr);
         inback.putExtra("sessionType", sessionType);
         inback.putExtra("firsttimesearch", firsttimesearch);
+        inback.putExtra("RegionName",RegionName);
         inback.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(inback);
     }

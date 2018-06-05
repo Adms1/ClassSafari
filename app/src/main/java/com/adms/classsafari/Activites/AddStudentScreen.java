@@ -52,7 +52,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
             familyIDStr, contatIDstr, orderIDStr, sessionIDStr, classStr = "Child",
             familyNameStr, paymentStatusstr, familylocationStr, familysessionStudentStr,
             sessionDateStr, durationStr, familysessionfeesStr, familysessionnameStr, locationStr,
-            boardStr, standardStr, streamStr, searchTypeStr, subjectStr, froncontanctStr,
+            boardStr, standardStr, streamStr, searchTypeStr, subjectStr, froncontanctStr,RegionName,
             wheretoComeStr, searchByStr, genderStr, wheretocometypeStr, searchfront,sessionType,firsttimesearch;
     Dialog confimDialog;
 //    TextView cancel_txt, confirm_txt, session_student_txt, session_name_txt,session_teacher_txt,
@@ -101,6 +101,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
         searchfront = getIntent().getStringExtra("searchfront");
         sessionType=getIntent().getStringExtra("sessionType");
         firsttimesearch=getIntent().getStringExtra("firsttimesearch");
+        RegionName=getIntent().getStringExtra("RegionName");
         Log.d("familyName", familyNameStr + familyIDStr);
         addStudentScreenBinding.familynameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
     }
@@ -134,6 +135,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                     intent.putExtra("sessionType",sessionType);
                     intent.putExtra("froncontanct",froncontanctStr);
                     intent.putExtra("firsttimesearch",firsttimesearch);
+                    intent.putExtra("RegionName",RegionName);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(mContext, FamilyListActivity.class);
@@ -304,6 +306,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                     intent.putExtra("sessionType",sessionType);
                     intent.putExtra("froncontanct",froncontanctStr);
                     intent.putExtra("firsttimesearch",firsttimesearch);
+                    intent.putExtra("RegionName",RegionName);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(mContext, FamilyListActivity.class);

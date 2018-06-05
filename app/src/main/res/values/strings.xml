@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">ClassSafari</string>
-    <string name="search_user">Search Activity/Subject</string>
+    <string name="app_name">Class Safari</string>
+    <string name="search_user">Search Activity / Subject</string>
     <string name="location">Location</string>
-    <string name="lets_play">LETS PLAY!</string>
-    <string name="lets_study">LETS STUDY!</string>
+    <string name="lets_play">LET\'S PLAY!</string>
+    <string name="lets_study">LET\'S STUDY!</string>
     <string name="subject">Maths</string>
     <string name="city">Ahmedabad</string>
     <string name="count">01</string>
@@ -34,7 +34,7 @@
     <string name="search_session">Subject</string>
     <string name="search_stream">Stream</string>
     <string name="search_MF">M/F</string>
-    <string name="search_class">Class Name</string>
+    <string name="search_class">Class Name / Tutor Name</string>
     <string name="comment_hint">Write Your Comment</string>
     <string name="login"><u><b>Login or Register</b></u></string>
     <string name="sortby">SORT BY</string>
@@ -56,7 +56,7 @@
 
     <!--Webservice String-->
     <string name="internet_error">Internet Connection !</string>
-    <string name="internet_connection_error">ClassSafariTeacher requires an internet connection.Make sure Wi-Fi or mobile networks are turned on, then try again.</string>
+    <string name="internet_connection_error">ClassSafari requires an internet connection.Make sure Wi-Fi or mobile networks are turned on, then try again.</string>
     <string name="something_wrong">Something Wrong</string>
     <string name="blank">Blank Filed Not Allowed</string>
     <string name="false_msg">Record not found</string>
@@ -214,7 +214,7 @@
 
 
     <!-- Class Detail String-->
-    <string name="blank_value">Please Select Proper Value</string>
+    <string name="blank_value">Please Select Activity / Subject.</string>
     <string name="location_validation">Please Select Proper Location</string>
     <string name="rating_header">Provide, Rate Session!</string>
     <string name="rating_row">How much do you like this session?</string>

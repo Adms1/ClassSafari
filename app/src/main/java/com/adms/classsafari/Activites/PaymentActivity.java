@@ -328,9 +328,9 @@ public class PaymentActivity extends AppCompatActivity {
                     }
                     if (sessionconfirmationInfoModel.getSuccess().equalsIgnoreCase("True")) {
                         if(paymentStatusstr.equalsIgnoreCase("1")) {
-                            Utils.ping(mContext, "Payment Successfully.");
+                            Utils.ping(mContext, "Your Transacation is Successfully.");
                         }else{
-                            Utils.ping(mContext, "Payment not done.");
+                            Utils.ping(mContext, "Your last transaction was cancelled.");
                         }
                     }
                 }

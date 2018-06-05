@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.adms.classsafari.R;
+import com.victor.loading.rotate.RotateLoading;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,8 +44,8 @@ public class Utils {
     public static Dialog menuDialog;
     public static Button btnMyReport, btnMySession, btnChangePassword,btnaddChild,btnLogout;
     public static String passWordStr, confirmpassWordStr, currentpasswordStr;
-
-
+    private static RotateLoading rotateLoading;
+//private static AVLoadingIndicatorView avi;
 
     
     public static boolean checkNetwork(Context context) {
@@ -113,12 +114,22 @@ public class Utils {
         dialog.setContentView(R.layout.progressbar_dialog);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
+        rotateLoading=(RotateLoading)dialog.findViewById(R.id.rotateLoading);
+        if(rotateLoading.isStart()){
+            rotateLoading.stop();
+        }else{
+            rotateLoading.start();
+        }
+//        avi=(AVLoadingIndicatorView)dialog.findViewById(R.id.avi) ;
+//      avi.show();
         dialog.show();
     }
 
     public static void dismissDialog() {
         if (dialog != null && dialog.isShowing())
             try {
+//            avi.hide();
+                rotateLoading.stop();
                 dialog.dismiss();
             } catch (final IllegalArgumentException e) {
                 // Do nothing.

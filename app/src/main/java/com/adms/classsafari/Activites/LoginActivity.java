@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             whereTocomestr, orderIDStr, checkStr, paymentStatusstr,
             boardStr, standardStr, streamStr, locationStr, classNameStr,
             searchTypeStr, subjectStr, genderStr, frontloginStr,
-            ratingLoginStr, searchfront, sessionType, durationStr, sessionDateStr;
+            ratingLoginStr, searchfront, sessionType, durationStr, sessionDateStr,RegionName;
     //    Use for Dialog
     Dialog forgotDialog, confimDialog;
     String EmailIdStr, type, searchByStr, familylocationStr, familysessionStudentStr,firsttimesearch;
@@ -79,6 +79,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         durationStr = getIntent().getStringExtra("duration");
         familysessionStudentStr = getIntent().getStringExtra("sessionStudent");
         firsttimesearch = getIntent().getStringExtra("firsttimesearch");
+        RegionName=getIntent().getStringExtra("RegionName");
         if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
             checkUnmPwd();
         }
@@ -125,6 +126,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 inregister.putExtra("sessiondate", sessionDateStr);
                 inregister.putExtra("sessionStudent", familysessionStudentStr);
                 inregister.putExtra("firsttimesearch", firsttimesearch);
+                inregister.putExtra("RegionName",RegionName);
                 startActivity(inregister);
                 break;
             case R.id.login_btn:
@@ -273,6 +275,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             intent.putExtra("sessiondate", sessionDateStr);
             intent.putExtra("sessionStudent", familysessionStudentStr);
             intent.putExtra("firsttimesearch", firsttimesearch);
+            intent.putExtra("RegionName",RegionName);
             intent.addCategory(Intent.CATEGORY_HOME);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -334,6 +337,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     iSearchByUser.putExtra("searchfront", searchfront);
                                     iSearchByUser.putExtra("sessionType", sessionType);
                                     iSearchByUser.putExtra("firsttimesearch", firsttimesearch);
+                                    iSearchByUser.putExtra("RegionName",RegionName);
                                     startActivity(iSearchByUser);
                                 } else if (ratingLoginStr.equalsIgnoreCase("ratingLoginSession")) {
                                     Intent iSearchByUser = new Intent(mContext, SessionName.class);
@@ -353,19 +357,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     iSearchByUser.putExtra("searchfront", searchfront);
                                     iSearchByUser.putExtra("sessionType", sessionType);
                                     iSearchByUser.putExtra("firsttimesearch", firsttimesearch);
+                                    iSearchByUser.putExtra("RegionName",RegionName);
                                     startActivity(iSearchByUser);
                                 } else {
-//                                    ConformSessionDialog(); session_student_txt.setText(AppConfiguration.classteacherSessionName);
-//        session_name_txt.setText(AppConfiguration.classSessionName);
-//        location_txt.setText(AppConfiguration.classsessionLocation);
-//        duration_txt.setText(AppConfiguration.classsessionDuration);
-//        time_txt.setText(AppConfiguration.classsessionDate);
-//        if (AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
-//            session_fee_txt.setText("Free");
-//        } else {
-//            session_fee_txt.setText("₹ " + AppConfiguration.classsessionPrice);
-//        }
-
                                     Intent iFamilyList = new Intent(mContext, FamilyListActivity.class);
                                     iFamilyList.putExtra("sessionfees", AppConfiguration.classsessionPrice);
                                     iFamilyList.putExtra("sessionName", classNameStr);
@@ -388,6 +382,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     iFamilyList.putExtra("sessionType", sessionType);
                                     iFamilyList.putExtra("sessionStudent", familysessionStudentStr);
                                     iFamilyList.putExtra("firsttimesearch", firsttimesearch);
+                                    iFamilyList.putExtra("RegionName",RegionName);
                                     startActivity(iFamilyList);
                                 }
                             }

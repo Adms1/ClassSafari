@@ -143,7 +143,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
                 startActivity(inClassDetail);
                 break;
             case R.id.search_class_edt:
-                searchByUserBinding.searchClassEdt.showDropDown();
+//                searchByUserBinding.searchClassEdt.showDropDown();
                 break;
             case R.id.search_txt:
                 validation();

@@ -61,7 +61,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
             familylocationStr, familysessionStudentStr, sessionDateStr, durationStr,
             orderIDStr, contatIDstr, type, familyIdStr = "", familyNameStr = "", locationStr,
             boardStr, standardStr, streamStr, searchTypeStr, subjectStr, searchfront, arraowStr,
-            wheretoComeStr, searchByStr, genderStr, froncontanctStr, wheretocometypeStr, sessionType,
+            wheretoComeStr, searchByStr, genderStr, froncontanctStr, wheretocometypeStr, sessionType,RegionName,
             firsttimesearch, selectedfamilyNameStr, selectedfamilytagStr;
     ArrayList<String> selectedId;
     //Purchase dialog
@@ -113,6 +113,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         wheretocometypeStr = getIntent().getStringExtra("wheretocometype");
         sessionType = getIntent().getStringExtra("sessionType");
         firsttimesearch = getIntent().getStringExtra("firsttimesearch");
+        RegionName=getIntent().getStringExtra("RegionName");
     }
 
     public void init() {
@@ -149,6 +150,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                     intent.putExtra("searchfront", searchfront);
                     intent.putExtra("sessionType", sessionType);
                     intent.putExtra("firsttimesearch", firsttimesearch);
+                    intent.putExtra("RegionName",RegionName);
                     startActivity(intent);
                 } else {
                     if (wheretocometypeStr.equalsIgnoreCase("mySession")) {
@@ -193,6 +195,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                     addchild.putExtra("searchfront", searchfront);
                     addchild.putExtra("sessionType", sessionType);
                     addchild.putExtra("firsttimesearch", firsttimesearch);
+                    addchild.putExtra("RegionName",RegionName);
                     startActivity(addchild);
                 } else {
                     Intent addchild = new Intent(mContext, AddStudentScreen.class);
@@ -245,55 +248,13 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                                     @Override
                                     public void getChilClick() {
 //                                        getFamilyID();
-//
-//                                        Intent addchild = new Intent(mContext, AddStudentScreen.class);
-//                                        addchild.putExtra("type", "book");
-//                                        addchild.putExtra("familyID", familyIdStr);
-//                                        addchild.putExtra("familyNameStr", familyNameStr);
-//                                        addchild.putExtra("sessionID", sessionIDStr);
-//                                        addchild.putExtra("duration", durationStr);
-//                                        addchild.putExtra("sessiondate", sessionDateStr);
-//                                        addchild.putExtra("sessionName", familysessionnameStr);
-//                                        addchild.putExtra("location", familylocationStr);
-//                                        addchild.putExtra("sessionfees", familysessionfeesStr);
-//                                        addchild.putExtra("sessionStudent", familysessionStudentStr);
-//                                        addchild.putExtra("city", locationStr);
-//                                        addchild.putExtra("SearchBy", searchByStr);
-//                                        addchild.putExtra("board", boardStr);
-//                                        addchild.putExtra("stream", streamStr);
-//                                        addchild.putExtra("standard", standardStr);
-//                                        addchild.putExtra("searchType", searchTypeStr);
-//                                        addchild.putExtra("lessionName", subjectStr);
-//                                        addchild.putExtra("gender", genderStr);
-//                                        addchild.putExtra("withOR", wheretoComeStr);
-//                                        startActivity(addchild);
+
                                     }
                                 }, new onViewClick() {
                                     @Override
                                     public void getViewClick() {
                                         getsessionID();
                                         callSessionReportApi();
-//                                        if (purchaseSessionIDArray.size() > 0) {
-//                                            for (int i = 0; i < purchaseSessionIDArray.size(); i++) {
-//                                                if (sessionIDStr.equalsIgnoreCase(purchaseSessionIDArray.get(i))) {
-//                                                    purchaseSessionIDStr = purchaseSessionIDArray.get(i);
-//                                                }
-//                                            }
-//                                        }
-//                                        if (purchaseSessionIDStr.equalsIgnoreCase("")) {
-//                                            ConformSessionDialog();
-//                                        } else {
-//                                            new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
-//                                                    .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
-//                                                    .setMessage("You are already purchase.")
-//                                                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                                                        public void onClick(DialogInterface dialog, int which) {
-//
-//                                                        }
-//                                                    })
-//                                                    .setIcon(R.drawable.safari)
-//                                                    .show();
-//                                        }
                                     }
                                 });
                                 familyBinding.lvExpfamilylist.setAdapter(expandableSelectStudentListAdapter);
