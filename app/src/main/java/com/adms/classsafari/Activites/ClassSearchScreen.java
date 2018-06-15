@@ -676,7 +676,6 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         classSearchScreenBinding.searchAutoTxt.setAdapter(adapterTerm);
     }
 
-
     public void fillRegion() {
         ArrayList<String> RegionName = new ArrayList<String>();
 
@@ -699,8 +698,8 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
                 validationSearch();
                 break;
             case R.id.back:
-                Intent inSearchUser = new Intent(mContext, SearchByUser.class);
-                startActivity(inSearchUser);
+                    Intent inSearchUser = new Intent(mContext, SearchByUser.class);
+                    startActivity(inSearchUser);
                 break;
             case R.id.stream_auto_txt:
                 classSearchScreenBinding.streamAutoTxt.showDropDown();
@@ -724,8 +723,8 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
     }
 
     public void validationSearch() {
-        if (!classSearchScreenBinding.searchAutoTxt.getText().toString().equalsIgnoreCase("") &&
-                !classSearchScreenBinding.sessionAutoTxt.getText().toString().equalsIgnoreCase("")) {
+        if (!classSearchScreenBinding.searchAutoTxt.getText().toString().equalsIgnoreCase("")){ /**&&
+                !classSearchScreenBinding.sessionAutoTxt.getText().toString().equalsIgnoreCase("")) {**/
 //                    setValueModel();
             Intent inSearchUser = new Intent(mContext, ClassDeatilScreen.class);
             inSearchUser.putExtra("SearchBy", "2");

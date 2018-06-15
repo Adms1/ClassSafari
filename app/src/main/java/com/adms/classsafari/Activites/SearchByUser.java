@@ -36,6 +36,7 @@ import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.AppConfiguration;
 import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
+import com.adms.classsafari.Model.SessionConfirmationDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivitySearchByUserBinding;
@@ -67,7 +68,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
     Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily;
     TextView userNameTxt;
     private PopupWindow popupWindow;
-
+    SessionConfirmationDetailModel selectedDataModel=new SessionConfirmationDetailModel();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +92,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
             searchByUserBinding.loginTxt.setText(Html.fromHtml("Logged as " + "<u> <b>" + Utils.getPref(mContext, "RegisterUserName") + "</u></b>"));
 
         } else {
-            searchByUserBinding.loginTxt.setText(Html.fromHtml("<u><b>Login or Register<u></b>"));
+            searchByUserBinding.loginTxt.setText(Html.fromHtml("<u><b>Login / Register<u></b>"));
 //            searchByUserBinding.logout.setVisibility(View.GONE);
         }
 
@@ -99,7 +100,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
     }
 
     public void setListner() {
-        callSessionListApi();
+//        callSessionListApi();
         searchByUserBinding.letsStudyTxt.setOnClickListener(this);
         searchByUserBinding.searchClassEdt.setOnClickListener(this);
         searchByUserBinding.searchTxt.setOnClickListener(this);
@@ -180,7 +181,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
     public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
         switch (textView.getId()) {
             case R.id.search_class_edt:
-                if (i == EditorInfo.IME_ACTION_DONE) {
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
                     validation();
                 }
                 break;
@@ -293,8 +294,21 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
     public void validation() {
         selectedSessionNameStr = searchByUserBinding.searchClassEdt.getText().toString();
         selectedLocationStr = searchByUserBinding.locationEdt.getText().toString();
+
+        if (!selectedSessionNameStr.equalsIgnoreCase("")) {
+            String A = selectedSessionNameStr;
+            String ACaps = A.toUpperCase().charAt(0) + A.substring(1, A.length());
+            selectedSessionNameStr = ACaps;
+            Log.d("sessionName", ACaps);
+        }
         AppConfiguration.ClassLocation = selectedLocationStr;
-        if (!selectedSessionNameStr.equalsIgnoreCase("") && !selectedLocationStr.equalsIgnoreCase("")) {
+//        selectedDataModel.setLocation(selectedLocationStr);
+//        selectedDataModel.setSessionName(selectedSessionNameStr);
+//        selectedDataModel.setSearchBy("1");
+//        selectedDataModel.setWheretoComeStr("withOutOR");
+//        selectedDataModel.setSearchfront("searchfront");
+
+        if (!selectedLocationStr.equalsIgnoreCase("")) {//!selectedSessionNameStr.equalsIgnoreCase("") &&
             Utils.setPref(mContext, "location", selectedLocationStr);
             Utils.setPref(mContext, "sessionName", selectedSessionNameStr);
             Intent inClassDetail = new Intent(mContext, ClassDeatilScreen.class);

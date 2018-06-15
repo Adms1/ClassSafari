@@ -36,6 +36,7 @@ import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
 import com.adms.classsafari.databinding.FragmentCalendarBinding;
+import com.adms.classsafari.databinding.SessiondetailConfirmationDialogBinding;
 import com.github.tibolte.agendacalendarview.CalendarPickerController;
 import com.github.tibolte.agendacalendarview.models.CalendarEvent;
 import com.github.tibolte.agendacalendarview.models.DayItem;
@@ -83,6 +84,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
     //    TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, session_fee_txt;
     String contatIDstr, orderIDStr, familyNameStr;
     ArrayList<String> selectedId;
+    SessiondetailConfirmationDialogBinding sessiondetailConfirmationDialogBinding;
     private View rootView;
     private Context mContext;
 
@@ -140,79 +142,9 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                 args.putString("flag", "Add");
                 fragment.setArguments(args);
                 fragmentTransaction.replace(R.id.frame, fragment);
-//                fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
         });
-//        calendarBinding.forwadTxt.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                calendar = Calendar.getInstance();
-//
-//                SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy");
-//                String d = calendarBinding.monthYearTxt.getText().toString();
-//                Date date = null;
-//                try {
-//                    date = new Date(sdf.parse(d).getTime());
-//                    date.setMonth(date.getMonth() + 1);
-//                    dateStr = String.valueOf(date);
-//                    Log.d("dateStr", dateStr);
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                }
-//                String inputPattern = "EEE MMM d HH:mm:ss zzz yyyy";
-//                String outputPattern = "MMMM yyyy";
-//
-//                SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
-//                SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
-//
-//                Date date1 = null;
-//                String str = null;
-//                try {
-//                    date1 = inputFormat.parse(dateStr);
-//                    str = outputFormat.format(date1);
-//
-//                    Log.i("mini", "Month:" + str);
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                }
-//                calendarBinding.monthYearTxt.setText(str);
-//            }
-//        });
-//
-//        calendarBinding.backTxt.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy");
-//                String d = calendarBinding.monthYearTxt.getText().toString();
-//                Date date = null;
-//                try {
-//                    date = new Date(sdf.parse(d).getTime());
-//                    date.setMonth(date.getMonth() - 1);
-//                    dateStr = String.valueOf(date);
-//                    Log.d("dateStr", dateStr);
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                }
-//                String inputPattern = "EEE MMM d HH:mm:ss zzz yyyy";
-//                String outputPattern = "MMMM yyyy";
-//
-//                SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
-//                SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
-//
-//                Date date1 = null;
-//                String str = null;
-//                try {
-//                    date1 = inputFormat.parse(dateStr);
-//                    str = outputFormat.format(date1);
-//
-//                    Log.i("mini", "Month:" + str);
-//                } catch (ParseException e) {
-//                    e.printStackTrace();
-//                }
-//                calendarBinding.monthYearTxt.setText(str);
-//            }
-//        });
     }
 
     @Override
@@ -247,7 +179,9 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                         AppConfiguration.SessionTime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime();
                         AppConfiguration.SessionPrice = String.valueOf(Math.round(Float.parseFloat(finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionPrice())));
 //                        AppConfiguration.SessionPrice=finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionPrice();
-                        Log.d("price", AppConfiguration.SessionPrice);
+                        AppConfiguration.SessionDate = finalsessionfullDetailModel.getData().get(i).getSessionDate();
+                        AppConfiguration.RegionName = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getRegionName();
+                        Log.d("price + RegionName", AppConfiguration.SessionPrice+" "+AppConfiguration.RegionName);
                         Utils.setPref(mContext, "sessionID", sessionIDStr);
                     }
 
@@ -556,7 +490,8 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                                 @Override
                                 public void getViewClick() {
                                     getFamilyID();
-                                    ConformationDialog();
+//                                    ConformationDialog();
+                                    SessionConfirmationDialog();
                                 }
                             });
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
@@ -691,6 +626,119 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
         confimDialog.show();
     }
 
+    public void SessionConfirmationDialog() {
+        sessiondetailConfirmationDialogBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContext), R.layout.sessiondetail_confirmation_dialog, (ViewGroup) calendarBinding.getRoot(), false);
+        confimDialog = new Dialog(mContext, R.style.Theme_Dialog);
+        Window window = confimDialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        confimDialog.getWindow().getAttributes().verticalMargin = 0.20f;
+        wlp.gravity = Gravity.TOP;
+        window.setAttributes(wlp);
+
+        confimDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+
+        confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        confimDialog.setCancelable(false);
+        confimDialog.setContentView(sessiondetailConfirmationDialogBinding.getRoot());
+
+        sessiondetailConfirmationDialogBinding.tutorNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
+        sessiondetailConfirmationDialogBinding.sessionNameTxt.setText(AppConfiguration.SessionName);
+        sessiondetailConfirmationDialogBinding.locationTxt.setText(AppConfiguration.RegionName);
+        sessiondetailConfirmationDialogBinding.durationTxt.setText(AppConfiguration.SessionDuration);
+        sessiondetailConfirmationDialogBinding.startDateTxt.setText(AppConfiguration.SessionDate);
+        sessiondetailConfirmationDialogBinding.endDateTxt.setText(AppConfiguration.SessionDate);
+
+        String[] spiltTime = AppConfiguration.SessionTime.split("\\-");
+        AppConfiguration.UserName=familyNameStr;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        SimpleDateFormat outsdf = new SimpleDateFormat("EEE");
+        Date date = null;
+        String inputstr = null;
+        try {
+            date = sdf.parse(AppConfiguration.SessionDate);
+            inputstr = outsdf.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Log.d("DateTime", inputstr);
+        switch (inputstr.toLowerCase()) {
+            case "sun":
+                sessiondetailConfirmationDialogBinding.sunTimeTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.sundayBtn.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.sunTimeTxt.setAlpha(1);
+                sessiondetailConfirmationDialogBinding.sundayBtn.setAlpha(1);
+                sessiondetailConfirmationDialogBinding.sunTimeTxt.setText(spiltTime[0]);
+                break;
+            case "mon":
+                sessiondetailConfirmationDialogBinding.monTimeTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.mondayBtn.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.monTimeTxt.setAlpha(1);
+                sessiondetailConfirmationDialogBinding.mondayBtn.setAlpha(1);
+                sessiondetailConfirmationDialogBinding.monTimeTxt.setText(spiltTime[0]);
+                break;
+            case "tue":
+                sessiondetailConfirmationDialogBinding.tuesTimeTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.tuesdayBtn.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.tuesTimeTxt.setAlpha(1);
+                sessiondetailConfirmationDialogBinding.tuesdayBtn.setAlpha(1);
+                sessiondetailConfirmationDialogBinding.tuesTimeTxt.setText(spiltTime[0]);
+                break;
+            case "wed":
+                sessiondetailConfirmationDialogBinding.wedTimeTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.wednesdayBtn.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.wedTimeTxt.setAlpha(1);
+                sessiondetailConfirmationDialogBinding.wednesdayBtn.setAlpha(1);
+                sessiondetailConfirmationDialogBinding.wedTimeTxt.setText(spiltTime[0]);
+                break;
+            case "thu":
+                sessiondetailConfirmationDialogBinding.thurTimeTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.thursdayBtn.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.thurTimeTxt.setAlpha(1);
+                sessiondetailConfirmationDialogBinding.thursdayBtn.setAlpha(1);
+                sessiondetailConfirmationDialogBinding.thurTimeTxt.setText(spiltTime[0]);
+                break;
+            case "fri":
+                sessiondetailConfirmationDialogBinding.friTimeTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.fridayBtn.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.friTimeTxt.setAlpha(1);
+                sessiondetailConfirmationDialogBinding.fridayBtn.setAlpha(1);
+                sessiondetailConfirmationDialogBinding.friTimeTxt.setText(spiltTime[0]);
+                break;
+            case "sat":
+                sessiondetailConfirmationDialogBinding.satTimeTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.saturdayBtn.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.satTimeTxt.setAlpha(1);
+                sessiondetailConfirmationDialogBinding.saturdayBtn.setAlpha(1);
+                sessiondetailConfirmationDialogBinding.satTimeTxt.setText(spiltTime[0]);
+                break;
+            default:
+
+        }
+        sessiondetailConfirmationDialogBinding.cancelTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                confimDialog.dismiss();
+            }
+        });
+        sessiondetailConfirmationDialogBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("")) {
+                    callpaymentRequestApi();
+                }
+                confimDialog.dismiss();
+                sessionDialog.dismiss();
+
+            }
+        });
+        confimDialog.show();
+
+    }
+
     //Use for paymentRequest
     public void callpaymentRequestApi() {
         if (Utils.isNetworkConnected(mContext)) {
@@ -721,8 +769,8 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                         Bundle args = new Bundle();
                         args.putString("orderID", orderIDStr);
                         args.putString("amount", AppConfiguration.SessionPrice);
-                        args.putString("mode",AppConfiguration.Mode);
-                        args.putString("username", confirmSessionDialogBinding.sessionStudentTxt.getText().toString());
+                        args.putString("mode", AppConfiguration.Mode);
+                        args.putString("username", familyNameStr);
                         args.putString("sessionID", sessionIDStr);
                         args.putString("contactID", contatIDstr);
                         args.putString("type", Utils.getPref(mContext, "Type"));

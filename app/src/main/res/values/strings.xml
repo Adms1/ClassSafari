@@ -20,9 +20,9 @@
     <string name="filter">FILTER</string>
     <string name="tutor">Tutor / Tution Class</string>
     <string name="session_detail">Session</string>
-    <string name="teacher_detail">Teacher Name</string>
+    <string name="teacher_detail">Teacher</string>
     <string name="session_type">Type</string>
-    <string name="session_detail_name">Lesson Name</string>
+    <string name="session_detail_name">Lesson</string>
     <string name="session_stream">Stream</string>
     <string name="email">Email id</string>
     <string name="phone">Phone</string>
@@ -36,7 +36,7 @@
     <string name="search_MF">M/F</string>
     <string name="search_class">Class Name / Tutor Name</string>
     <string name="comment_hint">Write Your Comment</string>
-    <string name="login"><u><b>Login or Register</b></u></string>
+    <string name="login"><u><b>Login / Register</b></u></string>
     <string name="sortby">SORT BY</string>
     <string name="most_recent">Most Recent</string>
     <string name="addsession">Add Session</string>
@@ -49,10 +49,10 @@
     <string name="mycontanct">My Family Contacts</string>
     <string name="agevalidation">Date of Birth should be > 1year .</string>
     <string name="close">Close</string>
-
+    <string name="click_here"><b><u>Click Here.</u></b></string>
     <string name="checkboc_text">All-inclusive price(coupon &amp; wallet applied)</string>
     <string name="payment">Payment</string>
-
+<string name="selection_info">\u2022  Please Select at least one of the following to enroll in the selected class.</string>
 
     <!--Webservice String-->
     <string name="internet_error">Internet Connection !</string>
@@ -71,7 +71,7 @@
     <!--SafariTeacher-->
     <!--<b>\u2014</b> OR <b>\u2014-->
     <string name="or"><b> OR </b></string>
-    <string name="user_id">Email</string>
+    <string name="user_id">Email address</string>
     <string name="user_pass">Password</string>
     <string name="register_str">Don\’t have an account?</string>
     <string name="register"><u>Register</u></string>

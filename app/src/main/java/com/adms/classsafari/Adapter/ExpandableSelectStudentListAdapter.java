@@ -237,7 +237,6 @@ public class ExpandableSelectStudentListAdapter extends BaseExpandableListAdapte
         FamilyID = spiltValue[3];
 
         if (!froncontanctStr.equalsIgnoreCase("true")) {
-
             groupbinding.familynameRb.setChecked(false);
             groupbinding.familynameRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override

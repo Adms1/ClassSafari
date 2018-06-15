@@ -12,8 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.adms.classsafari.Activites.SessionName;
+import com.adms.classsafari.Interface.bookClick;
 import com.adms.classsafari.Interface.onViewClick;
 import com.adms.classsafari.Model.Session.sessionDataModel;
+import com.adms.classsafari.Model.SessionConfirmationDetailModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.CardLayoutBinding;
 
@@ -27,7 +29,7 @@ import java.util.List;
  * Created by admsandroid on 3/5/2018.
  */
 
-public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.MyViewHolder> {
+public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.MyViewHolder>  {
 
     List<sessionDataModel> arrayList;
     int SessionHour = 0;
@@ -35,16 +37,20 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     String searchByStr, locationStr, classNameStr,
             address, boardStr, streamStr, standardStr,
             searchTypeStr, wheretoComeStr, searchfront,
-            sessionType, firsttimesearch,RegionName;
+            sessionType, firsttimesearch, RegionName;
     onViewClick onViewClick;
+    bookClick bookClick;
     CardLayoutBinding cardLayoutBinding;
 
     private Context mContext;
     private ArrayList<String> SessionDetail;
+    private ArrayList<String> SessionBookDetail;
+    SessionConfirmationDetailModel sessionConfirmationDetailModel=new SessionConfirmationDetailModel();
 
     public ClassDetailAdapter(Context mContext, List<sessionDataModel> arrayList, String searchByStr, String locationStr,
                               String classNameStr, String boardStr, String streamStr, String standardStr, String searchTypeStr,
-                              String wheretoComeStr, String searchfront, String sessionType, String firsttimesearch, String regionName, onViewClick onViewClick) {
+                              String wheretoComeStr, String searchfront, String sessionType, String firsttimesearch, String regionName,
+                              bookClick bookClick, onViewClick onViewClick) {
         this.mContext = mContext;
         this.arrayList = arrayList;
         this.searchByStr = searchByStr;
@@ -59,7 +65,8 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
         this.onViewClick = onViewClick;
         this.sessionType = sessionType;
         this.firsttimesearch = firsttimesearch;
-        this.RegionName=regionName;
+        this.RegionName = regionName;
+        this.bookClick = bookClick;
     }
 
     @Override
@@ -83,6 +90,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
             cardLayoutBinding.ratingUserTxt.setVisibility(View.VISIBLE);
             cardLayoutBinding.ratingUserTxt.setText("(" + arrayList.get(position).getTotalRatingUser() + ")");
         }
+
         cardLayoutBinding.ratingBar.setRating(Float.parseFloat(arrayList.get(position).getRating()));
         address = arrayList.get(position).getAddressLine1() +
                 "," + arrayList.get(position).getRegionName() +
@@ -119,7 +127,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                     inSession.putExtra("searchfront", searchfront);
                     inSession.putExtra("sessionType", sessionType);
                     inSession.putExtra("firsttimesearch", firsttimesearch);
-                    inSession.putExtra("RegionName",RegionName);
+                    inSession.putExtra("RegionName", RegionName);
                     mContext.startActivity(inSession);
                 }
                 return true;
@@ -143,10 +151,49 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                 inSession.putExtra("searchType", searchTypeStr);
                 inSession.putExtra("withOR", wheretoComeStr);
                 inSession.putExtra("firsttimesearch", firsttimesearch);
-                inSession.putExtra("RegionName",RegionName);
+                inSession.putExtra("RegionName", RegionName);
                 mContext.startActivity(inSession);
             }
         });
+        cardLayoutBinding.bookSessionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SessionBookDetail = new ArrayList<>();
+                SessionBookDetail.add(arrayList.get(position).getSessionID());
+                bookClick.bookClick();
+//                sessionConfirmationDetailModel.setSessionId(arrayList.get(position).getSessionID());
+//                sessionConfirmationDetailModel.setSessionName(arrayList.get(position).getSessionName());
+//                sessionConfirmationDetailModel.setFroncontanct("false");
+//                sessionConfirmationDetailModel.setRating(arrayList.get(position).getRating());
+//                sessionConfirmationDetailModel.setRatingValue(String.valueOf(arrayList.get(position).getTotalRatingUser()));
+//                sessionConfirmationDetailModel.setTeacherName(arrayList.get(position).getName());
+//                sessionConfirmationDetailModel.setRegion(arrayList.get(position).getRegionName());
+//                sessionConfirmationDetailModel.setStartdate(arrayList.get(position).getStartDate());
+//                sessionConfirmationDetailModel.setEnddate(arrayList.get(position).getEndDate());
+//                sessionConfirmationDetailModel.setSchdule(arrayList.get(position).getSchedule());
+//                sessionConfirmationDetailModel.setDuration(cardLayoutBinding.durationTxt.getText().toString());
+//                sessionConfirmationDetailModel.setPrice(arrayList.get(position).getSessionPrice());
+//                sessionConfirmationDetailModel.setLocation(locationStr);
+//                sessionConfirmationDetailModel.setWheretoComeStr(wheretoComeStr);
+//                sessionConfirmationDetailModel.setBack("classDeatil");
+//                sessionConfirmationDetailModel.setBoard(boardStr);
+//                sessionConfirmationDetailModel.setStream(streamStr);
+//                sessionConfirmationDetailModel.setStandard(standardStr);
+//                sessionConfirmationDetailModel.setLessionName(arrayList.get(position).getLessionTypeName());
+//                sessionConfirmationDetailModel.setSearchBy(searchByStr);
+//                sessionConfirmationDetailModel.setSearchType(searchTypeStr);
+//                sessionConfirmationDetailModel.setFirsttimesearch(firsttimesearch);
+//                sessionConfirmationDetailModel.setGender(arrayList.get(position).getGenderID());
+
+//                Intent intent=new Intent(mContext, FamilyListActivity.class);
+////                intent.putExtra("detail",sessionConfirmationDetailModel);
+//
+//
+//                mContext.startActivity(intent);
+            }
+        });
+
+
         cardLayoutBinding.ratingBar.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -222,11 +269,11 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
 
             }
         }
-        if (arrayList.get(position).getCoachTypeID().equalsIgnoreCase("1")) {
-            cardLayoutBinding.tutorNameTxt.setText("Academic " + "/" + arrayList.get(position).getLessionTypeName());
-        } else {
-            cardLayoutBinding.tutorNameTxt.setText("Sports " + "/" + arrayList.get(position).getLessionTypeName());
-        }
+//        if (arrayList.get(position).getCoachTypeID().equalsIgnoreCase("1")) {
+//            cardLayoutBinding.tutorNameTxt.setText("Academic " + "/" + arrayList.get(position).getName());
+//        } else {
+            cardLayoutBinding.tutorNameTxt.setText(arrayList.get(position).getName());//"Sports " + "/" +
+//        }
 
         arrayList.get(position).setDuration(SessionHour + " hr " + SessionMinit + " min");
         cardLayoutBinding.durationTxt.setText(arrayList.get(position).getDuration());
@@ -284,6 +331,9 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
 
     public ArrayList<String> getSessionDetail() {
         return SessionDetail;
+    }
+    public ArrayList<String> getSessionBookDetail(){
+        return SessionBookDetail;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

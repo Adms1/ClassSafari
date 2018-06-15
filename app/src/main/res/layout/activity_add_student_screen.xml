@@ -131,7 +131,7 @@
 
             <EditText
                 android:id="@+id/first_name_edt"
-                style="@style/AutoComplete"
+                style="@style/RegiAutoComplete"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -140,7 +140,7 @@
 
             <EditText
                 android:id="@+id/last_name_edt"
-                style="@style/AutoComplete"
+                style="@style/RegiAutoComplete"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_marginTop="@dimen/_15sdp"
@@ -149,7 +149,7 @@
 
             <EditText
                 android:id="@+id/email_edt"
-                style="@style/AutoComplete"
+                style="@style/RegiAutoComplete"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_marginTop="@dimen/_15sdp"
@@ -160,7 +160,7 @@
 
             <EditText
                 android:id="@+id/password_edt"
-                style="@style/AutoComplete"
+                style="@style/RegiAutoComplete"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_marginTop="@dimen/_15sdp"
@@ -170,7 +170,7 @@
 
             <EditText
                 android:id="@+id/phone_no_edt"
-                style="@style/AutoComplete"
+                style="@style/RegiAutoComplete"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_marginTop="@dimen/_15sdp"

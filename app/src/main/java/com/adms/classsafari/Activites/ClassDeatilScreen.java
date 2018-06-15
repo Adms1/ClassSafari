@@ -43,6 +43,7 @@ import com.adms.classsafari.AppConstant.LowToHighSortRating;
 import com.adms.classsafari.AppConstant.LowToHighSortSessionPrice;
 import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.BottomNavigationViewHelper;
+import com.adms.classsafari.Interface.bookClick;
 import com.adms.classsafari.Interface.onViewClick;
 import com.adms.classsafari.Model.SelectedDataModel;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
@@ -222,8 +223,8 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                             }
                             fillData(filterFinalArray);
                         }
-                    }else{
-                        Utils.ping(mContext,"Location not found.");
+                    } else {
+                        Utils.ping(mContext, "Location not found.");
                     }
                     arrayfirst = true;
 
@@ -245,8 +246,8 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                                 fillData(filterFinalArray);
                             }
                         }
-                    }else{
-                        Utils.ping(mContext,"Location not found.");
+                    } else {
+                        Utils.ping(mContext, "Location not found.");
                     }
                 }
             }
@@ -302,7 +303,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                 startActivity(inSearchUser);
                 break;
             case R.id.search_img:
-                if(wheretoComeStr.equalsIgnoreCase("withOR")) {
+                if (wheretoComeStr.equalsIgnoreCase("withOR")) {
                     Intent insession = new Intent(mContext, ClassSearchScreen.class);
                     insession.putExtra("flag", searchTypeStr);
                     insession.putExtra("withOR", wheretoComeStr);
@@ -320,7 +321,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                     insession.putExtra("RegionName", RegionName);
 //                insession.putExtra("selectedDataModel",selectedDataModel);
                     startActivity(insession);
-                }else{
+                } else {
                     Intent insession = new Intent(mContext, ClassSearchScreen.class);
                     insession.putExtra("flag", dataResponse.getData().get(0).getCoachTypeID());
                     insession.putExtra("withOR", wheretoComeStr);
@@ -820,7 +821,83 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
     public void fillData(List<sessionDataModel> array) {
         classDetailAdapter = new ClassDetailAdapter(mContext, array, searchByStr, locationStr,
                 classNameStr, boardStr, streamStr, standardStr, searchTypeStr, wheretoComeStr,
-                searchfront, sessionType, firsttimesearch, RegionName, new onViewClick() {
+                searchfront, sessionType, firsttimesearch, RegionName, new bookClick() {
+            @Override
+            public void bookClick() {
+                ArrayList<String> selectedId = new ArrayList<String>();
+                String sessionName = "";
+                String[] splitvalue = new String[0];
+                selectedId = classDetailAdapter.getSessionBookDetail();
+                Log.d("selectedId", "" + selectedId);
+                for (int i = 0; i < selectedId.size(); i++) {
+                    splitvalue = selectedId.get(i).split("\\|");
+//                    sessionName = splitvalue[0];
+                    sessionId = splitvalue[0];
+                }
+                if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
+                    Intent intentLogin = new Intent(mContext, FamilyListActivity.class);
+                    intentLogin.putExtra("froncontanct", "false");
+                    intentLogin.putExtra("back","classDeatil");
+                    intentLogin.putExtra("sessionID", sessionId);
+                    intentLogin.putExtra("city", locationStr);
+                    intentLogin.putExtra("sessionName", classNameStr);
+                    intentLogin.putExtra("withOR", wheretoComeStr);
+                    intentLogin.putExtra("frontLogin", "afterLogin");
+                    intentLogin.putExtra("SearchBy", searchByStr);
+                    intentLogin.putExtra("board", boardStr);
+                    intentLogin.putExtra("stream", streamStr);
+                    intentLogin.putExtra("standard", standardStr);
+                    intentLogin.putExtra("searchType", searchTypeStr);
+                    intentLogin.putExtra("lessionName", subjectStr);
+                    intentLogin.putExtra("gender", genderStr);
+                    intentLogin.putExtra("searchfront", searchfront);
+                    intentLogin.putExtra("sessionType", sessionType);
+                    intentLogin.putExtra("firsttimesearch", firsttimesearch);
+                    intentLogin.putExtra("RegionName", RegionName);
+                    startActivity(intentLogin);
+                    finish();
+                } else {
+                    new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                            .setCancelable(false)
+                            .setTitle("Login")
+                            .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+                            .setMessage("You are not login,So Please Login.")
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intentLogin = new Intent(mContext, LoginActivity.class);
+                                    intentLogin.putExtra("frontLogin", "afterLogin");
+                                    intentLogin.putExtra("sessionID", sessionId);
+                                    intentLogin.putExtra("SearchBy", searchByStr);
+                                    intentLogin.putExtra("board", boardStr);
+                                    intentLogin.putExtra("stream", streamStr);
+                                    intentLogin.putExtra("standard", standardStr);
+                                    intentLogin.putExtra("city", locationStr);
+                                    intentLogin.putExtra("sessionName", classNameStr);
+                                    intentLogin.putExtra("searchType", searchTypeStr);
+                                    intentLogin.putExtra("lessionName", subjectStr);
+                                    intentLogin.putExtra("gender", genderStr);
+                                    intentLogin.putExtra("withOR", wheretoComeStr);
+                                    intentLogin.putExtra("ratingLogin", "booksession");
+                                    intentLogin.putExtra("searchfront", searchfront);
+                                    intentLogin.putExtra("sessionType", sessionType);
+                                    intentLogin.putExtra("firsttimesearch", firsttimesearch);
+                                    intentLogin.putExtra("RegionName", RegionName);
+                                    intentLogin.putExtra("back","classDeatil");
+                                    startActivity(intentLogin);
+                                    finish();
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+
+                                }
+                            })
+                            .setIcon(R.drawable.safari)
+                            .show();
+                }
+            }
+        }, new onViewClick() {
             @Override
             public void getViewClick() {
                 if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
@@ -895,91 +972,90 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
     public void addRating() {
         ArrayList<String> selectedId = new ArrayList<String>();
         String sessionName = "";
+        String[] splitvalue = new String[0];
         selectedId = classDetailAdapter.getSessionDetail();
         Log.d("selectedId", "" + selectedId);
         for (int i = 0; i < selectedId.size(); i++) {
-            String[] splitvalue = selectedId.get(i).split("\\|");
+            splitvalue = selectedId.get(i).split("\\|");
             sessionName = splitvalue[0];
             sessionId = splitvalue[1];
         }
+            LayoutInflater inflater = getLayoutInflater();
+            View alertLayout = inflater.inflate(R.layout.rating_dialog_layout, null);
+            final RatingBar ratingBar = alertLayout.findViewById(R.id.rating_bar);
+            final TextView sessionNametxt = alertLayout.findViewById(R.id.session_name_txt);
+            final TextView session_rating_view_txt = alertLayout.findViewById(R.id.session_rating_view_txt);
+            final TextView cancel_txt = alertLayout.findViewById(R.id.cancel_txt);
+            final TextView confirm_txt = alertLayout.findViewById(R.id.confirm_txt);
+            final EditText comment_edt = alertLayout.findViewById(R.id.comment_edt);
+            sessionNametxt.setText(sessionName);
 
-        LayoutInflater inflater = getLayoutInflater();
-        View alertLayout = inflater.inflate(R.layout.rating_dialog_layout, null);
-        final RatingBar ratingBar = alertLayout.findViewById(R.id.rating_bar);
-        final TextView sessionNametxt = alertLayout.findViewById(R.id.session_name_txt);
-        final TextView session_rating_view_txt = alertLayout.findViewById(R.id.session_rating_view_txt);
-        final TextView cancel_txt = alertLayout.findViewById(R.id.cancel_txt);
-        final TextView confirm_txt = alertLayout.findViewById(R.id.confirm_txt);
-        final EditText comment_edt = alertLayout.findViewById(R.id.comment_edt);
-        sessionNametxt.setText(sessionName);
-
-        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-            @Override
-            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
-                if (b) {
-                    int rating = (int) ratingBar.getRating();
-                    if (rating == 1) {
-                        session_rating_view_txt.setText("Very poor");
-                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.remarks));
-                    } else if (rating == 2) {
-                        session_rating_view_txt.setText("Poor");
-                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.remarks));
-                    } else if (rating == 3) {
-                        session_rating_view_txt.setText("Average");
-                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.rating_bar));
-                    } else if (rating == 4) {
-                        session_rating_view_txt.setText("Good");
-                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.present));
-                    } else if (rating == 5) {
-                        session_rating_view_txt.setText("Excellent");
-                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.present));
+            ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                @Override
+                public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                    if (b) {
+                        int rating = (int) ratingBar.getRating();
+                        if (rating == 1) {
+                            session_rating_view_txt.setText("Very poor");
+                            session_rating_view_txt.setTextColor(getResources().getColor(R.color.remarks));
+                        } else if (rating == 2) {
+                            session_rating_view_txt.setText("Poor");
+                            session_rating_view_txt.setTextColor(getResources().getColor(R.color.remarks));
+                        } else if (rating == 3) {
+                            session_rating_view_txt.setText("Average");
+                            session_rating_view_txt.setTextColor(getResources().getColor(R.color.rating_bar));
+                        } else if (rating == 4) {
+                            session_rating_view_txt.setText("Good");
+                            session_rating_view_txt.setTextColor(getResources().getColor(R.color.present));
+                        } else if (rating == 5) {
+                            session_rating_view_txt.setText("Excellent");
+                            session_rating_view_txt.setTextColor(getResources().getColor(R.color.present));
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        AlertDialog.Builder sayWindows = new AlertDialog.Builder(
-                mContext);
+            AlertDialog.Builder sayWindows = new AlertDialog.Builder(
+                    mContext);
 
-        sayWindows.setPositiveButton("Rate", null);
-        sayWindows.setNegativeButton("Not Now", null);
-        sayWindows.setView(alertLayout);
+            sayWindows.setPositiveButton("Rate", null);
+            sayWindows.setNegativeButton("Not Now", null);
+            sayWindows.setView(alertLayout);
 
-        final AlertDialog mAlertDialog = sayWindows.create();
-        mAlertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            final AlertDialog mAlertDialog = sayWindows.create();
+            mAlertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
 
-            @Override
-            public void onShow(DialogInterface dialog) {
+                @Override
+                public void onShow(DialogInterface dialog) {
 
-                Button b = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                b.setOnClickListener(new View.OnClickListener() {
+                    Button b = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                    b.setOnClickListener(new View.OnClickListener() {
 
-                    @Override
-                    public void onClick(View view) {
-                        // TODO Do something
-                        String rating = String.valueOf(ratingBar.getRating());
+                        @Override
+                        public void onClick(View view) {
+                            // TODO Do something
+                            String rating = String.valueOf(ratingBar.getRating());
 //                Toast.makeText(getApplicationContext(), rating, Toast.LENGTH_LONG).show();
-                        commentStr = comment_edt.getText().toString();
-                        if (commentStr.equalsIgnoreCase("")) {
-                            commentStr = session_rating_view_txt.getText().toString();
-                        }
-                        ratingValueStr = String.valueOf(ratingBar.getRating());
-                        if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
-                            if (!ratingValueStr.equalsIgnoreCase("0.0")) {
-                                callAddrating();
-                                mAlertDialog.dismiss();
-                            } else {
-                                Utils.ping(mContext, "Please Select Rate.");
+                            commentStr = comment_edt.getText().toString();
+                            if (commentStr.equalsIgnoreCase("")) {
+                                commentStr = session_rating_view_txt.getText().toString();
                             }
-                        } else {
-                            Utils.ping(mContext, getResources().getString(R.string.not_loging));
+                            ratingValueStr = String.valueOf(ratingBar.getRating());
+                            if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
+                                if (!ratingValueStr.equalsIgnoreCase("0.0")) {
+                                    callAddrating();
+                                    mAlertDialog.dismiss();
+                                } else {
+                                    Utils.ping(mContext, "Please Select Rate.");
+                                }
+                            } else {
+                                Utils.ping(mContext, getResources().getString(R.string.not_loging));
+                            }
                         }
-                    }
-                });
-            }
-        });
-        mAlertDialog.show();
-
+                    });
+                }
+            });
+            mAlertDialog.show();
     }
 
     //Use for AddRating

@@ -36,6 +36,7 @@ import com.adms.classsafari.databinding.ActivityMySessionBinding;
 import com.adms.classsafari.databinding.ChangePasswordDialogBinding;
 import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
 import com.adms.classsafari.databinding.LayoutMenuBinding;
+import com.adms.classsafari.databinding.SessiondetailConfirmationDialogBinding;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,12 +58,14 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
     LayoutMenuBinding menuBinding;
     ChangePasswordDialogBinding changePasswordDialogBinding;
 
+    SessiondetailConfirmationDialogBinding sessiondetailConfirmationDialogBinding;
+
     Context mContext;
     UserSessionListAdapter userSessionListAdapter;
     List<sessionDataModel> sessionList;
 
     //Use for Dialog
-    Dialog confimDialog, sessionDetailDialog, changeDialog;
+    Dialog confimDialog, changeDialog;
     String paymentStatusstr, sessionIDStr, selectedsessionIDStr, sessionPriceStr, orderIDStr, flag, sessionNameStr;
     SessionDetailModel dataResponse;
     int SessionHour = 0;
@@ -92,7 +95,6 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
 
     public void init() {
         callSessionReportApi();
-//        callSessionListApi();
     }
 
     public void setListner() {
@@ -104,19 +106,9 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.back:
-                //                if (wheretocometypeStr.equalsIgnoreCase("mySession")) {
-//                    Intent intent = new Intent(mContext, MySession.class);
-//                    intent.putExtra("wheretocometype", wheretocometypeStr);
-//                    startActivity(intent);
-//                }else if(wheretocometypeStr.equalsIgnoreCase("myAccount")){
-//                    Intent intent = new Intent(mContext, MyAccountActivity.class);
-//                    intent.putExtra("wheretocometype", wheretocometypeStr);
-//                    startActivity(intent);
-//                }else if(wheretocometypeStr.equalsIgnoreCase("menu")){
                 Intent intent = new Intent(mContext, SearchByUser.class);
                 intent.putExtra("wheretocometype", wheretocometypeStr);
                 startActivity(intent);
-//                }
                 break;
             case R.id.menu:
                 menuDialog();
@@ -193,9 +185,9 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                     String[] spilt = selectedId.get(i).split("\\|");
                     sessionIDStr = spilt[0];
                     flag = spilt[1];
-                    sessionNameStr=spilt[2];
+                    sessionNameStr = spilt[2];
                 }
-
+                selectedsessionIDStr = sessionIDStr;
                 if (flag.equalsIgnoreCase("1")) {
 //                    SessionDetailDialog();
                     Intent intent = new Intent(mContext, SessionDetailActivity.class);
@@ -203,8 +195,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                     intent.putExtra("sessionID", sessionIDStr);
                     startActivity(intent);
                 } else {
-                    callSessionListApi();
-//                    ConformSessionDialog();
+                    SessionConfirmationDialog();
                 }
             }
         });
@@ -212,53 +203,6 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         mySessionBinding.sessionRcList.setLayoutManager(mLayoutManager);
         mySessionBinding.sessionRcList.setItemAnimator(new DefaultItemAnimator());
         mySessionBinding.sessionRcList.setAdapter(userSessionListAdapter);
-    }
-
-    public void ConformSessionDialog() {
-
-        confirmSessionDialogBinding = DataBindingUtil.
-                inflate(LayoutInflater.from(mContext), R.layout.confirm_session_dialog, (ViewGroup) mySessionBinding.getRoot(), false);
-
-        confimDialog = new Dialog(mContext, R.style.Theme_Dialog);
-        Window window = confimDialog.getWindow();
-        WindowManager.LayoutParams wlp = window.getAttributes();
-        confimDialog.getWindow().getAttributes().verticalMargin = 0.20f;
-        wlp.gravity = Gravity.TOP;
-        window.setAttributes(wlp);
-
-        confimDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-
-        confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        confimDialog.setCancelable(false);
-        confimDialog.setContentView(confirmSessionDialogBinding.getRoot());
-
-        confirmSessionDialogBinding.sessionStudentTxtView.setText("FAMILY NAME");
-        confirmSessionDialogBinding.sessionStudentTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
-//        confirmSessionDialogBinding.linear.setVisibility(View.GONE);
-        setDialogData();
-        confirmSessionDialogBinding.cancelTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                confimDialog.dismiss();
-            }
-        });
-        confirmSessionDialogBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("") &&
-                        !selectedsessionIDStr.equalsIgnoreCase("") &&
-                        !sessionPriceStr.equalsIgnoreCase("0.00")) {
-                    callpaymentRequestApi();
-                } else {
-                    paymentStatusstr = "1";
-                    callSessionConfirmationApi();
-                }
-                confimDialog.dismiss();
-            }
-        });
-
-
-        confimDialog.show();
     }
 
     //Use for paymentRequest
@@ -319,7 +263,6 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         return map;
     }
 
-
     //Use for Family and Child Session Confirmation
     public void callSessionConfirmationApi() {
         if (Utils.isNetworkConnected(mContext)) {
@@ -374,31 +317,106 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
     //Use for SessionList
     public void callSessionListApi() {
         if (Utils.checkNetwork(mContext)) {
-//            Utils.showDialog(mContext);
-            ApiHandler.getApiService().get_SessionList_Search_Criteria(getSessionListDetail(), new retrofit.Callback<SessionDetailModel>() {
+
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_SessionBySessionID(getSessionListDetail(), new retrofit.Callback<SessionDetailModel>() {
                 @Override
-                public void success(SessionDetailModel sessionInfo, Response response) {
+                public void success(SessionDetailModel sessionDetailInfo, Response response) {
                     Utils.dismissDialog();
-                    if (sessionInfo == null) {
+                    if (sessionDetailInfo == null) {
                         Utils.ping(mContext, getString(R.string.something_wrong));
                         return;
                     }
-                    if (sessionInfo.getSuccess() == null) {
+                    if (sessionDetailInfo.getSuccess() == null) {
                         Utils.ping(mContext, getString(R.string.something_wrong));
                         return;
                     }
-                    if (sessionInfo.getSuccess().equalsIgnoreCase("false")) {
+                    if (sessionDetailInfo.getSuccess().equalsIgnoreCase("false")) {
                         Utils.ping(mContext, getString(R.string.false_msg));
                         return;
                     }
-                    if (sessionInfo.getSuccess().equalsIgnoreCase("True")) {
+                    if (sessionDetailInfo.getSuccess().equalsIgnoreCase("True")) {
 
-                        dataResponse = sessionInfo;
-//                        callSessionReportApi();
+                        if (sessionDetailInfo.getData().size() > 0) {
+                            dataResponse = sessionDetailInfo;
+                            for (int j = 0; j < dataResponse.getData().size(); j++) {
+                                sessiondetailConfirmationDialogBinding.sessionNameTxt.setText(dataResponse.getData().get(j).getSessionName());
+                                sessiondetailConfirmationDialogBinding.ratingBar.setRating(Float.parseFloat(dataResponse.getData().get(j).getRating()));
+//                                sessiondetailConfirmationDialogBinding.ratingUserTxt.setText();
+                                sessiondetailConfirmationDialogBinding.tutorNameTxt.setText(dataResponse.getData().get(j).getName());
+                                sessiondetailConfirmationDialogBinding.locationTxt.setText(dataResponse.getData().get(j).getRegionName());
+                                sessiondetailConfirmationDialogBinding.startDateTxt.setText(dataResponse.getData().get(j).getStartDate());
+                                sessiondetailConfirmationDialogBinding.endDateTxt.setText(dataResponse.getData().get(j).getEndDate());
+                                sessionPriceStr=dataResponse.getData().get(j).getSessionAmount();
+                                AppConfiguration.classsessionPrice = dataResponse.getData().get(j).getSessionAmount();
+                                String[] spiltPipes = dataResponse.getData().get(j).getSchedule().split("\\|");
+                                String[] spiltComma;
+                                String[] spiltDash;
+                                Log.d("spilt", "" + spiltPipes.toString());
+                                for (int i = 0; i < spiltPipes.length; i++) {
+                                    spiltComma = spiltPipes[i].split("\\,");
+                                    spiltDash = spiltComma[1].split("\\-");
+                                    calculateHours(spiltDash[0], spiltDash[1]);
+                                    dataResponse.getData().get(j).setDateTime(spiltDash[0]);
+                                    Log.d("DateTime", spiltDash[0]);
+                                    sessiondetailConfirmationDialogBinding.durationTxt.setText(SessionHour + " hr " + SessionMinit + " min");
+                                    switch (spiltComma[0]) {
+                                        case "sun":
+                                            sessiondetailConfirmationDialogBinding.sunTimeTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.sundayBtn.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.sunTimeTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.sundayBtn.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.sunTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
+                                            break;
+                                        case "mon":
+                                            sessiondetailConfirmationDialogBinding.monTimeTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.mondayBtn.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.monTimeTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.mondayBtn.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.monTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
+                                            break;
+                                        case "tue":
+                                            sessiondetailConfirmationDialogBinding.tuesTimeTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.tuesdayBtn.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.tuesTimeTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.tuesdayBtn.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.tuesTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
+                                            break;
+                                        case "wed":
+                                            sessiondetailConfirmationDialogBinding.wedTimeTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.wednesdayBtn.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.wedTimeTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.wednesdayBtn.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.wedTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
+                                            break;
+                                        case "thu":
+                                            sessiondetailConfirmationDialogBinding.thurTimeTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.thursdayBtn.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.thurTimeTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.thursdayBtn.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.thurTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
+                                            break;
+                                        case "fri":
+                                            sessiondetailConfirmationDialogBinding.friTimeTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.fridayBtn.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.friTimeTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.fridayBtn.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.friTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
+                                            break;
+                                        case "sat":
+                                            sessiondetailConfirmationDialogBinding.satTimeTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.saturdayBtn.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.satTimeTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.saturdayBtn.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.satTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
+                                            break;
+                                        default:
 
-                        ConformSessionDialog();
-                        Utils.dismissDialog();
+                                    }
+                                }
+                            }
 
+                        }
                     }
                 }
 
@@ -417,90 +435,8 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
 
     private Map<String, String> getSessionListDetail() {
         Map<String, String> map = new HashMap<>();
-        map.put("SessionName", sessionNameStr);
-        map.put("AddressCity", "");
-        map.put("LessonTypeName", "");
-        map.put("BoardName", "");
-        map.put("StandardName", "");
-        map.put("StreamName", "");
-        map.put("Gender_ID", "");
-        map.put("CoachType_ID", "");
+        map.put("SessionID", sessionIDStr);
         return map;
-    }
-
-    public void setDialogData() {
-        if (!flag.equalsIgnoreCase("1")) {
-            confirmSessionDialogBinding.timeTxtView.setText("Date");
-            for (int i = 0; i < dataResponse.getData().size(); i++) {
-                if (sessionIDStr.equalsIgnoreCase(dataResponse.getData().get(i).getSessionID())) {
-                    selectedsessionIDStr = dataResponse.getData().get(i).getSessionID();
-                    if (dataResponse.getData().get(i).getSessionAmount().equalsIgnoreCase("0.00")) {
-                        confirmSessionDialogBinding.sessionFeeTxt.setText("Free");
-                    } else {
-                        confirmSessionDialogBinding.sessionFeeTxt.setText("₹ " + dataResponse.getData().get(i).getSessionAmount() + " /-");
-                    }
-                    sessionPriceStr = dataResponse.getData().get(i).getSessionAmount();
-                    confirmSessionDialogBinding.sessionNameTxt.setText(dataResponse.getData().get(i).getSessionName());
-                    confirmSessionDialogBinding.locationTxt.setText(dataResponse.getData().get(i).getAddressLine1()
-                            + ", " + dataResponse.getData().get(i).getRegionName()
-                            + ", " + dataResponse.getData().get(i).getAddressCity()
-                            + ", " + dataResponse.getData().get(i).getAddressState()
-                            + "- " + dataResponse.getData().get(i).getAddressZipCode());
-                    confirmSessionDialogBinding.sessionTeacherTxt.setText(dataResponse.getData().get(i).getName());
-                    confirmSessionDialogBinding.durationTxt.setText(dataResponse.getData().get(i).getStartDate() + " To " + dataResponse.getData().get(i).getEndDate());
-                    String[] spiltPipes = dataResponse.getData().get(i).getSchedule().split("\\|");
-                    String[] spiltComma;
-                    String[] spiltDash;
-                    Log.d("spilt", "" + spiltPipes.toString());
-                    for (int j = 0; j < spiltPipes.length; j++) {
-                        spiltComma = spiltPipes[j].split("\\,");
-                        spiltDash = spiltComma[1].split("\\-");
-                        calculateHours(spiltDash[0], spiltDash[1]);
-                    }
-                    confirmSessionDialogBinding.timeTxt.setText(SessionHour + " hr " + SessionMinit + " min");
-
-                }
-            }
-        }
-//        else {
-//            for (int i = 0; i < dataResponse.getData().size(); i++) {
-//                if (sessionIDStr.equalsIgnoreCase(dataResponse.getData().get(i).getSessionID())) {
-//                    if (!dataResponse.getData().get(i).getCoachTypeID().equalsIgnoreCase("1")) {
-//                        dialogSessionDetailBinding.linearBoard.setVisibility(View.GONE);
-//                        dialogSessionDetailBinding.linearStandard.setVisibility(View.GONE);
-//                        dialogSessionDetailBinding.linearStream.setVisibility(View.GONE);
-//
-//
-//                    } else {
-//                        dialogSessionDetailBinding.linearBoard.setVisibility(View.VISIBLE);
-//                        dialogSessionDetailBinding.linearStandard.setVisibility(View.VISIBLE);
-//                        dialogSessionDetailBinding.linearStream.setVisibility(View.VISIBLE);
-//                    }
-//                    dialogSessionDetailBinding.sessionNameTxt.setText(dataResponse.getData().get(i).getSessionName());
-//                    dialogSessionDetailBinding.sessionStudentTxt.setText(dataResponse.getData().get(i).getName());
-//                    dialogSessionDetailBinding.sessionBoardTxt.setText(dataResponse.getData().get(i).getBoard());
-//                    dialogSessionDetailBinding.sessionStandardTxt.setText(dataResponse.getData().get(i).getStandard());
-//                    dialogSessionDetailBinding.sessionStreamTxt.setText(dataResponse.getData().get(i).getStream());
-//                    dialogSessionDetailBinding.sessionLessionTxt.setText(dataResponse.getData().get(i).getLessionTypeName());
-//                    dialogSessionDetailBinding.locationTxt.setText(dataResponse.getData().get(i).getAddressLine1()
-//                            + ", " + dataResponse.getData().get(i).getRegionName()
-//                            + ", " + dataResponse.getData().get(i).getAddressCity()
-//                            + ", " + dataResponse.getData().get(i).getAddressState()
-//                            + "- " + dataResponse.getData().get(i).getAddressZipCode());
-//                    dialogSessionDetailBinding.sessionDateTxt.setText(dataResponse.getData().get(i).getStartDate() + " To " + dataResponse.getData().get(i).getEndDate());
-//                    String[] spiltPipes = dataResponse.getData().get(i).getSchedule().split("\\|");
-//                    String[] spiltComma;
-//                    String[] spiltDash;
-//                    Log.d("spilt", "" + spiltPipes.toString());
-//                    for (int j = 0; j < spiltPipes.length; j++) {
-//                        spiltComma = spiltPipes[j].split("\\,");
-//                        spiltDash = spiltComma[1].split("\\-");
-//                        calculateHours(spiltDash[0], spiltDash[1]);
-//                    }
-//                    dialogSessionDetailBinding.sessionTimeTxt.setText(SessionHour + " hr " + SessionMinit + " min");
-//                }
-//            }
-//        }
     }
 
     public void calculateHours(String time1, String time2) {
@@ -527,39 +463,6 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
 
 
     }
-
-
-//    public void SessionDetailDialog() {
-//        dialogSessionDetailBinding = DataBindingUtil.
-//                inflate(LayoutInflater.from(mContext), R.layout.dialog_session_detail, (ViewGroup) mySessionBinding.getRoot(), false);
-//
-//
-//        sessionDetailDialog = new Dialog(mContext, R.style.Theme_Dialog);
-//        Window window = sessionDetailDialog.getWindow();
-//        WindowManager.LayoutParams wlp = window.getAttributes();
-//        sessionDetailDialog.getWindow().getAttributes().verticalMargin = 0.20f;
-//        wlp.gravity = Gravity.TOP;
-//        window.setAttributes(wlp);
-//
-//        sessionDetailDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-//
-//        sessionDetailDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        sessionDetailDialog.setCancelable(false);
-//        sessionDetailDialog.setContentView(dialogSessionDetailBinding.getRoot());
-//
-//        dialogSessionDetailBinding.sessionStudentTxtView.setText("TEACHER NAME");
-//        setDialogData();
-//
-//        dialogSessionDetailBinding.cancelTxt.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                sessionDetailDialog.dismiss();
-//            }
-//        });
-//
-//
-//        sessionDetailDialog.show();
-//    }
 
 
     public void changePasswordDialog() {
@@ -760,94 +663,49 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                         .show();
             }
         });
-//        menuBinding = DataBindingUtil.
-//                inflate(LayoutInflater.from(mContext), R.layout.layout_menu, (ViewGroup) mySessionBinding.getRoot(), false);
-//
-//        menuDialog = new Dialog(mContext, R.style.Theme_Dialog);
-//        Window window = menuDialog.getWindow();
-//        WindowManager.LayoutParams wlp = window.getAttributes();
-//        menuDialog.getWindow().getAttributes().verticalMargin = 0.1F;
-//        wlp.gravity = Gravity.TOP;
-//        window.setAttributes(wlp);
-//
-//        menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-//        menuDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        menuDialog.setCanceledOnTouchOutside(true);
-//        menuDialog.setContentView(menuBinding.getRoot());
-//
-//        menuBinding.userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
-//        menuBinding.btnMyReport.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent imyaccount = new Intent(mContext, MyAccountActivity.class);
-//                imyaccount.putExtra("wheretocometype", "mySession");
-//                startActivity(imyaccount);
-//            }
-//        });
-//        menuBinding.btnMySession.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent isession = new Intent(mContext, MySession.class);
-//                isession.putExtra("wheretocometype", "mySession");
-//                startActivity(isession);
-//                menuDialog.dismiss();
-//            }
-//        });
-//        menuBinding.btnChangePassword.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                menuDialog.dismiss();
-//                changePasswordDialog();
-//            }
-//        });
-//        menuBinding.btnmyfamily.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(mContext, FamilyListActivity.class);
-//                intent.putExtra("froncontanct", "true");
-//                intent.putExtra("wheretocometype", "mySession");
-//                intent.putExtra("familyNameStr", Utils.getPref(mContext, "RegisterUserName"));
-//                intent.putExtra("familyID", Utils.getPref(mContext, "coachTypeID"));
-//                startActivity(intent);
-//            }
-//        });
-//        menuBinding.btnLogout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                menuDialog.dismiss();
-//                new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
-//                        .setCancelable(false)
-//                        .setTitle("Logout")
-//                        .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
-//                        .setMessage("Are you sure you want to logout?")
-//                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                Utils.setPref(mContext, "coachID", "");
-//                                Utils.setPref(mContext, "coachTypeID", "");
-//                                Utils.setPref(mContext, "RegisterUserName", "");
-//                                Utils.setPref(mContext, "RegisterEmail", "");
-//                                Utils.setPref(mContext, "LoginType", "");
-//                                Utils.setPref(mContext, "Password", "");
-//                                Utils.setPref(mContext, "FamilyID", "");
-//                                Utils.setPref(mContext, "location", "");
-//                                Utils.setPref(mContext, "sessionName", "");
-//                                Intent intentLogin = new Intent(mContext, SearchByUser.class);
-//                                intentLogin.putExtra("frontLogin", "beforeLogin");
-//                                startActivity(intentLogin);
-//                                finish();
-//                            }
-//                        })
-//                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                // do nothing
-//
-//                            }
-//                        })
-//                        .setIcon(R.drawable.safari)
-//                        .show();
-//            }
-//        });
         menuDialog.show();
+    }
+
+    public void SessionConfirmationDialog() {
+        sessiondetailConfirmationDialogBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContext), R.layout.sessiondetail_confirmation_dialog, (ViewGroup) mySessionBinding.getRoot(), false);
+        confimDialog = new Dialog(mContext, R.style.Theme_Dialog);
+        Window window = confimDialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        confimDialog.getWindow().getAttributes().verticalMargin = 0.20f;
+        wlp.gravity = Gravity.TOP;
+        window.setAttributes(wlp);
+
+        confimDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+
+        confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        confimDialog.setCancelable(false);
+        confimDialog.setContentView(sessiondetailConfirmationDialogBinding.getRoot());
+        callSessionListApi();
+
+
+        sessiondetailConfirmationDialogBinding.cancelTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                confimDialog.dismiss();
+            }
+        });
+        sessiondetailConfirmationDialogBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("") &&
+                        !selectedsessionIDStr.equalsIgnoreCase("") &&
+                        !sessionPriceStr.equalsIgnoreCase("0.00")) {
+                    callpaymentRequestApi();
+                } else {
+                    paymentStatusstr = "1";
+                    callSessionConfirmationApi();
+                }
+                confimDialog.dismiss();
+            }
+        });
+        confimDialog.show();
+
     }
 
 

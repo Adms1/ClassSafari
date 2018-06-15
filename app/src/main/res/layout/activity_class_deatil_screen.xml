@@ -80,7 +80,8 @@
                     android:drawableLeft="@drawable/person"
                     android:drawablePadding="@dimen/_3sdp"
                     android:textSize="@dimen/_12sdp"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/board_txt"

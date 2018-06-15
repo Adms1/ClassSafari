@@ -69,7 +69,7 @@
                     android:layout_marginTop="@dimen/_5sdp"
                     android:background="@drawable/round_edittext"
                     android:hint="@string/search_user"
-                    android:imeOptions="actionDone"
+                    android:imeOptions="actionSearch"
                     android:paddingLeft="@dimen/_5sdp"
                     android:paddingRight="@dimen/_9sdp"
                     android:singleLine="true"/>

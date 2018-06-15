@@ -6,16 +6,16 @@
 
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_45sdp"
+        android:layout_height="@dimen/_35sdp"
         android:background="@drawable/list_line1"
         android:stretchColumns="*">
 
         <TableRow
             android:id="@+id/tableRow1"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_45sdp"
+            android:layout_height="@dimen/_30sdp"
             android:background="@color/search_class"
-            android:weightSum="6">
+            android:weightSum="4">
             <TextView
                 android:id="@+id/srno_txt"
                 android:layout_width="0dp"
@@ -39,14 +39,15 @@
                 android:paddingLeft="@dimen/_5sdp"
                 android:text="Test"
                 android:textColor="@color/text_color"
-                android:textSize="@dimen/_9sdp" />
+                android:textSize="@dimen/_9sdp"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/date_txt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="0.1dp"
-                android:layout_weight="1.2"
+                android:layout_weight="1.3"
                 android:background="@color/white"
                 android:gravity="start|center_vertical"
                 android:paddingLeft="@dimen/_5sdp"
@@ -59,7 +60,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="0.1dp"
-                android:layout_weight="1"
+                android:layout_weight="1.3"
                 android:background="@color/white"
                 android:gravity="start|center_vertical"
                 android:paddingLeft="@dimen/_9sdp"
@@ -91,7 +92,8 @@
                 android:paddingLeft="@dimen/_5sdp"
                 android:text="Sucess"
                 android:textColor="@color/text_color"
-                android:textSize="@dimen/_9sdp" />
+                android:textSize="@dimen/_9sdp"
+                android:visibility="gone"/>
 
         </TableRow>
     </TableLayout>

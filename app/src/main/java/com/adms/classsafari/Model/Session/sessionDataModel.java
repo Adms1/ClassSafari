@@ -116,6 +116,7 @@ public class sessionDataModel{
     @SerializedName("AddressLine2")
     @Expose
     private String addressLine2;
+
     @SerializedName("RegionName")
     @Expose
     private String regionName;

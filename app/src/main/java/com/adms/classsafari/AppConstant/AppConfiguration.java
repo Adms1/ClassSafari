@@ -6,8 +6,8 @@ package com.adms.classsafari.AppConstant;
 
 public class AppConfiguration {
 
-    public static final String Mode="LIVE";
-//    public static final String Mode="TEST";
+//    public static final String Mode="LIVE";
+    public static final String Mode="TEST";
 
 
 
@@ -26,6 +26,8 @@ public class AppConfiguration {
     public static String UserName;
     public static String RegisterEmail;
     public static String ClassLocation;
+    public static String SessionDate;
+    public static String RegionName;
 
 
     //ClassSafari String
@@ -37,6 +39,15 @@ public class AppConfiguration {
     public static String classsessionPrice;
     public static String famliyName;
     public static String name;
+
+
+    //Validation String
+    public static final String EMAIL_REGEX = "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"
+            + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+            + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
+            + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
+            + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
+            + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
 
 
 
