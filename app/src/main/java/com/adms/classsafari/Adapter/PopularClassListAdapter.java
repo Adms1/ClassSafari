@@ -72,7 +72,7 @@ public class PopularClassListAdapter extends RecyclerView.Adapter<PopularClassLi
         holder.popular_Session_image_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    holder.main_linear.setBackgroundResource(R.drawable.edit_box);
+                    holder.main_linear.setBackgroundResource(R.drawable.linear_shape);
                     SessionDetail = new ArrayList<>();
                     SessionDetail.add(arrayList.get(position).getSessionID());
                     onViewClick.getViewClick();

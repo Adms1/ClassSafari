@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     ConfirmSessionDialogBinding confirmSessionDialogBinding;
     Context mContext;
     String usernameStr, passwordStr, sessionIDStr, contatIDstr,
-            whereTocomestr, orderIDStr, checkStr, paymentStatusstr,
+            whereTocomestr, checkStr,
             boardStr, standardStr, streamStr, locationStr, classNameStr,
             searchTypeStr, subjectStr, genderStr, frontloginStr,
             ratingLoginStr, searchfront, sessionType, durationStr,
@@ -51,9 +51,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     //    Use for Dialog
     Dialog forgotDialog;
     String EmailIdStr, type, searchByStr, familylocationStr, familysessionStudentStr,firsttimesearch;
-    //    CallbackManager callbackManager;
-//    private LoginManager mLoginManager;
-//    private AccessTokenTracker mAccessTokenTracker;
     private boolean loggedin;
 
     @Override
@@ -86,14 +83,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
             checkUnmPwd();
         }
-
-        // Init
-//        setupInit();
-
-        // Facebook
-//        setupFacebook();
-
-
         setListner();
     }
 
@@ -135,13 +124,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.login_btn:
                 getInsertedValue();
-//                if (!EmailIdStr.equalsIgnoreCase("") && Utils.isValidEmaillId(EmailIdStr)
-//                        && !passwordStr.equalsIgnoreCase("") && passwordStr.length() >= 4 && passwordStr.length() <= 8) {
-//                    checkStr = "login";
-//                    callTeacherLoginApi();
-//                } else {
-//                    Utils.ping(mContext, "Invalid Email Address or Password.");
-//                }
                 if(Validation.checkEmail(EmailIdStr)&&Validation.checkPassword(passwordStr)){
                     checkStr = "login";
                     callTeacherLoginApi();
@@ -150,13 +132,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
                 break;
             case R.id.facebook_img:
-//                if (loggedin) {
-//                    LoginManager.getInstance().logOut();
-//                    loggedin = false;
-//                } else {
-//                    mAccessTokenTracker.startTracking();
-//                    mLoginManager.logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", "email", "user_birthday"));
-//                }
                 break;
             case R.id.forgot_pass_txt:
                 forgotPasswordDialog();
@@ -171,12 +146,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.password_edt:
                 if (i == EditorInfo.IME_ACTION_DONE) {
                     getInsertedValue();
-//                    if (!EmailIdStr.equalsIgnoreCase("") && Utils.isValidEmaillId(EmailIdStr) && !passwordStr.equalsIgnoreCase("") && passwordStr.length() >= 4 && passwordStr.length() <= 8) {
-//                        checkStr = "login";
-//                        callTeacherLoginApi();
-//                    } else {
-//                        Utils.ping(mContext, "Invalid Email Address or Password.");
-//                    }
                     if(Validation.checkEmail(EmailIdStr)&&Validation.checkPassword(passwordStr)){
                         checkStr = "login";
                         callTeacherLoginApi();
@@ -188,84 +157,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         return false;
     }
-
-    private void setupInit() {
-//        FacebookSdk.sdkInitialize(getApplicationContext());
-//        loggedin = false;
-    }
-
-    private void setupFacebook() {
-//        mLoginManager = LoginManager.getInstance();
-//        callbackManager = CallbackManager.Factory.create();
-//        mAccessTokenTracker = new AccessTokenTracker() {
-//            @Override
-//            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-//                // handle
-//            }
-//        };
-//
-//        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-//            @Override
-//            public void onSuccess(LoginResult loginResult) {
-//                Utils.ping(mContext, "HEllo Adms");
-//            }
-//
-//            @Override
-//            public void onCancel() {
-//
-//            }
-//
-//            @Override
-//            public void onError(FacebookException error) {
-//
-//            }
-//        });
-//        if (AccessToken.getCurrentAccessToken() != null) {
-//            requestObjectUser(AccessToken.getCurrentAccessToken());
-//        }
-    }
-
-//    private void requestObjectUser(final AccessToken accessToken) {
-//        GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
-//            @Override
-//            public void onCompleted(JSONObject object, GraphResponse response) {
-//                if (response.getError() != null) {
-//                    // handle error
-//                } else {
-//                    Toast.makeText(LoginActivity.this, "Access Token: " + accessToken.getToken(), Toast.LENGTH_SHORT).show();
-//
-//                    loggedin = true;
-//
-////                    mFacebookText.setText("Log out");
-//                    Log.d("response", response.toString());
-//                    Log.d("First Name: ", "" + object.optString("first_name"));
-//                    Log.d("Last Name: ", "" + object.optString("last_name"));
-//                    Log.d("Email: ", "" + object.optString("email"));
-//
-//
-//                    try {
-//                        String userId = String.valueOf(object.get("id"));
-//                        String profilePic = "https://graph.facebook.com/" + userId + "/picture?type=large";
-//                        Log.d("Profile Pic", profilePic);
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        });
-//
-////        Bundle parameters = new Bundle();
-//        parameters.putString("fields", "first_name,last_name,email");
-//        request.setParameters(parameters);
-//        request.executeAsync();
-//    }
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        callbackManager.onActivityResult(requestCode, resultCode, data);
-//    }
-
     @Override
     public void onBackPressed() {
         if (frontloginStr.equalsIgnoreCase("beforeLogin")) {
@@ -382,7 +273,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     Intent iFamilyList = new Intent(mContext, FamilyListActivity.class);
                                     iFamilyList.putExtra("sessionfees", AppConfiguration.classsessionPrice);
                                     iFamilyList.putExtra("sessionName", classNameStr);
-//                                    iFamilyList.putExtra("location",locationStr);
                                     iFamilyList.putExtra("duration", AppConfiguration.classsessionDuration);
                                     iFamilyList.putExtra("sessiondate", AppConfiguration.classsessionDate);
                                     iFamilyList.putExtra("froncontanct", "false");
@@ -424,7 +314,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             });
         } else {
-//            Utils.showCustomDialog(getResources().getString(R.string.app_name),getResources().getString(R.string.internet_connection_error),);
             Utils.ping(mContext,getResources().getString(R.string.internet_connection_error));
         }
     }

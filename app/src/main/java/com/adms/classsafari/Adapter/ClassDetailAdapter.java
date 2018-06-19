@@ -15,7 +15,6 @@ import com.adms.classsafari.Activites.SessionName;
 import com.adms.classsafari.Interface.bookClick;
 import com.adms.classsafari.Interface.onViewClick;
 import com.adms.classsafari.Model.Session.sessionDataModel;
-import com.adms.classsafari.Model.SessionConfirmationDetailModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.CardLayoutBinding;
 
@@ -24,12 +23,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by admsandroid on 3/5/2018.
  */
 
-public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.MyViewHolder>  {
+public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.MyViewHolder> {
 
     List<sessionDataModel> arrayList;
     int SessionHour = 0;
@@ -41,12 +41,10 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     onViewClick onViewClick;
     bookClick bookClick;
     CardLayoutBinding cardLayoutBinding;
-
     private Context mContext;
     private ArrayList<String> SessionDetail;
     private ArrayList<String> SessionBookDetail;
-    SessionConfirmationDetailModel sessionConfirmationDetailModel=new SessionConfirmationDetailModel();
-
+    String hours,minit;
     public ClassDetailAdapter(Context mContext, List<sessionDataModel> arrayList, String searchByStr, String locationStr,
                               String classNameStr, String boardStr, String streamStr, String standardStr, String searchTypeStr,
                               String wheretoComeStr, String searchfront, String sessionType, String firsttimesearch, String regionName,
@@ -161,35 +159,6 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                 SessionBookDetail = new ArrayList<>();
                 SessionBookDetail.add(arrayList.get(position).getSessionID());
                 bookClick.bookClick();
-//                sessionConfirmationDetailModel.setSessionId(arrayList.get(position).getSessionID());
-//                sessionConfirmationDetailModel.setSessionName(arrayList.get(position).getSessionName());
-//                sessionConfirmationDetailModel.setFroncontanct("false");
-//                sessionConfirmationDetailModel.setRating(arrayList.get(position).getRating());
-//                sessionConfirmationDetailModel.setRatingValue(String.valueOf(arrayList.get(position).getTotalRatingUser()));
-//                sessionConfirmationDetailModel.setTeacherName(arrayList.get(position).getName());
-//                sessionConfirmationDetailModel.setRegion(arrayList.get(position).getRegionName());
-//                sessionConfirmationDetailModel.setStartdate(arrayList.get(position).getStartDate());
-//                sessionConfirmationDetailModel.setEnddate(arrayList.get(position).getEndDate());
-//                sessionConfirmationDetailModel.setSchdule(arrayList.get(position).getSchedule());
-//                sessionConfirmationDetailModel.setDuration(cardLayoutBinding.durationTxt.getText().toString());
-//                sessionConfirmationDetailModel.setPrice(arrayList.get(position).getSessionPrice());
-//                sessionConfirmationDetailModel.setLocation(locationStr);
-//                sessionConfirmationDetailModel.setWheretoComeStr(wheretoComeStr);
-//                sessionConfirmationDetailModel.setBack("classDeatil");
-//                sessionConfirmationDetailModel.setBoard(boardStr);
-//                sessionConfirmationDetailModel.setStream(streamStr);
-//                sessionConfirmationDetailModel.setStandard(standardStr);
-//                sessionConfirmationDetailModel.setLessionName(arrayList.get(position).getLessionTypeName());
-//                sessionConfirmationDetailModel.setSearchBy(searchByStr);
-//                sessionConfirmationDetailModel.setSearchType(searchTypeStr);
-//                sessionConfirmationDetailModel.setFirsttimesearch(firsttimesearch);
-//                sessionConfirmationDetailModel.setGender(arrayList.get(position).getGenderID());
-
-//                Intent intent=new Intent(mContext, FamilyListActivity.class);
-////                intent.putExtra("detail",sessionConfirmationDetailModel);
-//
-//
-//                mContext.startActivity(intent);
             }
         });
 
@@ -272,10 +241,24 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
 //        if (arrayList.get(position).getCoachTypeID().equalsIgnoreCase("1")) {
 //            cardLayoutBinding.tutorNameTxt.setText("Academic " + "/" + arrayList.get(position).getName());
 //        } else {
-            cardLayoutBinding.tutorNameTxt.setText(arrayList.get(position).getName());//"Sports " + "/" +
+        cardLayoutBinding.tutorNameTxt.setText(arrayList.get(position).getName());//"Sports " + "/" +
 //        }
-
-        arrayList.get(position).setDuration(SessionHour + " hr " + SessionMinit + " min");
+        //String hours,minit;
+        if (SessionHour < 10) {
+            hours= "0"+SessionHour;
+        }else{
+            hours= String.valueOf(SessionHour);
+        }
+        if(SessionMinit<10){
+            minit="0"+SessionMinit;
+        }else{
+            minit=String.valueOf(SessionMinit);
+        }
+        if(minit.equalsIgnoreCase(("00"))) {
+            arrayList.get(position).setDuration(hours + " hr ");//+ " min"
+        }else{
+            arrayList.get(position).setDuration(hours + " hr " + minit + " min");//+ " min"
+        }
         cardLayoutBinding.durationTxt.setText(arrayList.get(position).getDuration());
         cardLayoutBinding.locationTxt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -308,7 +291,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
         Date date1, date2;
         int days, hours, min;
         String hourstr, minstr;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa", Locale.US);
         try {
             date1 = simpleDateFormat.parse(time1);
             date2 = simpleDateFormat.parse(time2);
@@ -332,7 +315,8 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     public ArrayList<String> getSessionDetail() {
         return SessionDetail;
     }
-    public ArrayList<String> getSessionBookDetail(){
+
+    public ArrayList<String> getSessionBookDetail() {
         return SessionBookDetail;
     }
 

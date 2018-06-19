@@ -74,7 +74,7 @@
         <item name="android:paddingLeft">@dimen/_5sdp</item>
         <item name="android:paddingRight">@dimen/_5sdp</item>
         <item name="android:maxLines">1</item>
-        <item name="android:imeOptions">actionSearch</item>
+        <item name="android:imeOptions">actionNext</item>
         <item name="android:singleLine">true</item>
     </style>
 

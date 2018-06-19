@@ -37,6 +37,7 @@
                 android:textStyle="bold"/>
         </LinearLayout>
         <TextView
+            android:id="@+id/text"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_45sdp"
             android:text="@string/selection_info"

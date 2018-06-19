@@ -385,9 +385,11 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                 dataResponse.getData().get(i).setSessionAmount("Free");
             }
             if (dataResponse.getData().get(i).getSessionAmount().equalsIgnoreCase("Free")) {
+                sessionNameBinding.rupesSymbol.setVisibility(View.GONE);
                 sessionNameBinding.priceTxt.setText(dataResponse.getData().get(i).getSessionAmount());
             } else {
-                sessionNameBinding.priceTxt.setText("₹ " + dataResponse.getData().get(i).getSessionAmount() + " /-");
+                sessionNameBinding.rupesSymbol.setVisibility(View.VISIBLE);
+                sessionNameBinding.priceTxt.setText(dataResponse.getData().get(i).getSessionAmount());//0.07F
             }
             AppConfiguration.classSessionName = dataResponse.getData().get(i).getSessionName();
             AppConfiguration.classteacherSessionName = dataResponse.getData().get(i).getName();
@@ -794,7 +796,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         menuDialog = new Dialog(mContext, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
-        menuDialog.getWindow().getAttributes().verticalMargin = 0.1F;
+        menuDialog.getWindow().getAttributes().verticalMargin = 0.07F;
         wlp.gravity = Gravity.TOP;
         window.setAttributes(wlp);
 

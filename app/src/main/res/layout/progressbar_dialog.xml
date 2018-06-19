@@ -24,16 +24,4 @@
     android:background="@android:color/transparent"
     app:loading_speed="11"
     app:loading_width="@dimen/_2sdp" />
-
-
-    <!--<com.wang.avi.AVLoadingIndicatorView-->
-        <!--android:id="@+id/avi"-->
-        <!--style="@style/AVLoadingIndicatorView"-->
-        <!--android:layout_width="@dimen/_50sdp"-->
-        <!--android:layout_height="@dimen/_50sdp"-->
-        <!--android:visibility="visible"-->
-        <!--app:indicatorColor="@color/blue"-->
-        <!--android:layout_centerInParent="true"-->
-        <!--app:indicatorName="BallSpinFadeLoaderIndicator" />-->
-
 </RelativeLayout>

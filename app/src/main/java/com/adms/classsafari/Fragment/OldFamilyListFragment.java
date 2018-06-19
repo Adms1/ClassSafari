@@ -338,6 +338,7 @@ String froncontanctStr;
                         finalFamilyDetail = familyInfoModel.getData();
                         if (familyInfoModel.getData() != null) {
                             if (familyInfoModel.getData().size() > 0) {
+                                oldFamilyListBinding.text.setVisibility(View.VISIBLE);
                                 oldFamilyListBinding.listLinear.setVisibility(View.VISIBLE);
                                 oldFamilyListBinding.noRecordTxt.setVisibility(View.GONE);
                                 fillExpLV();
@@ -368,6 +369,7 @@ String froncontanctStr;
                                 oldFamilyListBinding.lvExpfamilylist.setAdapter(expandableSelectStudentListAdapter);
                                 oldFamilyListBinding.lvExpfamilylist.expandGroup(0);
                             } else {
+                                oldFamilyListBinding.text.setVisibility(View.GONE);
                                 oldFamilyListBinding.listLinear.setVisibility(View.GONE);
                                 oldFamilyListBinding.noRecordTxt.setVisibility(View.VISIBLE);
                             }

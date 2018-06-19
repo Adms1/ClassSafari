@@ -2,10 +2,8 @@ package com.adms.classsafari.AppConstant;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
@@ -14,11 +12,8 @@ import android.net.NetworkInfo;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.adms.classsafari.R;
@@ -75,38 +70,6 @@ public class Utils {
             return true;
     }
 
-    public static void showCustomDialog(String title, String str, Activity activity) {
-        context = activity;
-        // custom dialog
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(activity);
-// ...Irrelevant code for customizing the buttons and title
-        LayoutInflater inflater = activity.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.custom_simple_dailog_ok, null);
-
-        dialogBuilder.setView(dialogView);
-
-        TextView txt_message_dialog = (TextView) dialogView.findViewById(R.id.txt_message_dialog);
-        txt_message_dialog.setText(str);
-
-        TextView txt_title_dialog = (TextView) dialogView.findViewById(R.id.txt_title_dialog);
-        txt_title_dialog.setText(title);
-
-        TextView btn_ok = (TextView) dialogView.findViewById(R.id.btn_ok);
-
-
-        final AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.show();
-        btn_ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                context.startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
-                alertDialog.dismiss();
-            }
-        });
-
-    }
-
     public static void showDialog(Context context) {
         dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -120,8 +83,6 @@ public class Utils {
         }else{
             rotateLoading.start();
         }
-//        avi=(AVLoadingIndicatorView)dialog.findViewById(R.id.avi) ;
-//      avi.show();
         dialog.show();
     }
 
@@ -183,47 +144,8 @@ public class Utils {
         Log.d("priviousDatefinal", "" + s);
         return String.valueOf(s);
     }
-
-    public static Integer calculateHours(String time1, String time2) {
-        Date date1, date2;
-        int days, hours=0, min = 0;
-        String hourstr, minstr;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
-        try {
-            date1 = simpleDateFormat.parse(time1);
-            date2 = simpleDateFormat.parse(time2);
-
-            long difference = date2.getTime() - date1.getTime();
-            days = (int) (difference / (1000 * 60 * 60 * 24));
-            hours = (int) ((difference - (1000 * 60 * 60 * 24 * days)) / (1000 * 60 * 60));
-            min = (int) (difference - (1000 * 60 * 60 * 24 * days) - (1000 * 60 * 60 * hours)) / (1000 * 60);
-            hours = (hours < 0 ? -hours : hours);
-//            SessionHour = hours;
-//            SessionMinit = min;
-            Log.i("======= Hours", " :: " + hours + ":" + min);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return hours + min ;
-
-    }
-
-    public static String getCurrentTime() {
-
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat mdformat = new SimpleDateFormat("HH:mm:a");
-        String strDate = mdformat.format(calendar.getTime());
-        Log.d("Currenttime", strDate);
-        return strDate;
-    }
-
     public static void ping(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-    }
-
-    public static void pong(Context context, String message) {
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
     public static boolean isValidEmaillId(String email) {
@@ -249,38 +171,6 @@ public class Utils {
         return value;
     }
 
-    public static boolean getAge(String date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        int age = 0;
-        try {
-            Date date1 = dateFormat.parse(date);
-            Calendar now = Calendar.getInstance();
-            Calendar dob = Calendar.getInstance();
-            dob.setTime(date1);
-            if (dob.after(now)) {
-//                throw new IllegalArgumentException("Can't be born in the future");
-            }
-            int year1 = now.get(Calendar.YEAR);
-            int year2 = dob.get(Calendar.YEAR);
-            age = year1 - year2;
-            int month1 = now.get(Calendar.MONTH);
-            int month2 = dob.get(Calendar.MONTH);
-            if (month2 > month1) {
-                age--;
-            } else if (month1 == month2) {
-                int day1 = now.get(Calendar.DAY_OF_MONTH);
-                int day2 = dob.get(Calendar.DAY_OF_MONTH);
-                if (day2 > day1) {
-                    age--;
-                }
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return age >= 5;
-    }
-
     public static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
 
     public static boolean checkAndRequestPermissions(final Context context) {
@@ -297,21 +187,21 @@ public class Utils {
         if (callPhone != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.CALL_PHONE);
         }
-        if (receiveSMS != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.RECEIVE_MMS);
-        }
-        if (readSMS != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.READ_SMS);
-        }
-        if (permissionSendMessage != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.SEND_SMS);
-        }
-        if (FineLocation !=PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
-        }
-        if (CorseLocation !=PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-        }
+//        if (receiveSMS != PackageManager.PERMISSION_GRANTED) {
+//            listPermissionsNeeded.add(Manifest.permission.RECEIVE_MMS);
+//        }
+//        if (readSMS != PackageManager.PERMISSION_GRANTED) {
+//            listPermissionsNeeded.add(Manifest.permission.READ_SMS);
+//        }
+//        if (permissionSendMessage != PackageManager.PERMISSION_GRANTED) {
+//            listPermissionsNeeded.add(Manifest.permission.SEND_SMS);
+//        }
+//        if (FineLocation !=PackageManager.PERMISSION_GRANTED) {
+//            listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
+//        }
+//        if (CorseLocation !=PackageManager.PERMISSION_GRANTED) {
+//            listPermissionsNeeded.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+//        }
         if (!listPermissionsNeeded.isEmpty()) {
            ActivityCompat.requestPermissions((Activity) context,
                     listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_MULTIPLE_PERMISSIONS);

@@ -65,8 +65,9 @@ public class PaymentSuccessActivity extends AppCompatActivity {
         paymentSuccessBinding.btnNewCharge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent isearchByuser = new Intent(mContext, MySession.class);
-                startActivity(isearchByuser);
+                        Intent isearchByuser = new Intent(mContext, MySession.class);
+                        startActivity(isearchByuser);
+                        // Stuff that updates the UI
             }
         });
     }

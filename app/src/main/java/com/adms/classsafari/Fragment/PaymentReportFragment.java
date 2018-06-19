@@ -109,8 +109,7 @@ public class PaymentReportFragment extends Fragment implements DatePickerDialog.
         paymentReportBinding.btnShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startDateStr=paymentReportBinding.txtStartDate.getText().toString();
-                endDateStr=paymentReportBinding.txtEndDate.getText().toString();
+
                 if(!startDateStr.equalsIgnoreCase("dd/MM/yyyy")&&!endDateStr.equalsIgnoreCase("dd/MM/yyyy")) {
                     callPaymentReportApi();
                 }else{
@@ -203,7 +202,8 @@ public class PaymentReportFragment extends Fragment implements DatePickerDialog.
     }
 
     private Map<String, String> getReportDetail() {
-
+        startDateStr=paymentReportBinding.txtStartDate.getText().toString();
+        endDateStr=paymentReportBinding.txtEndDate.getText().toString();
         Map<String, String> map = new HashMap<>();
         map.put("CoachID", Utils.getPref(mContext, "coachID"));
         map.put("StartDate", startDateStr);

@@ -37,9 +37,13 @@ import com.adms.classsafari.databinding.ChangePasswordDialogBinding;
 import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
 import com.adms.classsafari.databinding.SessiondetailConfirmationDialogBinding;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit.RetrofitError;
@@ -70,6 +74,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
             firsttimesearch, selectedfamilyNameStr, selectedfamilytagStr, bactStr,sessionNameStr;
     int SessionHour = 0;
     Integer SessionMinit = 0;
+    String hours,minit;
     ArrayList<String> selectedId;
     //Purchase dialog
     ArrayList<String> purchaseSessionIDArray;
@@ -279,10 +284,10 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
 //                        callSessionReportApi();
                         if (familyInfoModel.getData() != null) {
                             if (familyInfoModel.getData().size() > 0) {
+                                familyBinding.text.setVisibility(View.VISIBLE);
                                 familyBinding.listLinear.setVisibility(View.VISIBLE);
                                 familyBinding.noRecordTxt.setVisibility(View.GONE);
                                 fillExpLV();
-//                                froncontanctStr=sessionConfirmationDetailModel.getFroncontanct();
                                 expandableSelectStudentListAdapter = new ExpandableSelectStudentListAdapter(mContext, listDataHeader, listDataChild, froncontanctStr, arraowStr, new onChlidClick() {
                                     @Override
                                     public void getChilClick() {
@@ -298,19 +303,8 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                                 });
                                 familyBinding.lvExpfamilylist.setAdapter(expandableSelectStudentListAdapter);
                                 familyBinding.lvExpfamilylist.expandGroup(0);
-//                                if (!froncontanctStr.equalsIgnoreCase("true")) {
-//                                    new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
-//                                            .setCancelable(false)
-//                                            .setMessage("Please Select Atleast One Student for Session Confirmation.")
-//                                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                                                public void onClick(DialogInterface dialog, int which) {
-//
-//                                                }
-//                                            })
-//                                            .setIcon(R.drawable.safari)
-//                                            .show();
-//                                }
                             } else {
+                                familyBinding.text.setVisibility(View.GONE);
                                 familyBinding.listLinear.setVisibility(View.GONE);
                                 familyBinding.noRecordTxt.setVisibility(View.VISIBLE);
                             }
@@ -521,9 +515,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                         return;
                     }
                     if (sessionModel.getSuccess().equalsIgnoreCase("false")) {
-//                        Utils.ping(mContext, getString(R.string.false_msg));
                         purchaseSessionIDArray = new ArrayList<>();
-//                        ConformSessionDialog();
                         SessionConfirmationDialog();
                         return;
                     }
@@ -685,7 +677,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         menuDialog = new Dialog(mContext, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
-        menuDialog.getWindow().getAttributes().verticalMargin = 0.1F;
+        menuDialog.getWindow().getAttributes().verticalMargin = 0.07F;
         wlp.gravity = Gravity.TOP;
         window.setAttributes(wlp);
 
@@ -848,12 +840,11 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                             for (int j = 0; j < dataResponse.getData().size(); j++) {
                                 sessiondetailConfirmationDialogBinding.sessionNameTxt.setText(dataResponse.getData().get(j).getSessionName());
                                 sessiondetailConfirmationDialogBinding.ratingBar.setRating(Float.parseFloat(dataResponse.getData().get(j).getRating()));
-//                                sessiondetailConfirmationDialogBinding.ratingUserTxt.setText();
                                 sessiondetailConfirmationDialogBinding.tutorNameTxt.setText(dataResponse.getData().get(j).getName());
                                 sessiondetailConfirmationDialogBinding.locationTxt.setText(dataResponse.getData().get(j).getRegionName());
                                 sessiondetailConfirmationDialogBinding.startDateTxt.setText(dataResponse.getData().get(j).getStartDate());
                                 sessiondetailConfirmationDialogBinding.endDateTxt.setText(dataResponse.getData().get(j).getEndDate());
-                                sessiondetailConfirmationDialogBinding.durationTxt.setText(durationStr);
+
                                 AppConfiguration.classsessionPrice = dataResponse.getData().get(j).getSessionAmount();
                                 String[] spiltPipes = dataResponse.getData().get(j).getSchedule().split("\\|");
                                 String[] spiltComma;
@@ -862,8 +853,26 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                                 for (int i = 0; i < spiltPipes.length; i++) {
                                     spiltComma = spiltPipes[i].split("\\,");
                                     spiltDash = spiltComma[1].split("\\-");
+                                    calculateHours(spiltDash[0], spiltDash[1]);
                                     dataResponse.getData().get(j).setDateTime(spiltDash[0]);
                                     Log.d("DateTime", spiltDash[0]);
+
+                                    if (SessionHour < 10) {
+                                        hours= "0"+SessionHour;
+                                    }else{
+                                        hours= String.valueOf(SessionHour);
+                                    }
+                                    if(SessionMinit<10){
+                                        minit="0"+SessionMinit;
+                                    }else{
+                                        minit=String.valueOf(SessionMinit);
+                                    }
+                                    if(minit.equalsIgnoreCase(("00"))) {
+                                        sessiondetailConfirmationDialogBinding.durationTxt.setText(hours + " hr ");
+                                    }else{
+                                        sessiondetailConfirmationDialogBinding.durationTxt.setText(hours + " hr " + minit + " min");//+ " min"
+                                    }
+
                                     switch (spiltComma[0]) {
                                         case "sun":
                                             sessiondetailConfirmationDialogBinding.sunTimeTxt.setEnabled(true);
@@ -941,6 +950,30 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         Map<String, String> map = new HashMap<>();
         map.put("SessionID", sessionIDStr);
         return map;
+    }
+    public void calculateHours(String time1, String time2) {
+        Date date1, date2;
+        int days, hours, min;
+        String hourstr, minstr;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa", Locale.US);
+        try {
+            date1 = simpleDateFormat.parse(time1);
+            date2 = simpleDateFormat.parse(time2);
+
+            long difference = date2.getTime() - date1.getTime();
+            days = (int) (difference / (1000 * 60 * 60 * 24));
+            hours = (int) ((difference - (1000 * 60 * 60 * 24 * days)) / (1000 * 60 * 60));
+            min = (int) (difference - (1000 * 60 * 60 * 24 * days) - (1000 * 60 * 60 * hours)) / (1000 * 60);
+            hours = (hours < 0 ? -hours : hours);
+            SessionHour = hours;
+            SessionMinit = min;
+            Log.i("======= Hours", " :: " + hours + ":" + min);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 }

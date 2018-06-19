@@ -45,13 +45,19 @@
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
 
-                <ImageView
-                    android:id="@+id/search_img"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
-                    android:layout_marginLeft="@dimen/_30sdp"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:src="@drawable/search1" />
+                <LinearLayout
+                    android:layout_width="@dimen/_35sdp"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_marginLeft="@dimen/_30sdp">
+
+                    <ImageView
+                        android:id="@+id/search_img"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:src="@drawable/search1" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -77,12 +83,12 @@
                     android:layout_height="@dimen/_15sdp"
                     android:layout_marginBottom="@dimen/_2sdp"
                     android:layout_marginLeft="@dimen/_5sdp"
-                    android:drawableLeft="@drawable/person"
+
                     android:drawablePadding="@dimen/_3sdp"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold"
-                    android:visibility="gone"/>
-
+                    android:visibility="gone" />
+                <!--android:drawableLeft="@drawable/person"-->
                 <TextView
                     android:id="@+id/board_txt"
                     android:layout_width="wrap_content"
@@ -91,7 +97,7 @@
                     android:layout_marginLeft="@dimen/_45sdp"
                     android:text="@string/board"
                     android:textSize="@dimen/_9sdp"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/standard_txt"
@@ -101,7 +107,7 @@
                     android:layout_marginLeft="@dimen/_5sdp"
                     android:text="@string/standard"
                     android:textSize="@dimen/_9sdp"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/stream_txt"
@@ -111,7 +117,7 @@
                     android:layout_marginLeft="@dimen/_5sdp"
                     android:text="@string/stream"
                     android:textSize="@dimen/_9sdp"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
 
@@ -179,7 +185,7 @@
                     android:textColor="@color/search_boder"
                     android:textSize="@dimen/_14sdp"
                     android:textStyle="bold"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
 
@@ -191,12 +197,11 @@
             android:orientation="vertical"
             android:visibility="visible">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/class_list_recView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none"
-             />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/class_list_recView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none" />
 
         </LinearLayout>
 
@@ -212,19 +217,19 @@
             android:textColor="@color/search_boder"
             android:textSize="@dimen/_11sdp"
             android:textStyle="bold"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/bottomNavigationView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
             android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom|end"
+            android:elevation="5dp"
             app:itemBackground="@drawable/nav_item_drawable"
             app:itemIconTint="@color/white"
             app:itemTextColor="@color/white"
-            app:menu="@menu/menu_navigation"
             app:layout_insetEdge="bottom"
-            android:elevation="5dp"/>
+            app:menu="@menu/menu_navigation" />
     </LinearLayout>
 </layout>

@@ -64,6 +64,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit.RetrofitError;
@@ -87,7 +88,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
             locationStr, classNameStr, searchByStr, searchTypeStr,
             wheretoComeStr, genderStr = "", maxpriceStr = "", minpriceStr = "",
             sessionId, commentStr, ratingValueStr, popularsessionID = "",
-            populardurationStr = "", populargenderStr = "", popluarsessiondateStr = "", firsttimesearch, RegionName;
+            populardurationStr = "", populargenderStr = "", popluarsessiondateStr = "", firsttimesearch, RegionName = "", SearchPlaystudy;
     SessionDetailModel dataResponse, populardataresponse;
     List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
     boolean arrayfirst = true;
@@ -111,9 +112,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
     }
 
     public void init() {
-
-//        Intent intent=getIntent();
-//        selectedDataModel=intent.getParcelableExtra("selectedDataModel");
         searchByStr = getIntent().getStringExtra("SearchBy");
 
         locationStr = getIntent().getStringExtra("city");
@@ -121,52 +119,17 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         wheretoComeStr = getIntent().getStringExtra("withOR");
         searchTypeStr = getIntent().getStringExtra("searchType");
 
+
         searchfront = getIntent().getStringExtra("searchfront");
         Utils.setPref(mContext, "location", locationStr.trim());
         Utils.setPref(mContext, "classname", classNameStr.trim());
         BottomNavigationViewHelper.removeShiftMode(binding.bottomNavigationView);
 
+        validData();
+//
 
-        if (wheretoComeStr.equalsIgnoreCase("withOR")) {
-            subjectStr = getIntent().getStringExtra("lessionName");
-            standardStr = getIntent().getStringExtra("standard");
-            streamStr = getIntent().getStringExtra("stream");
-            boardStr = getIntent().getStringExtra("board");
-            sessionType = getIntent().getStringExtra("sessionType");
-            genderStr = getIntent().getStringExtra("gender");
-            firsttimesearch = getIntent().getStringExtra("firsttimesearch");
-            RegionName = getIntent().getStringExtra("RegionName");
-        } else {
-            subjectStr = "";
-            standardStr = "";
-            streamStr = "";
-            boardStr = "";
-            sessionType = "";
-            genderStr = "";
-            firsttimesearch = "";
-            RegionName = "";
-        }
-        if (!searchByStr.equalsIgnoreCase("1")) {
-            if (!boardStr.equalsIgnoreCase("")) { //||
-                //  || ) {
-                binding.boardTxt.setVisibility(View.VISIBLE);
-                binding.boardTxt.setText("\u2022" + boardStr);
-            } else {
-                binding.boardTxt.setVisibility(View.GONE);
-            }
-            if (!standardStr.equalsIgnoreCase("")) {
-                binding.standardTxt.setVisibility(View.VISIBLE);
-                binding.standardTxt.setText("\u2022" + standardStr);
-            } else {
-                binding.standardTxt.setVisibility(View.GONE);
-            }
-            if (!streamStr.equalsIgnoreCase("")) {
-                binding.streamTxt.setVisibility(View.VISIBLE);
-                binding.streamTxt.setText("\u2022" + streamStr);
-            } else {
-                binding.streamTxt.setVisibility(View.GONE);
-            }
-        }
+
+
         binding.cityTxt.setText(locationStr);
         binding.subjectTxt.setText(classNameStr);
 
@@ -186,9 +149,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                     case R.id.action_price:
                         PriceDialog();
                         break;
-//                    case R.id.action_sort:
-//                        SortDialog();
-//                        break;
                     case R.id.action_filter:
                         SortDialog();
                         break;
@@ -303,25 +263,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                 startActivity(inSearchUser);
                 break;
             case R.id.search_img:
-                if (wheretoComeStr.equalsIgnoreCase("withOR")) {
-                    Intent insession = new Intent(mContext, ClassSearchScreen.class);
-                    insession.putExtra("flag", searchTypeStr);
-                    insession.putExtra("withOR", wheretoComeStr);
-                    insession.putExtra("SearchBy", searchByStr);
-                    insession.putExtra("searchfront", "searchunder");
-                    insession.putExtra("city", locationStr);
-                    insession.putExtra("sessionName", classNameStr);
-                    insession.putExtra("sessionType", sessionType);
-                    insession.putExtra("lessionName", subjectStr);
-                    insession.putExtra("board", boardStr);
-                    insession.putExtra("standard", standardStr);
-                    insession.putExtra("stream", streamStr);
-                    insession.putExtra("gender", genderStr);
-                    insession.putExtra("firsttimesearch", firsttimesearch);
-                    insession.putExtra("RegionName", RegionName);
-//                insession.putExtra("selectedDataModel",selectedDataModel);
-                    startActivity(insession);
-                } else {
                     Intent insession = new Intent(mContext, ClassSearchScreen.class);
                     insession.putExtra("flag", dataResponse.getData().get(0).getCoachTypeID());
                     insession.putExtra("withOR", wheretoComeStr);
@@ -337,9 +278,9 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                     insession.putExtra("gender", genderStr);
                     insession.putExtra("firsttimesearch", firsttimesearch);
                     insession.putExtra("RegionName", RegionName);
-//                insession.putExtra("selectedDataModel",selectedDataModel);
+                    insession.putExtra("SearchPlaystudy",SearchPlaystudy);
                     startActivity(insession);
-                }
+//                }
                 break;
             case R.id.multiautocompe:
                 binding.multiautocompe.showDropDown();
@@ -810,7 +751,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         map.put("StandardName", standardStr);
         map.put("StreamName", streamStr);
         map.put("Gender_ID", genderStr);
-        map.put("CoachType_ID", sessionType);
+        map.put("CoachType_ID", SearchPlaystudy);
         map.put("RegionName", RegionName);
 
 
@@ -837,7 +778,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                 if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
                     Intent intentLogin = new Intent(mContext, FamilyListActivity.class);
                     intentLogin.putExtra("froncontanct", "false");
-                    intentLogin.putExtra("back","classDeatil");
+                    intentLogin.putExtra("back", "classDeatil");
                     intentLogin.putExtra("sessionID", sessionId);
                     intentLogin.putExtra("city", locationStr);
                     intentLogin.putExtra("sessionName", classNameStr);
@@ -882,7 +823,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                                     intentLogin.putExtra("sessionType", sessionType);
                                     intentLogin.putExtra("firsttimesearch", firsttimesearch);
                                     intentLogin.putExtra("RegionName", RegionName);
-                                    intentLogin.putExtra("back","classDeatil");
+                                    intentLogin.putExtra("back", "classDeatil");
                                     startActivity(intentLogin);
                                     finish();
                                 }
@@ -980,82 +921,82 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
             sessionName = splitvalue[0];
             sessionId = splitvalue[1];
         }
-            LayoutInflater inflater = getLayoutInflater();
-            View alertLayout = inflater.inflate(R.layout.rating_dialog_layout, null);
-            final RatingBar ratingBar = alertLayout.findViewById(R.id.rating_bar);
-            final TextView sessionNametxt = alertLayout.findViewById(R.id.session_name_txt);
-            final TextView session_rating_view_txt = alertLayout.findViewById(R.id.session_rating_view_txt);
-            final TextView cancel_txt = alertLayout.findViewById(R.id.cancel_txt);
-            final TextView confirm_txt = alertLayout.findViewById(R.id.confirm_txt);
-            final EditText comment_edt = alertLayout.findViewById(R.id.comment_edt);
-            sessionNametxt.setText(sessionName);
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.rating_dialog_layout, null);
+        final RatingBar ratingBar = alertLayout.findViewById(R.id.rating_bar);
+        final TextView sessionNametxt = alertLayout.findViewById(R.id.session_name_txt);
+        final TextView session_rating_view_txt = alertLayout.findViewById(R.id.session_rating_view_txt);
+        final TextView cancel_txt = alertLayout.findViewById(R.id.cancel_txt);
+        final TextView confirm_txt = alertLayout.findViewById(R.id.confirm_txt);
+        final EditText comment_edt = alertLayout.findViewById(R.id.comment_edt);
+        sessionNametxt.setText(sessionName);
 
-            ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-                @Override
-                public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
-                    if (b) {
-                        int rating = (int) ratingBar.getRating();
-                        if (rating == 1) {
-                            session_rating_view_txt.setText("Very poor");
-                            session_rating_view_txt.setTextColor(getResources().getColor(R.color.remarks));
-                        } else if (rating == 2) {
-                            session_rating_view_txt.setText("Poor");
-                            session_rating_view_txt.setTextColor(getResources().getColor(R.color.remarks));
-                        } else if (rating == 3) {
-                            session_rating_view_txt.setText("Average");
-                            session_rating_view_txt.setTextColor(getResources().getColor(R.color.rating_bar));
-                        } else if (rating == 4) {
-                            session_rating_view_txt.setText("Good");
-                            session_rating_view_txt.setTextColor(getResources().getColor(R.color.present));
-                        } else if (rating == 5) {
-                            session_rating_view_txt.setText("Excellent");
-                            session_rating_view_txt.setTextColor(getResources().getColor(R.color.present));
-                        }
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                if (b) {
+                    int rating = (int) ratingBar.getRating();
+                    if (rating == 1) {
+                        session_rating_view_txt.setText("Very poor");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.remarks));
+                    } else if (rating == 2) {
+                        session_rating_view_txt.setText("Poor");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.remarks));
+                    } else if (rating == 3) {
+                        session_rating_view_txt.setText("Average");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.rating_bar));
+                    } else if (rating == 4) {
+                        session_rating_view_txt.setText("Good");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.present));
+                    } else if (rating == 5) {
+                        session_rating_view_txt.setText("Excellent");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.present));
                     }
                 }
-            });
+            }
+        });
 
-            AlertDialog.Builder sayWindows = new AlertDialog.Builder(
-                    mContext);
+        AlertDialog.Builder sayWindows = new AlertDialog.Builder(
+                mContext);
 
-            sayWindows.setPositiveButton("Rate", null);
-            sayWindows.setNegativeButton("Not Now", null);
-            sayWindows.setView(alertLayout);
+        sayWindows.setPositiveButton("Rate", null);
+        sayWindows.setNegativeButton("Not Now", null);
+        sayWindows.setView(alertLayout);
 
-            final AlertDialog mAlertDialog = sayWindows.create();
-            mAlertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+        final AlertDialog mAlertDialog = sayWindows.create();
+        mAlertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
 
-                @Override
-                public void onShow(DialogInterface dialog) {
+            @Override
+            public void onShow(DialogInterface dialog) {
 
-                    Button b = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                    b.setOnClickListener(new View.OnClickListener() {
+                Button b = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
 
-                        @Override
-                        public void onClick(View view) {
-                            // TODO Do something
-                            String rating = String.valueOf(ratingBar.getRating());
+                    @Override
+                    public void onClick(View view) {
+                        // TODO Do something
+                        String rating = String.valueOf(ratingBar.getRating());
 //                Toast.makeText(getApplicationContext(), rating, Toast.LENGTH_LONG).show();
-                            commentStr = comment_edt.getText().toString();
-                            if (commentStr.equalsIgnoreCase("")) {
-                                commentStr = session_rating_view_txt.getText().toString();
-                            }
-                            ratingValueStr = String.valueOf(ratingBar.getRating());
-                            if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
-                                if (!ratingValueStr.equalsIgnoreCase("0.0")) {
-                                    callAddrating();
-                                    mAlertDialog.dismiss();
-                                } else {
-                                    Utils.ping(mContext, "Please Select Rate.");
-                                }
-                            } else {
-                                Utils.ping(mContext, getResources().getString(R.string.not_loging));
-                            }
+                        commentStr = comment_edt.getText().toString();
+                        if (commentStr.equalsIgnoreCase("")) {
+                            commentStr = session_rating_view_txt.getText().toString();
                         }
-                    });
-                }
-            });
-            mAlertDialog.show();
+                        ratingValueStr = String.valueOf(ratingBar.getRating());
+                        if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
+                            if (!ratingValueStr.equalsIgnoreCase("0.0")) {
+                                callAddrating();
+                                mAlertDialog.dismiss();
+                            } else {
+                                Utils.ping(mContext, "Please Select Rate.");
+                            }
+                        } else {
+                            Utils.ping(mContext, getResources().getString(R.string.not_loging));
+                        }
+                    }
+                });
+            }
+        });
+        mAlertDialog.show();
     }
 
     //Use for AddRating
@@ -1188,7 +1129,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         Date date1, date2;
         int days, hours = 0, min = 0;
         String hourstr, minstr;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa", Locale.US);
         try {
             date1 = simpleDateFormat.parse(time1);
             date2 = simpleDateFormat.parse(time2);
@@ -1209,5 +1150,61 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 
     }
 
+    public void validData() {
+        if (getIntent().getStringExtra("lessionName") != null) {
+            subjectStr = getIntent().getStringExtra("lessionName");
+        } else {
+            subjectStr = "";
+        }
+        if (getIntent().getStringExtra("standard") != null) {
+            standardStr = getIntent().getStringExtra("standard");
+        } else {
+            standardStr = "";
+        }
+        if (getIntent().getStringExtra("stream") != null) {
+            streamStr = getIntent().getStringExtra("stream");
+        } else {
+            streamStr = "";
+        }
+        if (getIntent().getStringExtra("board") != null) {
+            boardStr = getIntent().getStringExtra("board");
+        } else {
+            boardStr = "";
+        }
+        if (getIntent().getStringExtra("RegionName") != null) {
+            RegionName = getIntent().getStringExtra("RegionName");
+        } else {
+            RegionName = "";
+        }
+        if (getIntent().getStringExtra("SearchPlaystudy") != null) {
+            SearchPlaystudy = getIntent().getStringExtra("SearchPlaystudy");
+        } else {
+            SearchPlaystudy = "";
+        }
+        if (getIntent().getStringExtra("firsttimesearch") != null) {
+            firsttimesearch = getIntent().getStringExtra("firsttimesearch");
+        } else {
+            firsttimesearch = "";
+        }
+        if (!boardStr.equalsIgnoreCase("")) {
+            binding.boardTxt.setVisibility(View.VISIBLE);
+            binding.boardTxt.setText("\u2022" + boardStr);
+        } else {
+            binding.boardTxt.setVisibility(View.GONE);
+        }
+        if (!standardStr.equalsIgnoreCase("")) {
+            binding.standardTxt.setVisibility(View.VISIBLE);
+            binding.standardTxt.setText("\u2022" + standardStr);
+        } else {
+            binding.standardTxt.setVisibility(View.GONE);
+        }
+        if (!streamStr.equalsIgnoreCase("")) {
+            binding.streamTxt.setVisibility(View.VISIBLE);
+            binding.streamTxt.setText("\u2022" + streamStr);
+        } else {
+            binding.streamTxt.setVisibility(View.GONE);
+
+        }
+        }
 
 }

@@ -81,10 +81,10 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
     int k;
     //Use for PaymentConfirmation Dialog
     Dialog confimDialog;
-    //    TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, session_fee_txt;
     String contatIDstr, orderIDStr, familyNameStr;
     ArrayList<String> selectedId;
     SessiondetailConfirmationDialogBinding sessiondetailConfirmationDialogBinding;
+    String hours, minit;
     private View rootView;
     private Context mContext;
 
@@ -172,16 +172,34 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                                 + ", " + finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getAddressCity()
                                 + ", " + finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getAddressState()
                                 + "- " + finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getAddressZipCode();
+
+
+
+
                         String[] spiltTime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime().split("\\-");
                         calculateHours(spiltTime[0], spiltTime[1]);
                         AppConfiguration.SessionName = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionName();
-                        AppConfiguration.SessionDuration = "( " + SessionHour + "hr" + ", " + SessionMinit + "min )";
+                        if (SessionHour < 10) {
+                            hours= "0"+SessionHour;
+                        }else{
+                            hours= String.valueOf(SessionHour);
+                        }
+                        if(SessionMinit<10){
+                            minit="0"+SessionMinit;
+                        }else{
+                            minit=String.valueOf(SessionMinit);
+                        }
+                        if(minit.equalsIgnoreCase(("00"))) {
+                            AppConfiguration.SessionDuration =hours + " hr ";
+                        }else{
+                            AppConfiguration.SessionDuration =hours + " hr " + minit + " min";//+ " min"
+                        }
                         AppConfiguration.SessionTime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime();
                         AppConfiguration.SessionPrice = String.valueOf(Math.round(Float.parseFloat(finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionPrice())));
 //                        AppConfiguration.SessionPrice=finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionPrice();
                         AppConfiguration.SessionDate = finalsessionfullDetailModel.getData().get(i).getSessionDate();
                         AppConfiguration.RegionName = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getRegionName();
-                        Log.d("price + RegionName", AppConfiguration.SessionPrice+" "+AppConfiguration.RegionName);
+                        Log.d("price + RegionName", AppConfiguration.SessionPrice + " " + AppConfiguration.RegionName);
                         Utils.setPref(mContext, "sessionID", sessionIDStr);
                     }
 
@@ -415,8 +433,8 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                     String dateString = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionDate() + " " + spiltTime[0];
                     String enddateString = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionDate() + " " + spiltTime[1];
                     Log.d("StartDate and EndDate :", dateString + " " + enddateString);
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.getDefault());
-                    SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.getDefault());
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm aa",Locale.US);//, Locale.getDefault());
+                    SimpleDateFormat sdf1 = new SimpleDateFormat("dd/MM/yyyy hh:mm aa",Locale.US);//, Locale.getDefault());
                     Date date = sdf.parse(dateString);
                     Date date1 = sdf1.parse(enddateString);
 
@@ -552,7 +570,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
         Date date1, date2;
         int days, hours, min;
         String hourstr, minstr;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa",Locale.US);
         try {
             date1 = simpleDateFormat.parse(time1);
             date2 = simpleDateFormat.parse(time2);
@@ -573,57 +591,6 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
         }
 
 
-    }
-
-    public void ConformationDialog() {
-
-        confirmSessionDialogBinding = DataBindingUtil.
-                inflate(LayoutInflater.from(mContext), R.layout.confirm_session_dialog, (ViewGroup) calendarBinding.getRoot(), false);
-        confimDialog = new Dialog(getActivity(), R.style.Theme_Dialog);
-        Window window = confimDialog.getWindow();
-        WindowManager.LayoutParams wlp = window.getAttributes();
-        confimDialog.getWindow().getAttributes().verticalMargin = 0.10f;
-        wlp.gravity = Gravity.CENTER;
-        window.setAttributes(wlp);
-
-        confimDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-
-        confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        confimDialog.setCancelable(false);
-        confimDialog.setContentView(confirmSessionDialogBinding.getRoot());
-
-
-        if (AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
-            confirmSessionDialogBinding.sessionFeeTxt.setText("Free");
-        } else {
-            confirmSessionDialogBinding.sessionFeeTxt.setText("₹ " + AppConfiguration.SessionPrice);
-        }
-        confirmSessionDialogBinding.sessionTeacherTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
-        confirmSessionDialogBinding.sessionStudentTxt.setText(familyNameStr);
-        confirmSessionDialogBinding.sessionNameTxt.setText(AppConfiguration.SessionName);
-        confirmSessionDialogBinding.locationTxt.setText(AppConfiguration.SessionLocation);
-        confirmSessionDialogBinding.durationTxt.setText(AppConfiguration.SessionDuration);
-        confirmSessionDialogBinding.timeTxt.setText(AppConfiguration.SessionTime);
-        AppConfiguration.UserName = confirmSessionDialogBinding.sessionStudentTxt.getText().toString();
-
-        confirmSessionDialogBinding.cancelTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                confimDialog.dismiss();
-            }
-        });
-        confirmSessionDialogBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("")) {
-                    callpaymentRequestApi();
-                }
-                confimDialog.dismiss();
-                sessionDialog.dismiss();
-            }
-        });
-        confimDialog.show();
     }
 
     public void SessionConfirmationDialog() {
@@ -650,7 +617,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
         sessiondetailConfirmationDialogBinding.endDateTxt.setText(AppConfiguration.SessionDate);
 
         String[] spiltTime = AppConfiguration.SessionTime.split("\\-");
-        AppConfiguration.UserName=familyNameStr;
+        AppConfiguration.UserName = familyNameStr;
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 

@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit.RetrofitError;
@@ -70,7 +71,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
     SessionDetailModel dataResponse;
     int SessionHour = 0;
     Integer SessionMinit = 0;
-
+    String hours,minit;
     //Use for Menu Dialog
     String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr;
     Dialog menuDialog;
@@ -359,7 +360,21 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                                     calculateHours(spiltDash[0], spiltDash[1]);
                                     dataResponse.getData().get(j).setDateTime(spiltDash[0]);
                                     Log.d("DateTime", spiltDash[0]);
-                                    sessiondetailConfirmationDialogBinding.durationTxt.setText(SessionHour + " hr " + SessionMinit + " min");
+                                    if (SessionHour < 10) {
+                                        hours= "0"+SessionHour;
+                                    }else{
+                                        hours= String.valueOf(SessionHour);
+                                    }
+                                    if(SessionMinit<10){
+                                        minit="0"+SessionMinit;
+                                    }else{
+                                        minit=String.valueOf(SessionMinit);
+                                    }
+                                    if(minit.equalsIgnoreCase(("00"))) {
+                                        sessiondetailConfirmationDialogBinding.durationTxt.setText(hours + " hr ");
+                                    }else{
+                                        sessiondetailConfirmationDialogBinding.durationTxt.setText(hours + " hr " + minit + " min");//+ " min"
+                                    }
                                     switch (spiltComma[0]) {
                                         case "sun":
                                             sessiondetailConfirmationDialogBinding.sunTimeTxt.setEnabled(true);
@@ -443,7 +458,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         Date date1, date2;
         int days, hours, min;
         String hourstr, minstr;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa", Locale.US);
         try {
             date1 = simpleDateFormat.parse(time1);
             date2 = simpleDateFormat.parse(time2);

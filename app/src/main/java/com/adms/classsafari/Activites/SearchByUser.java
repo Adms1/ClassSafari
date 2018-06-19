@@ -28,7 +28,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +35,6 @@ import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.AppConfiguration;
 import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
-import com.adms.classsafari.Model.SessionConfirmationDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivitySearchByUserBinding;
@@ -67,8 +65,9 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
     //Use for Menu Dialog
     Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily;
     TextView userNameTxt;
-    private PopupWindow popupWindow;
-    SessionConfirmationDetailModel selectedDataModel=new SessionConfirmationDetailModel();
+    String SearchPlaystudy;
+    boolean flag = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,29 +134,36 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.lets_study_txt:
                 AppConfiguration.ClassLocation = searchByUserBinding.locationEdt.getText().toString();
-                Intent inClassDetail = new Intent(mContext, ClassSearchScreen.class);
-                inClassDetail.putExtra("flag", "study");
-                inClassDetail.putExtra("withOR", "withOR");
-                inClassDetail.putExtra("SearchBy", "2");
-                inClassDetail.putExtra("sessionType", "1");
-                inClassDetail.putExtra("firsttimesearch", "true");
-                startActivity(inClassDetail);
+                flag = true;
+                SearchPlaystudy = "1";
+                validation();
+//                Intent inClassDetail = new Intent(mContext, ClassSearchScreen.class);
+//                inClassDetail.putExtra("flag", "study");
+//                inClassDetail.putExtra("withOR", "withOR");
+//                inClassDetail.putExtra("SearchBy", "2");
+//                inClassDetail.putExtra("sessionType", "1");
+//                inClassDetail.putExtra("firsttimesearch", "true");
+//                startActivity(inClassDetail);
                 break;
             case R.id.search_class_edt:
 //                searchByUserBinding.searchClassEdt.showDropDown();
                 break;
             case R.id.search_txt:
+                flag = false;
                 validation();
                 break;
             case R.id.lets_play_txt:
                 AppConfiguration.ClassLocation = searchByUserBinding.locationEdt.getText().toString();
-                Intent inClassDetail1 = new Intent(mContext, ClassSearchScreen.class);
-                inClassDetail1.putExtra("flag", "play");
-                inClassDetail1.putExtra("withOR", "withOR");
-                inClassDetail1.putExtra("SearchBy", "2");
-                inClassDetail1.putExtra("sessionType", "2");
-                inClassDetail1.putExtra("firsttimesearch", "true");
-                startActivity(inClassDetail1);
+                flag = true;
+                SearchPlaystudy = "2";
+                validation();
+//                Intent inClassDetail1 = new Intent(mContext, ClassSearchScreen.class);
+//                inClassDetail1.putExtra("flag", "play");
+//                inClassDetail1.putExtra("withOR", "withOR");
+//                inClassDetail1.putExtra("SearchBy", "2");
+//                inClassDetail1.putExtra("sessionType", "2");
+//                inClassDetail1.putExtra("firsttimesearch", "true");
+//                startActivity(inClassDetail1);
                 break;
             case R.id.login_txt:
                 if (!Utils.getPref(mContext, "RegisterUserName").equalsIgnoreCase("")) {
@@ -317,6 +323,11 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
             inClassDetail.putExtra("SearchBy", "1");
             inClassDetail.putExtra("withOR", "withOutOR");
             inClassDetail.putExtra("searchfront", "searchfront");
+            if (flag = true) {
+                inClassDetail.putExtra("SearchPlaystudy", SearchPlaystudy);
+            } else {
+                inClassDetail.putExtra("SearchPlaystudy", "");
+            }
 //            inClassDetail.putExtra("searchType", "study");
             startActivity(inClassDetail);
         } else {
@@ -430,7 +441,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
         menuDialog = new Dialog(mContext, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
-        menuDialog.getWindow().getAttributes().verticalMargin = 0.1F;
+        menuDialog.getWindow().getAttributes().verticalMargin = 0.09F;
         wlp.gravity = Gravity.TOP;
         window.setAttributes(wlp);
 

@@ -456,8 +456,6 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
 
                         Utils.setPref(mContext, "FamilyID", childInfoModel.getContactID());
                         contatIDstr = childInfoModel.getContactID();
-//                        Utils.ping(mContext, "Child Added Sucessfully.");
-//                        ConformationDialog();
                         SessionConfirmationDialog();
                     }
                 }
@@ -488,64 +486,6 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         map.put("ContactTypeID", contactTypeIDStr);
         return map;
     }
-
-    public void ConformationDialog() {
-        confirmSessionTeacherBinding = DataBindingUtil.
-                inflate(LayoutInflater.from(mContext), R.layout.confirm_session_teacher, (ViewGroup) addFamilyBinding.getRoot(), false);
-
-        confimDialog = new Dialog(getActivity(), R.style.Theme_Dialog);
-        Window window = confimDialog.getWindow();
-        WindowManager.LayoutParams wlp = window.getAttributes();
-        confimDialog.getWindow().getAttributes().verticalMargin = 0.10f;
-        wlp.gravity = Gravity.CENTER;
-        window.setAttributes(wlp);
-
-        confimDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-
-        confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        confimDialog.setCancelable(false);
-        confimDialog.setContentView(confirmSessionTeacherBinding.getRoot());
-//        confirmSessionTeacherBinding.cancelTxt.setVisibility(View.GONE);
-//
-//        confirmSessionTeacherBinding.cancelTxt.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                confimDialog.dismiss();
-//            }
-//        });
-        confirmSessionTeacherBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
-                    callpaymentRequestApi();
-                } else {
-                    paymentStatusstr = "1";
-                    callSessionConfirmationApi();
-                }
-                confimDialog.dismiss();
-            }
-        });
-        if (type.equalsIgnoreCase("Child")) {
-            confirmSessionTeacherBinding.sessionStudentTxtView.setText("STUDENT NAME");
-        } else {
-            confirmSessionTeacherBinding.sessionStudentTxtView.setText("FAMILY NAME");
-        }
-        confirmSessionTeacherBinding.sessionTeacherTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
-        confirmSessionTeacherBinding.sessionNameTxt.setText(AppConfiguration.SessionName);
-        confirmSessionTeacherBinding.locationTxt.setText(AppConfiguration.SessionLocation);
-        confirmSessionTeacherBinding.durationTxt.setText(AppConfiguration.SessionDuration);
-        confirmSessionTeacherBinding.timeTxt.setText(AppConfiguration.SessionTime);
-        confirmSessionTeacherBinding.sessionStudentTxt.setText(firstNameStr + " " + lastNameStr);
-        if (AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
-            confirmSessionTeacherBinding.sessionFeeTxt.setText("Free");
-        } else {
-            confirmSessionTeacherBinding.sessionFeeTxt.setText("₹ " + AppConfiguration.SessionPrice);
-        }
-        AppConfiguration.UserName = confirmSessionTeacherBinding.sessionStudentTxt.getText().toString();
-        confimDialog.show();
-
-    }
-
     public void SessionConfirmationDialog() {
         sessiondetailConfirmationDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.sessiondetail_confirmation_dialog, (ViewGroup) addFamilyBinding.getRoot(), false);
@@ -638,12 +578,6 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
             default:
 
         }
-//        sessiondetailConfirmationDialogBinding.cancelTxt.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                confimDialog.dismiss();
-//            }
-//        });
         sessiondetailConfirmationDialogBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

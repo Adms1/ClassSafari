@@ -42,7 +42,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
     String flag, selectedSessionStr = "", selectedSessionCityStr, sessionCapacityStr, selectedSessionRegionStr = "",
             sessionTypeStr, wheretoComeStr, genderStr = "", RegionName,
             searchByStr, searchfront, locationStr,
-            classNameStr, firsttimesearch, boardStr, standardStr, streamStr, lessionNameStr;
+            classNameStr, firsttimesearch, boardStr, standardStr, streamStr, lessionNameStr, SearchPlaystudy;
     SelectedDataModel selectedDataModel = new SelectedDataModel();
 
     @Override
@@ -62,62 +62,46 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         standardStr = getIntent().getStringExtra("standard");
         streamStr = getIntent().getStringExtra("stream");
         RegionName = getIntent().getStringExtra("RegionName");
+        SearchPlaystudy = getIntent().getStringExtra("SearchPlaystudy");
         lessionNameStr = getIntent().getStringExtra("lessionName");
-//        selectedDataModel=getIntent().getParcelableExtra("selectedDataModel");
         init();
         setListner();
     }
 
     public void init() {
 
-        if (wheretoComeStr.equalsIgnoreCase("withOR")) {
-            if (flag.equalsIgnoreCase("play")) {
-                classSearchScreenBinding.linearBg.setBackgroundResource(R.drawable.play_bg);
-                classSearchScreenBinding.boardAutoTxt.setVisibility(View.GONE);
-                classSearchScreenBinding.standardAutoTxt.setVisibility(View.GONE);
-                classSearchScreenBinding.streamAutoTxt.setVisibility(View.GONE);
-//                classSearchScreenBinding.genderGroup.setVisibility(View.VISIBLE);
-            } else {
-                classSearchScreenBinding.linearBg.setBackgroundResource(R.drawable.study_bg);
-                classSearchScreenBinding.boardAutoTxt.setVisibility(View.VISIBLE);
-                classSearchScreenBinding.standardAutoTxt.setVisibility(View.VISIBLE);
-                classSearchScreenBinding.streamAutoTxt.setVisibility(View.VISIBLE);
-//                classSearchScreenBinding.genderGroup.setVisibility(View.VISIBLE);
+//        if (wheretoComeStr.equalsIgnoreCase("withOR")) {
+        if (SearchPlaystudy.equalsIgnoreCase("2")) {
+            classSearchScreenBinding.linearBg.setBackgroundResource(R.drawable.play_bg);
+            classSearchScreenBinding.boardAutoTxt.setVisibility(View.GONE);
+            classSearchScreenBinding.standardAutoTxt.setVisibility(View.GONE);
+            classSearchScreenBinding.streamAutoTxt.setVisibility(View.GONE);
+        } else {
+            classSearchScreenBinding.linearBg.setBackgroundResource(R.drawable.study_bg);
+            classSearchScreenBinding.boardAutoTxt.setVisibility(View.VISIBLE);
+            classSearchScreenBinding.standardAutoTxt.setVisibility(View.VISIBLE);
+            classSearchScreenBinding.streamAutoTxt.setVisibility(View.VISIBLE);
+        }
+        if (!firsttimesearch.equalsIgnoreCase("true")) {
+            genderStr = getIntent().getStringExtra("gender");
+            if (!classNameStr.equalsIgnoreCase("")) {
+                classSearchScreenBinding.sessionAutoTxt.setText(classNameStr);
+                selectedSessionStr = classNameStr;
             }
-            if (!firsttimesearch.equalsIgnoreCase("true")) {
-                genderStr = getIntent().getStringExtra("gender");
-                if (!classNameStr.equalsIgnoreCase("")) {
-                    classSearchScreenBinding.sessionAutoTxt.setText(classNameStr);
-                    selectedSessionStr = classNameStr;
-                }
-                if (!lessionNameStr.equalsIgnoreCase("")) {
-                    classSearchScreenBinding.classAutoTxt.setText(lessionNameStr);
-                }
-                if (!boardStr.equalsIgnoreCase("")) {
-                    classSearchScreenBinding.boardAutoTxt.setText(boardStr);
-                }
-                if (!standardStr.equalsIgnoreCase("")) {
-                    classSearchScreenBinding.standardAutoTxt.setText(standardStr);
-                }
-                if (!streamStr.equalsIgnoreCase("")) {
-                    classSearchScreenBinding.streamAutoTxt.setText(streamStr);
-                }
-                if (!RegionName.equalsIgnoreCase("")) {
-                    classSearchScreenBinding.regionNameTxt.setText(RegionName);
-                }
+            if (!lessionNameStr.equalsIgnoreCase("")) {
+                classSearchScreenBinding.classAutoTxt.setText(lessionNameStr);
             }
-
-        }else {
-            if(flag.equalsIgnoreCase("1")){
-                classSearchScreenBinding.linearBg.setBackgroundResource(R.drawable.study_bg);
-                classSearchScreenBinding.boardAutoTxt.setVisibility(View.VISIBLE);
-                classSearchScreenBinding.standardAutoTxt.setVisibility(View.VISIBLE);
-                classSearchScreenBinding.streamAutoTxt.setVisibility(View.VISIBLE);
-            }else{
-                classSearchScreenBinding.linearBg.setBackgroundResource(R.drawable.play_bg);
-                classSearchScreenBinding.boardAutoTxt.setVisibility(View.GONE);
-                classSearchScreenBinding.standardAutoTxt.setVisibility(View.GONE);
-                classSearchScreenBinding.streamAutoTxt.setVisibility(View.GONE);
+            if (!boardStr.equalsIgnoreCase("")) {
+                classSearchScreenBinding.boardAutoTxt.setText(boardStr);
+            }
+            if (!standardStr.equalsIgnoreCase("")) {
+                classSearchScreenBinding.standardAutoTxt.setText(standardStr);
+            }
+            if (!streamStr.equalsIgnoreCase("")) {
+                classSearchScreenBinding.streamAutoTxt.setText(streamStr);
+            }
+            if (!RegionName.equalsIgnoreCase("")) {
+                classSearchScreenBinding.regionNameTxt.setText(RegionName);
             }
         }
         callSessionListApi();
@@ -141,7 +125,6 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 classNameStr = String.valueOf(adapterView.getItemAtPosition(i));
                 Log.d("SessionName", classNameStr);
-//                fillLession();
                 fillBoard();
                 fillStandard();
                 fillStream();
@@ -255,7 +238,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         classSearchScreenBinding.sessionAutoTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId==EditorInfo.IME_ACTION_SEARCH){
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     validationSearch();
                 }
                 return false;
@@ -264,7 +247,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         classSearchScreenBinding.classAutoTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId==EditorInfo.IME_ACTION_SEARCH){
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     validationSearch();
                 }
                 return false;
@@ -273,7 +256,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         classSearchScreenBinding.boardAutoTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId==EditorInfo.IME_ACTION_SEARCH){
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     validationSearch();
                 }
                 return false;
@@ -282,7 +265,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         classSearchScreenBinding.standardAutoTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId==EditorInfo.IME_ACTION_SEARCH){
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     validationSearch();
                 }
                 return false;
@@ -291,7 +274,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         classSearchScreenBinding.streamAutoTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId==EditorInfo.IME_ACTION_SEARCH){
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     validationSearch();
                 }
                 return false;
@@ -323,16 +306,6 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         Intent inback = new Intent(mContext, SearchByUser.class);
         inback.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(inback);
-    }
-
-    public void setValueModel() {
-        selectedDataModel.setSessionName(classSearchScreenBinding.sessionAutoTxt.getText().toString());
-        selectedDataModel.setCity(classSearchScreenBinding.searchAutoTxt.getText().toString());
-        selectedDataModel.setLessionName(classSearchScreenBinding.classAutoTxt.getText().toString());
-        selectedDataModel.setBoard(classSearchScreenBinding.boardAutoTxt.getText().toString());
-        selectedDataModel.setStandard(classSearchScreenBinding.standardAutoTxt.getText().toString());
-        selectedDataModel.setStream(classSearchScreenBinding.streamAutoTxt.getText().toString());
-        selectedDataModel.setGender(genderStr);
     }
 
     //Use for SessionList
@@ -385,11 +358,9 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
                             fillCity();
                             fillRegion();
                             fillSession();
-//                            fillLession();
                             fillBoard();
                             fillStandard();
                             fillStream();
-//                            fillGender();
                         }
                     }
                 }
@@ -434,12 +405,12 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
                     }
                 }
             } else {
-                if(flag.equalsIgnoreCase("1")) {
-                    if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())&&
+                if (flag.equalsIgnoreCase("1")) {
+                    if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
                             datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase("1")) {
                         SesisonNameArray.add(datafilterResponse.get(j).getSessionName());
                     }
-                }else{
+                } else {
                     if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
                             datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase("2")) {
                         SesisonNameArray.add(datafilterResponse.get(j).getSessionName());
@@ -468,12 +439,12 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
                     }
                 } else {
                     if (flag.equalsIgnoreCase("1")) {
-                        if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())&&
+                        if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
                                 datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase("1")) {
                             BoardName.add(datafilterResponse.get(j).getBoard());
                         }
-                    }else{
-                        if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())&&
+                    } else {
+                        if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
                                 datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase("2")) {
                             BoardName.add(datafilterResponse.get(j).getBoard());
                         }
@@ -487,15 +458,15 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
                         BoardName.add(datafilterResponse.get(j).getBoard());
                     }
                 } else {
-                    if(flag.equalsIgnoreCase("1")) {
+                    if (flag.equalsIgnoreCase("1")) {
                         if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
-                                datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim())&&
+                                datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim()) &&
                                 datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase("1")) {
                             BoardName.add(datafilterResponse.get(j).getBoard());
                         }
-                    }else{
+                    } else {
                         if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
-                                datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim())&&
+                                datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim()) &&
                                 datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase("2")) {
                             BoardName.add(datafilterResponse.get(j).getBoard());
                         }
@@ -525,12 +496,12 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
                     }
                 } else {
                     if (flag.equalsIgnoreCase("1")) {
-                        if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())&&
+                        if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
                                 datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase("1")) {
                             StandardName.add(datafilterResponse.get(j).getStandard());
                         }
-                    }else{
-                        if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())&&
+                    } else {
+                        if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
                                 datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase("2")) {
                             StandardName.add(datafilterResponse.get(j).getStandard());
                         }
@@ -545,12 +516,12 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
                     }
                 } else {
                     if (flag.equalsIgnoreCase("1")) {
-                        if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())&&
+                        if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
                                 datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase("1")) {
                             StandardName.add(datafilterResponse.get(j).getStandard());
                         }
-                    }else{
-                        if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())&&
+                    } else {
+                        if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
                                 datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase("2")) {
                             StandardName.add(datafilterResponse.get(j).getStandard());
                         }
@@ -579,12 +550,12 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
                     }
                 } else {
                     if (flag.equalsIgnoreCase("1")) {
-                        if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())&&
+                        if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
                                 datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase("1")) {
                             StreamName.add(datafilterResponse.get(j).getStream());
                         }
-                    }else{
-                        if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())&&
+                    } else {
+                        if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
                                 datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase("2")) {
                             StreamName.add(datafilterResponse.get(j).getStream());
                         }
@@ -599,12 +570,12 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
                     }
                 } else {
                     if (flag.equalsIgnoreCase("1")) {
-                        if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())&&
+                        if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
                                 datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase("1")) {
                             StreamName.add(datafilterResponse.get(j).getStream());
                         }
-                    }else{
-                        if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim())&&
+                    } else {
+                        if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
                                 datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase("2")) {
                             StreamName.add(datafilterResponse.get(j).getStream());
                         }
@@ -698,8 +669,11 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
                 validationSearch();
                 break;
             case R.id.back:
-                    Intent inSearchUser = new Intent(mContext, SearchByUser.class);
-                    startActivity(inSearchUser);
+                Intent intent = new Intent(mContext, ClassDeatilScreen.class);
+                intent.putExtra("SearchPlaystudy",SearchPlaystudy);
+                intent.putExtra("city",locationStr);
+                intent.putExtra("sessionName",classNameStr);
+              startActivity(intent);
                 break;
             case R.id.stream_auto_txt:
                 classSearchScreenBinding.streamAutoTxt.showDropDown();
@@ -723,8 +697,8 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
     }
 
     public void validationSearch() {
-        if (!classSearchScreenBinding.searchAutoTxt.getText().toString().equalsIgnoreCase("")){ /**&&
-                !classSearchScreenBinding.sessionAutoTxt.getText().toString().equalsIgnoreCase("")) {**/
+        if (!classSearchScreenBinding.searchAutoTxt.getText().toString().equalsIgnoreCase("")) { /**&&
+         !classSearchScreenBinding.sessionAutoTxt.getText().toString().equalsIgnoreCase("")) {**/
 //                    setValueModel();
             Intent inSearchUser = new Intent(mContext, ClassDeatilScreen.class);
             inSearchUser.putExtra("SearchBy", "2");

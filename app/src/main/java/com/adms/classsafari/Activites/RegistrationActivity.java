@@ -36,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit.RetrofitError;
@@ -58,9 +59,13 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     //Use for Confirmation Dialog
     Dialog confimDialog;
     boolean firsttime = false;
-    private DatePickerDialog datePickerDialog;
     SessiondetailConfirmationDialogBinding sessiondetailConfirmationDialogBinding;
     SessionDetailModel dataResponse;
+    int SessionHour = 0;
+    Integer SessionMinit = 0;
+    String hours, minit;
+    private DatePickerDialog datePickerDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -211,10 +216,12 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                 break;
             case R.id.click_here:
                 if (firsttime == false) {
+                    registrationBinding.typeOfRegi.setText("If you are a student -");
                     registrationBinding.session1TypeRg.setVisibility(View.VISIBLE);
                     registerTypeStr = registrationBinding.clickHere.getTag().toString();
                     firsttime = true;
                 } else {
+                    registrationBinding.typeOfRegi.setText("If you are a teacher -");
                     registrationBinding.session1TypeRg.setVisibility(View.GONE);
                     registerTypeStr = "family";
                     firsttime = false;
@@ -776,7 +783,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                                 sessiondetailConfirmationDialogBinding.locationTxt.setText(dataResponse.getData().get(j).getRegionName());
                                 sessiondetailConfirmationDialogBinding.startDateTxt.setText(dataResponse.getData().get(j).getStartDate());
                                 sessiondetailConfirmationDialogBinding.endDateTxt.setText(dataResponse.getData().get(j).getEndDate());
-                                sessiondetailConfirmationDialogBinding.durationTxt.setText(durationStr);
+
                                 AppConfiguration.classsessionPrice = dataResponse.getData().get(j).getSessionAmount();
                                 String[] spiltPipes = dataResponse.getData().get(j).getSchedule().split("\\|");
                                 String[] spiltComma;
@@ -785,8 +792,24 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                                 for (int i = 0; i < spiltPipes.length; i++) {
                                     spiltComma = spiltPipes[i].split("\\,");
                                     spiltDash = spiltComma[1].split("\\-");
+                                    calculateHours(spiltDash[0], spiltDash[1]);
                                     dataResponse.getData().get(j).setDateTime(spiltDash[0]);
                                     Log.d("DateTime", spiltDash[0]);
+                                    if (SessionHour < 10) {
+                                        hours= "0"+SessionHour;
+                                    }else{
+                                        hours= String.valueOf(SessionHour);
+                                    }
+                                    if(SessionMinit<10){
+                                        minit="0"+SessionMinit;
+                                    }else{
+                                        minit=String.valueOf(SessionMinit);
+                                    }
+                                    if(minit.equalsIgnoreCase(("00"))) {
+                                        sessiondetailConfirmationDialogBinding.durationTxt.setText(hours + " hr ");
+                                    }else{
+                                        sessiondetailConfirmationDialogBinding.durationTxt.setText(hours + " hr " + minit + " min");//+ " min"
+                                    }
                                     switch (spiltComma[0]) {
                                         case "sun":
                                             sessiondetailConfirmationDialogBinding.sunTimeTxt.setEnabled(true);
@@ -864,5 +887,30 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         Map<String, String> map = new HashMap<>();
         map.put("SessionID", sessionIDStr);
         return map;
+    }
+
+    public void calculateHours(String time1, String time2) {
+        Date date1, date2;
+        int days, hours, min;
+        String hourstr, minstr;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa", Locale.US);
+        try {
+            date1 = simpleDateFormat.parse(time1);
+            date2 = simpleDateFormat.parse(time2);
+
+            long difference = date2.getTime() - date1.getTime();
+            days = (int) (difference / (1000 * 60 * 60 * 24));
+            hours = (int) ((difference - (1000 * 60 * 60 * 24 * days)) / (1000 * 60 * 60));
+            min = (int) (difference - (1000 * 60 * 60 * 24 * days) - (1000 * 60 * 60 * hours)) / (1000 * 60);
+            hours = (hours < 0 ? -hours : hours);
+            SessionHour = hours;
+            SessionMinit = min;
+            Log.i("======= Hours", " :: " + hours + ":" + min);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
     }
 }

@@ -70,8 +70,8 @@
                     android:background="@drawable/round_edittext"
                     android:hint="@string/search_user"
                     android:imeOptions="actionSearch"
-                    android:paddingLeft="@dimen/_5sdp"
-                    android:paddingRight="@dimen/_9sdp"
+                    android:paddingLeft="@dimen/_4sdp"
+                    android:paddingRight="@dimen/_8sdp"
                     android:singleLine="true"/>
 
                 <TextView
