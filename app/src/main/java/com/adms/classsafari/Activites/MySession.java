@@ -586,7 +586,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         menuDialog = new Dialog(mContext, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
-        menuDialog.getWindow().getAttributes().verticalMargin = 0.1F;
+        menuDialog.getWindow().getAttributes().verticalMargin = 0.07F;
         wlp.gravity = Gravity.TOP;
         window.setAttributes(wlp);
 

@@ -6,8 +6,8 @@ package com.adms.classsafari.AppConstant;
 
 public class AppConfiguration {
 
-//    public static final String Mode="LIVE";
-    public static final String Mode="TEST";
+    public static final String Mode="LIVE";
+//    public static final String Mode="TEST";
 
 
 

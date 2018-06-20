@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.AppConfiguration;
 import com.adms.classsafari.AppConstant.Utils;
-import com.adms.classsafari.Model.SelectedDataModel;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.Session.sessionDataModel;
 import com.adms.classsafari.R;
@@ -43,7 +42,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
             sessionTypeStr, wheretoComeStr, genderStr = "", RegionName,
             searchByStr, searchfront, locationStr,
             classNameStr, firsttimesearch, boardStr, standardStr, streamStr, lessionNameStr, SearchPlaystudy;
-    SelectedDataModel selectedDataModel = new SelectedDataModel();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

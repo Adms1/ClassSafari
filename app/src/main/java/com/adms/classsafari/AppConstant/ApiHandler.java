@@ -48,8 +48,6 @@ public class ApiHandler {
             return apiService;
         }
     }
-
-
     protected static OkHttpClient myOkHttpClient() {
 
         try {

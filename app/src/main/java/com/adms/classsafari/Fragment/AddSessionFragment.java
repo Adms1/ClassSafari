@@ -40,6 +40,9 @@ import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.FragmentAddSessionBinding;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,6 +50,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -311,7 +315,8 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         callStreamApi();
         callLessionApi();
         callRegionApi();
-//        }
+        fillCity();
+
         initViews();
         setListners();
 
@@ -2310,6 +2315,105 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
 
     }
 
+    public void diableDialogControl() {
+        start_date_txt.setEnabled(false);
+        end_date_txt.setEnabled(false);
+
+        sun_start_linear.setEnabled(false);
+        sun_end_linear.setEnabled(false);
+        sun_start_time_txt.setEnabled(false);
+        sun_end_time_txt.setEnabled(false);
+        sun_start_add_session_btn.setEnabled(false);
+        sun_end_add_session_btn.setEnabled(false);
+        sun_start_linear.setAlpha(1);
+        sun_end_linear.setAlpha(1);
+
+        mon_start_linear.setEnabled(false);
+        mon_end_linear.setEnabled(false);
+        mon_start_time_txt.setEnabled(false);
+        mon_end_time_txt.setEnabled(false);
+        mon_start_add_session_btn.setEnabled(false);
+        mon_end_add_session_btn.setEnabled(false);
+        mon_start_linear.setAlpha(1);
+        mon_end_linear.setAlpha(1);
+
+        tue_start_linear.setEnabled(false);
+        tue_end_linear.setEnabled(false);
+        tue_start_linear.setAlpha(1);
+        tue_end_linear.setAlpha(1);
+        tue_start_time_txt.setEnabled(false);
+        tue_end_time_txt.setEnabled(false);
+        tue_start_add_session_btn.setEnabled(false);
+        tue_end_add_session_btn.setEnabled(false);
+
+        wed_start_linear.setEnabled(false);
+        wed_end_linear.setEnabled(false);
+        wed_start_linear.setAlpha(1);
+        wed_end_linear.setAlpha(1);
+        wed_start_add_session_btn.setEnabled(false);
+        wed_end_add_session_btn.setEnabled(false);
+
+        thu_start_linear.setEnabled(false);
+        thu_end_linear.setEnabled(false);
+        thu_start_linear.setAlpha(1);
+        thu_end_linear.setAlpha(1);
+        thu_start_add_session_btn.setEnabled(false);
+        thu_end_add_session_btn.setEnabled(false);
+
+        fri_start_linear.setEnabled(false);
+        fri_end_linear.setEnabled(false);
+        fri_start_linear.setAlpha(1);
+        fri_end_linear.setAlpha(1);
+        fri_start_add_session_btn.setEnabled(false);
+        fri_end_add_session_btn.setEnabled(false);
+
+        sat_start_linear.setEnabled(false);
+        sat_end_linear.setEnabled(false);
+        sat_start_linear.setAlpha(1);
+        sat_end_linear.setAlpha(1);
+        sat_start_add_session_btn.setEnabled(false);
+        sat_end_add_session_btn.setEnabled(false);
+
+    }
+
+    public void fillCity() {
+        ArrayList<String> CityName = new ArrayList<String>();
+        ArrayList<String> StateName = new ArrayList<>();
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(mContext.getAssets().open("world_cities.txt")));
+            String line;
+            Log.e("Reader Stuff", reader.readLine());
+            while ((line = reader.readLine()) != null) {
+                Log.e("code", line);
+                String[] RowData = line.split(",");
+                CityName.add(RowData[0]);
+                StateName.add(RowData[2]);
+            }
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        HashSet hs = new HashSet();
+        hs.addAll(CityName);
+        CityName.clear();
+        CityName.addAll(hs);
+
+        HashSet sh = new HashSet();
+        sh.addAll(StateName);
+        StateName.clear();
+        StateName.addAll(sh);
+
+        ArrayAdapter<String> adapterTerm = new ArrayAdapter<String>(mContext, R.layout.autocomplete_layout, CityName);
+        addSessionBinding.cityEdt.setAdapter(adapterTerm);
+        addSessionBinding.cityEdt.setThreshold(1);
+
+        ArrayAdapter<String> adapterTerm1 = new ArrayAdapter<String>(mContext, R.layout.autocomplete_layout, StateName);
+        addSessionBinding.stateEdt.setAdapter(adapterTerm1);
+        addSessionBinding.stateEdt.setThreshold(1);
+
+    }
+
     public static class TimePicker extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
         @Override
@@ -2570,64 +2674,4 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
 
     }
 
-    public void diableDialogControl(){
-        start_date_txt.setEnabled(false);
-        end_date_txt.setEnabled(false);
-
-        sun_start_linear.setEnabled(false);
-        sun_end_linear.setEnabled(false);
-        sun_start_time_txt.setEnabled(false);
-        sun_end_time_txt.setEnabled(false);
-        sun_start_add_session_btn.setEnabled(false);
-        sun_end_add_session_btn.setEnabled(false);
-        sun_start_linear.setAlpha(1);
-        sun_end_linear.setAlpha(1);
-
-        mon_start_linear.setEnabled(false);
-        mon_end_linear.setEnabled(false);
-        mon_start_time_txt.setEnabled(false);
-        mon_end_time_txt.setEnabled(false);
-        mon_start_add_session_btn.setEnabled(false);
-        mon_end_add_session_btn.setEnabled(false);
-        mon_start_linear.setAlpha(1);
-        mon_end_linear.setAlpha(1);
-
-        tue_start_linear.setEnabled(false);
-        tue_end_linear.setEnabled(false);
-tue_start_linear.setAlpha(1);
-tue_end_linear.setAlpha(1);
-        tue_start_time_txt.setEnabled(false);
-        tue_end_time_txt.setEnabled(false);
-        tue_start_add_session_btn.setEnabled(false);
-        tue_end_add_session_btn.setEnabled(false);
-
-        wed_start_linear.setEnabled(false);
-        wed_end_linear.setEnabled(false);
-        wed_start_linear.setAlpha(1);
-        wed_end_linear.setAlpha(1);
-        wed_start_add_session_btn.setEnabled(false);
-        wed_end_add_session_btn.setEnabled(false);
-
-        thu_start_linear.setEnabled(false);
-        thu_end_linear.setEnabled(false);
-        thu_start_linear.setAlpha(1);
-        thu_end_linear.setAlpha(1);
-        thu_start_add_session_btn.setEnabled(false);
-        thu_end_add_session_btn.setEnabled(false);
-
-        fri_start_linear.setEnabled(false);
-        fri_end_linear.setEnabled(false);
-        fri_start_linear.setAlpha(1);
-        fri_end_linear.setAlpha(1);
-        fri_start_add_session_btn.setEnabled(false);
-        fri_end_add_session_btn.setEnabled(false);
-
-        sat_start_linear.setEnabled(false);
-        sat_end_linear.setEnabled(false);
-        sat_start_linear.setAlpha(1);
-        sat_end_linear.setAlpha(1);
-        sat_start_add_session_btn.setEnabled(false);
-        sat_end_add_session_btn.setEnabled(false);
-
-    }
 }

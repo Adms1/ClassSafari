@@ -45,7 +45,6 @@ import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.BottomNavigationViewHelper;
 import com.adms.classsafari.Interface.bookClick;
 import com.adms.classsafari.Interface.onViewClick;
-import com.adms.classsafari.Model.SelectedDataModel;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.Session.sessionDataModel;
 import com.adms.classsafari.R;
@@ -98,7 +97,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
     int count = 0, result = 0;
     int SessionHour = 0;
     Integer SessionMinit = 0;
-    SelectedDataModel selectedDataModel;
+
 
     @Override
 
