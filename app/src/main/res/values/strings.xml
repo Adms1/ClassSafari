@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Class Safari</string>
+    <string name="app_name">Search Classes</string>
+    <string name="contentDescription">x</string>
     <string name="search_user">Search by Subject / Activity</string>
     <string name="location">Location</string>
     <string name="lets_play">LET\'S PLAY!</string>
@@ -11,37 +12,37 @@
     <string name="standard">\u2022 Standard</string>
     <string name="stream">\u2022 Stream</string>
     <string name="add_stream">Stream</string>
-    <string name="location_add">Add Location Preference</string>
+    <string name="location_add">Location Preferences</string>
     <string name="location_note">Choose from popular areas or enter your own</string>
-    <string name="button_txt">ADD</string>
+    <string name="button_txt">More filter</string>
     <string name="popular">POPULAR</string>
     <string name="price">PRICE</string>
     <string name="sort">SORT</string>
     <string name="filter">FILTER</string>
     <string name="tutor">Tutor / Tution Class</string>
-    <string name="session_detail">Session</string>
+    <string name="session_detail">Class</string>
     <string name="teacher_detail">Teacher</string>
     <string name="session_type">Type</string>
-    <string name="session_detail_name">Lesson</string>
+    <string name="session_detail_name">Subject</string>
     <string name="session_stream">Stream</string>
     <string name="email">Email id</string>
     <string name="phone">Phone</string>
     <string name="session_reviews">Reviews</string>
     <string name="user_name">Felicia Richi Bwown</string>
-    <string name="book_session">BOOK SESSION</string>
+    <string name="book_session">BOOK CLASS</string>
     <string name="class_search">SEARCH</string>
     <string name="search_string">City</string>
     <string name="search_session">Subject</string>
     <string name="search_stream">Stream</string>
     <string name="search_MF">M/F</string>
-    <string name="search_class">Class Name / Tutor Name</string>
+    <string name="search_class">Class Name / Teacher Name</string>
     <string name="comment_hint">Write Your Comment</string>
-    <string name="login"><u><b>Login / Register</b></u></string>
+    <string name="login"><u><b>Login</b></u></string>
     <string name="sortby">SORT BY</string>
     <string name="most_recent">Most Recent</string>
-    <string name="addsession">Add Session</string>
+    <string name="addsession">Add Class</string>
     <string name="my_Account">My Payment</string>
-    <string name="my_session">My Session</string>
+    <string name="my_session">Upcoming Classes</string>
     <string name="my_change_pass">Change Password</string>
     <string name="reviews">Reviews</string>
     <string name="logout">Logout</string>
@@ -82,7 +83,7 @@
     <string name="family_register1">Registration</string>
     <string name="forgot">Forgot Password</string>
     <string name="title_activity_dash_board">DashBoardActivity</string>
-    <string name="session_time">Add Session Time</string>
+    <string name="session_time">Add Class Time</string>
     <string name="date">Date</string>
     <string name="time">Time</string>
     <string name="area">Area</string>
@@ -90,7 +91,7 @@
     <string name="zipcode">Zipcode</string>
     <string name="description">Description</string>
     <string name="alert">Alert</string>
-    <string name="session_name">Session Details</string>
+    <string name="session_name">Class Name</string>
     <string name="session_standard">Standard</string>
     <string name="search_board">Board</string>
     <string name="payment_success">Payment Success</string>
@@ -110,7 +111,7 @@
     <string name="recurring">Recurring</string>
     <string name="single">Single</string>
     <string name="academic">Academic</string>
-    <string name="play">Sports</string>
+    <string name="play">Activity</string>
     <string name="family_regi">Family</string>
     <string name="teacher_regi">Teacher</string>
     <string name="add_Student">Add Contact</string>
@@ -132,23 +133,24 @@
     <string name="action_settings">Settings</string>
     <string name="openDrawer">open_drawer</string>
     <string name="closeDrawer">close_drawer</string>
-    <string name="session_price">Session Price</string>
+    <string name="session_price">Class Price</string>
     <string name="s_subject">Lesson</string>
     <string name="batch_time">Time</string>
     <string name="total_student">Student</string>
     <string name="start_date">Start Date</string>
     <string name="end_date">End Date</string>
-    <string name="sports">Spots</string>
+    <string name="sports">No of Students</string>
+    <string name="sports1">Open Spot</string>
     <string name="add_familyname">Family Name</string>
     <string name="family_list">Family List</string>
-
+<string name="strIAccTermsAndCond">I accept the terms and conditions</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
-        <item>Session Calendar</item>
-        <item>Add Session</item>
+        <item>Class Calendar</item>
+        <item>Add Class</item>
         <item>Payment Report</item>
         <item>Student Attendance</item>
         <!--<item>Change Password</item>-->
@@ -191,24 +193,24 @@
     <string name="strOtpMesgText">Code has been sent to your registered number. Enter the code to verify your account.</string>
 
     <!-- Session Page String-->
-    <string name="sessionName">Please enter session\'s name.</string>
+    <string name="sessionName">Please enter class name.</string>
     <string name="boardName">Please enter board.</string>
     <string name="standardName">Please enter standard.</string>
     <string name="streamName">Please enter stream name.</string>
-    <string name="lessonName">Please enter lesson name.</string>
-    <string name="sessionTime">Please add session\'s time.</string>
-    <string name="sessionAddress">Please enter session\'s address.</string>
-    <string name="sessionArea">Please enter session\'s area.</string>
-    <string name="sessionCity">Please enter session\'s city.</string>
-    <string name="sessionState">Please enter session\'s state.</string>
+    <string name="lessonName">Please enter subject name.</string>
+    <string name="sessionTime">Please add class time.</string>
+    <string name="sessionAddress">Please enter class address.</string>
+    <string name="sessionArea">Please enter class area.</string>
+    <string name="sessionCity">Please enter class city.</string>
+    <string name="sessionState">Please enter class state.</string>
     <string name="sessionZipcode">Please enter zipcode.</string>
-    <string name="sessionCapacity">Please enter session\'s capacity.</string>
-    <string name="sessionAmount">Please enter session\'s amount.</string>
-    <string name="Date">Please select session start date and end date should be same.</string>
+    <string name="sessionCapacity">Please enter class capacity.</string>
+    <string name="sessionAmount">Please enter class amount.</string>
+    <string name="Date">Please select class start date and end date should be same.</string>
 
     <!--Change Passsword String-->
     <string name="newPassword">Enter New Password</string>
-    <string name="changPassword">Your Password Change Succesfully.</string>
+    <string name="changPassword">Your Password Changed Succesfully.</string>
     <string name="confirmpassword">Enter Confirm Password</string>
     <string name="currentpassword">Enter Current Password</string>
 
@@ -216,7 +218,8 @@
     <!-- Class Detail String-->
     <string name="blank_value">Please Select Activity / Subject.</string>
     <string name="location_validation">Please Select Proper Location</string>
-    <string name="rating_header">Provide, Rate Session!</string>
-    <string name="rating_row">How much do you like this session?</string>
+    <string name="rating_header">Provide, Rate Class!</string>
+    <string name="rating_row">How much do you like this class?</string>
     <string name="not_loging">you are not login.</string>
+    <string name="class_type">Please Select Class type.</string>
 </resources>

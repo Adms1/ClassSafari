@@ -39,7 +39,7 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
     SessionReviewCardLayout1Binding reviewCardLayout1Binding;
 
     List<sessionDataModel> arrayList, sessionRatingList;
-    String address,ratinguserStr;
+    String address, ratinguserStr;
     onViewClick onViewClick;
     ArrayList<String> reviewarray;
     ArrayList<String> descriptionviewarray;
@@ -58,7 +58,7 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
         this.sessionRatingList = sessionRatingList;
         this.reviewarray = reviewarray;
         this.descriptionviewarray = descriptionviewarray;
-        this.ratinguserStr=ratinguserStr;
+        this.ratinguserStr = ratinguserStr;
     }
 
     @Override
@@ -119,12 +119,18 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
             sessionCardLayout1Binding.emailTxt.setText(arrayList.get(position).getEmailAddress());
             sessionCardLayout1Binding.phoneTxt.setText(arrayList.get(position).getContactPhoneNumber());
             sessionCardLayout1Binding.teacherNameTxt.setText(arrayList.get(position).getName());
-            if(ratinguserStr.equalsIgnoreCase("0")) {
-            sessionCardLayout1Binding.ratingTxt.setVisibility(View.GONE);
-            }else {
+            if (ratinguserStr.equalsIgnoreCase("0")) {
+                sessionCardLayout1Binding.ratingTxt.setVisibility(View.GONE);
+            } else {
                 sessionCardLayout1Binding.ratingTxt.setVisibility(View.VISIBLE);
                 sessionCardLayout1Binding.ratingTxt.setText("(" + ratinguserStr + ")");
             }
+            if (arrayList.get(position).getCoachTypeID().equalsIgnoreCase("1")) {
+                sessionCardLayout1Binding.sessionImage.setImageResource(R.drawable.physics_img);
+            } else {
+                sessionCardLayout1Binding.sessionImage.setImageResource(R.drawable.all_sports_image);
+            }
+
 
             sessionCardLayout1Binding.phoneTxtView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -215,34 +221,9 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
     }
 
     public class SessionCard extends RecyclerView.ViewHolder {
-//        public TextView session_name_txt, session_type_txt, session_detail_name_txt,
-//                session_board_txt, session_standard_txt, session_stream_txt, session_total_student_txt,
-//                address_txt, email_txt, phone_txt, rating_txt, session_board_txt_view,
-//                session_standard_txt_view, session_stream_txt_view, teacher_name_txt;
-//                session_description_txt;
-
-//        RatingBar session_ratingbar;
 
         public SessionCard(View view) {
             super(view);
-//            session_board_txt_view = (TextView) view.findViewById(R.id.session_board_txt_view);
-//            session_standard_txt_view = (TextView) view.findViewById(R.id.session_standard_txt_view);
-//            session_stream_txt_view = (TextView) view.findViewById(R.id.session_stream_txt_view);
-//            session_name_txt = (TextView) view.findViewById(R.id.session_name_txt);
-//            session_type_txt = (TextView) view.findViewById(R.id.session_type_txt);
-//            session_detail_name_txt = (TextView) view.findViewById(R.id.session_detail_name_txt);
-//            session_board_txt = (TextView) view.findViewById(R.id.session_board_txt);
-//            session_standard_txt = (TextView) view.findViewById(R.id.session_standard_txt);
-//            session_stream_txt = (TextView) view.findViewById(R.id.session_stream_txt);
-//            session_total_student_txt = (TextView) view.findViewById(R.id.session_total_student_txt);
-//            address_txt = (TextView) view.findViewById(R.id.address_txt);
-//            email_txt = (TextView) view.findViewById(R.id.email_txt);
-//            phone_txt = (TextView) view.findViewById(R.id.phone_txt);
-//            session_ratingbar = (RatingBar) view.findViewById(R.id.session_ratingbar);
-//            rating_txt = (TextView) view.findViewById(R.id.rating_txt);
-//            teacher_name_txt = (TextView) view.findViewById(R.id.teacher_name_txt);
-//            session_description_txt = (TextView) view.findViewById(R.id.session_description_txt);
-
         }
     }
 

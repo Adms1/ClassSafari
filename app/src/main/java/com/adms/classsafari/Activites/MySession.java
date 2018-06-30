@@ -71,13 +71,16 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
     SessionDetailModel dataResponse;
     int SessionHour = 0;
     Integer SessionMinit = 0;
+    String SessionDuration ;
     String hours,minit;
     //Use for Menu Dialog
     String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr;
     Dialog menuDialog;
     Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily;
     TextView userNameTxt;
-
+    ArrayList<Integer> totalHours;
+    ArrayList<Integer> totalMinit;
+    int avgHoursvalue, avgMinitvalue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +138,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                         return;
                     }
                     if (sessionModel.getSuccess().equalsIgnoreCase("false")) {
-                        Utils.ping(mContext, getString(R.string.false_msg));
+                        Utils.ping(mContext,"Classes not found");
                         return;
                     }
                     if (sessionModel.getSuccess().equalsIgnoreCase("True")) {
@@ -348,8 +351,15 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                                 sessiondetailConfirmationDialogBinding.locationTxt.setText(dataResponse.getData().get(j).getRegionName());
                                 sessiondetailConfirmationDialogBinding.startDateTxt.setText(dataResponse.getData().get(j).getStartDate());
                                 sessiondetailConfirmationDialogBinding.endDateTxt.setText(dataResponse.getData().get(j).getEndDate());
+                                sessiondetailConfirmationDialogBinding.priceTxt.setText("₹"+dataResponse.getData().get(j).getSessionAmount());
+                                if(!dataResponse.getData().get(j).getTotalRatingUser().equalsIgnoreCase("0")) {
+                                    sessiondetailConfirmationDialogBinding.ratingUserTxt.setText("( "+dataResponse.getData().get(j).getTotalRatingUser()+" )");
+                                }
+
                                 sessionPriceStr=dataResponse.getData().get(j).getSessionAmount();
                                 AppConfiguration.classsessionPrice = dataResponse.getData().get(j).getSessionAmount();
+                                totalHours = new ArrayList<>();
+                                totalMinit = new ArrayList<>();
                                 String[] spiltPipes = dataResponse.getData().get(j).getSchedule().split("\\|");
                                 String[] spiltComma;
                                 String[] spiltDash;
@@ -360,77 +370,105 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                                     calculateHours(spiltDash[0], spiltDash[1]);
                                     dataResponse.getData().get(j).setDateTime(spiltDash[0]);
                                     Log.d("DateTime", spiltDash[0]);
-                                    if (SessionHour < 10) {
-                                        hours= "0"+SessionHour;
-                                    }else{
-                                        hours= String.valueOf(SessionHour);
-                                    }
-                                    if(SessionMinit<10){
-                                        minit="0"+SessionMinit;
-                                    }else{
-                                        minit=String.valueOf(SessionMinit);
-                                    }
-                                    if(minit.equalsIgnoreCase(("00"))) {
-                                        sessiondetailConfirmationDialogBinding.durationTxt.setText(hours + " hr ");
-                                    }else{
-                                        sessiondetailConfirmationDialogBinding.durationTxt.setText(hours + " hr " + minit + " min");//+ " min"
-                                    }
+//                                    if (SessionHour < 10) {
+//                                        hours= "0"+SessionHour;
+//                                    }else{
+//                                        hours= String.valueOf(SessionHour);
+//                                    }
+//                                    if(SessionMinit<10){
+//                                        minit="0"+SessionMinit;
+//                                    }else{
+//                                        minit=String.valueOf(SessionMinit);
+//                                    }
+//                                    if(minit.equalsIgnoreCase(("00"))) {
+//                                        sessiondetailConfirmationDialogBinding.durationTxt.setText(hours + " hr ");
+//                                    }else{
+//                                        sessiondetailConfirmationDialogBinding.durationTxt.setText(hours + " hr " + minit + " min");//+ " min"
+//                                    }
                                     switch (spiltComma[0]) {
                                         case "sun":
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.sunTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.sundayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.sunTimeTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.sundayBtn.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.sunTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setText(SessionDuration);
                                             break;
                                         case "mon":
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.monTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.mondayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.monTimeTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.mondayBtn.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.monTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
+                                            sessiondetailConfirmationDialogBinding.monHoursTxt.setText(SessionDuration);
                                             break;
                                         case "tue":
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.tuesTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.tuesdayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.tuesTimeTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.tuesdayBtn.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.tuesTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
+                                            sessiondetailConfirmationDialogBinding.tuesHoursTxt.setText(SessionDuration);
                                             break;
                                         case "wed":
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.wedTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.wednesdayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.wedTimeTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.wednesdayBtn.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.wedTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
+                                            sessiondetailConfirmationDialogBinding.wedHoursTxt.setText(SessionDuration);
                                             break;
                                         case "thu":
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.thurTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.thursdayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.thurTimeTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.thursdayBtn.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.thurTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
+                                            sessiondetailConfirmationDialogBinding.thurHoursTxt.setText(SessionDuration);
                                             break;
                                         case "fri":
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.friTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.fridayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.friTimeTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.fridayBtn.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.friTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
+                                            sessiondetailConfirmationDialogBinding.friHoursTxt.setText(SessionDuration);
                                             break;
                                         case "sat":
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.satTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.saturdayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.satTimeTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.saturdayBtn.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.satTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
+                                            sessiondetailConfirmationDialogBinding.satHoursTxt.setText(SessionDuration);
                                             break;
                                         default:
 
                                     }
                                 }
                             }
-
+//                            averageHours(totalHours);
+//                            averageMinit(totalMinit);
+//
+//                            if(avgMinitvalue==0) {
+//                                sessiondetailConfirmationDialogBinding.durationTxt.setText(avgHoursvalue + " hr ");
+//                            }else{
+//                                sessiondetailConfirmationDialogBinding.durationTxt.setText(avgHoursvalue + " hr " + avgMinitvalue + " min");//+ " min"
+//                            }
                         }
                     }
                 }
@@ -453,7 +491,27 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         map.put("SessionID", sessionIDStr);
         return map;
     }
-
+    public void averageHours(List<Integer> list) {
+        if(list!=null) {
+            int sum = 0;
+            int n = list.size();
+            for (int i = 0; i < n; i++)
+                sum += list.get(i);
+            Log.d("sum", "" + sum);
+            avgHoursvalue = (sum) / n;
+            Log.d("value", "" + avgHoursvalue);
+        }
+    }
+    public void averageMinit(List<Integer> list) {
+        if(list!=null) {
+            int sum = 0;
+            int n = list.size();
+            for (int i = 0; i < n; i++)
+                sum += list.get(i);
+            avgMinitvalue = (sum) / n;
+            Log.d("value", "" + avgMinitvalue);
+        }
+    }
     public void calculateHours(String time1, String time2) {
         Date date1, date2;
         int days, hours, min;
@@ -471,7 +529,22 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
             SessionHour = hours;
             SessionMinit = min;
             Log.i("======= Hours", " :: " + hours + ":" + min);
+//            if(SessionHour>0) {
+////                totalHours.add(SessionHour);
+////            }
+//////            if(SessionMinit>0) {
+////            totalMinit.add(SessionMinit);
+//////            }
 
+            if(SessionMinit>0){
+                if(SessionMinit<10) {
+                    SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf("0" + SessionMinit + " hrs");
+                }else{SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf(SessionMinit + " hrs");
+
+                }
+            }else{
+                SessionDuration=String.valueOf(SessionHour)+" hrs";
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }

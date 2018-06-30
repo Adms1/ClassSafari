@@ -6,7 +6,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/login"
+        android:background="@drawable/login_new"
         android:orientation="vertical"
         tools:context=".Activites.LoginActivity">
 
@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_40sdp"
-            android:src="@drawable/logo" />
+            android:src="@drawable/s_c_logo" />
 
         <LinearLayout
             android:id="@+id/email_pass_linear"

@@ -35,7 +35,7 @@ public class PurchaseSessionDetailAdapter extends RecyclerView.Adapter {
     SessionReviewCardLayout1Binding reviewCardLayout1Binding;
 
     List<sessionDataModel> arrayList, sessionRatingList;
-    String address;
+    String address,ratinguserStr;
     onViewClick onViewClick;
     ArrayList<String> reviewarray;
     ArrayList<String> descriptionviewarray;
@@ -43,12 +43,13 @@ public class PurchaseSessionDetailAdapter extends RecyclerView.Adapter {
     private ArrayList<String> SessionDetail;
 
     public PurchaseSessionDetailAdapter(Context mContext, List<sessionDataModel> arrayList,
-                                ArrayList<String> descriptionviewarray, ArrayList<String> reviewarray, List<sessionDataModel> sessionRatingList, onViewClick onViewClick) {
+                                        ArrayList<String> descriptionviewarray, ArrayList<String> reviewarray, String ratinguserStr, List<sessionDataModel> sessionRatingList, onViewClick onViewClick) {
         this.mContext = mContext;
         this.arrayList = arrayList;
         this.onViewClick = onViewClick;
         this.sessionRatingList = sessionRatingList;
         this.reviewarray = reviewarray;
+        this.ratinguserStr=ratinguserStr;
         this.descriptionviewarray = descriptionviewarray;
     }
 
@@ -85,7 +86,7 @@ public class PurchaseSessionDetailAdapter extends RecyclerView.Adapter {
             final SessionCard headerHolder = (SessionCard) holder;
             sessionCardLayout1Binding.sessionNameTxt.setText(arrayList.get(position).getSessionName());
             sessionCardLayout1Binding.sessionRatingbar.setRating(Float.parseFloat(arrayList.get(position).getRating()));
-            sessionCardLayout1Binding.ratingTxt.setText(String.valueOf("(" + arrayList.get(position).getRating() + ")"));
+            sessionCardLayout1Binding.ratingTxt.setText("(" + ratinguserStr + ")");
             if (arrayList.get(position).getCoachTypeID().equalsIgnoreCase("1")) {
                 sessionCardLayout1Binding.linearBoard.setVisibility(View.VISIBLE);
                 sessionCardLayout1Binding.linearStandard.setVisibility(View.VISIBLE);

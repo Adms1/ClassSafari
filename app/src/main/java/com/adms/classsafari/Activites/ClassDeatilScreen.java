@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -25,17 +26,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.MultiAutoCompleteTextView;
 import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.adms.classsafari.Adapter.ClassDetailAdapter;
 import com.adms.classsafari.Adapter.PopularClassListAdapter;
+import com.adms.classsafari.Adapter.SearchAreaAdapter;
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.HighToLowSortRating;
 import com.adms.classsafari.AppConstant.HightToLowSortSessionPrice;
@@ -47,8 +47,11 @@ import com.adms.classsafari.Interface.bookClick;
 import com.adms.classsafari.Interface.onViewClick;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.Session.sessionDataModel;
+import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivityClassDeatilScreenBinding;
+import com.adms.classsafari.databinding.ChangePasswordDialogBinding;
+import com.adms.classsafari.databinding.DialogFilterBinding;
 import com.adms.classsafari.databinding.DialogPopularBinding;
 import com.adms.classsafari.databinding.DialogPriceBinding;
 import com.adms.classsafari.databinding.DialogSortBinding;
@@ -71,33 +74,45 @@ import retrofit.client.Response;
 
 public class ClassDeatilScreen extends AppCompatActivity implements View.OnClickListener {
 
-    public Dialog popularDialog, priceDialog, sortDialog;
+    public Dialog popularDialog, priceDialog, sortDialog, filterDialog;
     ActivityClassDeatilScreenBinding binding;
     DialogPopularBinding popularBinding;
     DialogPriceBinding priceBinding;
     DialogSortBinding sortBinding;
+    DialogFilterBinding filterBinding;
+
 
     Context mContext;
     ClassDetailAdapter classDetailAdapter;
 
     List<sessionDataModel> arrayListPopular;
     PopularClassListAdapter popularClassListAdapter;
+    ArrayList<String> AreaName;
+    SearchAreaAdapter searchAreaAdapter;
+    ArrayList<String> dialogselectarea;
 
     String subjectStr, boardStr = "", standardStr = "", streamStr = "",
-            locationStr, classNameStr, searchByStr, searchTypeStr,
-            wheretoComeStr, genderStr = "", maxpriceStr = "", minpriceStr = "",
-            sessionId, commentStr, ratingValueStr, popularsessionID = "",
-            populardurationStr = "", populargenderStr = "", popluarsessiondateStr = "", firsttimesearch, RegionName = "", SearchPlaystudy;
+            locationStr, classNameStr, genderStr = "", sessionId, commentStr, ratingValueStr, popularsessionID = "",
+            populardurationStr = "", populargenderStr = "", popluarsessiondateStr = "", firsttimesearch, RegionName = "", SearchPlaystudy, dialogselectareaStr = "";
     SessionDetailModel dataResponse, populardataresponse;
     List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
     boolean arrayfirst = true;
 
 
-    String rangestatusStr = "", afterfilterresult, pricewiseStr = "", ratingStr = "", sessionType, searchfront;
+    String rangestatusStr = "", afterfilterresult, pricewiseStr = "", ratingStr = "", searchfront;
     int count = 0, result = 0;
     int SessionHour = 0;
     Integer SessionMinit = 0;
+    ArrayList<Integer> totalHours;
+    ArrayList<Integer> totalMinit;
+    int avgHoursvalue, avgMinitvalue;
 
+    //Use for Menu Dialog
+    String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr;
+    Dialog menuDialog, changeDialog;
+    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily;
+    TextView userNameTxt;
+    ChangePasswordDialogBinding changePasswordDialogBinding;
 
     @Override
 
@@ -111,27 +126,16 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
     }
 
     public void init() {
-        searchByStr = getIntent().getStringExtra("SearchBy");
 
-        locationStr = getIntent().getStringExtra("city");
-        classNameStr = getIntent().getStringExtra("sessionName");
-        wheretoComeStr = getIntent().getStringExtra("withOR");
-        searchTypeStr = getIntent().getStringExtra("searchType");
-
-
-        searchfront = getIntent().getStringExtra("searchfront");
-        Utils.setPref(mContext, "location", locationStr.trim());
-        Utils.setPref(mContext, "classname", classNameStr.trim());
         BottomNavigationViewHelper.removeShiftMode(binding.bottomNavigationView);
-
         validData();
-//
 
 
-
-        binding.cityTxt.setText(locationStr);
-        binding.subjectTxt.setText(classNameStr);
-
+        if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
+            binding.menu.setVisibility(View.GONE);
+        } else {
+            binding.menu.setVisibility(View.VISIBLE);
+        }
         callSessionListApi();
 
     }
@@ -142,14 +146,17 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.action_popular:
-                        PopularDialog();
-                        break;
+//                    case R.id.action_popular:
+//                        PopularDialog();
+//                        break;
                     case R.id.action_price:
                         PriceDialog();
                         break;
-                    case R.id.action_filter:
+                    case R.id.action_sort:
                         SortDialog();
+                        break;
+                    case R.id.action_filter:
+                        FilterDialog();
                         break;
                 }
 
@@ -159,7 +166,9 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         });
         binding.backImg.setOnClickListener(this);
         binding.searchImg.setOnClickListener(this);
-        binding.multiautocompe.setOnClickListener(this);
+        binding.addBtn.setOnClickListener(this);
+        binding.menu.setOnClickListener(this);
+//        binding.multiautocompe.setOnClickListener(this);
         binding.multiautocompe.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -170,7 +179,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
             public void onTextChanged(CharSequence charSequence, int i, int i1, int count) {
                 Log.d("valueOf OnTextChange", "" + charSequence + i + i1);
                 if (charSequence.length() == 0) {
-                    binding.inforTxt.setVisibility(View.VISIBLE);
+//                    binding.inforTxt.setVisibility(View.VISIBLE);
                     if (dataResponse.getSuccess().equalsIgnoreCase("True")) {
                         if (dataResponse.getData().size() >= 0) {
                             List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
@@ -215,43 +224,43 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
             public void afterTextChanged(Editable editable) {
             }
         });
-
-        binding.multiautocompe.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                binding.inforTxt.setVisibility(View.GONE);
-                if (arrayfirst) {
-                    filterFinalArray = new ArrayList<sessionDataModel>();
-                }
-                String str = binding.multiautocompe.getText().toString();
-                if (!str.equalsIgnoreCase("")) {
-                    arrayfirst = false;
-                    String[] spilt = adapterView.getItemAtPosition(i).toString().trim().split("\\,");
-
-                    for (sessionDataModel arrayObj : dataResponse.getData()) {
-                        if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-                                arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-                            if (arrayObj.getRegionName().trim().toLowerCase().contains((spilt[0]).trim().toLowerCase())) {
-                                filterFinalArray.add(arrayObj);
-
-                            }
-                        }
-                    }
-                    Log.d("FilterArray", "" + filterFinalArray.size());
-                    fillData(filterFinalArray);
-                } else {
-                    List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-                    for (sessionDataModel arrayObj : dataResponse.getData()) {
-                        if (arrayObj.getAddressCity().trim().toLowerCase().contains(locationStr.trim().toLowerCase()) &&
-                                arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-                            filterFinalArray.add(arrayObj);
-                        }
-                    }
-                    Log.d("FilterArray", "" + filterFinalArray.size());
-                    fillData(filterFinalArray);
-                }
-            }
-        });
+//
+//        binding.multiautocompe.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                binding.inforTxt.setVisibility(View.GONE);
+//                if (arrayfirst) {
+//                    filterFinalArray = new ArrayList<sessionDataModel>();
+//                }
+//                String str = binding.multiautocompe.getText().toString();
+//                if (!str.equalsIgnoreCase("")) {
+//                    arrayfirst = false;
+//                    String[] spilt = adapterView.getItemAtPosition(i).toString().trim().split("\\,");
+//
+//                    for (sessionDataModel arrayObj : dataResponse.getData()) {
+//                        if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+//                                arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+//                            if (arrayObj.getRegionName().trim().toLowerCase().contains((spilt[0]).trim().toLowerCase())) {
+//                                filterFinalArray.add(arrayObj);
+//
+//                            }
+//                        }
+//                    }
+//                    Log.d("FilterArray", "" + filterFinalArray.size());
+//                    fillData(filterFinalArray);
+//                } else {
+//                    List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+//                    for (sessionDataModel arrayObj : dataResponse.getData()) {
+//                        if (arrayObj.getAddressCity().trim().toLowerCase().contains(locationStr.trim().toLowerCase()) &&
+//                                arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+//                            filterFinalArray.add(arrayObj);
+//                        }
+//                    }
+//                    Log.d("FilterArray", "" + filterFinalArray.size());
+//                    fillData(filterFinalArray);
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -262,29 +271,29 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                 startActivity(inSearchUser);
                 break;
             case R.id.search_img:
-                    Intent insession = new Intent(mContext, ClassSearchScreen.class);
-                    insession.putExtra("flag", dataResponse.getData().get(0).getCoachTypeID());
-                    insession.putExtra("withOR", wheretoComeStr);
-                    insession.putExtra("SearchBy", searchByStr);
-                    insession.putExtra("searchfront", "searchunder");
-                    insession.putExtra("city", locationStr);
-                    insession.putExtra("sessionName", classNameStr);
-                    insession.putExtra("sessionType", sessionType);
-                    insession.putExtra("lessionName", subjectStr);
-                    insession.putExtra("board", boardStr);
-                    insession.putExtra("standard", standardStr);
-                    insession.putExtra("stream", streamStr);
-                    insession.putExtra("gender", genderStr);
-                    insession.putExtra("firsttimesearch", firsttimesearch);
-                    insession.putExtra("RegionName", RegionName);
-                    insession.putExtra("SearchPlaystudy",SearchPlaystudy);
-                    startActivity(insession);
-//                }
+                Intent insession = new Intent(mContext, ClassSearchScreen.class);
+                insession.putExtra("flag", SearchPlaystudy);
+                insession.putExtra("searchfront", "searchunder");
+                insession.putExtra("city", locationStr);
+                insession.putExtra("sessionName", classNameStr);
+                insession.putExtra("lessionName", subjectStr);
+                insession.putExtra("board", boardStr);
+                insession.putExtra("standard", standardStr);
+                insession.putExtra("stream", streamStr);
+                insession.putExtra("gender", genderStr);
+                insession.putExtra("firsttimesearch", firsttimesearch);
+                insession.putExtra("RegionName", RegionName);
+                insession.putExtra("SearchPlaystudy", SearchPlaystudy);
+                startActivity(insession);
                 break;
             case R.id.multiautocompe:
-                binding.multiautocompe.showDropDown();
+//                binding.multiautocompe.showDropDown();
                 break;
-
+            case R.id.add_btn:
+                FilterDialog();
+                break;
+            case R.id.menu:
+                menuDialog();
             default:
                 break;
         }
@@ -321,49 +330,55 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         popularBinding.doneTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                List<SessionDetailModel> arrayList = new ArrayList<SessionDetailModel>();
-
-                if (!popularsessionID.equalsIgnoreCase("")) {
-                    List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-                    for (int i = 0; i < dataResponse.getData().size(); i++) {
-                        if (popularsessionID.equalsIgnoreCase(dataResponse.getData().get(i).getSessionID())) {
-                            String[] spiltPipes = dataResponse.getData().get(i).getSchedule().split("\\|");
-                            String[] spiltComma;
-                            String[] spiltDash;
-                            Log.d("spilt", "" + spiltPipes.toString());
-                            for (int j = 0; j < spiltPipes.length; j++) {
-                                spiltComma = spiltPipes[j].split("\\,");
-                                spiltDash = spiltComma[1].split("\\-");
-                                calculateHours(spiltDash[0], spiltDash[1]);
-                                populardurationStr = SessionHour + " hr " + SessionMinit + " min";
-
-                            }
-                            populargenderStr = dataResponse.getData().get(i).getGenderID();
-                            popluarsessiondateStr = dataResponse.getData().get(i).getStartDate() + " To " + dataResponse.getData().get(i).getEndDate();
-                        }
-                    }
-                    Log.d("duration,+Time", populardurationStr + "" + popluarsessiondateStr);
-
-                    Intent inSession = new Intent(mContext, SessionName.class);
-                    inSession.putExtra("sessionID", popularsessionID);
-                    inSession.putExtra("SearchBy", searchByStr);
-                    inSession.putExtra("city", locationStr);
-                    inSession.putExtra("sessionName", classNameStr);
-                    inSession.putExtra("board", boardStr);
-                    inSession.putExtra("stream", streamStr);
-                    inSession.putExtra("standard", standardStr);
-                    inSession.putExtra("lessionName", subjectStr);
-                    inSession.putExtra("sessiondate", popluarsessiondateStr);
-                    inSession.putExtra("duration", populardurationStr);
-                    inSession.putExtra("gender", populargenderStr);
-                    inSession.putExtra("searchType", searchTypeStr);
-                    inSession.putExtra("withOR", wheretoComeStr);
-                    inSession.putExtra("searchfront", searchfront);
-                    mContext.startActivity(inSession);
-                    popularDialog.dismiss();
-                } else {
-                    popularDialog.dismiss();
-                }
+//                List<SessionDetailModel> arrayList = new ArrayList<SessionDetailModel>();
+//                totalHours = new ArrayList<>();
+//                totalMinit = new ArrayList<>();
+//                if (!popularsessionID.equalsIgnoreCase("")) {
+//                    List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+//                    for (int i = 0; i < dataResponse.getData().size(); i++) {
+//                        if (popularsessionID.equalsIgnoreCase(dataResponse.getData().get(i).getSessionID())) {
+//                            String[] spiltPipes = dataResponse.getData().get(i).getSchedule().split("\\|");
+//                            String[] spiltComma;
+//                            String[] spiltDash;
+//                            Log.d("spilt", "" + spiltPipes.toString());
+//                            for (int j = 0; j < spiltPipes.length; j++) {
+//                                spiltComma = spiltPipes[j].split("\\,");
+//                                spiltDash = spiltComma[1].split("\\-");
+//                                calculateHours(spiltDash[0], spiltDash[1]);
+//                            }
+//                            populargenderStr = dataResponse.getData().get(i).getGenderID();
+//                            popluarsessiondateStr = dataResponse.getData().get(i).getStartDate() + " To " + dataResponse.getData().get(i).getEndDate();
+//                        }
+//                    }
+//                    averageHours(totalHours);
+//                    averageMinit(totalMinit);
+//                    if (avgMinitvalue==0) {
+//                        populardurationStr = String.valueOf(avgHoursvalue);
+//                    }else{
+//                        populardurationStr=avgHoursvalue + " hr " + avgMinitvalue + " min";
+//                    }
+//                    Log.d("duration,+Time", populardurationStr + "" + popluarsessiondateStr);
+//
+//                    Intent inSession = new Intent(mContext, SessionName.class);
+//                    inSession.putExtra("sessionID", popularsessionID);
+////                    inSession.putExtra("SearchBy", searchByStr);
+//                    inSession.putExtra("city", locationStr);
+//                    inSession.putExtra("sessionName", classNameStr);
+//                    inSession.putExtra("board", boardStr);
+//                    inSession.putExtra("stream", streamStr);
+//                    inSession.putExtra("standard", standardStr);
+//                    inSession.putExtra("lessionName", subjectStr);
+//                    inSession.putExtra("sessiondate", popluarsessiondateStr);
+//                    inSession.putExtra("duration", populardurationStr);
+//                    inSession.putExtra("gender", populargenderStr);
+////                    inSession.putExtra("searchType", searchTypeStr);
+////                    inSession.putExtra("withOR", wheretoComeStr);
+//                    inSession.putExtra("searchfront", searchfront);
+//                    mContext.startActivity(inSession);
+//                    popularDialog.dismiss();
+//                } else {
+                popularDialog.dismiss();
+//                }
             }
         });
 
@@ -683,6 +698,108 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         sortDialog.show();
     }
 
+
+    public void FilterDialog() {
+        filterBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContext), R.layout.dialog_filter, (ViewGroup) binding.getRoot(), false);
+
+        filterDialog = new Dialog(mContext, R.style.PauseDialog);
+        Window window = filterDialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        filterDialog.getWindow().getAttributes().verticalMargin = 0.10F;
+        wlp.gravity = Gravity.BOTTOM;
+        window.setAttributes(wlp);
+
+        filterDialog.getWindow().setBackgroundDrawableResource(R.drawable.poop_p3);
+
+        filterDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        filterDialog.setCancelable(true);
+        filterDialog.setContentView(filterBinding.getRoot());
+
+        filterBinding.doneTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogselectareaStr = "";
+                dialogselectarea = new ArrayList<>();
+                for (int i = 0; i < searchAreaAdapter.getCount(); i++) {
+                    sessionDataModel sessionDetailModel = (sessionDataModel) searchAreaAdapter.getItem(i);
+                    String status = sessionDetailModel.getCheckStatus();
+                    if (status.equalsIgnoreCase("1")) {
+                        dialogselectarea.add(sessionDetailModel.getCheckValue());
+                    }
+                }
+                Log.d("Area", dialogselectarea.toString());
+
+//
+//                for (int i = 0; i < filterBinding.displayAreaList.getChildCount(); i++) {
+//                    View viewGroup=(View)filterBinding.displayAreaList.getChildAt(i);
+//                    CheckBox chk=(CheckBox)viewGroup.findViewById(R.id.area_chk);
+//                    if (chk.isChecked()) {
+//                        dialogselectarea.add(chk.getText().toString());
+//                    }
+//                }
+                for (String s : dialogselectarea) {
+                    if (!s.equals("")) {
+                        dialogselectareaStr = dialogselectareaStr + " , " + s;
+                    }
+
+                }
+                if (!dialogselectareaStr.equalsIgnoreCase("")) {
+                    dialogselectareaStr = dialogselectareaStr.substring(1, dialogselectareaStr.length());
+                    Log.d("dialogselectareaStr ", dialogselectareaStr);
+                    binding.multiautocompe.setText(dialogselectareaStr);
+                    binding.multiautocompe.setEnabled(false);
+
+                    List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                    for (int i = 0; i < dialogselectarea.size(); i++) {
+                        for (int j = 0; j < dataResponse.getData().size(); j++) {
+                            if (dataResponse.getData().get(j).getRegionName().trim().toLowerCase().contains(dialogselectarea.get(i).trim().toLowerCase())) {
+                                filterFinalArray.add(dataResponse.getData().get(j));
+                            }
+                        }
+                    }
+
+                    fillData(filterFinalArray);
+                } else {
+                    binding.multiautocompe.setHint(getResources().getString(R.string.location_add));
+                    binding.multiautocompe.setText("");
+                    List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                    for (sessionDataModel arrayObj : dataResponse.getData()) {
+                        if (arrayObj.getAddressCity().trim().toLowerCase().contains(locationStr.trim().toLowerCase()) &&
+                                arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+                            filterFinalArray.add(arrayObj);
+                        }
+                    }
+                    fillData(filterFinalArray);
+                }
+                filterDialog.dismiss();
+            }
+        });
+
+        for (int j = 0; j < dataResponse.getData().size(); j++) {
+            if (dialogselectareaStr.equalsIgnoreCase("")) {
+                dataResponse.getData().get(j).setCheckStatus("0");
+            } else {
+                String [] split=dialogselectareaStr.split("\\,");
+                for (int i=0;i<split.length;i++){
+                    if(dataResponse.getData().get(j).getRegionName().equalsIgnoreCase(split[i])) {
+                      dataResponse.getData().get(j).setCheckStatus("1");
+                    }
+                    else{
+                        dataResponse.getData().get(j).setCheckStatus("0");
+                    }
+                }
+            }
+        }
+        searchAreaAdapter = new SearchAreaAdapter(mContext, dataResponse, dialogselectareaStr);
+//        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
+//        filterBinding.displayAreaList.setLayoutManager(mLayoutManager);
+//        filterBinding.displayAreaList.setItemAnimator(new DefaultItemAnimator());
+        filterBinding.displayAreaList.setAdapter(searchAreaAdapter);
+
+        filterDialog.show();
+    }
+
     //    //Use for SessionList
     public void callSessionListApi() {
         if (Utils.checkNetwork(mContext)) {
@@ -701,7 +818,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                         return;
                     }
                     if (sessionInfo.getSuccess().equalsIgnoreCase("false")) {
-                        Utils.ping(mContext, "Session not found.");
+                        Utils.ping(mContext, "Class not found.");
                         dataResponse = sessionInfo;
 
                         return;
@@ -720,11 +837,11 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                         Log.d("FilterArray", "" + filterFinalArray.size());
 
                         result = dataResponse.getData().size();
-                        if (result < 10) {
-                            binding.countTxt.setText("0" + String.valueOf(result));
-                        } else {
-                            binding.countTxt.setText(String.valueOf(result));
-                        }
+//                        if (result < 10) {
+//                            binding.countTxt.setText("0" + String.valueOf(result));
+//                        } else {
+//                            binding.countTxt.setText(String.valueOf(result));
+//                        }
                     }
 
                 }
@@ -759,9 +876,9 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 
 
     public void fillData(List<sessionDataModel> array) {
-        classDetailAdapter = new ClassDetailAdapter(mContext, array, searchByStr, locationStr,
-                classNameStr, boardStr, streamStr, standardStr, searchTypeStr, wheretoComeStr,
-                searchfront, sessionType, firsttimesearch, RegionName, new bookClick() {
+        classDetailAdapter = new ClassDetailAdapter(mContext, array, locationStr,
+                classNameStr, boardStr, streamStr, standardStr, SearchPlaystudy, /*searchTypeStr, wheretoComeStr, searchByStr,*/
+                searchfront, firsttimesearch, RegionName, new bookClick() {
             @Override
             public void bookClick() {
                 ArrayList<String> selectedId = new ArrayList<String>();
@@ -781,19 +898,16 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                     intentLogin.putExtra("sessionID", sessionId);
                     intentLogin.putExtra("city", locationStr);
                     intentLogin.putExtra("sessionName", classNameStr);
-                    intentLogin.putExtra("withOR", wheretoComeStr);
                     intentLogin.putExtra("frontLogin", "afterLogin");
-                    intentLogin.putExtra("SearchBy", searchByStr);
                     intentLogin.putExtra("board", boardStr);
                     intentLogin.putExtra("stream", streamStr);
                     intentLogin.putExtra("standard", standardStr);
-                    intentLogin.putExtra("searchType", searchTypeStr);
                     intentLogin.putExtra("lessionName", subjectStr);
                     intentLogin.putExtra("gender", genderStr);
                     intentLogin.putExtra("searchfront", searchfront);
-                    intentLogin.putExtra("sessionType", sessionType);
                     intentLogin.putExtra("firsttimesearch", firsttimesearch);
                     intentLogin.putExtra("RegionName", RegionName);
+                    intentLogin.putExtra("SearchPlaystudy", SearchPlaystudy);
                     startActivity(intentLogin);
                     finish();
                 } else {
@@ -807,22 +921,19 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                                     Intent intentLogin = new Intent(mContext, LoginActivity.class);
                                     intentLogin.putExtra("frontLogin", "afterLogin");
                                     intentLogin.putExtra("sessionID", sessionId);
-                                    intentLogin.putExtra("SearchBy", searchByStr);
                                     intentLogin.putExtra("board", boardStr);
                                     intentLogin.putExtra("stream", streamStr);
                                     intentLogin.putExtra("standard", standardStr);
                                     intentLogin.putExtra("city", locationStr);
                                     intentLogin.putExtra("sessionName", classNameStr);
-                                    intentLogin.putExtra("searchType", searchTypeStr);
                                     intentLogin.putExtra("lessionName", subjectStr);
                                     intentLogin.putExtra("gender", genderStr);
-                                    intentLogin.putExtra("withOR", wheretoComeStr);
                                     intentLogin.putExtra("ratingLogin", "booksession");
                                     intentLogin.putExtra("searchfront", searchfront);
-                                    intentLogin.putExtra("sessionType", sessionType);
                                     intentLogin.putExtra("firsttimesearch", firsttimesearch);
                                     intentLogin.putExtra("RegionName", RegionName);
                                     intentLogin.putExtra("back", "classDeatil");
+                                    intentLogin.putExtra("SearchPlaystudy", SearchPlaystudy);
                                     startActivity(intentLogin);
                                     finish();
                                 }
@@ -853,21 +964,18 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                                     Intent intentLogin = new Intent(mContext, LoginActivity.class);
                                     intentLogin.putExtra("frontLogin", "afterLogin");
                                     intentLogin.putExtra("sessionID", sessionId);
-                                    intentLogin.putExtra("SearchBy", searchByStr);
                                     intentLogin.putExtra("board", boardStr);
                                     intentLogin.putExtra("stream", streamStr);
                                     intentLogin.putExtra("standard", standardStr);
                                     intentLogin.putExtra("city", locationStr);
                                     intentLogin.putExtra("sessionName", classNameStr);
-                                    intentLogin.putExtra("searchType", searchTypeStr);
                                     intentLogin.putExtra("lessionName", subjectStr);
                                     intentLogin.putExtra("gender", genderStr);
-                                    intentLogin.putExtra("withOR", wheretoComeStr);
                                     intentLogin.putExtra("ratingLogin", "ratingLoginclass");
                                     intentLogin.putExtra("searchfront", searchfront);
-                                    intentLogin.putExtra("sessionType", sessionType);
                                     intentLogin.putExtra("firsttimesearch", firsttimesearch);
                                     intentLogin.putExtra("RegionName", RegionName);
+                                    intentLogin.putExtra("SearchPlaystudy", SearchPlaystudy);
                                     startActivity(intentLogin);
                                     finish();
                                 }
@@ -891,12 +999,12 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
     }
 
     public void fillArea() {
-        ArrayList<String> AreaName = new ArrayList<String>();
+        AreaName = new ArrayList<String>();
         for (int j = 0; j < dataResponse.getData().size(); j++) {
-            if (dataResponse.getData().get(j).getAddressCity().trim().toLowerCase().contains(locationStr.trim().toLowerCase())
-                    && dataResponse.getData().get(j).getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-                AreaName.add(dataResponse.getData().get(j).getRegionName());
-            }
+//            if (dataResponse.getData().get(j).getAddressCity().trim().toLowerCase().contains(locationStr.trim().toLowerCase())
+//                    && dataResponse.getData().get(j).getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+            AreaName.add(dataResponse.getData().get(j).getRegionName());
+//            }
         }
 
         HashSet<String> hashSet = new HashSet<String>();
@@ -904,9 +1012,9 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         AreaName.clear();
         AreaName.addAll(hashSet);
         ArrayAdapter<String> adapterTerm = new ArrayAdapter<String>(mContext, R.layout.autocomplete_layout, AreaName);
-        binding.multiautocompe.setThreshold(1);
-        binding.multiautocompe.setAdapter(adapterTerm);
-        binding.multiautocompe.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+//        binding.multiautocompe.setThreshold(1);
+//        binding.multiautocompe.setAdapter(adapterTerm);
+//        binding.multiautocompe.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
     }
 
     public void addRating() {
@@ -1096,6 +1204,55 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                                         popularsessionID = selectedId.get(i);
                                     }
                                     Log.d("popularsessionID", "" + popularsessionID);
+
+                                    List<SessionDetailModel> arrayList = new ArrayList<SessionDetailModel>();
+                                    totalHours = new ArrayList<>();
+                                    totalMinit = new ArrayList<>();
+                                    if (!popularsessionID.equalsIgnoreCase("")) {
+                                        List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                                        for (int i = 0; i < dataResponse.getData().size(); i++) {
+                                            if (popularsessionID.equalsIgnoreCase(dataResponse.getData().get(i).getSessionID())) {
+                                                String[] spiltPipes = dataResponse.getData().get(i).getSchedule().split("\\|");
+                                                String[] spiltComma;
+                                                String[] spiltDash;
+                                                Log.d("spilt", "" + spiltPipes.toString());
+                                                for (int j = 0; j < spiltPipes.length; j++) {
+                                                    spiltComma = spiltPipes[j].split("\\,");
+                                                    spiltDash = spiltComma[1].split("\\-");
+                                                    calculateHours(spiltDash[0], spiltDash[1]);
+                                                }
+                                                populargenderStr = dataResponse.getData().get(i).getGenderID();
+                                                popluarsessiondateStr = dataResponse.getData().get(i).getStartDate() + " To " + dataResponse.getData().get(i).getEndDate();
+                                            }
+                                        }
+                                        averageHours(totalHours);
+                                        averageMinit(totalMinit);
+                                        if (avgMinitvalue == 0) {
+                                            populardurationStr = String.valueOf(avgHoursvalue);
+                                        } else {
+                                            populardurationStr = avgHoursvalue + " hr " + avgMinitvalue + " min";
+                                        }
+                                        Log.d("duration,+Time", populardurationStr + "" + popluarsessiondateStr);
+
+                                        Intent inSession = new Intent(mContext, SessionName.class);
+                                        inSession.putExtra("sessionID", popularsessionID);
+//                    inSession.putExtra("SearchBy", searchByStr);
+                                        inSession.putExtra("city", locationStr);
+                                        inSession.putExtra("sessionName", classNameStr);
+                                        inSession.putExtra("board", boardStr);
+                                        inSession.putExtra("stream", streamStr);
+                                        inSession.putExtra("standard", standardStr);
+                                        inSession.putExtra("lessionName", subjectStr);
+                                        inSession.putExtra("sessiondate", popluarsessiondateStr);
+                                        inSession.putExtra("duration", populardurationStr);
+                                        inSession.putExtra("gender", populargenderStr);
+//                    inSession.putExtra("searchType", searchTypeStr);
+//                    inSession.putExtra("withOR", wheretoComeStr);
+                                        inSession.putExtra("searchfront", searchfront);
+                                        mContext.startActivity(inSession);
+                                        popularDialog.dismiss();
+                                    }
+
                                 }
                             });
                             RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(mContext, 2);
@@ -1141,7 +1298,12 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
             SessionHour = hours;
             SessionMinit = min;
             Log.i("======= Hours", " :: " + hours + ":" + min);
-
+            if (SessionHour > 0) {
+                totalHours.add(SessionHour);
+            }
+//            if(SessionMinit>0) {
+            totalMinit.add(SessionMinit);
+//            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -1149,7 +1311,56 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 
     }
 
+    public void averageHours(List<Integer> list) {
+        if (list != null) {
+            int sum = 0;
+            int n = list.size();
+            for (int i = 0; i < n; i++)
+                sum += list.get(i);
+            Log.d("sum", "" + sum);
+            avgHoursvalue = (sum) / n;
+            Log.d("value", "" + avgHoursvalue);
+        }
+    }
+
+    public void averageMinit(List<Integer> list) {
+        if (list != null) {
+            int sum = 0;
+            int n = list.size();
+            for (int i = 0; i < n; i++)
+                sum += list.get(i);
+            avgMinitvalue = (sum) / n;
+            Log.d("value", "" + avgMinitvalue);
+        }
+    }
+
     public void validData() {
+        if (getIntent().getStringExtra("searchfront") != null) {
+            searchfront = getIntent().getStringExtra("searchfront");
+        } else {
+            searchfront = "";
+        }
+        if (getIntent().getStringExtra("sessionName") != null) {
+            classNameStr = getIntent().getStringExtra("sessionName");
+            Utils.setPref(mContext, "classname", classNameStr.trim());
+        } else {
+            classNameStr = "";
+        }
+        if (classNameStr.equalsIgnoreCase("")) {
+            binding.subjectTxt.setText("All Classes");
+        } else {
+            binding.subjectTxt.setText(classNameStr);
+        }
+        if (getIntent().getStringExtra("city") != null) {
+            locationStr = getIntent().getStringExtra("city");
+            Utils.setPref(mContext, "location", locationStr.trim());
+        } else {
+            locationStr = "";
+        }
+        if (!locationStr.equalsIgnoreCase("")) {
+            binding.cityTxt.setText(locationStr);
+        }
+
         if (getIntent().getStringExtra("lessionName") != null) {
             subjectStr = getIntent().getStringExtra("lessionName");
         } else {
@@ -1172,6 +1383,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         }
         if (getIntent().getStringExtra("RegionName") != null) {
             RegionName = getIntent().getStringExtra("RegionName");
+            binding.multiautocompe.setText(RegionName);
         } else {
             RegionName = "";
         }
@@ -1188,22 +1400,224 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         if (!boardStr.equalsIgnoreCase("")) {
             binding.boardTxt.setVisibility(View.VISIBLE);
             binding.boardTxt.setText("\u2022" + boardStr);
+
         } else {
-            binding.boardTxt.setVisibility(View.GONE);
+            binding.boardTxt.setText("");
         }
         if (!standardStr.equalsIgnoreCase("")) {
             binding.standardTxt.setVisibility(View.VISIBLE);
             binding.standardTxt.setText("\u2022" + standardStr);
         } else {
-            binding.standardTxt.setVisibility(View.GONE);
+            binding.standardTxt.setText("");
         }
         if (!streamStr.equalsIgnoreCase("")) {
             binding.streamTxt.setVisibility(View.VISIBLE);
             binding.streamTxt.setText("\u2022" + streamStr);
         } else {
-            binding.streamTxt.setVisibility(View.GONE);
+            binding.streamTxt.setText("");
 
         }
+    }
+
+    public void menuDialog() {
+        menuDialog = new Dialog(mContext, R.style.Theme_Dialog);
+        Window window = menuDialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        menuDialog.getWindow().getAttributes().verticalMargin = 0.07F;
+        wlp.gravity = Gravity.TOP;
+        window.setAttributes(wlp);
+
+        menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        menuDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        menuDialog.setCanceledOnTouchOutside(true);
+//        menuDialog.setContentView(menuBinding.getRoot());
+        menuDialog.setContentView(R.layout.layout_menu);
+
+        btnMyReport = (Button) menuDialog.findViewById(R.id.btnMyReport);
+        btnMySession = (Button) menuDialog.findViewById(R.id.btnMySession);
+        btnChangePassword = (Button) menuDialog.findViewById(R.id.btnChangePassword);
+        btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
+        btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
+        btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
+
+        userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
+        userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
+
+        btnMyReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent imyaccount = new Intent(mContext, MyAccountActivity.class);
+                imyaccount.putExtra("wheretocometype", "session");
+                startActivity(imyaccount);
+            }
+        });
+        btnMySession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent isession = new Intent(mContext, MySession.class);
+                isession.putExtra("wheretocometype", "session");
+                startActivity(isession);
+                menuDialog.dismiss();
+            }
+        });
+        btnChangePassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menuDialog.dismiss();
+                changePasswordDialog();
+            }
+        });
+        btnmyfamily.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, FamilyListActivity.class);
+                intent.putExtra("froncontanct", "true");
+                intent.putExtra("wheretocometype", "session");
+                intent.putExtra("familyNameStr", Utils.getPref(mContext, "RegisterUserName"));
+                intent.putExtra("familyID", Utils.getPref(mContext, "coachTypeID"));
+                startActivity(intent);
+            }
+        });
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menuDialog.dismiss();
+                new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                        .setCancelable(false)
+                        .setTitle("Logout")
+                        .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+                        .setMessage("Are you sure you want to logout?")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Utils.setPref(mContext, "coachID", "");
+                                Utils.setPref(mContext, "coachTypeID", "");
+                                Utils.setPref(mContext, "RegisterUserName", "");
+                                Utils.setPref(mContext, "RegisterEmail", "");
+                                Utils.setPref(mContext, "LoginType", "");
+                                Utils.setPref(mContext, "Password", "");
+                                Utils.setPref(mContext, "FamilyID", "");
+                                Utils.setPref(mContext, "location", "");
+                                Utils.setPref(mContext, "sessionName", "");
+                                Intent intentLogin = new Intent(mContext, SearchByUser.class);
+                                intentLogin.putExtra("frontLogin", "beforeLogin");
+                                startActivity(intentLogin);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+
+                            }
+                        })
+                        .setIcon(R.drawable.safari)
+                        .show();
+            }
+        });
+        menuDialog.show();
+    }
+
+    public void changePasswordDialog() {
+        changePasswordDialogBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContext), R.layout.change_password_dialog, (ViewGroup) binding.getRoot(), false);
+
+        changeDialog = new Dialog(mContext, R.style.Theme_Dialog);
+        Window window = changeDialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        changeDialog.getWindow().getAttributes().verticalMargin = 0.0f;
+        wlp.gravity = Gravity.CENTER;
+        window.setAttributes(wlp);
+
+        changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+
+        changeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        changeDialog.setCancelable(false);
+        changeDialog.setContentView(changePasswordDialogBinding.getRoot());
+
+        changePasswordDialogBinding.changepwdBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentpasswordStr = changePasswordDialogBinding.edtcurrentpassword.getText().toString();
+                confirmpassWordStr = changePasswordDialogBinding.edtconfirmpassword.getText().toString();
+                passWordStr = changePasswordDialogBinding.edtnewpassword.getText().toString();
+                if (currentpasswordStr.equalsIgnoreCase(Utils.getPref(mContext, "Password"))) {
+                    if (!passWordStr.equalsIgnoreCase("") && passWordStr.length() >= 4 && passWordStr.length() <= 8) {
+                        if (passWordStr.equalsIgnoreCase(confirmpassWordStr)) {
+                            callChangePasswordApi();
+                        } else {
+                            changePasswordDialogBinding.edtconfirmpassword.setError("Confirm Password does not match.");
+                        }
+                    } else {
+                        changePasswordDialogBinding.edtnewpassword.setError("Password must be 4-8 Characters.");
+                        changePasswordDialogBinding.edtnewpassword.setText("");
+                        changePasswordDialogBinding.edtconfirmpassword.setText("");
+                    }
+                } else {
+                    changePasswordDialogBinding.edtcurrentpassword.setError("Password does not match to current password.");
+                }
+
+
+            }
+        });
+        changePasswordDialogBinding.cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                changeDialog.dismiss();
+            }
+        });
+
+        changeDialog.show();
+
+    }
+
+    //USe for Change Password
+    public void callChangePasswordApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_Change_Password(getChangePasswordDetail(), new retrofit.Callback<TeacherInfoModel>() {
+                @Override
+                public void success(TeacherInfoModel forgotInfoModel, Response response) {
+                    Utils.dismissDialog();
+                    if (forgotInfoModel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (forgotInfoModel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (forgotInfoModel.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.ping(mContext, "Please Enter Valid Password.");
+                        return;
+                    }
+                    if (forgotInfoModel.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.ping(mContext, getResources().getString(R.string.changPassword));
+                        Utils.setPref(mContext, "Password", passWordStr);
+                        changeDialog.dismiss();
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
         }
+    }
+
+    private Map<String, String> getChangePasswordDetail() {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("EmailAddress", Utils.getPref(mContext, "RegisterEmail"));
+        map.put("Password", passWordStr);
+        return map;
+    }
+
 
 }

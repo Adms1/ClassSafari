@@ -47,6 +47,30 @@ public class SessionFullDetail {
     @SerializedName("SessionCapacity")
     @Expose
     private String sessionCapacity;
+    @SerializedName("Rating")
+    @Expose
+    private String rating;
+    @SerializedName("TotalRatingUser")
+    @Expose
+    private String totalRatingUser;
+
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    public String getTotalRatingUser() {
+        return totalRatingUser;
+    }
+
+    public void setTotalRatingUser(String totalRatingUser) {
+        this.totalRatingUser = totalRatingUser;
+    }
+
     public String getSessionID() {
         return sessionID;
     }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/list_line"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <RadioButton
+            android:id="@+id/address_rb"
+            android:layout_width="0dp"
+            android:layout_weight="1.86"
+            android:layout_height="wrap_content"
+            android:button="@drawable/family_selected_unselected_type"
+            android:checked="false"
+            android:padding="@dimen/_5sdp"
+           android:layout_marginLeft="@dimen/_5sdp"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/_12sdp" />
+    </LinearLayout>
+</LinearLayout>
+</layout>

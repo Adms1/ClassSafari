@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_280sdp"
+        android:background="@drawable/session_confirm"
+        android:orientation="vertical"
+        android:tag="cards main container">
+
+        <LinearLayout
+            android:id="@+id/address_linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_5sdp"
+            android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/forgot_title_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|start"
+                    android:paddingLeft="@dimen/_15sdp"
+                    android:text="Select Address"
+                    android:textColor="@color/blue"
+                    android:textSize="@dimen/_14sdp"
+                    android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/dark_gray" />
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/address_list"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_130sdp"
+                android:layout_margin="@dimen/_5sdp"
+                android:scrollbars="none" />
+
+
+            <Button
+                android:id="@+id/cancel_btn"
+                android:layout_width="@dimen/_120sdp"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/blue_btn"
+                android:gravity="center"
+                android:text="Cancel"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

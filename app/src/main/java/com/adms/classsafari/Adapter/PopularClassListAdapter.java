@@ -66,6 +66,11 @@ public class PopularClassListAdapter extends RecyclerView.Adapter<PopularClassLi
     @Override
     public void onBindViewHolder(final PopularClassListAdapter.MyViewHolder holder, final int position) {
 
+        if(arrayList.get(position).getCoachTypeID().equalsIgnoreCase("1")){
+            holder.popular_Session_image_img.setImageResource(R.drawable.physics_img);
+        }else{
+            holder.popular_Session_image_img.setImageResource(R.drawable.all_sports_image);
+        }
         holder.popular_session_name_txt.setText(arrayList.get(position).getSessionName());
         holder.popular_rating_bar.setRating(Float.parseFloat(String.valueOf(arrayList.get(position).getRatingValue())));
 

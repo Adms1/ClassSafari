@@ -39,7 +39,7 @@
                 android:background="@color/sucees_bg"
                 android:gravity="start|center_vertical"
                 android:paddingLeft="@dimen/_3sdp"
-                android:text="Session Name"
+                android:text="Class Name"
                 android:textColor="@color/blue"
                 android:textSize="@dimen/_12sdp" />
 

@@ -31,8 +31,8 @@
                 android:layout_width="@dimen/_150sdp"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_marginLeft="@dimen/_25sdp"
-               
-                android:gravity="center"
+               android:paddingLeft="@dimen/_5sdp"
+                android:gravity="start|center_vertical"
                 android:text="@string/my_Account"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_15sdp"

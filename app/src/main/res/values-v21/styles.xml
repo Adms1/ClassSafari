@@ -21,6 +21,14 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:textStyle">normal</item>
     </style>
+    <style name="MyCheckBox" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlActivated">@color/remarks</item>
+    </style>
+    <style name="MyCheckBox1" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/blue</item>
+        <item name="colorControlActivated">@color/remarks</item>
+    </style>
     <!--SafariTeacher-->
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -44,7 +52,7 @@
         <item name="android:layout_marginTop">@dimen/_5sdp</item>
         <item name="android:paddingLeft">@dimen/_5sdp</item>
         <item name="android:paddingRight">@dimen/_5sdp</item>
-        <item name="android:imeOptions">actionNext</item>
+        <item name="android:imeOptions">actionSearch</item>
         <item name="android:singleLine">true</item>
     </style>
     <style name="RegiAutoComplete" parent="Widget.AppCompat.AutoCompleteTextView">

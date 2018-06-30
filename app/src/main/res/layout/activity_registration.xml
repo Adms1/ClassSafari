@@ -100,11 +100,11 @@
 
                     <TextView
                         android:id="@+id/type_of_regi"
-                        android:layout_width="@dimen/_120sdp"
+                        android:layout_width="wrap_content"
                         android:layout_height="@dimen/_30sdp"
                         android:paddingLeft="@dimen/_5sdp"
-                        android:text="If you are a teacher -"
-                        android:layout_marginLeft="@dimen/_20sdp"
+                        android:text="If you are a Teacher / Instructor"
+                        android:layout_marginLeft="@dimen/_5sdp"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_12sdp" />
 
@@ -266,6 +266,17 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/_12sdp" />
                 </RadioGroup>
+                <CheckBox
+                    android:id="@+id/chkTermsAndCondi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/strIAccTermsAndCond"
+                    android:textColor="@color/white"
+                    android:tag="click"
+                    android:theme="@style/MyCheckBox"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
 

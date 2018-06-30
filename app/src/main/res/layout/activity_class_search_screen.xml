@@ -87,19 +87,11 @@
                     android:visibility="visible"
                     android:imeOptions="actionNext"/>
                 <AutoCompleteTextView
-                    android:id="@+id/session_auto_txt"
-                    style="@style/AutoComplete"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_30sdp"
-                    android:hint="@string/search_session" />
-
-                <AutoCompleteTextView
                     android:id="@+id/class_auto_txt"
                     style="@style/AutoComplete"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_30sdp"
                     android:hint="@string/search_class" />
-
 
                     <AutoCompleteTextView
                         android:id="@+id/board_auto_txt"
@@ -122,6 +114,13 @@
                         android:layout_height="@dimen/_30sdp"
                         android:imeOptions="actionSearch"
                         android:hint="@string/search_stream" />
+                <AutoCompleteTextView
+                    android:id="@+id/session_auto_txt"
+                    style="@style/AutoComplete"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_30sdp"
+                    android:hint="@string/search_session" />
+
             </LinearLayout>
 
             <Button

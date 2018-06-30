@@ -51,6 +51,7 @@ public class DashBoardActivity extends AppCompatActivity {
     private static final String TAG_Student_Attendance = "Student Attendance";
     public static String CURRENT_TAG = TAG_Session;
     public static int navItemIndex = 0;
+    public static String position;
     Context mContex;
     //Use for dialog
     Dialog changeDialog;
@@ -79,6 +80,14 @@ public class DashBoardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
+
+        position=getIntent().getStringExtra("position");
+        if(getIntent().getStringExtra("position")!=null){
+            navItemIndex= Integer.parseInt(position);
+        }else{
+            navItemIndex=0;
+        }
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         session_cal = (ImageView) findViewById(R.id.session_cal);
         setSupportActionBar(toolbar);
@@ -95,13 +104,24 @@ public class DashBoardActivity extends AppCompatActivity {
         imgProfile = (ImageView) navHeader.findViewById(R.id.profile_image);
         // load toolbar titles from string resources
         activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
-
-        if (savedInstanceState == null) {
-            navItemIndex = 0;
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame, new SessionFragment()).addToBackStack(null).commit();
-            getSupportActionBar().setTitle(activityTitles[navItemIndex]);
+        if(getIntent().getStringExtra("position")!=null) {
+                navItemIndex = Integer.parseInt(position);
+                if (getIntent().getStringExtra("position").equalsIgnoreCase("0")) {
+//                getSupportFragmentManager().beginTransaction().replace(R.id.frame, new SessionFragment()).addToBackStack(null).commit();
+//                getSupportActionBar().setTitle(activityTitles[navItemIndex]);
+                    displayView(navItemIndex);
+                } else {
+                    displayView(navItemIndex);
+//                getSupportFragmentManager().beginTransaction().replace(R.id.frame, new AddSessionFragment()).addToBackStack(null).commit();
+//                getSupportActionBar().setTitle(activityTitles[navItemIndex]);
+                }
         } else {
-            getSupportActionBar().setTitle(activityTitles[navItemIndex]);
+            if(savedInstanceState==null){
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame, new SessionFragment()).addToBackStack(null).commit();
+                getSupportActionBar().setTitle(activityTitles[navItemIndex]);
+            }else {
+                getSupportActionBar().setTitle(activityTitles[navItemIndex]);
+            }
         }
         whereTocomestr = getIntent().getStringExtra("frontLogin");
         session_cal.setOnClickListener(new View.OnClickListener() {
@@ -360,10 +380,15 @@ public class DashBoardActivity extends AppCompatActivity {
 
 //                loadHomeFragment();
                 Utils.ping(mContex, "Press again to exist.");
-//                Intent intent = new Intent(mContex, SearchByUser.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                finish();
-                System.exit(0);
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);//***Change Here***
+                    startActivity(intent);
+                    finish();
+                    System.exit(0);
+//                finish();
+//                System.exit(0);
+//                    moveTaskToBack(true);
                 }
             }
             super.onBackPressed();
@@ -373,13 +398,13 @@ public class DashBoardActivity extends AppCompatActivity {
 
     public void setActionBar(int session, String flag) {
         if (session == 1 && flag.equalsIgnoreCase("edit")) {
-            getSupportActionBar().setTitle("Edit Session");
+            getSupportActionBar().setTitle("Edit Class");
             session_cal.setVisibility(View.VISIBLE);
         } else if (session == 1 && flag.equalsIgnoreCase("add")) {
-            getSupportActionBar().setTitle("Add Session");
+            getSupportActionBar().setTitle("Add Class");
             session_cal.setVisibility(View.VISIBLE);
         } else if (session == 1 && flag.equalsIgnoreCase("view")) {
-            getSupportActionBar().setTitle("View Session");
+            getSupportActionBar().setTitle("View Class");
             session_cal.setVisibility(View.VISIBLE);
         } else if (session == 10 && flag.equalsIgnoreCase("false")) {
             getSupportActionBar().setTitle("Add Family");

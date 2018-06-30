@@ -50,7 +50,7 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
     ActivitySessionDetailBinding sessionDetailBinding;
     ChangePasswordDialogBinding changePasswordDialogBinding;
     Context mContext;
-    String sessionIDStr, wheretocometypeStr, commentStr, ratingValueStr;
+    String sessionIDStr, wheretocometypeStr, commentStr, ratingValueStr,ratinguserStr;
     SessionDetailModel dataResponse, dataResponseRating;
     List<sessionDataModel> arrayList;
     List<sessionDataModel> sessionRatingList;
@@ -174,7 +174,7 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
             descriptionviewarray = new ArrayList<>();
         }
         //,descriptionarray
-        purchaseSessionDetailAdapter = new PurchaseSessionDetailAdapter(mContext, arrayList, descriptionviewarray, reviewarray, sessionRatingList, new onViewClick() {
+        purchaseSessionDetailAdapter = new PurchaseSessionDetailAdapter(mContext, arrayList, descriptionviewarray, reviewarray,ratinguserStr, sessionRatingList, new onViewClick() {
             @Override
             public void getViewClick() {
                 if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
@@ -217,6 +217,7 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
                             }
                         }
                         reviewarray = new ArrayList<>();
+                        ratinguserStr= String.valueOf(sessionRatingList.size());
                         setData();
                         Utils.dismissDialog();
                         return;
@@ -229,6 +230,7 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
                             for (int i = 0; i < dataResponseRating.getData().size(); i++) {
                                 sessionRatingList.add(dataResponseRating.getData().get(i));
                             }
+                            ratinguserStr= String.valueOf(sessionRatingList.size());
                             reviewarray = new ArrayList<>();
                             reviewarray.add("Reviews");
                             setData();

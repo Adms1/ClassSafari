@@ -45,19 +45,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/_15sdp"
                         android:layout_gravity="center_vertical|top"
-                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginLeft="@dimen/_20sdp"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:theme="@style/RatingBar1" />
 
                     <TextView
                         android:id="@+id/rating_user_txt"
-                        android:layout_width="@dimen/_40sdp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_5sdp"
                         android:text=""
                         android:textColor="@color/text_color"
-                        android:textSize="@dimen/_13sdp" />
+                        android:textSize="@dimen/_10sdp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -80,7 +80,7 @@
                         android:layout_width="@dimen/_120sdp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_2sdp"
-                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginLeft="@dimen/_15sdp"
                         android:drawableLeft="@drawable/location_blue"
                         android:drawablePadding="@dimen/_2sdp"
                         android:paddingBottom="@dimen/_2sdp"
@@ -260,7 +260,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_5sdp"
                         android:alpha="0.2"
-                        android:text="00:00 AM"
+                        android:text=""
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_8sdp" />
 
@@ -270,7 +270,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_3sdp"
                         android:alpha="0.2"
-                        android:text="00:00 AM"
+                        android:text=""
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_8sdp" />
 
@@ -280,7 +280,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_3sdp"
                         android:alpha="0.2"
-                        android:text="00:00 AM"
+                        android:text=""
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_8sdp" />
 
@@ -290,7 +290,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_3sdp"
                         android:alpha="0.2"
-                        android:text="00:00 AM"
+                        android:text=""
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_8sdp" />
 
@@ -300,7 +300,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_3sdp"
                         android:alpha="0.2"
-                        android:text="00:00 AM"
+                        android:text=""
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_8sdp" />
 
@@ -310,7 +310,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_1sdp"
                         android:alpha="0.2"
-                        android:text="00:00 AM"
+                        android:text=""
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_8sdp" />
 
@@ -320,9 +320,86 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_1sdp"
                         android:alpha="0.2"
-                        android:text="00:00 AM"
+                        android:text=""
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_8sdp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_3sdp"
+                    android:layout_marginTop="@dimen/_3sdp">
+
+                    <TextView
+                        android:id="@+id/mon_hours_txt"
+                        android:layout_width="@dimen/_37sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:alpha="0.2"
+                        android:text=""
+                        android:textColor="@color/search_boder"
+                        android:textSize="@dimen/_9sdp" />
+
+                    <TextView
+                        android:id="@+id/tues_hours_txt"
+                        android:layout_width="@dimen/_37sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:alpha="0.2"
+                        android:text=""
+                        android:textColor="@color/search_boder"
+                        android:textSize="@dimen/_9sdp" />
+
+                    <TextView
+                        android:id="@+id/wed_hours_txt"
+                        android:layout_width="@dimen/_37sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:alpha="0.2"
+                        android:text=""
+                        android:textColor="@color/search_boder"
+                        android:textSize="@dimen/_9sdp" />
+
+                    <TextView
+                        android:id="@+id/thur_hours_txt"
+                        android:layout_width="@dimen/_37sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:alpha="0.2"
+                        android:text=""
+                        android:textColor="@color/search_boder"
+                        android:textSize="@dimen/_9sdp" />
+
+                    <TextView
+                        android:id="@+id/fri_hours_txt"
+                        android:layout_width="@dimen/_37sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:alpha="0.2"
+                        android:text=""
+                        android:textColor="@color/search_boder"
+                        android:textSize="@dimen/_9sdp" />
+
+                    <TextView
+                        android:id="@+id/sat_hours_txt"
+                        android:layout_width="@dimen/_37sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_1sdp"
+                        android:alpha="0.2"
+                        android:text=""
+                        android:textColor="@color/search_boder"
+                        android:textSize="@dimen/_9sdp" />
+
+                    <TextView
+                        android:id="@+id/sun_hours_txt"
+                        android:layout_width="@dimen/_37sdp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_1sdp"
+                        android:alpha="0.2"
+                        android:text=""
+                        android:textColor="@color/search_boder"
+                        android:textSize="@dimen/_9sdp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -331,48 +408,15 @@
                     android:layout_marginBottom="@dimen/_5sdp"
                     android:layout_marginTop="@dimen/_5sdp">
 
-                    <TextView
-                        android:id="@+id/duration_txt_view"
-                        android:layout_width="@dimen/_60sdp"
-                        android:layout_height="@dimen/_25sdp"
-                        android:layout_marginBottom="@dimen/_5sdp"
-                        android:layout_marginLeft="@dimen/_7sdp"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/_5sdp"
-                        android:text="@string/duration"
-                        android:textColor="@color/search_boder"
-                        android:textSize="@dimen/_10sdp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="@dimen/_8sdp"
-                        android:layout_height="@dimen/_25sdp"
-                        android:layout_marginBottom="@dimen/_5sdp"
-                        android:gravity="start|center_vertical"
-                        android:text=":"
-                        android:textColor="@color/search_boder"
-                        android:textSize="@dimen/_10sdp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/duration_txt"
-                        android:layout_width="@dimen/_90sdp"
-                        android:layout_height="@dimen/_25sdp"
-                        android:layout_marginBottom="@dimen/_5sdp"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="@dimen/_5sdp"
-                        android:textColor="@color/search_boder"
-                        android:textSize="@dimen/_10sdp"
-                        android:textStyle="bold" />
                     <Button
                         android:id="@+id/book_session_btn"
                         android:layout_width="@dimen/_100sdp"
                         android:layout_height="@dimen/_30sdp"
+                        android:layout_marginLeft="@dimen/_165sdp"
                         android:background="@drawable/submit_shape"
-                        android:text="BOOK SESSION"
-                        android:textSize="@dimen/_11sdp"
-                        android:textColor="@color/blue"/>
+                        android:text="BOOK CLASS"
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/_11sdp" />
                 </LinearLayout>
 
 

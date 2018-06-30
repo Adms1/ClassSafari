@@ -42,6 +42,6 @@
             android:layout_width="@dimen/_113sdp"
             android:layout_height="@dimen/_113sdp"
             android:layout_gravity="center"
-            android:src="@drawable/football" />
+            android:src="@drawable/all_sports_image" />
     </LinearLayout>
 </LinearLayout>

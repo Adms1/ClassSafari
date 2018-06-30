@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivityLoginBinding;
 import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
 import com.adms.classsafari.databinding.ForgotPasswordDialogBinding;
+import com.adms.classsafari.databinding.OptionDialogBinding;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,16 +43,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     ActivityLoginBinding loginScreenBinding;
     ForgotPasswordDialogBinding forgotPasswordDialogBinding;
     ConfirmSessionDialogBinding confirmSessionDialogBinding;
+    OptionDialogBinding optionDialogBinding;
+
     Context mContext;
     String usernameStr, passwordStr, sessionIDStr, contatIDstr,
-            whereTocomestr, checkStr,
+            checkStr,
             boardStr, standardStr, streamStr, locationStr, classNameStr,
-            searchTypeStr, subjectStr, genderStr, frontloginStr,
+            subjectStr, genderStr, frontloginStr,
             ratingLoginStr, searchfront, sessionType, durationStr,
-            sessionDateStr,RegionName,backStr;
+            sessionDateStr, RegionName, backStr, SearchPlaystudy;
     //    Use for Dialog
     Dialog forgotDialog;
-    String EmailIdStr, type, searchByStr, familylocationStr, familysessionStudentStr,firsttimesearch;
+    String EmailIdStr, type, familylocationStr, familysessionStudentStr, firsttimesearch;
+    //DashboardDialog
+    Dialog optionDialog;
     private boolean loggedin;
 
     @Override
@@ -59,14 +65,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginScreenBinding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         mContext = LoginActivity.this;
         sessionIDStr = getIntent().getStringExtra("sessionID");
-        whereTocomestr = getIntent().getStringExtra("withOR");
-        searchByStr = getIntent().getStringExtra("SearchBy");
         boardStr = getIntent().getStringExtra("board");
         standardStr = getIntent().getStringExtra("standard");
         streamStr = getIntent().getStringExtra("stream");
         locationStr = getIntent().getStringExtra("city");
         classNameStr = getIntent().getStringExtra("sessionName");
-        searchTypeStr = getIntent().getStringExtra("searchType");
         subjectStr = getIntent().getStringExtra("lessionName");
         genderStr = getIntent().getStringExtra("gender");
         frontloginStr = getIntent().getStringExtra("frontLogin");
@@ -78,8 +81,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         durationStr = getIntent().getStringExtra("duration");
         familysessionStudentStr = getIntent().getStringExtra("sessionStudent");
         firsttimesearch = getIntent().getStringExtra("firsttimesearch");
-        RegionName=getIntent().getStringExtra("RegionName");
-        backStr=getIntent().getStringExtra("back");
+        RegionName = getIntent().getStringExtra("RegionName");
+        backStr = getIntent().getStringExtra("back");
+        SearchPlaystudy = getIntent().getStringExtra("SearchPlaystudy");
         if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
             checkUnmPwd();
         }
@@ -101,16 +105,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Intent inregister = new Intent(mContext, RegistrationActivity.class);
                 inregister.putExtra("sessionID", sessionIDStr);
                 inregister.putExtra("frontLogin", frontloginStr);
-                inregister.putExtra("SearchBy", searchByStr);
+//                inregister.putExtra("SearchBy", searchByStr);
                 inregister.putExtra("board", boardStr);
                 inregister.putExtra("stream", streamStr);
                 inregister.putExtra("standard", standardStr);
                 inregister.putExtra("city", locationStr);
                 inregister.putExtra("sessionName", classNameStr);
-                inregister.putExtra("searchType", searchTypeStr);
                 inregister.putExtra("lessionName", subjectStr);
                 inregister.putExtra("gender", genderStr);
-                inregister.putExtra("withOR", whereTocomestr);
+//                inregister.putExtra("withOR", whereTocomestr);
+                inregister.putExtra("SearchPlaystudy", SearchPlaystudy);
                 inregister.putExtra("ratingLogin", ratingLoginStr);
                 inregister.putExtra("searchfront", searchfront);
                 inregister.putExtra("sessionType", sessionType);
@@ -118,17 +122,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 inregister.putExtra("sessiondate", sessionDateStr);
                 inregister.putExtra("sessionStudent", familysessionStudentStr);
                 inregister.putExtra("firsttimesearch", firsttimesearch);
-                inregister.putExtra("RegionName",RegionName);
-                inregister.putExtra("back",backStr);
+                inregister.putExtra("RegionName", RegionName);
+                inregister.putExtra("back", backStr);
                 startActivity(inregister);
                 break;
             case R.id.login_btn:
                 getInsertedValue();
-                if(Validation.checkEmail(EmailIdStr)&&Validation.checkPassword(passwordStr)){
+                if (Validation.checkEmail(EmailIdStr) && Validation.checkPassword(passwordStr)) {
                     checkStr = "login";
                     callTeacherLoginApi();
-                }else{
-                    Utils.ping(mContext, "Invalid Email Address or Password.");
+                } else {
+                    Utils.ping(mContext, "Invalid Email Address or Password");
                 }
                 break;
             case R.id.facebook_img:
@@ -146,10 +150,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.password_edt:
                 if (i == EditorInfo.IME_ACTION_DONE) {
                     getInsertedValue();
-                    if(Validation.checkEmail(EmailIdStr)&&Validation.checkPassword(passwordStr)){
+                    if (Validation.checkEmail(EmailIdStr) && Validation.checkPassword(passwordStr)) {
                         checkStr = "login";
                         callTeacherLoginApi();
-                    }else{
+                    } else {
                         Utils.ping(mContext, "Invalid Email Address or Password.");
                     }
                 }
@@ -157,6 +161,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
         return false;
     }
+
     @Override
     public void onBackPressed() {
         if (frontloginStr.equalsIgnoreCase("beforeLogin")) {
@@ -164,17 +169,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             startActivity(isearchbyuser);
         } else {
             Intent intent = new Intent(mContext, SessionName.class);
-            intent.putExtra("SearchBy", searchByStr);
+//            intent.putExtra("SearchBy", searchByStr);
             intent.putExtra("sessionID", sessionIDStr);
             intent.putExtra("board", boardStr);
             intent.putExtra("stream", streamStr);
             intent.putExtra("standard", standardStr);
             intent.putExtra("city", locationStr);
             intent.putExtra("sessionName", classNameStr);
-            intent.putExtra("searchType", searchTypeStr);
             intent.putExtra("lessionName", subjectStr);
             intent.putExtra("gender", genderStr);
-            intent.putExtra("withOR", whereTocomestr);
+//            intent.putExtra("withOR", whereTocomestr);
             intent.putExtra("ratingLogin", ratingLoginStr);
             intent.putExtra("searchfront", searchfront);
             intent.putExtra("sessionType", sessionType);
@@ -182,8 +186,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             intent.putExtra("sessiondate", sessionDateStr);
             intent.putExtra("sessionStudent", familysessionStudentStr);
             intent.putExtra("firsttimesearch", firsttimesearch);
-            intent.putExtra("RegionName",RegionName);
-            intent.putExtra("back",backStr);
+            intent.putExtra("RegionName", RegionName);
+            intent.putExtra("back", backStr);
             intent.addCategory(Intent.CATEGORY_HOME);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -219,7 +223,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                         Utils.setPref(mContext, "coachID", splitCoachID[0]);
                         Utils.setPref(mContext, "coachTypeID", splitCoachID[1]);
-                        Utils.setPref(mContext, "RegisterUserName",teacherInfoModel.getName());
+                        Utils.setPref(mContext, "RegisterUserName", teacherInfoModel.getName());
                         Utils.setPref(mContext, "RegisterEmail", teacherInfoModel.getEmailID());
                         Utils.setPref(mContext, "LoginType", teacherInfoModel.getLoginType());
                         AppConfiguration.coachId = teacherInfoModel.getCoachID();
@@ -227,47 +231,50 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         contatIDstr = splitCoachID[0];
                         if (teacherInfoModel.getLoginType().equalsIgnoreCase("Family")) {
                             if (frontloginStr.equalsIgnoreCase("beforeLogin")) {
-                                Intent iSearchByUser = new Intent(mContext, SearchByUser.class);
+//                                Intent iSearchByUser = new Intent(mContext, SearchByUser.class);
+//                                startActivity(iSearchByUser);
+                                Intent iSearchByUser = new Intent(mContext, MySession.class);
                                 startActivity(iSearchByUser);
+
                             } else {
                                 if (ratingLoginStr.equalsIgnoreCase("ratingLoginclass")) {
                                     Intent iSearchByUser = new Intent(mContext, ClassDeatilScreen.class);
                                     iSearchByUser.putExtra("frontLogin", "afterLogin");
                                     iSearchByUser.putExtra("sessionID", sessionIDStr);
-                                    iSearchByUser.putExtra("SearchBy", searchByStr);
+//                                    iSearchByUser.putExtra("SearchBy", searchByStr);
                                     iSearchByUser.putExtra("board", boardStr);
                                     iSearchByUser.putExtra("stream", streamStr);
                                     iSearchByUser.putExtra("standard", standardStr);
                                     iSearchByUser.putExtra("city", locationStr);
                                     iSearchByUser.putExtra("sessionName", classNameStr);
-                                    iSearchByUser.putExtra("searchType", searchTypeStr);
+
                                     iSearchByUser.putExtra("lessionName", subjectStr);
                                     iSearchByUser.putExtra("gender", genderStr);
-                                    iSearchByUser.putExtra("withOR", whereTocomestr);
+//                                    iSearchByUser.putExtra("withOR", whereTocomestr);
                                     iSearchByUser.putExtra("searchfront", searchfront);
                                     iSearchByUser.putExtra("sessionType", sessionType);
                                     iSearchByUser.putExtra("firsttimesearch", firsttimesearch);
-                                    iSearchByUser.putExtra("RegionName",RegionName);
+                                    iSearchByUser.putExtra("RegionName", RegionName);
                                     startActivity(iSearchByUser);
                                 } else if (ratingLoginStr.equalsIgnoreCase("ratingLoginSession")) {
                                     Intent iSearchByUser = new Intent(mContext, SessionName.class);
                                     iSearchByUser.putExtra("frontLogin", "afterLogin");
                                     iSearchByUser.putExtra("sessionID", sessionIDStr);
-                                    iSearchByUser.putExtra("SearchBy", searchByStr);
+//                                    iSearchByUser.putExtra("SearchBy", searchByStr);
                                     iSearchByUser.putExtra("board", boardStr);
                                     iSearchByUser.putExtra("stream", streamStr);
                                     iSearchByUser.putExtra("standard", standardStr);
                                     iSearchByUser.putExtra("city", locationStr);
                                     iSearchByUser.putExtra("sessionName", classNameStr);
-                                    iSearchByUser.putExtra("searchType", searchTypeStr);
+
                                     iSearchByUser.putExtra("lessionName", subjectStr);
                                     iSearchByUser.putExtra("gender", genderStr);
-                                    iSearchByUser.putExtra("withOR", whereTocomestr);
+//                                    iSearchByUser.putExtra("withOR", whereTocomestr);
                                     iSearchByUser.putExtra("ratingLogin", "false");
                                     iSearchByUser.putExtra("searchfront", searchfront);
                                     iSearchByUser.putExtra("sessionType", sessionType);
                                     iSearchByUser.putExtra("firsttimesearch", firsttimesearch);
-                                    iSearchByUser.putExtra("RegionName",RegionName);
+                                    iSearchByUser.putExtra("RegionName", RegionName);
                                     startActivity(iSearchByUser);
                                 } else {
                                     Intent iFamilyList = new Intent(mContext, FamilyListActivity.class);
@@ -276,31 +283,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     iFamilyList.putExtra("duration", AppConfiguration.classsessionDuration);
                                     iFamilyList.putExtra("sessiondate", AppConfiguration.classsessionDate);
                                     iFamilyList.putExtra("froncontanct", "false");
-                                    iFamilyList.putExtra("SearchBy", searchByStr);
+//                                    iFamilyList.putExtra("SearchBy", searchByStr);
                                     iFamilyList.putExtra("sessionID", sessionIDStr);
                                     iFamilyList.putExtra("board", boardStr);
                                     iFamilyList.putExtra("stream", streamStr);
                                     iFamilyList.putExtra("standard", standardStr);
                                     iFamilyList.putExtra("city", locationStr);
-                                    iFamilyList.putExtra("searchType", searchTypeStr);
+
                                     iFamilyList.putExtra("lessionName", subjectStr);
                                     iFamilyList.putExtra("gender", genderStr);
-                                    iFamilyList.putExtra("withOR", whereTocomestr);
+//                                    iFamilyList.putExtra("withOR", whereTocomestr);
                                     iFamilyList.putExtra("location", familylocationStr);
                                     iFamilyList.putExtra("searchfront", searchfront);
                                     iFamilyList.putExtra("sessionType", sessionType);
                                     iFamilyList.putExtra("sessionStudent", familysessionStudentStr);
                                     iFamilyList.putExtra("firsttimesearch", firsttimesearch);
-                                    iFamilyList.putExtra("RegionName",RegionName);
-                                    iFamilyList.putExtra("back",backStr);
+                                    iFamilyList.putExtra("RegionName", RegionName);
+                                    iFamilyList.putExtra("back", backStr);
                                     startActivity(iFamilyList);
                                 }
                             }
 
                         } else {
-                            Intent inLogin = new Intent(mContext, DashBoardActivity.class);
-                            inLogin.putExtra("frontLogin", frontloginStr);
-                            startActivity(inLogin);
+                            selectOptionDialog();
                         }
                     }
                 }
@@ -314,7 +319,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             });
         } else {
-            Utils.ping(mContext,getResources().getString(R.string.internet_connection_error));
+            Utils.ping(mContext, getResources().getString(R.string.internet_connection_error));
         }
     }
 
@@ -480,4 +485,62 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         return map;
     }
+
+
+    public void selectOptionDialog() {
+        optionDialogBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContext), R.layout.option_dialog, (ViewGroup) loginScreenBinding.getRoot(), false);
+
+        optionDialog = new Dialog(mContext, R.style.Theme_Dialog);
+        Window window = optionDialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        optionDialog.getWindow().getAttributes().verticalMargin = 0.0f;
+        wlp.gravity = Gravity.CENTER;
+        window.setAttributes(wlp);
+
+        optionDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+
+        optionDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        optionDialog.setCancelable(false);
+        optionDialog.setContentView(optionDialogBinding.getRoot());
+        String[] userName = Utils.getPref(mContext, "RegisterUserName").split("\\s+");
+
+        optionDialogBinding.titleTxt.setText(Html.fromHtml("Hi " + "<u><b>" + userName[0] + "</u></b>"));
+        optionDialogBinding.addClassBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent inLogin = new Intent(mContext, DashBoardActivity.class);
+                inLogin.putExtra("frontLogin", frontloginStr);
+                inLogin.putExtra("position","1");
+                startActivity(inLogin);
+                optionDialog.dismiss();
+            }
+        });
+        optionDialogBinding.viewClassBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent inLogin = new Intent(mContext, DashBoardActivity.class);
+                inLogin.putExtra("frontLogin", frontloginStr);
+                inLogin.putExtra("position","0");
+                startActivity(inLogin);
+                optionDialog.dismiss();
+            }
+        });
+        optionDialogBinding.cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loginScreenBinding.emailEdt.setText("");
+                loginScreenBinding.passwordEdt.setText("");
+                Utils.setPref(mContext, "coachID", "");
+                Utils.setPref(mContext, "coachTypeID","");
+                Utils.setPref(mContext, "RegisterUserName","");
+                Utils.setPref(mContext, "RegisterEmail","");
+                Utils.setPref(mContext, "LoginType","");
+                optionDialog.dismiss();
+            }
+        });
+        optionDialog.show();
+
+    }
+
 }

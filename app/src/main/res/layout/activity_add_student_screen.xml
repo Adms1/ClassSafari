@@ -156,7 +156,8 @@
                 android:drawableRight="@drawable/email_white"
                 android:hint="@string/user_id"
                 android:imeOptions="actionNext"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:visibility="gone"/>
 
             <EditText
                 android:id="@+id/password_edt"
@@ -166,7 +167,8 @@
                 android:layout_marginTop="@dimen/_15sdp"
                 android:drawableRight="@drawable/password_white"
                 android:hint="@string/user_pass"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:visibility="gone" />
 
             <EditText
                 android:id="@+id/phone_no_edt"
@@ -177,7 +179,8 @@
                 android:drawableRight="@drawable/mobile"
                 android:hint="@string/phone_no"
                 android:inputType="number"
-                android:maxLength="10" />
+                android:maxLength="10"
+                android:visibility="gone"/>
 
             <Button
                 android:id="@+id/date_of_birth_edt"

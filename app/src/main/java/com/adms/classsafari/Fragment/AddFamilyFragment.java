@@ -46,22 +46,27 @@ import retrofit.client.Response;
 public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDateSetListener,
         View.OnClickListener, TextView.OnEditorActionListener, RadioGroup.OnCheckedChangeListener {
 
-//    ConfirmSessionDialogBinding confirmSessionDialogBinding;
+    //    ConfirmSessionDialogBinding confirmSessionDialogBinding;
     ConfirmSessionTeacherBinding confirmSessionTeacherBinding;
     String MonthInt;
     int Year, Month, Day;
     Calendar calendar;
     int mYear, mMonth, mDay;
-    String pageTitle, type, firstNameStr, lastNameStr, emailStr = "", passwordStr, phonenoStr, gendarIdStr = "1", dateofbirthStr, contactTypeIDStr, familyIDStr, contatIDstr, orderIDStr, sessionIDStr, classStr = "Child", familyNameStr, paymentStatusstr;
+    String pageTitle, type, firstNameStr, lastNameStr, emailStr = "",
+            passwordStr, phonenoStr, gendarIdStr = "1", dateofbirthStr,
+            contactTypeIDStr, familyIDStr, contatIDstr, orderIDStr,
+            sessionIDStr, classStr = "Child", familyNameStr, paymentStatusstr,familyMobileStr;
     Dialog confimDialog;
     //    TextView cancel_txt, confirm_txt, session_student_txt, session_name_txt, location_txt, duration_txt, time_txt, session_fee_txt, session_student_txt_view;
     TeacherInfoModel classListInfo;
     HashMap<Integer, String> spinnerClassMap;
+    SessiondetailConfirmationDialogBinding sessiondetailConfirmationDialogBinding;
+    boolean callservice = false;
     private FragmentAddFamilyBinding addFamilyBinding;
     private View rootView;
     private Context mContext;
     private DatePickerDialog datePickerDialog;
-    SessiondetailConfirmationDialogBinding sessiondetailConfirmationDialogBinding;
+
     public AddFamilyFragment() {
     }
 
@@ -77,6 +82,7 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         type = getArguments().getString("type");
         familyIDStr = getArguments().getString("familyID");
         familyNameStr = getArguments().getString("familyNameStr");
+        familyMobileStr=getArguments().getString("familyMobileStr");
         sessionIDStr = Utils.getPref(mContext, "sessionID");
         ((DashBoardActivity) getActivity()).setActionBar(Integer.parseInt(pageTitle), "false");
         initViews();
@@ -98,6 +104,9 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
             addFamilyBinding.classTypeGroup.setVisibility(View.VISIBLE);
             addFamilyBinding.linearFamilyName.setVisibility(View.VISIBLE);
             addFamilyBinding.familynameTxt.setText(familyNameStr);
+            addFamilyBinding.emailEdt.setVisibility(View.GONE);
+            addFamilyBinding.passwordEdt.setVisibility(View.GONE);
+            addFamilyBinding.phoneNoEdt.setVisibility(View.GONE);
         }
     }
 
@@ -123,27 +132,33 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
                 if (!contactTypeIDStr.equalsIgnoreCase("")) {
                     if (!firstNameStr.equalsIgnoreCase("")) {
                         if (!lastNameStr.equalsIgnoreCase("")) {
-                            if (!emailStr.equalsIgnoreCase("") && Utils.isValidEmaillId(emailStr)) {
-                                if (!passwordStr.equalsIgnoreCase("") && passwordStr.length() >= 4 && passwordStr.length() <= 8) {
-                                    if (!phonenoStr.equalsIgnoreCase("") && phonenoStr.length() >= 10) {
-                                        if (!gendarIdStr.equalsIgnoreCase("")) {
-                                            if (!dateofbirthStr.equalsIgnoreCase("")) {
-                                                callCheckEmailIdApi();
+                            if (!gendarIdStr.equalsIgnoreCase("")) {
+                                if (!dateofbirthStr.equalsIgnoreCase("")) {
+                                    if (type.equalsIgnoreCase("Family")) {
+                                        if (!emailStr.equalsIgnoreCase("") && Utils.isValidEmaillId(emailStr)) {
+                                            if (!passwordStr.equalsIgnoreCase("") && passwordStr.length() >= 4 && passwordStr.length() <= 8) {
+                                                if (!phonenoStr.equalsIgnoreCase("") && phonenoStr.length() >= 10) {
+                                                    callservice = true;
+                                                    callCheckEmailIdApi();
+                                                }else {
+                                                    addFamilyBinding.phoneNoEdt.setError("Enter 10 digit Phone Number.");
+                                                }
                                             } else {
-                                                addFamilyBinding.dateOfBirthEdt.setError("Please Select Your Birth Date.");
+                                                addFamilyBinding.passwordEdt.setError("Password must be 4-8 Characters.");
                                             }
                                         } else {
-                                            addFamilyBinding.femaleChk.setError("Select Gender.");
+                                            addFamilyBinding.emailEdt.setError("Please Enter Valid Email Addres.");
                                         }
-                                    } else {
-                                        addFamilyBinding.phoneNoEdt.setError("Enter 10 digit Phone Number.");
+                                    }else{
+                                        callNewChildApi();
                                     }
                                 } else {
-                                    addFamilyBinding.passwordEdt.setError("Password must be 4-8 Characters.");
+                                    addFamilyBinding.dateOfBirthEdt.setError("Please Select Your Birth Date.");
                                 }
                             } else {
-                                addFamilyBinding.emailEdt.setError("Please Enter Valid Email Addres.");
+                                addFamilyBinding.femaleChk.setError("Select Gender.");
                             }
+//
                         } else {
                             addFamilyBinding.lastNameEdt.setError("Please Enter LastName.");
                         }
@@ -235,12 +250,14 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
             case R.id.email_edt:
                 emailStr = addFamilyBinding.emailEdt.getText().toString();
                 if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    if (!emailStr.equalsIgnoreCase("") && Utils.isValidEmaillId(emailStr)) {
-//                        callCheckEmailIdApi();
-                    } else {
-                        addFamilyBinding.emailEdt.setError("Please Enter Valid Email Address.");
+                    if (type.equalsIgnoreCase("Family")) {
+                        callservice = false;
+                        if (!emailStr.equalsIgnoreCase("") && Utils.isValidEmaillId(emailStr)) {
+                            callCheckEmailIdApi();
+                        } else {
+                            addFamilyBinding.emailEdt.setError("Please Enter Valid Email Address.");
+                        }
                     }
-
                 }
                 break;
         }
@@ -248,7 +265,8 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
     }
 
     @Override
-    public void onDateSet(com.wdullaer.materialdatetimepicker.date.DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+    public void onDateSet(com.wdullaer.materialdatetimepicker.date.DatePickerDialog
+                                  view, int year, int monthOfYear, int dayOfMonth) {
         mDay = dayOfMonth;
         mMonth = monthOfYear + 1;
         mYear = year;
@@ -266,41 +284,43 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
 
         MonthInt = d + "/" + m + "/" + y;
         addFamilyBinding.dateOfBirthEdt.setText(MonthInt);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        int age = 0;
-        try {
-            Date date1 = dateFormat.parse(addFamilyBinding.dateOfBirthEdt.getText().toString());
-            Calendar now = Calendar.getInstance();
-            Calendar dob = Calendar.getInstance();
-            dob.setTime(date1);
-            if (dob.after(now)) {
-                addFamilyBinding.dateOfBirthEdt.setError("Can't be born in the future");
-                addFamilyBinding.dateOfBirthEdt.setText("");
-            }
-            int year1 = now.get(Calendar.YEAR);
-            int year2 = dob.get(Calendar.YEAR);
-            age = year1 - year2;
-            int month1 = now.get(Calendar.MONTH);
-            int month2 = dob.get(Calendar.MONTH);
-            if (month2 > month1) {
-                age--;
-            } else if (month1 == month2) {
-                int day1 = now.get(Calendar.DAY_OF_MONTH);
-                int day2 = dob.get(Calendar.DAY_OF_MONTH);
-                if (day2 > day1) {
-                    age--;
-                }
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
-        if (age >= 1) {
-        } else {
-            addFamilyBinding.dateOfBirthEdt.setError(getResources().getString(R.string.agevalidation));
-            addFamilyBinding.dateOfBirthEdt.setText("");
-
-        }
+        //Age Validation
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+//        int age = 0;
+//        try {
+//            Date date1 = dateFormat.parse(addFamilyBinding.dateOfBirthEdt.getText().toString());
+//            Calendar now = Calendar.getInstance();
+//            Calendar dob = Calendar.getInstance();
+//            dob.setTime(date1);
+//            if (dob.after(now)) {
+//                addFamilyBinding.dateOfBirthEdt.setError("Can't be born in the future");
+//                addFamilyBinding.dateOfBirthEdt.setText("");
+//            }
+//            int year1 = now.get(Calendar.YEAR);
+//            int year2 = dob.get(Calendar.YEAR);
+//            age = year1 - year2;
+//            int month1 = now.get(Calendar.MONTH);
+//            int month2 = dob.get(Calendar.MONTH);
+//            if (month2 > month1) {
+//                age--;
+//            } else if (month1 == month2) {
+//                int day1 = now.get(Calendar.DAY_OF_MONTH);
+//                int day2 = dob.get(Calendar.DAY_OF_MONTH);
+//                if (day2 > day1) {
+//                    age--;
+//                }
+//            }
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//
+//        if (age >= 1) {
+//        } else {
+//            addFamilyBinding.dateOfBirthEdt.setError(getResources().getString(R.string.agevalidation));
+//            addFamilyBinding.dateOfBirthEdt.setText("");
+//
+//        }
     }
 
     //Use for New Family
@@ -378,16 +398,24 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
                     }
                     if (teacherInfoModel.getSuccess().equalsIgnoreCase("false")) {
 //                        Utils.ping(mContext, getString(R.string.false_msg));
+
                         if (type.equalsIgnoreCase("Family")) {
-                            callFamilyApi();
-                        } else {
-                            callNewChildApi();
+                            if (callservice == true) {
+                                callFamilyApi();
+                            }
+//                            else {
+//                                callNewChildApi();
+//                            }
                         }
+                        callservice = false;
+
+
                         return;
                     }
                     if (teacherInfoModel.getSuccess().equalsIgnoreCase("True")) {
                         addFamilyBinding.emailEdt.setError("Already Exist!");
                         addFamilyBinding.emailEdt.setText("");
+                        callservice = false;
                     }
                 }
 
@@ -482,10 +510,11 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         map.put("Password", passwordStr);
         map.put("GenderID", gendarIdStr);
         map.put("DateOfBirth", dateofbirthStr);
-        map.put("PhoneNumber", phonenoStr);
+        map.put("PhoneNumber", familyMobileStr);
         map.put("ContactTypeID", contactTypeIDStr);
         return map;
     }
+
     public void SessionConfirmationDialog() {
         sessiondetailConfirmationDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.sessiondetail_confirmation_dialog, (ViewGroup) addFamilyBinding.getRoot(), false);
@@ -508,9 +537,11 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         sessiondetailConfirmationDialogBinding.durationTxt.setText(AppConfiguration.SessionDuration);
         sessiondetailConfirmationDialogBinding.startDateTxt.setText(AppConfiguration.SessionDate);
         sessiondetailConfirmationDialogBinding.endDateTxt.setText(AppConfiguration.SessionDate);
-
+        sessiondetailConfirmationDialogBinding.priceTxt.setText("₹"+AppConfiguration.SessionPrice);
+        sessiondetailConfirmationDialogBinding.ratingBar.setRating(Float.parseFloat(AppConfiguration.SessionRating));
+        sessiondetailConfirmationDialogBinding.ratingUserTxt.setText(AppConfiguration.SessionUserRating);
         String[] spiltTime = AppConfiguration.SessionTime.split("\\-");
-        AppConfiguration.UserName=familyNameStr;
+        AppConfiguration.UserName = familyNameStr;
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -532,6 +563,9 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
                 sessiondetailConfirmationDialogBinding.sunTimeTxt.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.sundayBtn.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.sunTimeTxt.setText(spiltTime[0]);
+                sessiondetailConfirmationDialogBinding.sunHoursTxt.setText(AppConfiguration.SessionDuration);
+                sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
                 break;
             case "mon":
                 sessiondetailConfirmationDialogBinding.monTimeTxt.setEnabled(true);
@@ -539,6 +573,9 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
                 sessiondetailConfirmationDialogBinding.monTimeTxt.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.mondayBtn.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.monTimeTxt.setText(spiltTime[0]);
+                sessiondetailConfirmationDialogBinding.monHoursTxt.setText(AppConfiguration.SessionDuration);
+                sessiondetailConfirmationDialogBinding.monHoursTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.monHoursTxt.setAlpha(1);
                 break;
             case "tue":
                 sessiondetailConfirmationDialogBinding.tuesTimeTxt.setEnabled(true);
@@ -546,6 +583,9 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
                 sessiondetailConfirmationDialogBinding.tuesTimeTxt.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.tuesdayBtn.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.tuesTimeTxt.setText(spiltTime[0]);
+                sessiondetailConfirmationDialogBinding.tuesHoursTxt.setText(AppConfiguration.SessionDuration);
+                sessiondetailConfirmationDialogBinding.tuesHoursTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.tuesHoursTxt.setAlpha(1);
                 break;
             case "wed":
                 sessiondetailConfirmationDialogBinding.wedTimeTxt.setEnabled(true);
@@ -553,6 +593,9 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
                 sessiondetailConfirmationDialogBinding.wedTimeTxt.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.wednesdayBtn.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.wedTimeTxt.setText(spiltTime[0]);
+                sessiondetailConfirmationDialogBinding.wedHoursTxt.setText(AppConfiguration.SessionDuration);
+                sessiondetailConfirmationDialogBinding.wedHoursTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.wedHoursTxt.setAlpha(1);
                 break;
             case "thu":
                 sessiondetailConfirmationDialogBinding.thurTimeTxt.setEnabled(true);
@@ -560,6 +603,9 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
                 sessiondetailConfirmationDialogBinding.thurTimeTxt.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.thursdayBtn.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.thurTimeTxt.setText(spiltTime[0]);
+                sessiondetailConfirmationDialogBinding.thurHoursTxt.setText(AppConfiguration.SessionDuration);
+                sessiondetailConfirmationDialogBinding.thurHoursTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.thurHoursTxt.setAlpha(1);
                 break;
             case "fri":
                 sessiondetailConfirmationDialogBinding.friTimeTxt.setEnabled(true);
@@ -567,6 +613,9 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
                 sessiondetailConfirmationDialogBinding.friTimeTxt.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.fridayBtn.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.friTimeTxt.setText(spiltTime[0]);
+                sessiondetailConfirmationDialogBinding.friHoursTxt.setText(AppConfiguration.SessionDuration);
+                sessiondetailConfirmationDialogBinding.friHoursTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.friHoursTxt.setAlpha(1);
                 break;
             case "sat":
                 sessiondetailConfirmationDialogBinding.satTimeTxt.setEnabled(true);
@@ -574,6 +623,9 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
                 sessiondetailConfirmationDialogBinding.satTimeTxt.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.saturdayBtn.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.satTimeTxt.setText(spiltTime[0]);
+                sessiondetailConfirmationDialogBinding.satHoursTxt.setText(AppConfiguration.SessionDuration);
+                sessiondetailConfirmationDialogBinding.satHoursTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.satHoursTxt.setAlpha(1);
                 break;
             default:
 
@@ -584,7 +636,7 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
                 if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
                     callpaymentRequestApi();
                 } else {
-                    paymentStatusstr="1";
+                    paymentStatusstr = "1";
                     callSessionConfirmationApi();
                 }
                 confimDialog.dismiss();
@@ -594,6 +646,7 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         confimDialog.show();
 
     }
+
     //Use for paymentRequest
     public void callpaymentRequestApi() {
         if (Utils.isNetworkConnected(mContext)) {
@@ -623,8 +676,8 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
                         Bundle args = new Bundle();
                         args.putString("orderID", orderIDStr);
                         args.putString("amount", AppConfiguration.SessionPrice);
-                        args.putString("mode",AppConfiguration.Mode);
-                        args.putString("username",firstNameStr + " " + lastNameStr);
+                        args.putString("mode", AppConfiguration.Mode);
+                        args.putString("username", firstNameStr + " " + lastNameStr);
                         args.putString("sessionID", sessionIDStr);
                         args.putString("contactID", contatIDstr);
                         args.putString("type", type);

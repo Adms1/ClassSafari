@@ -47,25 +47,24 @@ import retrofit.client.Response;
 
 public class OldFamilyListFragment extends Fragment {
 
-    private FragmentOldFamilyListBinding oldFamilyListBinding;
     ConfirmSessionDialogBinding confirmSessionDialogBinding;
+    List<FamilyDetailModel> finalFamilyDetail;
+    List<String> listDataHeader;
+    HashMap<String, List<ChildDetailModel>> listDataChild;
+    ExpandableSelectStudentListAdapter expandableSelectStudentListAdapter;
+    Dialog confimDialog;
+    //    TextView cancel_txt, confirm_txt, session_student_txt,session_teacher_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, session_fee_txt;
+    String familyIdStr = "", contatIDstr, orderIDStr, sessionIDStr, type, familyNameStr = "", familyMobileStr = "", paymentStatusstr, arraowStr;
+    ArrayList<String> selectedId;
+    String froncontanctStr;
+    SessiondetailConfirmationDialogBinding sessiondetailConfirmationDialogBinding;
+    private FragmentOldFamilyListBinding oldFamilyListBinding;
     private View rootView;
     private Context mContext;
     private Fragment fragment = null;
     private FragmentManager fragmentManager = null;
-
-    List<FamilyDetailModel> finalFamilyDetail;
-    List<String> listDataHeader;
-    HashMap<String, List<ChildDetailModel>> listDataChild;
     private int lastExpandedPosition = -1;
-    ExpandableSelectStudentListAdapter expandableSelectStudentListAdapter;
 
-    Dialog confimDialog;
-//    TextView cancel_txt, confirm_txt, session_student_txt,session_teacher_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, session_fee_txt;
-    String familyIdStr = "", contatIDstr, orderIDStr, sessionIDStr, type, familyNameStr = "",paymentStatusstr,arraowStr;
-    ArrayList<String> selectedId;
-String froncontanctStr;
-    SessiondetailConfirmationDialogBinding sessiondetailConfirmationDialogBinding;
     public OldFamilyListFragment() {
     }
 
@@ -77,14 +76,14 @@ String froncontanctStr;
         rootView = oldFamilyListBinding.getRoot();
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mContext = getActivity();
-        arraowStr="Fragment";
+        arraowStr = "Fragment";
         ((DashBoardActivity) getActivity()).setActionBar(13, "false");
         sessionIDStr = Utils.getPref(mContext, "sessionID");
         Log.d("sessionID", sessionIDStr);
         initViews();
         setListners();
         callFamilyListApi();
-        froncontanctStr="false";
+        froncontanctStr = "false";
         return rootView;
     }
 
@@ -104,7 +103,7 @@ String froncontanctStr;
                 Bundle args = new Bundle();
                 args.putString("session", "10");
                 args.putString("type", "Family");
-                args.putString("sessionID",sessionIDStr);
+                args.putString("sessionID", sessionIDStr);
                 fragment.setArguments(args);
                 fragmentTransaction.replace(R.id.frame, fragment);
                 fragmentTransaction.addToBackStack(null);
@@ -168,6 +167,7 @@ String froncontanctStr;
         confirmSessionDialogBinding.locationTxt.setText(AppConfiguration.SessionLocation);
         confirmSessionDialogBinding.durationTxt.setText(AppConfiguration.SessionDuration);
         confirmSessionDialogBinding.timeTxt.setText(AppConfiguration.SessionTime);
+
         AppConfiguration.UserName = confirmSessionDialogBinding.sessionStudentTxt.getText().toString();
 
         confirmSessionDialogBinding.cancelTxt.setOnClickListener(new View.OnClickListener() {
@@ -183,7 +183,7 @@ String froncontanctStr;
                 if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
                     callpaymentRequestApi();
                 } else {
-                    paymentStatusstr="1";
+                    paymentStatusstr = "1";
                     callSessionConfirmationApi();
                 }
                 confimDialog.dismiss();
@@ -214,12 +214,15 @@ String froncontanctStr;
         sessiondetailConfirmationDialogBinding.tutorNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
         sessiondetailConfirmationDialogBinding.sessionNameTxt.setText(AppConfiguration.SessionName);
         sessiondetailConfirmationDialogBinding.locationTxt.setText(AppConfiguration.RegionName);
-        sessiondetailConfirmationDialogBinding.durationTxt.setText(AppConfiguration.SessionDuration);
+//        sessiondetailConfirmationDialogBinding.durationTxt.setText(AppConfiguration.SessionDuration);
         sessiondetailConfirmationDialogBinding.startDateTxt.setText(AppConfiguration.SessionDate);
         sessiondetailConfirmationDialogBinding.endDateTxt.setText(AppConfiguration.SessionDate);
+        sessiondetailConfirmationDialogBinding.priceTxt.setText(AppConfiguration.SessionPrice);
+        sessiondetailConfirmationDialogBinding.ratingBar.setRating(Float.parseFloat(AppConfiguration.SessionRating));
+        sessiondetailConfirmationDialogBinding.ratingUserTxt.setText(AppConfiguration.SessionUserRating);
 
         String[] spiltTime = AppConfiguration.SessionTime.split("\\-");
-        AppConfiguration.UserName=familyNameStr;
+        AppConfiguration.UserName = familyNameStr;
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -241,6 +244,9 @@ String froncontanctStr;
                 sessiondetailConfirmationDialogBinding.sunTimeTxt.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.sundayBtn.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.sunTimeTxt.setText(spiltTime[0]);
+                sessiondetailConfirmationDialogBinding.sunHoursTxt.setText(AppConfiguration.SessionDuration);
+                sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
                 break;
             case "mon":
                 sessiondetailConfirmationDialogBinding.monTimeTxt.setEnabled(true);
@@ -248,6 +254,9 @@ String froncontanctStr;
                 sessiondetailConfirmationDialogBinding.monTimeTxt.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.mondayBtn.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.monTimeTxt.setText(spiltTime[0]);
+                sessiondetailConfirmationDialogBinding.monHoursTxt.setText(AppConfiguration.SessionDuration);
+                sessiondetailConfirmationDialogBinding.monHoursTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.monHoursTxt.setAlpha(1);
                 break;
             case "tue":
                 sessiondetailConfirmationDialogBinding.tuesTimeTxt.setEnabled(true);
@@ -255,6 +264,9 @@ String froncontanctStr;
                 sessiondetailConfirmationDialogBinding.tuesTimeTxt.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.tuesdayBtn.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.tuesTimeTxt.setText(spiltTime[0]);
+                sessiondetailConfirmationDialogBinding.tuesHoursTxt.setText(AppConfiguration.SessionDuration);
+                sessiondetailConfirmationDialogBinding.tuesHoursTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.tuesHoursTxt.setAlpha(1);
                 break;
             case "wed":
                 sessiondetailConfirmationDialogBinding.wedTimeTxt.setEnabled(true);
@@ -262,6 +274,9 @@ String froncontanctStr;
                 sessiondetailConfirmationDialogBinding.wedTimeTxt.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.wednesdayBtn.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.wedTimeTxt.setText(spiltTime[0]);
+                sessiondetailConfirmationDialogBinding.wedHoursTxt.setText(AppConfiguration.SessionDuration);
+                sessiondetailConfirmationDialogBinding.wedHoursTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.wedHoursTxt.setAlpha(1);
                 break;
             case "thu":
                 sessiondetailConfirmationDialogBinding.thurTimeTxt.setEnabled(true);
@@ -269,6 +284,9 @@ String froncontanctStr;
                 sessiondetailConfirmationDialogBinding.thurTimeTxt.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.thursdayBtn.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.thurTimeTxt.setText(spiltTime[0]);
+                sessiondetailConfirmationDialogBinding.thurHoursTxt.setText(AppConfiguration.SessionDuration);
+                sessiondetailConfirmationDialogBinding.thurHoursTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.thurHoursTxt.setAlpha(1);
                 break;
             case "fri":
                 sessiondetailConfirmationDialogBinding.friTimeTxt.setEnabled(true);
@@ -276,6 +294,9 @@ String froncontanctStr;
                 sessiondetailConfirmationDialogBinding.friTimeTxt.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.fridayBtn.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.friTimeTxt.setText(spiltTime[0]);
+                sessiondetailConfirmationDialogBinding.friHoursTxt.setText(AppConfiguration.SessionDuration);
+                sessiondetailConfirmationDialogBinding.friHoursTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.friHoursTxt.setAlpha(1);
                 break;
             case "sat":
                 sessiondetailConfirmationDialogBinding.satTimeTxt.setEnabled(true);
@@ -283,6 +304,9 @@ String froncontanctStr;
                 sessiondetailConfirmationDialogBinding.satTimeTxt.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.saturdayBtn.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.satTimeTxt.setText(spiltTime[0]);
+                sessiondetailConfirmationDialogBinding.satHoursTxt.setText(AppConfiguration.SessionDuration);
+                sessiondetailConfirmationDialogBinding.satHoursTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.satHoursTxt.setAlpha(1);
                 break;
             default:
 
@@ -299,7 +323,7 @@ String froncontanctStr;
                 if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
                     callpaymentRequestApi();
                 } else {
-                    paymentStatusstr="1";
+                    paymentStatusstr = "1";
                     callSessionConfirmationApi();
                 }
                 confimDialog.dismiss();
@@ -309,7 +333,6 @@ String froncontanctStr;
         confimDialog.show();
 
     }
-
 
 
     //Use for Get FamilyList
@@ -342,7 +365,7 @@ String froncontanctStr;
                                 oldFamilyListBinding.listLinear.setVisibility(View.VISIBLE);
                                 oldFamilyListBinding.noRecordTxt.setVisibility(View.GONE);
                                 fillExpLV();
-                                expandableSelectStudentListAdapter = new ExpandableSelectStudentListAdapter(getActivity(), listDataHeader, listDataChild, froncontanctStr,arraowStr, new onChlidClick() {
+                                expandableSelectStudentListAdapter = new ExpandableSelectStudentListAdapter(getActivity(), listDataHeader, listDataChild, froncontanctStr, arraowStr, new onChlidClick() {
                                     @Override
                                     public void getChilClick() {
                                         getFamilyID();
@@ -353,7 +376,8 @@ String froncontanctStr;
                                         args.putString("session", "11");
                                         args.putString("type", "Child");
                                         args.putString("familyID", familyIdStr);
-                                        args.putString("familyNameStr",familyNameStr);
+                                        args.putString("familyNameStr", familyNameStr);
+                                        args.putString("familyMobileStr", familyMobileStr);
                                         fragment.setArguments(args);
                                         fragmentTransaction.replace(R.id.frame, fragment);
                                         fragmentTransaction.addToBackStack(null);
@@ -430,8 +454,9 @@ String froncontanctStr;
             String[] spiltValue = selectedId.get(i).split("\\|");
             familyIdStr = spiltValue[0];
             familyNameStr = spiltValue[1] + " " + spiltValue[2];
+            familyMobileStr = spiltValue[3];
             Log.d("selectedIdStr", familyIdStr);
-            Log.d("familyname",familyNameStr);
+            Log.d("familyname", familyNameStr);
         }
     }
 
@@ -449,7 +474,7 @@ String froncontanctStr;
 //            confirmSessionDialogBinding.sessionStudentTxt.setText(spilt[0] + " " + spilt[1]);
 //            confirmSessionDialogBinding.sessionStudentTxtView.setText(spilt[3]);
             type = spilt[4];
-            Utils.setPref(mContext,"Type",type);
+            Utils.setPref(mContext, "Type", type);
             Log.d("selectedIdStr", contatIDstr);
         }
     }
@@ -509,7 +534,7 @@ String froncontanctStr;
         Map<String, String> map = new HashMap<>();
         map.put("SessionID", sessionIDStr);
         map.put("ContactID", contatIDstr);
-        map.put("PaymentStatus",paymentStatusstr);
+        map.put("PaymentStatus", paymentStatusstr);
         return map;
     }
 
@@ -542,8 +567,8 @@ String froncontanctStr;
                         Bundle args = new Bundle();
                         args.putString("orderID", orderIDStr);
                         args.putString("amount", AppConfiguration.SessionPrice);
-                        args.putString("mode",AppConfiguration.Mode);
-                        args.putString("username",AppConfiguration.UserName);
+                        args.putString("mode", AppConfiguration.Mode);
+                        args.putString("username", AppConfiguration.UserName);
                         args.putString("sessionID", sessionIDStr);
                         args.putString("contactID", contatIDstr);
                         args.putString("type", type);

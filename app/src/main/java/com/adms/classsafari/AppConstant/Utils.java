@@ -187,15 +187,15 @@ public class Utils {
         if (callPhone != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.CALL_PHONE);
         }
-//        if (receiveSMS != PackageManager.PERMISSION_GRANTED) {
-//            listPermissionsNeeded.add(Manifest.permission.RECEIVE_MMS);
-//        }
-//        if (readSMS != PackageManager.PERMISSION_GRANTED) {
-//            listPermissionsNeeded.add(Manifest.permission.READ_SMS);
-//        }
-//        if (permissionSendMessage != PackageManager.PERMISSION_GRANTED) {
-//            listPermissionsNeeded.add(Manifest.permission.SEND_SMS);
-//        }
+        if (receiveSMS != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.RECEIVE_MMS);
+        }
+        if (readSMS != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.READ_SMS);
+        }
+        if (permissionSendMessage != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(Manifest.permission.SEND_SMS);
+        }
 //        if (FineLocation !=PackageManager.PERMISSION_GRANTED) {
 //            listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
 //        }

@@ -327,11 +327,11 @@ public class PaymentActivity extends AppCompatActivity {
                         return;
                     }
                     if (sessionconfirmationInfoModel.getSuccess().equalsIgnoreCase("True")) {
-                        if(paymentStatusstr.equalsIgnoreCase("1")) {
-                            Utils.ping(mContext, "Your Transacation is Successfully.");
-                        }else{
-                            Utils.ping(mContext, "Your last transaction was cancelled.");
-                        }
+//                        if(paymentStatusstr.equalsIgnoreCase("1")) {
+//                            Utils.ping(mContext, "Your Transacation is Successfully.");
+//                        }else{
+//                            Utils.ping(mContext, "Your last transaction was cancelled.");
+//                        }
                     }
                 }
 

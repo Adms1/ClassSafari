@@ -20,11 +20,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -32,12 +34,14 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.adms.classsafari.Activites.DashBoardActivity;
+import com.adms.classsafari.Adapter.AddressListAdapter;
 import com.adms.classsafari.Adapter.AlertListAdapter;
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.Interface.onViewClick;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.R;
+import com.adms.classsafari.databinding.DisplayTimeGridBinding;
 import com.adms.classsafari.databinding.FragmentAddSessionBinding;
 
 import java.io.BufferedReader;
@@ -52,6 +56,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit.RetrofitError;
@@ -65,7 +70,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
     //    AddSessionDialogBinding sessionDialogBinding;
     static TextView sun_start_time_txt, sun_end_time_txt, mon_start_time_txt, mon_end_time_txt, tue_start_time_txt,
             tue_end_time_txt, wed_start_time_txt, wed_end_time_txt, thu_start_time_txt, thu_end_time_txt, fri_end_time_txt,
-            fri_start_time_txt, sat_end_time_txt, sat_start_time_txt;
+            fri_start_time_txt, sat_end_time_txt, sat_start_time_txt, confirm_title_txt;
     static String Tag;
     static Button sun_start_add_session_btn, sun_end_add_session_btn, mon_start_add_session_btn, mon_end_add_session_btn,
             tue_start_add_session_btn, tue_end_add_session_btn, wed_start_add_session_btn, wed_end_add_session_btn,
@@ -92,7 +97,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
     //Use for selectedSessionTimeValue
     String coachIdStr, lessionTypeNameStr = "", sessionNameStr = "", boardStr = "", standardStr = "", streamStr = "", startDateStr = "", endDateStr = "",
             address1Str = "", address2Str = "", regionStr = "", cityStr = "", stateStr = "", zipcodeStr = "", descriptionStr = "", sessionamtStr = "0",
-            sessioncapacityStr = "", alerttimeStr = "", scheduleStr = "", sessiontypeStr = "1", sessionTypeValueStr = "Recurring", doneStartDate = "", doneEndDate = "", selectprice = "Free";
+            sessioncapacityStr = "", alerttimeStr = "", scheduleStr = "", sessiontypeStr = "1", sessionTypeValueStr = "", sessionTypeStr = "Academic", doneStartDate = "", doneEndDate = "", selectprice = "Free";
     String sunstartTimeStr, sunendTimeStr, finalsunTimeStr, monstartTimeStr, monendTimeStr, finalmonTimeStr,
             tuestartTimeStr, tueendTimeStr, finaltueTimeStr, wedstartTimeStr, wedendTimeStr, finalwedTimeStr,
             thustartTimeStr, thuendTimeStr, finalthuTimeStr, fristartTimeStr, friendTimeStr, finalfriTimeStr,
@@ -100,7 +105,22 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
     String EditStartDateStr, EditEndDateStr, EditScheduleStr = "";
     ArrayList<String> scheduleArray;
     ArrayList<String> newEnteryArray;
-    SessionDetailModel dataResponse;
+    SessionDetailModel dataResponse, addressResponse;
+    String line, citytxt = "";
+    String[] RowData = new String[0];
+    ArrayList<String> lineArray;
+    DisplayTimeGridBinding displayTimeGridBinding;
+    Dialog addressDialog;
+    ArrayList<String> SelectedAddressList;
+    AddressListAdapter addressListAdapter;
+    int SessionHour = 0;
+    Integer SessionMinit = 0;
+    String SessionDuration;
+    String hours, minit;
+    ArrayList<Integer> totalHours;
+    ArrayList<Integer> totalMinit;
+    int avgHoursvalue, avgMinitvalue;
+    boolean checkfalse=false;
     private FragmentAddSessionBinding addSessionBinding;
     private View rootView;
     private Context mContext;
@@ -316,7 +336,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         callLessionApi();
         callRegionApi();
         fillCity();
-
+        callAddressApi();
         initViews();
         setListners();
 
@@ -352,6 +372,34 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                 }
             }
         });
+        addSessionBinding.session1TypeRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if (checkfalse==true){
+//                    addSessionBinding.recurringRb.setChecked(true);
+//                    addSessionBinding.singleRb.setChecked(true);
+                }else{
+                    addSessionBinding.recurringRb.setChecked(false);
+                    addSessionBinding.singleRb.setChecked(false);
+                }
+                int radioButtonId = addSessionBinding.session1TypeRg.getCheckedRadioButtonId();
+                switch (radioButtonId) {
+                    case R.id.Academic_rb:
+                        sessionTypeStr = addSessionBinding.AcademicRb.getTag().toString();
+                        addSessionBinding.sessionBoardLinear.setVisibility(View.VISIBLE);
+                        addSessionBinding.sessionStandardLinear.setVisibility(View.VISIBLE);
+                        addSessionBinding.sessionStreamLinear.setVisibility(View.VISIBLE);
+                        break;
+                    case R.id.play_rb:
+                        sessionTypeStr = addSessionBinding.playRb.getTag().toString();
+                        addSessionBinding.sessionBoardLinear.setVisibility(View.GONE);
+                        addSessionBinding.sessionStandardLinear.setVisibility(View.GONE);
+                        addSessionBinding.sessionStreamLinear.setVisibility(View.GONE);
+                        break;
+
+                }
+            }
+        });
         addSessionBinding.sessionTypeRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -359,16 +407,27 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                 switch (radioButtonId) {
                     case R.id.recurring_rb:
                         sessiontypeStr = "1";
-                        sessionTypeValueStr = addSessionBinding.recurringRb.getText().toString();
+                        if (sessionTypeStr.equalsIgnoreCase("Academic")) {
+                            sessionTypeValueStr = "1";
+                        } else {
+                            sessionTypeValueStr = "3";
+
+                        }
                         break;
                     case R.id.single_rb:
                         sessiontypeStr = "2";
-                        sessionTypeValueStr = addSessionBinding.singleRb.getText().toString();
-                        break;
+                        if (sessionTypeStr.equalsIgnoreCase("Academic")) {
+                            sessionTypeValueStr = "2";
+                        } else {
+                            sessionTypeValueStr = "4";
 
+                        }
+                        break;
+                    default:
                 }
             }
         });
+
         addSessionBinding.alertBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -386,6 +445,21 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
             public void onClick(View view) {
 //                fillEditSessionFiled();
                 editSessionValidation();
+            }
+        });
+        addSessionBinding.sportsEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    editSessionValidation();
+                }
+                return false;
+            }
+        });
+        addSessionBinding.selectSessionAddressBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddressDialog();
             }
         });
     }
@@ -446,7 +520,11 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
 
         popularDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         popularDialog.setCancelable(false);
-        popularDialog.setContentView(R.layout.add_session_dialog);
+        if (flag.equalsIgnoreCase("view")) {
+            popularDialog.setContentView(R.layout.view_session_dialog);
+        } else {
+            popularDialog.setContentView(R.layout.add_session_dialog);
+        }
         popularDialog.show();
 
         calendar = Calendar.getInstance();
@@ -470,6 +548,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         fri_start_time_txt = (TextView) popularDialog.findViewById(R.id.fri_start_time_txt);
         sat_end_time_txt = (TextView) popularDialog.findViewById(R.id.sat_end_time_txt);
         sat_start_time_txt = (TextView) popularDialog.findViewById(R.id.sat_start_time_txt);
+        confirm_title_txt = (TextView) popularDialog.findViewById(R.id.confirm_title_txt);
 
         sun_start_linear = (LinearLayout) popularDialog.findViewById(R.id.sun_start_linear);
         mon_start_linear = (LinearLayout) popularDialog.findViewById(R.id.mon_start_linear);
@@ -507,7 +586,9 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
 
         done_btn = (Button) popularDialog.findViewById(R.id.done_btn);
         cancel_btn = (Button) popularDialog.findViewById(R.id.cancel_btn);
+        Log.d("flag", flag);
         if (flag.equalsIgnoreCase("edit")) {
+            confirm_title_txt.setText("EDIT CLASS TIME");
             start_date_txt.setText(EditStartDateStr);
             end_date_txt.setText(EditEndDateStr);
             String[] spiltPipes = EditScheduleStr.split("\\|");
@@ -594,7 +675,8 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
             }
             final List<String> days = getDates(start_date_txt.getText().toString(), end_date_txt.getText().toString());
             System.out.println(days);
-        } else {
+        } else if (flag.equalsIgnoreCase("view")) {
+            confirm_title_txt.setText("VIEW CLASS TIME");
             if (!scheduleStr.equalsIgnoreCase("")) {
                 diableDialogControl();
                 start_date_txt.setText(EditStartDateStr);
@@ -689,6 +771,122 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                 final List<String> days = getDates(start_date_txt.getText().toString(), end_date_txt.getText().toString());
                 System.out.println(days);
             }
+        } else if (flag.equalsIgnoreCase("reedit")) {
+            if (!scheduleStr.equalsIgnoreCase("")) {
+                start_date_txt.setText(EditStartDateStr);
+                end_date_txt.setText(EditEndDateStr);
+
+                String[] spiltPipes = scheduleStr.split("\\|");
+                String[] spiltComma;
+                String[] spiltDash;
+                Log.d("spilt", "" + spiltPipes.toString());
+                for (int i = 0; i < spiltPipes.length; i++) {
+                    spiltComma = spiltPipes[i].split("\\,");
+                    spiltDash = spiltComma[1].split("\\-");
+                    switch (spiltComma[0]) {
+                        case "sun":
+                            sun_start_time_txt.setText(spiltDash[0]);
+                            sun_end_time_txt.setText(spiltDash[1]);
+                            sun_start_add_session_btn.setText("x");
+                            sun_start_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
+                            sun_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                            sun_end_add_session_btn.setText("x");
+                            sun_end_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
+                            sun_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                            sun_start_linear.setAlpha(1);
+                            sun_end_linear.setAlpha(1);
+                            break;
+                        case "mon":
+                            mon_start_time_txt.setText(spiltDash[0]);
+                            mon_end_time_txt.setText(spiltDash[1]);
+                            mon_start_add_session_btn.setText("x");
+                            mon_start_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
+                            mon_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                            mon_end_add_session_btn.setText("x");
+                            mon_end_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
+                            mon_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                            mon_start_linear.setAlpha(1);
+                            mon_end_linear.setAlpha(1);
+                            break;
+                        case "tue":
+                            tue_start_time_txt.setText(spiltDash[0]);
+                            tue_end_time_txt.setText(spiltDash[1]);
+                            tue_start_add_session_btn.setText("x");
+                            tue_start_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
+                            tue_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                            tue_end_add_session_btn.setText("x");
+                            tue_end_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
+                            tue_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                            tue_start_linear.setAlpha(1);
+                            tue_end_linear.setAlpha(1);
+                            break;
+                        case "wed":
+                            wed_start_time_txt.setText(spiltDash[0]);
+                            wed_end_time_txt.setText(spiltDash[1]);
+                            wed_start_add_session_btn.setText("x");
+                            wed_start_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
+                            wed_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                            wed_end_add_session_btn.setText("x");
+                            wed_end_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
+                            wed_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                            wed_start_linear.setAlpha(1);
+                            wed_end_linear.setAlpha(1);
+                            break;
+                        case "thu":
+                            thu_start_time_txt.setText(spiltDash[0]);
+                            thu_end_time_txt.setText(spiltDash[1]);
+                            thu_start_add_session_btn.setText("x");
+                            thu_start_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
+                            thu_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                            thu_end_add_session_btn.setText("x");
+                            thu_end_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
+                            thu_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                            thu_start_linear.setAlpha(1);
+                            thu_end_linear.setAlpha(1);
+                            break;
+                        case "fri":
+                            fri_start_time_txt.setText(spiltDash[0]);
+                            fri_end_time_txt.setText(spiltDash[1]);
+                            fri_start_add_session_btn.setText("x");
+                            fri_start_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
+                            fri_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                            fri_end_add_session_btn.setText("x");
+                            fri_end_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
+                            fri_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                            fri_start_linear.setAlpha(1);
+                            fri_end_linear.setAlpha(1);
+                            break;
+                        case "sat":
+                            sat_start_time_txt.setText(spiltDash[0]);
+                            sat_end_time_txt.setText(spiltDash[1]);
+                            sat_start_add_session_btn.setText("x");
+                            sat_start_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
+                            sat_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                            sat_end_add_session_btn.setText("x");
+                            sat_end_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
+                            sat_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                            sun_start_linear.setAlpha(1);
+                            sun_end_linear.setAlpha(1);
+                            break;
+                        default:
+                    }
+
+                }
+                final List<String> days = getDates(start_date_txt.getText().toString(), end_date_txt.getText().toString());
+                System.out.println(days);
+            } else {
+                start_date_txt.setText(Utils.getTodaysDate());
+                end_date_txt.setText(Utils.getTodaysDate());
+
+                final List<String> days = getDates(start_date_txt.getText().toString(), end_date_txt.getText().toString());
+                System.out.println(days);
+            }
+        } else {
+            start_date_txt.setText(Utils.getTodaysDate());
+            end_date_txt.setText(Utils.getTodaysDate());
+
+            final List<String> days = getDates(start_date_txt.getText().toString(), end_date_txt.getText().toString());
+            System.out.println(days);
         }
 
 
@@ -698,132 +896,142 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                 popularDialog.dismiss();
             }
         });
-        done_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                doneStartDate = start_date_txt.getText().toString();
-                doneEndDate = end_date_txt.getText().toString();
-                scheduleArray = new ArrayList<>();
-                newEnteryArray = new ArrayList<>();
-                scheduleStr = "";
-                if (!checkTime_sun && !checkTime_mon && !checkTime_thu && !checkTime_wed && !checkTime_tue && !checkTime_fri && !checkTime_sat) {
-                    if (!sun_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !sun_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
-                        sunstartTimeStr = sun_start_time_txt.getText().toString();
-                        sunendTimeStr = sun_end_time_txt.getText().toString();
-                        finalsunTimeStr = "sun" + "," + sunstartTimeStr + "-" + sunendTimeStr;
-                        Log.d("SundayTime", finalsunTimeStr);
-
-                        scheduleArray.add(finalsunTimeStr);
-
-                    } else {
+        if (!flag.equalsIgnoreCase("view")) {
+            done_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (getArguments().getString("flag").equalsIgnoreCase("Add")) {
+                        flag = "reedit";
                     }
-                    if (!mon_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !mon_end_time_txt.getText().toString().equalsIgnoreCase("")) {
-                        monstartTimeStr = mon_start_time_txt.getText().toString();
-                        monendTimeStr = mon_end_time_txt.getText().toString();
-                        finalmonTimeStr = "mon" + "," + monstartTimeStr + "-" + monendTimeStr;
-                        scheduleArray.add(finalmonTimeStr);
+                    doneStartDate = start_date_txt.getText().toString();
+                    doneEndDate = end_date_txt.getText().toString();
 
-                    } else {
-//                    Util.ping(mContext, "Please Select Time.");
+                    EditStartDateStr = doneStartDate;
+                    EditEndDateStr = doneEndDate;
+                    scheduleArray = new ArrayList<>();
+                    newEnteryArray = new ArrayList<>();
+                    scheduleStr = "";
+                    if (!checkTime_sun && !checkTime_mon && !checkTime_thu && !checkTime_wed && !checkTime_tue && !checkTime_fri && !checkTime_sat) {
+                        if (!sun_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !sun_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
+                            sunstartTimeStr = sun_start_time_txt.getText().toString();
+                            sunendTimeStr = sun_end_time_txt.getText().toString();
+                            finalsunTimeStr = "sun" + "," + sunstartTimeStr + "-" + sunendTimeStr;
+                            Log.d("SundayTime", finalsunTimeStr);
 
-                    }
-                    if (!tue_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !tue_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
-                        tuestartTimeStr = tue_start_time_txt.getText().toString();
-                        tueendTimeStr = tue_end_time_txt.getText().toString();
-                        finaltueTimeStr = "tue" + "," + tuestartTimeStr + "-" + tueendTimeStr;
-                        scheduleArray.add(finaltueTimeStr);
-                    } else {
-//                    Util.ping(mContext, "Please Select Time.");
+                            scheduleArray.add(finalsunTimeStr);
 
-                    }
-                    if (!wed_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !wed_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
-                        wedstartTimeStr = wed_start_time_txt.getText().toString();
-                        wedendTimeStr = wed_end_time_txt.getText().toString();
-                        finalwedTimeStr = "wed" + "," + wedstartTimeStr + "-" + wedendTimeStr;
-                        scheduleArray.add(finalwedTimeStr);
-                    } else {
-//                    Util.ping(mContext, "Please Select Time.");
-
-                    }
-                    if (!thu_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !thu_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
-                        thustartTimeStr = thu_start_time_txt.getText().toString();
-                        thuendTimeStr = thu_end_time_txt.getText().toString();
-                        finalthuTimeStr = "thu" + "," + thustartTimeStr + "-" + thuendTimeStr;
-
-                        scheduleArray.add(finalthuTimeStr);
-                    } else {
-//                    Util.ping(mContext, "Please Select Time.");
-
-                    }
-                    if (!fri_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !fri_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
-                        fristartTimeStr = fri_start_time_txt.getText().toString();
-                        friendTimeStr = fri_end_time_txt.getText().toString();
-                        finalfriTimeStr = "fri" + "," + fristartTimeStr + "-" + friendTimeStr;
-
-                        scheduleArray.add(finalfriTimeStr);
-
-                    } else {
-//                    Util.ping(mContext, "Please Select Time.");
-
-                    }
-                    if (!sat_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !sat_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
-                        satstartTimeStr = sat_start_time_txt.getText().toString();
-                        satendTimeStr = sat_end_time_txt.getText().toString();
-                        finalsatTimeStr = "sat" + "," + satstartTimeStr + "-" + satendTimeStr;
-
-                        scheduleArray.add(finalsatTimeStr);
-                    } else {
-//                    Util.ping(mContext, "Please Select Time.");
-                    }
-                    Log.d("scheduleArray", "" + scheduleArray.size());
-
-                    for (int i = 0; i < scheduleArray.size(); i++) {
-                        newEnteryArray.add(scheduleArray.get(i));
-                    }
-                    Log.d("newEnteryArray", "" + newEnteryArray);
-
-                    for (String s : newEnteryArray) {
-                        if (!s.equals("")) {
-                            scheduleStr = scheduleStr + "|" + s;
-
-                        }
-
-                    }
-                    Log.d("scheduleStr", scheduleStr);
-                    if (!scheduleStr.equalsIgnoreCase("")) {
-                        scheduleStr = scheduleStr.substring(1, scheduleStr.length());
-                        Log.d("responseString ", scheduleStr);
-                    }
-//                if (days.size() == scheduleArray.size()) {
-                    if (sessiontypeStr.equalsIgnoreCase("1")) {
-                        if (!scheduleStr.equalsIgnoreCase("")) {
-                            popularDialog.dismiss();
                         } else {
-                            Utils.ping(mContext, "Please Select Time.");
                         }
-                    } else {
-                        if (startDateStr.equalsIgnoreCase(endDateStr)) {
+                        if (!mon_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !mon_end_time_txt.getText().toString().equalsIgnoreCase("")) {
+                            monstartTimeStr = mon_start_time_txt.getText().toString();
+                            monendTimeStr = mon_end_time_txt.getText().toString();
+                            finalmonTimeStr = "mon" + "," + monstartTimeStr + "-" + monendTimeStr;
+                            scheduleArray.add(finalmonTimeStr);
+
+                        } else {
+//                    Util.ping(mContext, "Please Select Time.");
+
+                        }
+                        if (!tue_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !tue_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
+                            tuestartTimeStr = tue_start_time_txt.getText().toString();
+                            tueendTimeStr = tue_end_time_txt.getText().toString();
+                            finaltueTimeStr = "tue" + "," + tuestartTimeStr + "-" + tueendTimeStr;
+                            scheduleArray.add(finaltueTimeStr);
+                        } else {
+//                    Util.ping(mContext, "Please Select Time.");
+
+                        }
+                        if (!wed_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !wed_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
+                            wedstartTimeStr = wed_start_time_txt.getText().toString();
+                            wedendTimeStr = wed_end_time_txt.getText().toString();
+                            finalwedTimeStr = "wed" + "," + wedstartTimeStr + "-" + wedendTimeStr;
+                            scheduleArray.add(finalwedTimeStr);
+                        } else {
+//                    Util.ping(mContext, "Please Select Time.");
+
+                        }
+                        if (!thu_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !thu_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
+                            thustartTimeStr = thu_start_time_txt.getText().toString();
+                            thuendTimeStr = thu_end_time_txt.getText().toString();
+                            finalthuTimeStr = "thu" + "," + thustartTimeStr + "-" + thuendTimeStr;
+
+                            scheduleArray.add(finalthuTimeStr);
+                        } else {
+//                    Util.ping(mContext, "Please Select Time.");
+
+                        }
+                        if (!fri_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !fri_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
+                            fristartTimeStr = fri_start_time_txt.getText().toString();
+                            friendTimeStr = fri_end_time_txt.getText().toString();
+                            finalfriTimeStr = "fri" + "," + fristartTimeStr + "-" + friendTimeStr;
+
+                            scheduleArray.add(finalfriTimeStr);
+
+                        } else {
+//                    Util.ping(mContext, "Please Select Time.");
+
+                        }
+                        if (!sat_start_time_txt.getText().toString().equalsIgnoreCase("Add") && !sat_end_time_txt.getText().toString().equalsIgnoreCase("Add")) {
+                            satstartTimeStr = sat_start_time_txt.getText().toString();
+                            satendTimeStr = sat_end_time_txt.getText().toString();
+                            finalsatTimeStr = "sat" + "," + satstartTimeStr + "-" + satendTimeStr;
+
+                            scheduleArray.add(finalsatTimeStr);
+                        } else {
+//                    Util.ping(mContext, "Please Select Time.");
+                        }
+                        Log.d("scheduleArray", "" + scheduleArray.size());
+
+                        for (int i = 0; i < scheduleArray.size(); i++) {
+                            newEnteryArray.add(scheduleArray.get(i));
+                        }
+                        Log.d("newEnteryArray", "" + newEnteryArray);
+
+                        for (String s : newEnteryArray) {
+                            if (!s.equals("")) {
+                                scheduleStr = scheduleStr + "|" + s;
+
+                            }
+
+                        }
+                        Log.d("scheduleStr", scheduleStr);
+                        if (!scheduleStr.equalsIgnoreCase("")) {
+                            scheduleStr = scheduleStr.substring(1, scheduleStr.length());
+                            Log.d("responseString ", scheduleStr);
+                        }
+//                if (days.size() == scheduleArray.size()) {
+                        if (sessiontypeStr.equalsIgnoreCase("1")) {
                             if (!scheduleStr.equalsIgnoreCase("")) {
                                 popularDialog.dismiss();
                             } else {
                                 Utils.ping(mContext, "Please Select Time.");
                             }
                         } else {
-                            Utils.ping(mContext, "Please select session start date and end date should be same.");
-                        }
+                            if (startDateStr.equalsIgnoreCase(endDateStr)) {
+                                if (!scheduleStr.equalsIgnoreCase("")) {
+                                    popularDialog.dismiss();
+                                } else {
+                                    Utils.ping(mContext, "Please Select Time.");
+                                }
+                            } else {
+                                Utils.ping(mContext, "Please select class start date and end date should be same.");
+                            }
 
-                    }
+                        }
 //                }else{
 //                    Utils.ping(mContext,"Please Enter Proper Time");
 //                }
 
-                } else
-                    Utils.ping(mContext, "Please Select ProperTime.");
-                {
-                }
+                    } else {
+                        Utils.ping(mContext, "Please Select ProperTime.");
 
-            }
-        });
+                    }
+                    fillTimeGrid();
+
+                }
+            });
+
+        }
         start_date_txt.setOnClickListener(new View.OnClickListener()
 
         {
@@ -835,7 +1043,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                 datePickerDialog.setOkText("Done");
                 datePickerDialog.showYearPickerFirst(false);
                 datePickerDialog.setAccentColor(Color.parseColor("#f2552c"));
-                datePickerDialog.setMinDate(Calendar.getInstance());
+//                datePickerDialog.setMinDate(Calendar.getInstance());
 //                datePickerDialog.setTitle("Select Date From DatePickerDialog");
                 datePickerDialog.show(getActivity().getFragmentManager(), "DatePickerDialog");
             }
@@ -852,7 +1060,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                 datePickerDialog.showYearPickerFirst(false);
                 datePickerDialog.setAccentColor(Color.parseColor("#f2552c"));
 //                datePickerDialog.setTitle("Select Date From DatePickerDialog");
-                datePickerDialog.setMinDate(Calendar.getInstance());
+//                datePickerDialog.setMinDate(Calendar.getInstance());
                 datePickerDialog.show(getActivity().getFragmentManager(), "DatePickerDialog");
 
             }
@@ -1479,7 +1687,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     }
                     if (sessionDetailModel.getSuccess().equalsIgnoreCase("True")) {
                         Utils.dismissDialog();
-                        Utils.ping(mContext, "Session created Successfully.");
+                        Utils.ping(mContext, "Class created Successfully.");
                         Fragment fragment = new SessionFragment();
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -1506,7 +1714,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
 
         Map<String, String> map = new HashMap<>();
         map.put("CoachID", coachIdStr);
-        map.put("SessionTypeID", sessiontypeStr);
+        map.put("SessionTypeID", sessionTypeValueStr);
         map.put("SessionName", sessionNameStr);
         map.put("Board", boardStr);
         map.put("Standard", standardStr);
@@ -1826,6 +2034,111 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         addSessionBinding.areaEdt.setAdapter(adapterTerm);
     }
 
+    //Use for Address
+    public void callAddressApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+//            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_SessionAddressList_By_CoachID(getAddressDetail(), new retrofit.Callback<SessionDetailModel>() {
+                @Override
+                public void success(SessionDetailModel addressInfo, Response response) {
+                    Utils.dismissDialog();
+                    if (addressInfo == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (addressInfo.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (addressInfo.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.ping(mContext, getString(R.string.false_msg));
+                        return;
+                    }
+                    if (addressInfo.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.dismissDialog();
+                        if (addressInfo.getData().size() > 0) {
+                            addressResponse = addressInfo;
+                            if (flag.equalsIgnoreCase("view")) {
+                                addSessionBinding.sessionSelectAddressLinear.setVisibility(View.GONE);
+                            } else {
+                                addSessionBinding.sessionSelectAddressLinear.setVisibility(View.VISIBLE);
+                            }
+                        } else {
+                            addSessionBinding.sessionSelectAddressLinear.setVisibility(View.GONE);
+                        }
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getAddressDetail() {
+        Map<String, String> map = new HashMap<>();
+        map.put("CoachID", coachIdStr);
+        return map;
+    }
+
+    public void AddressDialog() {
+        displayTimeGridBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContext), R.layout.display_time_grid, (ViewGroup) addSessionBinding.getRoot(), false);
+        addressDialog = new Dialog(mContext, R.style.Theme_Dialog);
+        Window window = addressDialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        addressDialog.getWindow().getAttributes().verticalMargin = 0.20f;
+        wlp.gravity = Gravity.TOP;
+        window.setAttributes(wlp);
+
+        addressDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+
+        addressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        addressDialog.setCancelable(false);
+        addressDialog.setContentView(displayTimeGridBinding.getRoot());
+
+        addressListAdapter = new AddressListAdapter(mContext, addressResponse, new onViewClick() {
+            @Override
+            public void getViewClick() {
+                SelectedAddressList = new ArrayList<>();
+                String SelectedAddressListStr, strPosition;
+                SelectedAddressListStr = String.valueOf(addressListAdapter.getAddress());
+                strPosition = SelectedAddressListStr.substring(1, SelectedAddressListStr.length() - 1);
+                Log.d("Address", strPosition);
+                for (int i = 0; i < addressResponse.getData().size(); i++) {
+                    if (String.valueOf(i).equalsIgnoreCase(strPosition)) {
+                        addSessionBinding.addressEdt.setText(addressResponse.getData().get(i).getAddressLine1());
+                        addSessionBinding.areaEdt.setText(addressResponse.getData().get(i).getRegionName());
+                        addSessionBinding.cityEdt.setText(addressResponse.getData().get(i).getAddressCity());
+                        addSessionBinding.stateEdt.setText(addressResponse.getData().get(i).getAddressState());
+                        addSessionBinding.zipcodeEdt.setText(addressResponse.getData().get(i).getAddressZipCode());
+                    }
+                }
+                addressDialog.dismiss();
+            }
+        });
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
+        displayTimeGridBinding.addressList.setLayoutManager(mLayoutManager);
+        displayTimeGridBinding.addressList.setItemAnimator(new DefaultItemAnimator());
+        displayTimeGridBinding.addressList.setAdapter(addressListAdapter);
+
+        displayTimeGridBinding.cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addressDialog.dismiss();
+            }
+        });
+        addressDialog.show();
+    }
+
     //Use for EditSession
     public void callEditSessionApi() {
         if (Utils.isNetworkConnected(mContext)) {
@@ -1878,18 +2191,25 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
     }
 
     public void fillEditSessionFiled() {
+        checkfalse=true;
         scheduleStr = "";
-        ArrayList<String> editTime = new ArrayList<>();
-        ArrayList<String> newTime = new ArrayList<>();
-        boolean isEnable = false;
-        String studentString = "";
         for (int i = 0; i < dataResponse.getData().size(); i++) {
             switch (dataResponse.getData().get(i).getSessionType()) {
                 case "1":
                     addSessionBinding.recurringRb.setChecked(true);
+                    addSessionBinding.AcademicRb.setChecked(true);
                     break;
                 case "2":
                     addSessionBinding.singleRb.setChecked(true);
+                    addSessionBinding.AcademicRb.setChecked(true);
+                    break;
+                case "3":
+                    addSessionBinding.recurringRb.setChecked(true);
+                    addSessionBinding.playRb.setChecked(true);
+                    break;
+                case "4":
+                    addSessionBinding.singleRb.setChecked(true);
+                    addSessionBinding.playRb.setChecked(true);
                     break;
                 default:
             }
@@ -1905,39 +2225,6 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
             endDateStr = EditEndDateStr;
             scheduleStr = EditScheduleStr;
             Log.d("EditscheduleStr ", scheduleStr);
-//            String[] spiltPipes = EditScheduleStr.split("\\|");
-//            String[] spiltComma;
-//            String[] spiltDash;
-//            Log.d("spilt", "" + spiltPipes.length);
-//            for (int j = 0; j < spiltPipes.length; j++) {
-//                spiltComma = spiltPipes[j].split("\\,");
-//                if (!isEnable) {
-//                    studentString = spiltComma[0] + "," + spiltComma[1];
-//                    isEnable = true;
-//                } else {
-//                    studentString = studentString + "|" + spiltComma[0] + "," + spiltComma[1];
-//                }
-//                editTime.add(studentString);
-//            }
-//            for (int k = 0; k < editTime.size(); k++) {
-//                newTime.add(editTime.get(k));
-//            }
-//            Log.d("newTime ", "" + newTime);
-//
-//            for (String s : newTime) {
-//                if (!s.equals("")) {
-//                    scheduleStr = scheduleStr + "|" + s;
-//                }
-//            }
-//            scheduleStr = scheduleStr.substring(1, scheduleStr.length());
-//            Log.d("EditscheduleStr ", scheduleStr);
-
-
-//            if (!studentAvailable.equalsIgnoreCase("0")) {
-//                addSessionBinding.addSessionBtn.performClick();
-//            } else {
-//                addSessionBinding.addSessionBtn.performClick();
-//            }
             addSessionBinding.addressEdt.setText(dataResponse.getData().get(i).getAddressLine1());
             addSessionBinding.areaEdt.setText(dataResponse.getData().get(i).getRegionName());
             addSessionBinding.cityEdt.setText(dataResponse.getData().get(i).getAddressCity());
@@ -1952,6 +2239,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
             }
             addSessionBinding.sportsEdt.setText(dataResponse.getData().get(i).getSessionCapacity());
             addSessionBinding.alertBtn.setText(dataResponse.getData().get(i).getAlertTime());
+            fillTimeGrid();
         }
     }
 
@@ -1978,7 +2266,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     }
                     if (updatesessionDetailModel.getSuccess().equalsIgnoreCase("True")) {
                         Utils.dismissDialog();
-                        Utils.ping(mContext, "Session update successfully.");
+                        Utils.ping(mContext, "Class Updated Successfully.");
                         Fragment fragment = new SessionFragment();
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -2006,7 +2294,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         Map<String, String> map = new HashMap<>();
         map.put("SessionID", SeslectedsessionID);
         map.put("CoachID", coachIdStr);//coachIdStr
-        map.put("SessionTypeID", sessiontypeStr);
+        map.put("SessionTypeID", sessionTypeValueStr);
         map.put("SessionName", sessionNameStr);
         map.put("Board", boardStr);
         map.put("Standard", standardStr);
@@ -2032,96 +2320,104 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
 //        sessionamtStr = addSessionBinding.sessionPriceEdt.getText().toString();
         getSelectedSessionTimeValue();
 
-        if (!CoachTypeStr.equalsIgnoreCase("1")) {
+        if (!sessionTypeStr.equalsIgnoreCase("Academic")) {
             if (flag.equalsIgnoreCase("edit")) {
-                if (!coachIdStr.equalsIgnoreCase("") && !sessionNameStr.equalsIgnoreCase("")) {
-                    if (!lessionTypeNameStr.equalsIgnoreCase("")) {
-                        if (!address1Str.equalsIgnoreCase("")) {
-                            if (!regionStr.equalsIgnoreCase("")) {
-                                if (!cityStr.equalsIgnoreCase("")) {
-                                    if (!stateStr.equalsIgnoreCase("")) {
-                                        if (!zipcodeStr.equalsIgnoreCase("")) {
-                                            if (!sessioncapacityStr.equalsIgnoreCase("")) {
-                                                if (!sessionamtStr.equalsIgnoreCase("")) {
-                                                    if (sessiontypeStr.equalsIgnoreCase("1")) {
-                                                        callUpdateSessionApi();
-                                                    } else {
-                                                        if (startDateStr.equalsIgnoreCase(endDateStr)) {
+                if (!sessionTypeValueStr.equalsIgnoreCase("")) {
+                    if (!coachIdStr.equalsIgnoreCase("") && !sessionNameStr.equalsIgnoreCase("")) {
+                        if (!lessionTypeNameStr.equalsIgnoreCase("")) {
+                            if (!address1Str.equalsIgnoreCase("")) {
+                                if (!regionStr.equalsIgnoreCase("")) {
+                                    if (!cityStr.equalsIgnoreCase("")) {
+                                        if (!stateStr.equalsIgnoreCase("")) {
+                                            if (!zipcodeStr.equalsIgnoreCase("")) {
+                                                if (!sessioncapacityStr.equalsIgnoreCase("")) {
+                                                    if (!sessionamtStr.equalsIgnoreCase("")) {
+                                                        if (sessiontypeStr.equalsIgnoreCase("1")) {
                                                             callUpdateSessionApi();
                                                         } else {
-                                                            Utils.ping(mContext, getString(R.string.Date));
-                                                        }
-                                                    }
-                                                } else {
-                                                    addSessionBinding.sessionPriceEdt.setError(getString(R.string.sessionAmount));
-                                                }
-                                            } else {
-                                                addSessionBinding.sportsEdt.setError(getString(R.string.sessionCapacity));
-                                            }
-                                        } else {
-                                            addSessionBinding.zipcodeEdt.setError(getString(R.string.sessionZipcode));
-                                        }
-                                    } else {
-                                        addSessionBinding.stateEdt.setError(getString(R.string.sessionState));
-                                    }
-                                } else {
-                                    addSessionBinding.cityEdt.setError(getString(R.string.sessionCity));
-                                }
-                            } else {
-                                addSessionBinding.areaEdt.setError(getString(R.string.sessionArea));
-                            }
-                        } else {
-                            addSessionBinding.addressEdt.setError(getString(R.string.sessionAddress));
-                        }
-                    } else {
-                        addSessionBinding.subjectEdt.setError(getString(R.string.lessonName));
-                    }
-                } else {
-                    addSessionBinding.sessionNameEdt.setError(getString(R.string.sessionName));
-                    addSessionBinding.scrollView.setScrollY(0);
-                }
-            } else {
-                if (!coachIdStr.equalsIgnoreCase("") && !sessionNameStr.equalsIgnoreCase("")) {
-                    if (!lessionTypeNameStr.equalsIgnoreCase("")) {
-                        if (!startDateStr.equalsIgnoreCase("")) {
-                            if (!endDateStr.equalsIgnoreCase("")) {
-                                if (!scheduleStr.equalsIgnoreCase("")) {
-                                    if (!address1Str.equalsIgnoreCase("")) {
-                                        if (!regionStr.equalsIgnoreCase("")) {
-                                            if (!cityStr.equalsIgnoreCase("")) {
-                                                if (!stateStr.equalsIgnoreCase("")) {
-                                                    if (!zipcodeStr.equalsIgnoreCase("")) {
-                                                        if (!sessioncapacityStr.equalsIgnoreCase("")) {
-                                                            if (!sessionamtStr.equalsIgnoreCase("")) {
-                                                                if (sessiontypeStr.equalsIgnoreCase("1")) {
-                                                                    callCreateSessionApi();
-                                                                } else {
-                                                                    if (startDateStr.equalsIgnoreCase(endDateStr)) {
-                                                                        callCreateSessionApi();
-                                                                    } else {
-                                                                        Utils.ping(mContext, getString(R.string.Date));
-                                                                    }
-                                                                }
+                                                            if (startDateStr.equalsIgnoreCase(endDateStr)) {
+                                                                callUpdateSessionApi();
                                                             } else {
-                                                                addSessionBinding.sessionPriceEdt.setError(getString(R.string.sessionAmount));
+                                                                Utils.ping(mContext, getString(R.string.Date));
                                                             }
-                                                        } else {
-                                                            addSessionBinding.sportsEdt.setError(getString(R.string.sessionCapacity));
                                                         }
                                                     } else {
-                                                        addSessionBinding.zipcodeEdt.setError(getString(R.string.sessionZipcode));
+                                                        addSessionBinding.sessionPriceEdt.setError(getString(R.string.sessionAmount));
                                                     }
                                                 } else {
-                                                    addSessionBinding.stateEdt.setError(getString(R.string.sessionState));
+                                                    addSessionBinding.sportsEdt.setError(getString(R.string.sessionCapacity));
                                                 }
                                             } else {
-                                                addSessionBinding.cityEdt.setError(getString(R.string.sessionCity));
+                                                addSessionBinding.zipcodeEdt.setError(getString(R.string.sessionZipcode));
                                             }
                                         } else {
-                                            addSessionBinding.areaEdt.setError(getString(R.string.sessionArea));
+                                            addSessionBinding.stateEdt.setError(getString(R.string.sessionState));
                                         }
                                     } else {
-                                        addSessionBinding.addressEdt.setError(getString(R.string.sessionAddress));
+                                        addSessionBinding.cityEdt.setError(getString(R.string.sessionCity));
+                                    }
+                                } else {
+                                    addSessionBinding.areaEdt.setError(getString(R.string.sessionArea));
+                                }
+                            } else {
+                                addSessionBinding.addressEdt.setError(getString(R.string.sessionAddress));
+                            }
+                        } else {
+                            addSessionBinding.subjectEdt.setError(getString(R.string.lessonName));
+                        }
+                    } else {
+                        addSessionBinding.sessionNameEdt.setError(getString(R.string.sessionName));
+                        addSessionBinding.scrollView.setScrollY(0);
+                    }
+                } else {
+                    Utils.ping(mContext, getResources().getString(R.string.class_type));
+                }
+            } else {
+                if (!sessionTypeValueStr.equalsIgnoreCase("")) {
+                    if (!coachIdStr.equalsIgnoreCase("") && !sessionNameStr.equalsIgnoreCase("")) {
+                        if (!lessionTypeNameStr.equalsIgnoreCase("")) {
+                            if (!startDateStr.equalsIgnoreCase("")) {
+                                if (!endDateStr.equalsIgnoreCase("")) {
+                                    if (!scheduleStr.equalsIgnoreCase("")) {
+                                        if (!address1Str.equalsIgnoreCase("")) {
+                                            if (!regionStr.equalsIgnoreCase("")) {
+                                                if (!cityStr.equalsIgnoreCase("")) {
+                                                    if (!stateStr.equalsIgnoreCase("")) {
+                                                        if (!zipcodeStr.equalsIgnoreCase("")) {
+                                                            if (!sessioncapacityStr.equalsIgnoreCase("")) {
+                                                                if (!sessionamtStr.equalsIgnoreCase("")) {
+                                                                    if (sessiontypeStr.equalsIgnoreCase("1")) {
+                                                                        callCreateSessionApi();
+                                                                    } else {
+                                                                        if (startDateStr.equalsIgnoreCase(endDateStr)) {
+                                                                            callCreateSessionApi();
+                                                                        } else {
+                                                                            Utils.ping(mContext, getString(R.string.Date));
+                                                                        }
+                                                                    }
+                                                                } else {
+                                                                    addSessionBinding.sessionPriceEdt.setError(getString(R.string.sessionAmount));
+                                                                }
+                                                            } else {
+                                                                addSessionBinding.sportsEdt.setError(getString(R.string.sessionCapacity));
+                                                            }
+                                                        } else {
+                                                            addSessionBinding.zipcodeEdt.setError(getString(R.string.sessionZipcode));
+                                                        }
+                                                    } else {
+                                                        addSessionBinding.stateEdt.setError(getString(R.string.sessionState));
+                                                    }
+                                                } else {
+                                                    addSessionBinding.cityEdt.setError(getString(R.string.sessionCity));
+                                                }
+                                            } else {
+                                                addSessionBinding.areaEdt.setError(getString(R.string.sessionArea));
+                                            }
+                                        } else {
+                                            addSessionBinding.addressEdt.setError(getString(R.string.sessionAddress));
+                                        }
+                                    } else {
+                                        Utils.ping(mContext, getString(R.string.sessionTime));
                                     }
                                 } else {
                                     Utils.ping(mContext, getString(R.string.sessionTime));
@@ -2130,146 +2426,154 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                                 Utils.ping(mContext, getString(R.string.sessionTime));
                             }
                         } else {
-                            Utils.ping(mContext, getString(R.string.sessionTime));
+                            addSessionBinding.subjectEdt.setError(getString(R.string.lessonName));
                         }
                     } else {
-                        addSessionBinding.subjectEdt.setError(getString(R.string.lessonName));
+                        addSessionBinding.sessionNameEdt.setError(getString(R.string.sessionName));
+                        addSessionBinding.scrollView.setScrollY(0);
                     }
                 } else {
-                    addSessionBinding.sessionNameEdt.setError(getString(R.string.sessionName));
-                    addSessionBinding.scrollView.setScrollY(0);
+                    Utils.ping(mContext, getResources().getString(R.string.class_type));
                 }
             }
         } else {
             if (flag.equalsIgnoreCase("edit")) {
-                if (!coachIdStr.equalsIgnoreCase("") && !sessionNameStr.equalsIgnoreCase("")) {
-                    if (!boardStr.equalsIgnoreCase("")) {
-                        if (!standardStr.equalsIgnoreCase("")) {
-                            if (!streamStr.equalsIgnoreCase("")) {
-                                if (!lessionTypeNameStr.equalsIgnoreCase("")) {
-                                    if (!address1Str.equalsIgnoreCase("")) {
-                                        if (!regionStr.equalsIgnoreCase("")) {
-                                            if (!cityStr.equalsIgnoreCase("")) {
-                                                if (!stateStr.equalsIgnoreCase("")) {
-                                                    if (!zipcodeStr.equalsIgnoreCase("")) {
-                                                        if (!sessioncapacityStr.equalsIgnoreCase("")) {
-                                                            if (!sessionamtStr.equalsIgnoreCase("")) {
-                                                                if (sessiontypeStr.equalsIgnoreCase("1")) {
-                                                                    callUpdateSessionApi();
-                                                                } else {
-                                                                    if (startDateStr.equalsIgnoreCase(endDateStr)) {
+                if (!sessionTypeValueStr.equalsIgnoreCase("")) {
+                    if (!coachIdStr.equalsIgnoreCase("") && !sessionNameStr.equalsIgnoreCase("")) {
+                        if (!boardStr.equalsIgnoreCase("")) {
+                            if (!standardStr.equalsIgnoreCase("")) {
+                                if (!streamStr.equalsIgnoreCase("")) {
+                                    if (!lessionTypeNameStr.equalsIgnoreCase("")) {
+                                        if (!address1Str.equalsIgnoreCase("")) {
+                                            if (!regionStr.equalsIgnoreCase("")) {
+                                                if (!cityStr.equalsIgnoreCase("")) {
+                                                    if (!stateStr.equalsIgnoreCase("")) {
+                                                        if (!zipcodeStr.equalsIgnoreCase("")) {
+                                                            if (!sessioncapacityStr.equalsIgnoreCase("")) {
+                                                                if (!sessionamtStr.equalsIgnoreCase("")) {
+                                                                    if (sessiontypeStr.equalsIgnoreCase("1")) {
                                                                         callUpdateSessionApi();
                                                                     } else {
-                                                                        Utils.ping(mContext, getString(R.string.Date));
-                                                                    }
-                                                                }
-                                                            } else {
-                                                                addSessionBinding.sessionPriceEdt.setError(getString(R.string.sessionAmount));
-                                                            }
-                                                        } else {
-                                                            addSessionBinding.sportsEdt.setError(getString(R.string.sessionCapacity));
-                                                        }
-                                                    } else {
-                                                        addSessionBinding.zipcodeEdt.setError(getString(R.string.sessionZipcode));
-                                                    }
-                                                } else {
-                                                    addSessionBinding.stateEdt.setError(getString(R.string.sessionState));
-                                                }
-                                            } else {
-                                                addSessionBinding.cityEdt.setError(getString(R.string.sessionCity));
-                                            }
-                                        } else {
-                                            addSessionBinding.areaEdt.setError(getString(R.string.sessionArea));
-                                        }
-                                    } else {
-                                        addSessionBinding.addressEdt.setError(getString(R.string.sessionAddress));
-                                    }
-                                } else {
-                                    addSessionBinding.subjectEdt.setError(getString(R.string.lessonName));
-                                }
-                            } else {
-                                addSessionBinding.streamEdt.setError(getString(R.string.streamName));
-                            }
-                        } else {
-                            addSessionBinding.standardEdt.setError(getString(R.string.standardName));
-                        }
-                    } else {
-                        addSessionBinding.boardNameEdt.setError(getString(R.string.boardName));
-                    }
-                } else {
-                    addSessionBinding.sessionNameEdt.setError(getString(R.string.sessionName));
-                    addSessionBinding.scrollView.setScrollY(0);
-                }
-            } else {
-                if (!coachIdStr.equalsIgnoreCase("") && !sessionNameStr.equalsIgnoreCase("")) {
-                    if (!boardStr.equalsIgnoreCase("")) {
-                        if (!standardStr.equalsIgnoreCase("")) {
-                            if (!streamStr.equalsIgnoreCase("")) {
-                                if (!lessionTypeNameStr.equalsIgnoreCase("")) {
-                                    if (!startDateStr.equalsIgnoreCase("")) {
-                                        if (!endDateStr.equalsIgnoreCase("")) {
-                                            if (!scheduleStr.equalsIgnoreCase("")) {
-                                                if (!address1Str.equalsIgnoreCase("")) {
-                                                    if (!regionStr.equalsIgnoreCase("")) {
-                                                        if (!cityStr.equalsIgnoreCase("")) {
-                                                            if (!stateStr.equalsIgnoreCase("")) {
-                                                                if (!zipcodeStr.equalsIgnoreCase("")) {
-                                                                    if (!sessioncapacityStr.equalsIgnoreCase("")) {
-                                                                        if (!sessionamtStr.equalsIgnoreCase("")) {
-                                                                            if (sessiontypeStr.equalsIgnoreCase("1")) {
-                                                                                callCreateSessionApi();
-                                                                            } else {
-                                                                                if (startDateStr.equalsIgnoreCase(endDateStr)) {
-                                                                                    callCreateSessionApi();
-                                                                                } else {
-                                                                                    Utils.ping(mContext, getString(R.string.Date));
-                                                                                }
-                                                                            }
+                                                                        if (startDateStr.equalsIgnoreCase(endDateStr)) {
+                                                                            callUpdateSessionApi();
                                                                         } else {
-                                                                            Utils.ping(mContext, getString(R.string.sessionAmount));
+                                                                            Utils.ping(mContext, getString(R.string.Date));
                                                                         }
-                                                                    } else {
-                                                                        addSessionBinding.sportsEdt.setError(getString(R.string.sessionCapacity));
                                                                     }
                                                                 } else {
-                                                                    addSessionBinding.zipcodeEdt.setError(getString(R.string.sessionZipcode));
+                                                                    addSessionBinding.sessionPriceEdt.setError(getString(R.string.sessionAmount));
                                                                 }
                                                             } else {
-                                                                addSessionBinding.stateEdt.setError(getString(R.string.sessionState));
+                                                                addSessionBinding.sportsEdt.setError(getString(R.string.sessionCapacity));
                                                             }
                                                         } else {
-                                                            addSessionBinding.cityEdt.setError(getString(R.string.sessionCity));
+                                                            addSessionBinding.zipcodeEdt.setError(getString(R.string.sessionZipcode));
                                                         }
                                                     } else {
-                                                        addSessionBinding.areaEdt.setError(getString(R.string.sessionArea));
+                                                        addSessionBinding.stateEdt.setError(getString(R.string.sessionState));
                                                     }
                                                 } else {
-                                                    addSessionBinding.addressEdt.setError(getString(R.string.sessionAddress));
+                                                    addSessionBinding.cityEdt.setError(getString(R.string.sessionCity));
                                                 }
                                             } else {
-                                                addSessionBinding.sessionTimeTxt.setError(getString(R.string.sessionTime));
+                                                addSessionBinding.areaEdt.setError(getString(R.string.sessionArea));
+                                            }
+                                        } else {
+                                            addSessionBinding.addressEdt.setError(getString(R.string.sessionAddress));
+                                        }
+                                    } else {
+                                        addSessionBinding.subjectEdt.setError(getString(R.string.lessonName));
+                                    }
+                                } else {
+                                    addSessionBinding.streamEdt.setError(getString(R.string.streamName));
+                                }
+                            } else {
+                                addSessionBinding.standardEdt.setError(getString(R.string.standardName));
+                            }
+                        } else {
+                            addSessionBinding.boardNameEdt.setError(getString(R.string.boardName));
+                        }
+                    } else {
+                        addSessionBinding.sessionNameEdt.setError(getString(R.string.sessionName));
+                        addSessionBinding.scrollView.setScrollY(0);
+                    }
+                } else {
+                    Utils.ping(mContext, getResources().getString(R.string.class_type));
+                }
+            } else {
+                if (!sessionTypeValueStr.equalsIgnoreCase("")) {
+                    if (!coachIdStr.equalsIgnoreCase("") && !sessionNameStr.equalsIgnoreCase("")) {
+                        if (!boardStr.equalsIgnoreCase("")) {
+                            if (!standardStr.equalsIgnoreCase("")) {
+                                if (!streamStr.equalsIgnoreCase("")) {
+                                    if (!lessionTypeNameStr.equalsIgnoreCase("")) {
+                                        if (!startDateStr.equalsIgnoreCase("")) {
+                                            if (!endDateStr.equalsIgnoreCase("")) {
+                                                if (!scheduleStr.equalsIgnoreCase("")) {
+                                                    if (!address1Str.equalsIgnoreCase("")) {
+                                                        if (!regionStr.equalsIgnoreCase("")) {
+                                                            if (!cityStr.equalsIgnoreCase("")) {
+                                                                if (!stateStr.equalsIgnoreCase("")) {
+                                                                    if (!zipcodeStr.equalsIgnoreCase("")) {
+                                                                        if (!sessioncapacityStr.equalsIgnoreCase("")) {
+                                                                            if (!sessionamtStr.equalsIgnoreCase("")) {
+                                                                                if (sessiontypeStr.equalsIgnoreCase("1")) {
+                                                                                    callCreateSessionApi();
+                                                                                } else {
+                                                                                    if (startDateStr.equalsIgnoreCase(endDateStr)) {
+                                                                                        callCreateSessionApi();
+                                                                                    } else {
+                                                                                        Utils.ping(mContext, getString(R.string.Date));
+                                                                                    }
+                                                                                }
+                                                                            } else {
+                                                                                Utils.ping(mContext, getString(R.string.sessionAmount));
+                                                                            }
+                                                                        } else {
+                                                                            addSessionBinding.sportsEdt.setError(getString(R.string.sessionCapacity));
+                                                                        }
+                                                                    } else {
+                                                                        addSessionBinding.zipcodeEdt.setError(getString(R.string.sessionZipcode));
+                                                                    }
+                                                                } else {
+                                                                    addSessionBinding.stateEdt.setError(getString(R.string.sessionState));
+                                                                }
+                                                            } else {
+                                                                addSessionBinding.cityEdt.setError(getString(R.string.sessionCity));
+                                                            }
+                                                        } else {
+                                                            addSessionBinding.areaEdt.setError(getString(R.string.sessionArea));
+                                                        }
+                                                    } else {
+                                                        addSessionBinding.addressEdt.setError(getString(R.string.sessionAddress));
+                                                    }
+                                                } else {
+                                                    addSessionBinding.sessionTimeTxt.setError(getString(R.string.sessionTime));
+                                                }
+                                            } else {
+                                                Utils.ping(mContext, getString(R.string.sessionTime));
                                             }
                                         } else {
                                             Utils.ping(mContext, getString(R.string.sessionTime));
                                         }
                                     } else {
-                                        Utils.ping(mContext, getString(R.string.sessionTime));
+                                        addSessionBinding.subjectEdt.setError(getString(R.string.lessonName));
                                     }
                                 } else {
-                                    addSessionBinding.subjectEdt.setError(getString(R.string.lessonName));
+                                    addSessionBinding.streamEdt.setError(getString(R.string.streamName));
                                 }
                             } else {
-                                addSessionBinding.streamEdt.setError(getString(R.string.streamName));
+                                addSessionBinding.standardEdt.setError(getString(R.string.standardName));
                             }
                         } else {
-                            addSessionBinding.standardEdt.setError(getString(R.string.standardName));
+                            addSessionBinding.boardNameEdt.setError(getString(R.string.boardName));
                         }
                     } else {
-                        addSessionBinding.boardNameEdt.setError(getString(R.string.boardName));
+                        addSessionBinding.sessionNameEdt.setError(getString(R.string.sessionName));
+                        addSessionBinding.scrollView.setScrollY(0);
                     }
                 } else {
-                    addSessionBinding.sessionNameEdt.setError(getString(R.string.sessionName));
-                    addSessionBinding.scrollView.setScrollY(0);
+                    Utils.ping(mContext, getResources().getString(R.string.class_type));
                 }
             }
         }
@@ -2277,6 +2581,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
     }
 
     public void disableControl() {
+        addSessionBinding.sessionTimeTxt.setText("View Class Time");
         addSessionBinding.sessionTimeLinear.setVisibility(View.VISIBLE);
         addSessionBinding.submitBtn.setVisibility(View.GONE);
         addSessionBinding.recurringRb.setEnabled(false);
@@ -2297,22 +2602,9 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         addSessionBinding.sportsEdt.setEnabled(false);
         addSessionBinding.alertBtn.setEnabled(false);
         addSessionBinding.sessionPriceEdt.setEnabled(false);
-    }
-
-    public void TimeValidation(String startTime1, String endTime1) {
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
-        try {
-            Date inTime = sdf.parse(startTime1);
-            Date outTime = sdf.parse(endTime1);
-            if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                Utils.ping(mContext, "Please Select Proper Time");
-            } else {
-
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
+        addSessionBinding.AcademicRb.setEnabled(false);
+        addSessionBinding.playRb.setEnabled(false);
+        addSessionBinding.sessionSelectAddressLinear.setVisibility(View.GONE);
     }
 
     public void diableDialogControl() {
@@ -2379,15 +2671,17 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
     public void fillCity() {
         ArrayList<String> CityName = new ArrayList<String>();
         ArrayList<String> StateName = new ArrayList<>();
+        lineArray = new ArrayList<>();
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(mContext.getAssets().open("world_cities.txt")));
-            String line;
+
             Log.e("Reader Stuff", reader.readLine());
             while ((line = reader.readLine()) != null) {
                 Log.e("code", line);
-                String[] RowData = line.split(",");
+                RowData = line.split(",");
                 CityName.add(RowData[0]);
                 StateName.add(RowData[2]);
+                lineArray.add(line);
             }
 
         } catch (IOException ex) {
@@ -2411,6 +2705,252 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         ArrayAdapter<String> adapterTerm1 = new ArrayAdapter<String>(mContext, R.layout.autocomplete_layout, StateName);
         addSessionBinding.stateEdt.setAdapter(adapterTerm1);
         addSessionBinding.stateEdt.setThreshold(1);
+
+    }
+
+    public void fillTimeGrid() {
+        if (!scheduleStr.equalsIgnoreCase("")) {
+            totalHours = new ArrayList<>();
+            totalMinit = new ArrayList<>();
+
+            addSessionBinding.linearClick.setVisibility(View.VISIBLE);
+            addSessionBinding.startDateTxt.setText(EditStartDateStr);
+            addSessionBinding.endDateTxt.setText(EditEndDateStr);
+
+
+            addSessionBinding.sunTimeTxt.setEnabled(false);
+            addSessionBinding.sundayBtn.setEnabled(false);
+            addSessionBinding.sunHoursTxt.setEnabled(false);
+            addSessionBinding.sunTimeTxt.setAlpha(0.2f);
+            addSessionBinding.sundayBtn.setAlpha(0.2f);
+            addSessionBinding.sunTimeTxt.setText("");
+            addSessionBinding.sunHoursTxt.setAlpha(0.2f);
+            addSessionBinding.sunHoursTxt.setText("");
+
+            addSessionBinding.monTimeTxt.setEnabled(false);
+            addSessionBinding.mondayBtn.setEnabled(false);
+            addSessionBinding.monHoursTxt.setEnabled(false);
+            addSessionBinding.monTimeTxt.setAlpha(0.2f);
+            addSessionBinding.mondayBtn.setAlpha(0.2f);
+            addSessionBinding.monTimeTxt.setText("");
+            addSessionBinding.monHoursTxt.setAlpha(0.2f);
+            addSessionBinding.monHoursTxt.setText("");
+
+            addSessionBinding.tuesTimeTxt.setEnabled(false);
+            addSessionBinding.tuesdayBtn.setEnabled(false);
+            addSessionBinding.tuesHoursTxt.setEnabled(false);
+            addSessionBinding.tuesTimeTxt.setAlpha(0.2f);
+            addSessionBinding.tuesdayBtn.setAlpha(0.2f);
+            addSessionBinding.tuesTimeTxt.setText("");
+            addSessionBinding.tuesHoursTxt.setAlpha(0.2f);
+            addSessionBinding.tuesHoursTxt.setText("");
+
+            addSessionBinding.wedTimeTxt.setEnabled(false);
+            addSessionBinding.wednesdayBtn.setEnabled(false);
+            addSessionBinding.wedHoursTxt.setEnabled(false);
+            addSessionBinding.wedTimeTxt.setAlpha(0.2f);
+            addSessionBinding.wednesdayBtn.setAlpha(0.2f);
+            addSessionBinding.wedTimeTxt.setText("");
+            addSessionBinding.wedHoursTxt.setAlpha(0.2f);
+            addSessionBinding.wedHoursTxt.setText("");
+
+            addSessionBinding.thurTimeTxt.setEnabled(false);
+            addSessionBinding.thursdayBtn.setEnabled(false);
+            addSessionBinding.thurHoursTxt.setEnabled(false);
+            addSessionBinding.thurTimeTxt.setAlpha(0.2f);
+            addSessionBinding.thursdayBtn.setAlpha(0.2f);
+            addSessionBinding.thurTimeTxt.setText("");
+            addSessionBinding.thurHoursTxt.setAlpha(0.2f);
+            addSessionBinding.thurHoursTxt.setText("");
+
+            addSessionBinding.friTimeTxt.setEnabled(false);
+            addSessionBinding.fridayBtn.setEnabled(false);
+            addSessionBinding.friHoursTxt.setEnabled(false);
+            addSessionBinding.friTimeTxt.setAlpha(0.2f);
+            addSessionBinding.fridayBtn.setAlpha(0.2f);
+            addSessionBinding.friTimeTxt.setText("");
+            addSessionBinding.friHoursTxt.setAlpha(0.2f);
+            addSessionBinding.friHoursTxt.setText("");
+
+            addSessionBinding.satTimeTxt.setEnabled(false);
+            addSessionBinding.saturdayBtn.setEnabled(false);
+            addSessionBinding.satHoursTxt.setEnabled(false);
+            addSessionBinding.satTimeTxt.setAlpha(0.2f);
+            addSessionBinding.saturdayBtn.setAlpha(0.2f);
+            addSessionBinding.satTimeTxt.setText("");
+            addSessionBinding.satHoursTxt.setAlpha(0.2f);
+            addSessionBinding.satHoursTxt.setText("");
+
+            String[] spiltPipes = scheduleStr.split("\\|");
+            String[] spiltComma;
+            String[] spiltDash;
+            Log.d("spilt", "" + spiltPipes.toString());
+            for (int i = 0; i < spiltPipes.length; i++) {
+                spiltComma = spiltPipes[i].split("\\,");
+                spiltDash = spiltComma[1].split("\\-");
+                calculateHours(spiltDash[0], spiltDash[1]);
+                switch (spiltComma[0]) {
+                    case "sun":
+                        addSessionBinding.sunTimeTxt.setEnabled(true);
+                        addSessionBinding.sundayBtn.setEnabled(true);
+                        addSessionBinding.sunHoursTxt.setAlpha(1);
+                        addSessionBinding.sunHoursTxt.setEnabled(true);
+                        addSessionBinding.sunTimeTxt.setAlpha(1);
+                        addSessionBinding.sundayBtn.setAlpha(1);
+                        addSessionBinding.sunHoursTxt.setAlpha(1);
+                        addSessionBinding.sunTimeTxt.setText(spiltDash[0]);
+                        addSessionBinding.sunHoursTxt.setText(SessionDuration);
+
+                        break;
+                    case "mon":
+                        addSessionBinding.monTimeTxt.setEnabled(true);
+                        addSessionBinding.mondayBtn.setEnabled(true);
+                        addSessionBinding.monTimeTxt.setAlpha(1);
+                        addSessionBinding.mondayBtn.setAlpha(1);
+                        addSessionBinding.monHoursTxt.setAlpha(1);
+                        addSessionBinding.monTimeTxt.setText(spiltDash[0]);
+                        addSessionBinding.monHoursTxt.setText(SessionDuration);
+                        break;
+                    case "tue":
+                        addSessionBinding.tuesTimeTxt.setEnabled(true);
+                        addSessionBinding.tuesdayBtn.setEnabled(true);
+                        addSessionBinding.tuesTimeTxt.setAlpha(1);
+                        addSessionBinding.tuesdayBtn.setAlpha(1);
+                        addSessionBinding.tuesHoursTxt.setAlpha(1);
+                        addSessionBinding.tuesTimeTxt.setText(spiltDash[0]);
+                        addSessionBinding.tuesHoursTxt.setText(SessionDuration);
+                        break;
+                    case "wed":
+                        addSessionBinding.wedTimeTxt.setEnabled(true);
+                        addSessionBinding.wednesdayBtn.setEnabled(true);
+                        addSessionBinding.wedTimeTxt.setAlpha(1);
+                        addSessionBinding.wednesdayBtn.setAlpha(1);
+                        addSessionBinding.wedHoursTxt.setAlpha(1);
+                        addSessionBinding.wedTimeTxt.setText(spiltDash[0]);
+                        addSessionBinding.wedHoursTxt.setText(SessionDuration);
+                        break;
+                    case "thu":
+                        addSessionBinding.thurTimeTxt.setEnabled(true);
+                        addSessionBinding.thursdayBtn.setEnabled(true);
+                        addSessionBinding.thurTimeTxt.setAlpha(1);
+                        addSessionBinding.thursdayBtn.setAlpha(1);
+                        addSessionBinding.thurHoursTxt.setAlpha(1);
+                        addSessionBinding.thurTimeTxt.setText(spiltDash[0]);
+                        addSessionBinding.thurHoursTxt.setText(SessionDuration);
+                        break;
+                    case "fri":
+                        addSessionBinding.friTimeTxt.setEnabled(true);
+                        addSessionBinding.fridayBtn.setEnabled(true);
+                        addSessionBinding.friTimeTxt.setAlpha(1);
+                        addSessionBinding.fridayBtn.setAlpha(1);
+                        addSessionBinding.friHoursTxt.setAlpha(1);
+                        addSessionBinding.friTimeTxt.setText(spiltDash[0]);
+                        addSessionBinding.friHoursTxt.setText(SessionDuration);
+                        break;
+                    case "sat":
+                        addSessionBinding.satTimeTxt.setEnabled(true);
+                        addSessionBinding.saturdayBtn.setEnabled(true);
+                        addSessionBinding.satTimeTxt.setAlpha(1);
+                        addSessionBinding.saturdayBtn.setAlpha(1);
+                        addSessionBinding.satHoursTxt.setAlpha(1);
+                        addSessionBinding.satTimeTxt.setText(spiltDash[0]);
+                        addSessionBinding.satHoursTxt.setText(SessionDuration);
+                        break;
+                    default:
+
+                }
+
+//                Log.d("totalHours + totalMinit", totalHours.toString() + "  " + totalMinit.toString());
+//
+//
+////                if (SessionHour < 10) {
+////                    hours = "0" + SessionHour;
+////                } else {
+//                hours = String.valueOf(SessionHour);
+////                }
+////                if (SessionMinit < 10) {
+////                    minit = "0" + SessionMinit;
+////                } else {
+//                minit = String.valueOf(SessionMinit);
+////
+            }
+//            averageHours(totalHours);
+//            averageMinit(totalMinit);
+//
+//            if (totalHours.size() > 0) {
+//                for (int i = 0; i < totalHours.size(); i++) {
+//
+//                }
+//            }
+
+
+//            if (avgMinitvalue == 0) {
+//                addSessionBinding.displayDurationTxt.setText("Duration : " + avgHoursvalue + " hr ");
+//            } else {
+//                addSessionBinding.displayDurationTxt.setText("Duration : " + avgHoursvalue + " hr " + avgMinitvalue + " min");
+//            }
+        }
+    }
+
+    public void averageHours(List<Integer> list) {
+        int sum = 0;
+        int n = list.size();
+        for (int i = 0; i < n; i++)
+            sum += list.get(i);
+        avgHoursvalue = (sum) / n;
+        Log.d("value", "" + avgHoursvalue);
+    }
+
+    public void averageMinit(List<Integer> list) {
+        int sum = 0;
+        int n = list.size();
+        for (int i = 0; i < n; i++)
+            sum += list.get(i);
+        avgMinitvalue = (sum) / n;
+        Log.d("value", "" + avgMinitvalue);
+    }
+
+    public void calculateHours(String time1, String time2) {
+
+        Date date1, date2;
+        int days, hours, min;
+        String hourstr, minstr;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa", Locale.US);
+        try {
+            date1 = simpleDateFormat.parse(time1);
+            date2 = simpleDateFormat.parse(time2);
+
+            long difference = date2.getTime() - date1.getTime();
+            days = (int) (difference / (1000 * 60 * 60 * 24));
+            hours = (int) ((difference - (1000 * 60 * 60 * 24 * days)) / (1000 * 60 * 60));
+            min = (int) (difference - (1000 * 60 * 60 * 24 * days) - (1000 * 60 * 60 * hours)) / (1000 * 60);
+            hours = (hours < 0 ? -hours : hours);
+            SessionHour = hours;
+
+            SessionMinit = min;
+
+            Log.i("======= Hours", " :: " + hours + ":" + min);
+            if (SessionHour > 0) {
+                totalHours.add(SessionHour);
+            }
+            totalMinit.add(SessionMinit);
+
+            if (SessionMinit > 0) {
+                if (SessionMinit < 10) {
+                    SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf("0" + SessionMinit + " hrs");
+                } else {
+                    SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf(SessionMinit + " hrs");
+
+                }
+            } else {
+                SessionDuration = String.valueOf(SessionHour) + " hrs";
+            }
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
 
     }
 

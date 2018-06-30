@@ -64,17 +64,16 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
     ExpandableSelectStudentListAdapter expandableSelectStudentListAdapter;
     //Conformation Dialog
     Dialog confimDialog;
-    //    TextView cancel_txt, confirm_txt, session_student_txt, session_student_txt_view,session_teacher_txt,
-//            session_name_txt, location_txt, duration_txt, time_txt, time_txt_view, session_fee_txt;
-    String paymentStatusstr, sessionIDStr, familysessionfeesStr, familysessionnameStr, teahcerNameStr,
+    String paymentStatusstr, sessionIDStr, familysessionfeesStr, familysessionnameStr,
             familylocationStr, familysessionStudentStr, sessionDateStr, durationStr,
             orderIDStr, contatIDstr, type, familyIdStr = "", familyNameStr = "", locationStr,
             boardStr, standardStr, streamStr, searchTypeStr, subjectStr, searchfront, arraowStr,
-            wheretoComeStr, searchByStr, genderStr, froncontanctStr, wheretocometypeStr, sessionType, RegionName,
-            firsttimesearch, selectedfamilyNameStr, selectedfamilytagStr, bactStr,sessionNameStr;
+    /* wheretoComeStr, searchByStr,*/ genderStr, froncontanctStr, wheretocometypeStr, sessionType, RegionName,
+            firsttimesearch, selectedfamilyNameStr, selectedfamilytagStr, bactStr, sessionNameStr, SearchPlaystudy;
     int SessionHour = 0;
     Integer SessionMinit = 0;
-    String hours,minit;
+    String SessionDuration ;
+    String hours, minit;
     ArrayList<String> selectedId;
     //Purchase dialog
     ArrayList<String> purchaseSessionIDArray;
@@ -85,6 +84,9 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
     Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily;
     TextView userNameTxt;
     SessionConfirmationDetailModel sessionConfirmationDetailModel;
+    ArrayList<Integer> totalHours;
+    ArrayList<Integer> totalMinit;
+    int avgHoursvalue, avgMinitvalue;
     private int lastExpandedPosition = -1;
 
     @Override
@@ -100,31 +102,30 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
     }
 
     public void getIntenetValue() {
-        sessionNameStr=getIntent().getStringExtra("sessionName");
+//        sessionNameStr=getIntent().getStringExtra("sessionName");
         sessionIDStr = getIntent().getStringExtra("sessionID");
-        familysessionStudentStr = getIntent().getStringExtra("sessionStudent");
-        familylocationStr = getIntent().getStringExtra("location");
-        durationStr = getIntent().getStringExtra("duration");
-        familysessionfeesStr = getIntent().getStringExtra("sessionfees");
+        SearchPlaystudy = getIntent().getStringExtra("SearchPlaystudy");
+//        familysessionStudentStr = getIntent().getStringExtra("sessionStudent");
+//        familylocationStr = getIntent().getStringExtra("location");
+//        durationStr = getIntent().getStringExtra("duration");
+//        familysessionfeesStr = getIntent().getStringExtra("sessionfees");
         familysessionnameStr = getIntent().getStringExtra("sessionName");
-        sessionDateStr = getIntent().getStringExtra("sessiondate");
+//        sessionDateStr = getIntent().getStringExtra("sessiondate");
         locationStr = getIntent().getStringExtra("city");
         subjectStr = getIntent().getStringExtra("lessionName");
-        searchByStr = getIntent().getStringExtra("SearchBy");
         standardStr = getIntent().getStringExtra("standard");
         streamStr = getIntent().getStringExtra("stream");
         boardStr = getIntent().getStringExtra("board");
-        searchTypeStr = getIntent().getStringExtra("searchType");
-        genderStr = getIntent().getStringExtra("gender");
-        wheretoComeStr = getIntent().getStringExtra("withOR");
+//        searchTypeStr = getIntent().getStringExtra("searchType");
+//        genderStr = getIntent().getStringExtra("gender");
         froncontanctStr = getIntent().getStringExtra("froncontanct");
-        familyIdStr = getIntent().getStringExtra("familyID");
-        familyNameStr = getIntent().getStringExtra("familyNameStr");
+//        familyIdStr = getIntent().getStringExtra("familyID");
+//        familyNameStr = getIntent().getStringExtra("familyNameStr");
         searchfront = getIntent().getStringExtra("searchfront");
         wheretocometypeStr = getIntent().getStringExtra("wheretocometype");
-        sessionType = getIntent().getStringExtra("sessionType");
+//        sessionType = getIntent().getStringExtra("sessionType");
         firsttimesearch = getIntent().getStringExtra("firsttimesearch");
-        RegionName = getIntent().getStringExtra("RegionName");
+//        RegionName = getIntent().getStringExtra("RegionName");
         bactStr = getIntent().getStringExtra("back");
         sessionConfirmationDetailModel = getIntent().getParcelableExtra("detail");
     }
@@ -149,47 +150,44 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                     if (!bactStr.equalsIgnoreCase("classDeatil")) {
                         Intent intent = new Intent(mContext, SessionName.class);
                         intent.putExtra("sessionID", sessionIDStr);
-                        intent.putExtra("duration", durationStr);
-                        intent.putExtra("sessiondate", sessionDateStr);
+                        intent.putExtra("SearchPlaystudy", SearchPlaystudy);
+//                        intent.putExtra("duration", durationStr);
+//                        intent.putExtra("sessiondate", sessionDateStr);
                         intent.putExtra("sessionName", familysessionnameStr);
-                        intent.putExtra("location", familylocationStr);
-                        intent.putExtra("sessionfees", familysessionfeesStr);
-                        intent.putExtra("sessionStudent", familysessionStudentStr);
+//                        intent.putExtra("location", familylocationStr);
+//                        intent.putExtra("sessionfees", familysessionfeesStr);
+//                        intent.putExtra("sessionStudent", familysessionStudentStr);
                         intent.putExtra("city", locationStr);
-                        intent.putExtra("SearchBy", searchByStr);
                         intent.putExtra("board", boardStr);
                         intent.putExtra("stream", streamStr);
                         intent.putExtra("standard", standardStr);
-                        intent.putExtra("searchType", searchTypeStr);
+//                        intent.putExtra("searchType", searchTypeStr);
                         intent.putExtra("lessionName", subjectStr);
-                        intent.putExtra("gender", genderStr);
-                        intent.putExtra("withOR", wheretoComeStr);
+//                        intent.putExtra("gender", genderStr);
                         intent.putExtra("searchfront", searchfront);
-                        intent.putExtra("sessionType", sessionType);
+//                        intent.putExtra("sessionType", sessionType);
                         intent.putExtra("firsttimesearch", firsttimesearch);
-                        intent.putExtra("RegionName", RegionName);
+//                        intent.putExtra("RegionName", RegionName);
                         intent.putExtra("back", bactStr);
                         startActivity(intent);
                     } else {
                         Intent intentClassDetail = new Intent(mContext, ClassDeatilScreen.class);
-//                        intentClassDetail.putExtra("detail",sessionConfirmationDetailModel);
                         intentClassDetail.putExtra("back", bactStr);
                         intentClassDetail.putExtra("sessionID", sessionIDStr);
                         intentClassDetail.putExtra("city", locationStr);
-                        intentClassDetail.putExtra("sessionName",sessionNameStr );
-                        intentClassDetail.putExtra("withOR", wheretoComeStr);
+                        intentClassDetail.putExtra("sessionName", familysessionnameStr);
                         intentClassDetail.putExtra("froncontanct", "false");
                         intentClassDetail.putExtra("back", "classDeatil");
                         intentClassDetail.putExtra("frontLogin", "afterLogin");
-                        intentClassDetail.putExtra("SearchBy", searchByStr);
+                        intentClassDetail.putExtra("SearchPlaystudy", SearchPlaystudy);
                         intentClassDetail.putExtra("board", boardStr);
                         intentClassDetail.putExtra("stream", streamStr);
                         intentClassDetail.putExtra("standard", standardStr);
-                        intentClassDetail.putExtra("searchType", searchTypeStr);
+//                        intentClassDetail.putExtra("searchType", searchTypeStr);
                         intentClassDetail.putExtra("lessionName", subjectStr);
-                        intentClassDetail.putExtra("gender", genderStr);
+//                        intentClassDetail.putExtra("gender", genderStr);
                         intentClassDetail.putExtra("searchfront", searchfront);
-                        intentClassDetail.putExtra("sessionType", sessionType);
+//                        intentClassDetail.putExtra("sessionType", sessionType);
                         startActivity(intentClassDetail);
 
                         startActivity(intentClassDetail);
@@ -218,27 +216,26 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                     addchild.putExtra("familyID", familyIdStr);
                     addchild.putExtra("familyNameStr", familyNameStr);
                     addchild.putExtra("sessionID", sessionIDStr);
-                    addchild.putExtra("duration", durationStr);
-                    addchild.putExtra("sessiondate", sessionDateStr);
+//                    addchild.putExtra("duration", durationStr);
+//                    addchild.putExtra("sessiondate", sessionDateStr);
                     addchild.putExtra("sessionName", familysessionnameStr);
-                    addchild.putExtra("location", familylocationStr);
-                    addchild.putExtra("sessionfees", familysessionfeesStr);
-                    addchild.putExtra("sessionStudent", familysessionStudentStr);
+//                    addchild.putExtra("location", familylocationStr);
+//                    addchild.putExtra("sessionfees", familysessionfeesStr);
+//                    addchild.putExtra("sessionStudent", familysessionStudentStr);
                     addchild.putExtra("city", locationStr);
-                    addchild.putExtra("SearchBy", searchByStr);
                     addchild.putExtra("board", boardStr);
                     addchild.putExtra("stream", streamStr);
                     addchild.putExtra("standard", standardStr);
-                    addchild.putExtra("searchType", searchTypeStr);
+//                    addchild.putExtra("searchType", searchTypeStr);
                     addchild.putExtra("lessionName", subjectStr);
-                    addchild.putExtra("gender", genderStr);
-                    addchild.putExtra("withOR", wheretoComeStr);
+//                    addchild.putExtra("gender", genderStr);
                     addchild.putExtra("froncontanct", froncontanctStr);
                     addchild.putExtra("searchfront", searchfront);
-                    addchild.putExtra("sessionType", sessionType);
+//                    addchild.putExtra("sessionType", sessionType);
                     addchild.putExtra("firsttimesearch", firsttimesearch);
-                    addchild.putExtra("RegionName", RegionName);
+//                    addchild.putExtra("RegionName", RegionName);
                     addchild.putExtra("back", bactStr);
+                    addchild.putExtra("SearchPlaystudy", SearchPlaystudy);
                     startActivity(addchild);
                 } else {
                     Intent addchild = new Intent(mContext, AddStudentScreen.class);
@@ -284,7 +281,12 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
 //                        callSessionReportApi();
                         if (familyInfoModel.getData() != null) {
                             if (familyInfoModel.getData().size() > 0) {
-                                familyBinding.text.setVisibility(View.VISIBLE);
+                                if (!froncontanctStr.equalsIgnoreCase("true")) {
+                                    familyBinding.text.setVisibility(View.VISIBLE);
+                                }else{
+                                    familyBinding.text.setVisibility(View.GONE);
+                                }
+
                                 familyBinding.listLinear.setVisibility(View.VISIBLE);
                                 familyBinding.noRecordTxt.setVisibility(View.GONE);
                                 fillExpLV();
@@ -458,7 +460,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
     private Map<String, String> getSessionConfirmationdetail() {
         Map<String, String> map = new HashMap<>();
         map.put("SessionID", sessionIDStr);
-        map.put("ContactID",contatIDstr);//contatIDstr  //Utils.getPref(mContext, "coachID")
+        map.put("ContactID", contatIDstr);//contatIDstr  //Utils.getPref(mContext, "coachID")
         map.put("PaymentStatus", paymentStatusstr);
         return map;
     }
@@ -525,9 +527,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                         if (sessionModel.getData().size() > 0) {
                             purchaseSessionIDArray = new ArrayList<>();
                             for (int i = 0; i < sessionModel.getData().size(); i++) {
-//                                purchaseSessionIDArray.add(sessionModel.getData().get(i).getSessionID());
                                 if (sessionIDStr.equalsIgnoreCase(sessionModel.getData().get(i).getSessionID())) {
-//                                    if(contatIDstr.equalsIgnoreCase(sessionModel.getData().get(i)))
                                     purchaseSessionIDStr = sessionModel.getData().get(i).getSessionID();
                                 }
                             }
@@ -772,7 +772,6 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         menuDialog.show();
     }
 
-
     public void SessionConfirmationDialog() {
         sessiondetailConfirmationDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.sessiondetail_confirmation_dialog, (ViewGroup) familyBinding.getRoot(), false);
@@ -844,8 +843,13 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                                 sessiondetailConfirmationDialogBinding.locationTxt.setText(dataResponse.getData().get(j).getRegionName());
                                 sessiondetailConfirmationDialogBinding.startDateTxt.setText(dataResponse.getData().get(j).getStartDate());
                                 sessiondetailConfirmationDialogBinding.endDateTxt.setText(dataResponse.getData().get(j).getEndDate());
-
+                                sessiondetailConfirmationDialogBinding.priceTxt.setText("₹"+dataResponse.getData().get(j).getSessionAmount());
+                                if(!dataResponse.getData().get(j).getTotalRatingUser().equalsIgnoreCase("0")) {
+                                    sessiondetailConfirmationDialogBinding.ratingUserTxt.setText("( "+dataResponse.getData().get(j).getTotalRatingUser()+" )");
+                                }
                                 AppConfiguration.classsessionPrice = dataResponse.getData().get(j).getSessionAmount();
+                                totalHours = new ArrayList<>();
+                                totalMinit = new ArrayList<>();
                                 String[] spiltPipes = dataResponse.getData().get(j).getSchedule().split("\\|");
                                 String[] spiltComma;
                                 String[] spiltDash;
@@ -857,78 +861,106 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                                     dataResponse.getData().get(j).setDateTime(spiltDash[0]);
                                     Log.d("DateTime", spiltDash[0]);
 
-                                    if (SessionHour < 10) {
-                                        hours= "0"+SessionHour;
-                                    }else{
-                                        hours= String.valueOf(SessionHour);
-                                    }
-                                    if(SessionMinit<10){
-                                        minit="0"+SessionMinit;
-                                    }else{
-                                        minit=String.valueOf(SessionMinit);
-                                    }
-                                    if(minit.equalsIgnoreCase(("00"))) {
-                                        sessiondetailConfirmationDialogBinding.durationTxt.setText(hours + " hr ");
-                                    }else{
-                                        sessiondetailConfirmationDialogBinding.durationTxt.setText(hours + " hr " + minit + " min");//+ " min"
-                                    }
+//                                    if (SessionHour < 10) {
+//                                        hours= "0"+SessionHour;
+//                                    }else{
+//                                        hours= String.valueOf(SessionHour);
+//                                    }
+//                                    if(SessionMinit<10){
+//                                        minit="0"+SessionMinit;
+//                                    }else{
+//                                        minit=String.valueOf(SessionMinit);
+//                                    }
+//                                    if(minit.equalsIgnoreCase(("00"))) {
+//                                        sessiondetailConfirmationDialogBinding.durationTxt.setText(hours + " hr ");
+//                                    }else{
+//                                        sessiondetailConfirmationDialogBinding.durationTxt.setText(hours + " hr " + minit + " min");//+ " min"
+//                                    }
 
                                     switch (spiltComma[0]) {
                                         case "sun":
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.sunTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.sundayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.sunTimeTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.sundayBtn.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.sunTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setText(SessionDuration);
                                             break;
                                         case "mon":
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.monTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.mondayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.monTimeTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.mondayBtn.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.monTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
+                                            sessiondetailConfirmationDialogBinding.monHoursTxt.setText(SessionDuration);
                                             break;
                                         case "tue":
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.tuesTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.tuesdayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.tuesTimeTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.tuesdayBtn.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.tuesTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
+                                            sessiondetailConfirmationDialogBinding.tuesHoursTxt.setText(SessionDuration);
                                             break;
                                         case "wed":
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.wedTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.wednesdayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.wedTimeTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.wednesdayBtn.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.wedTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
+                                            sessiondetailConfirmationDialogBinding.wedHoursTxt.setText(SessionDuration);
                                             break;
                                         case "thu":
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.thurTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.thursdayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.thurTimeTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.thursdayBtn.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.thurTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
+                                            sessiondetailConfirmationDialogBinding.thurHoursTxt.setText(SessionDuration);
                                             break;
                                         case "fri":
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.friTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.fridayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.friTimeTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.fridayBtn.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.friTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
+                                            sessiondetailConfirmationDialogBinding.friHoursTxt.setText(SessionDuration);
                                             break;
                                         case "sat":
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.satTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.saturdayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.satTimeTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.saturdayBtn.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.satTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
+                                            sessiondetailConfirmationDialogBinding.satHoursTxt.setText(SessionDuration);
                                             break;
                                         default:
 
                                     }
                                 }
                             }
-
+//                            averageHours(totalHours);
+//                            averageMinit(totalMinit);
+//
+//                            if (avgMinitvalue == 0) {
+//                                sessiondetailConfirmationDialogBinding.durationTxt.setText(avgHoursvalue + " hr ");
+//                            } else {
+//                                sessiondetailConfirmationDialogBinding.durationTxt.setText(avgHoursvalue + " hr " + avgMinitvalue + " min");//+ " min"
+//                            }
                         }
                     }
                 }
@@ -951,6 +983,30 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         map.put("SessionID", sessionIDStr);
         return map;
     }
+
+    public void averageHours(List<Integer> list) {
+        if (list != null) {
+            int sum = 0;
+            int n = list.size();
+            for (int i = 0; i < n; i++)
+                sum += list.get(i);
+            Log.d("sum", "" + sum);
+            avgHoursvalue = (sum) / n;
+            Log.d("value", "" + avgHoursvalue);
+        }
+    }
+
+    public void averageMinit(List<Integer> list) {
+        if (list != null) {
+            int sum = 0;
+            int n = list.size();
+            for (int i = 0; i < n; i++)
+                sum += list.get(i);
+            avgMinitvalue = (sum) / n;
+            Log.d("value", "" + avgMinitvalue);
+        }
+    }
+
     public void calculateHours(String time1, String time2) {
         Date date1, date2;
         int days, hours, min;
@@ -968,6 +1024,22 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
             SessionHour = hours;
             SessionMinit = min;
             Log.i("======= Hours", " :: " + hours + ":" + min);
+//            if (SessionHour > 0) {
+//                totalHours.add(SessionHour);
+//            }
+////            if(SessionMinit>0) {
+//            totalMinit.add(SessionMinit);
+////            }
+
+            if(SessionMinit>0){
+                if(SessionMinit<10) {
+                    SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf("0" + SessionMinit + " hrs");
+                }else{SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf(SessionMinit + " hrs");
+
+                }
+            }else{
+                SessionDuration=String.valueOf(SessionHour)+" hrs";
+            }
 
         } catch (ParseException e) {
             e.printStackTrace();

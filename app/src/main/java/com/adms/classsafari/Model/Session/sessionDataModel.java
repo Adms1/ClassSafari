@@ -367,6 +367,13 @@ public class sessionDataModel{
     @SerializedName("Reason")
     @Expose
     private String reason;
+    @SerializedName("CheckStatus")
+    @Expose
+    private String checkStatus;
+
+    @SerializedName("CheckValue")
+    @Expose
+    private String checkValue;
     @SerializedName("Status")
     @Expose
     private String status;
@@ -397,6 +404,14 @@ public class sessionDataModel{
 
     public String getStatus() {
         return status;
+    }
+
+    public String getCheckValue() {
+        return checkValue;
+    }
+
+    public void setCheckValue(String checkValue) {
+        this.checkValue = checkValue;
     }
 
     public void setStatus(String status) {
@@ -503,6 +518,14 @@ public class sessionDataModel{
 
     public String getRegionName() {
         return regionName;
+    }
+
+    public String getCheckStatus() {
+        return checkStatus;
+    }
+
+    public void setCheckStatus(String checkStatus) {
+        this.checkStatus = checkStatus;
     }
 
     public void setRegionName(String regionName) {
@@ -844,4 +867,5 @@ public class sessionDataModel{
         this.comment = comment;
     }
     //===================================================================
+
 }

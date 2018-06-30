@@ -79,6 +79,10 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
     Calendar calendar;
     String dateStr;
     int k;
+    ArrayList<Integer> totalHours;
+    ArrayList<Integer> totalMinit;
+    int avgHoursvalue, avgMinitvalue;
+    String SessionDuration ;
     //Use for PaymentConfirmation Dialog
     Dialog confimDialog;
     String contatIDstr, orderIDStr, familyNameStr;
@@ -155,6 +159,9 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
     @Override
     public void onEventSelected(CalendarEvent event) {
         if (!event.getTitle().equals("No events")) {
+            totalHours = new ArrayList<>();
+            totalMinit = new ArrayList<>();
+
             parseTodaysDate(String.valueOf(event.getStartTime().getTime()), String.valueOf(event.getEndTime().getTime()));
 
             sessionnameStr = event.getTitle();
@@ -179,23 +186,22 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                         String[] spiltTime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime().split("\\-");
                         calculateHours(spiltTime[0], spiltTime[1]);
                         AppConfiguration.SessionName = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionName();
-                        if (SessionHour < 10) {
-                            hours= "0"+SessionHour;
-                        }else{
-                            hours= String.valueOf(SessionHour);
+//                        if (SessionHour < 10) {
+//                            hours= "0"+SessionHour;
+//                        }else{
+//                            hours= String.valueOf(SessionHour);
+//                        }
+//                        if(SessionMinit<10){
+//                            minit="0"+SessionMinit;
+//                        }else{
+//                            minit=String.valueOf(SessionMinit);
+//                        }
+                        if(finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getTotalRatingUser().equalsIgnoreCase("0")){
+                            AppConfiguration.SessionUserRating="( "+finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getTotalRatingUser()+" )";
                         }
-                        if(SessionMinit<10){
-                            minit="0"+SessionMinit;
-                        }else{
-                            minit=String.valueOf(SessionMinit);
-                        }
-                        if(minit.equalsIgnoreCase(("00"))) {
-                            AppConfiguration.SessionDuration =hours + " hr ";
-                        }else{
-                            AppConfiguration.SessionDuration =hours + " hr " + minit + " min";//+ " min"
-                        }
+                        AppConfiguration.SessionRating=finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getRating();
                         AppConfiguration.SessionTime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime();
-                        AppConfiguration.SessionPrice = String.valueOf(Math.round(Float.parseFloat(finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionPrice())));
+                        AppConfiguration.SessionPrice =String.valueOf(Math.round(Float.parseFloat(finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionPrice())));
 //                        AppConfiguration.SessionPrice=finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionPrice();
                         AppConfiguration.SessionDate = finalsessionfullDetailModel.getData().get(i).getSessionDate();
                         AppConfiguration.RegionName = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getRegionName();
@@ -206,6 +212,13 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                 }
             }
 
+//            averageHours(totalHours);
+//            averageMinit(totalMinit);
+//            if(avgMinitvalue==0) {
+//                AppConfiguration.SessionDuration =avgHoursvalue + " hr ";
+//            }else{
+//                AppConfiguration.SessionDuration =avgHoursvalue + " hr " + avgMinitvalue + " min";//+ " min"
+//            }
 
             SessionDialog();
         } else {
@@ -422,7 +435,8 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
 
     public void mockList(List<CalendarEvent> eventList) {
         long startDate = 0, endDate = 0;
-
+        totalHours = new ArrayList<>();
+        totalMinit = new ArrayList<>();
         for (int i = 0; i < finalsessionfullDetailModel.getData().size(); i++) {
 
 
@@ -538,10 +552,10 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                             add_student_btn.setAlpha(0.5f);
                         }
                         if (arraySize == 0) {
-                            edit_session_btn.setText("Edit Session");
+                            edit_session_btn.setText("Edit Class");
                             flag = "edit";
                         } else {
-                            edit_session_btn.setText("View Session");
+                            edit_session_btn.setText("View Class");
                             flag = "view";
                         }
                     }
@@ -583,16 +597,40 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
             SessionHour = hours;
 
             SessionMinit = min;
-
+            totalHours.add(SessionHour);
+            totalMinit.add(SessionMinit);
             Log.i("======= Hours", " :: " + hours + ":" + min);
+
+            if(SessionMinit>0){
+                if(SessionMinit<10) {
+                    AppConfiguration.SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf("0" + SessionMinit + " hrs");
+                }else{AppConfiguration.SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf(SessionMinit + " hrs");
+
+                }
+            }else{
+                SessionDuration=String.valueOf(SessionHour)+" hrs";
+            }
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-
     }
-
+    public void averageHours(List<Integer> list) {
+        int sum = 0;
+        int n = list.size();
+        for (int i = 0; i < n; i++)
+            sum += list.get(i);
+        avgHoursvalue = (sum) / n;
+        Log.d("value", "" + avgHoursvalue);
+    }
+    public void averageMinit(List<Integer> list) {
+        int sum = 0;
+        int n = list.size();
+        for (int i = 0; i < n; i++)
+            sum += list.get(i);
+        avgMinitvalue = (sum) / n;
+        Log.d("value", "" + avgMinitvalue);
+    }
     public void SessionConfirmationDialog() {
         sessiondetailConfirmationDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.sessiondetail_confirmation_dialog, (ViewGroup) calendarBinding.getRoot(), false);
@@ -615,6 +653,9 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
         sessiondetailConfirmationDialogBinding.durationTxt.setText(AppConfiguration.SessionDuration);
         sessiondetailConfirmationDialogBinding.startDateTxt.setText(AppConfiguration.SessionDate);
         sessiondetailConfirmationDialogBinding.endDateTxt.setText(AppConfiguration.SessionDate);
+        sessiondetailConfirmationDialogBinding.priceTxt.setText("₹"+AppConfiguration.SessionPrice);
+        sessiondetailConfirmationDialogBinding.ratingBar.setRating(Float.parseFloat(AppConfiguration.SessionRating));
+        sessiondetailConfirmationDialogBinding.ratingUserTxt.setText(AppConfiguration.SessionUserRating);
 
         String[] spiltTime = AppConfiguration.SessionTime.split("\\-");
         AppConfiguration.UserName = familyNameStr;
@@ -639,6 +680,9 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                 sessiondetailConfirmationDialogBinding.sunTimeTxt.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.sundayBtn.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.sunTimeTxt.setText(spiltTime[0]);
+                sessiondetailConfirmationDialogBinding.sunHoursTxt.setText(AppConfiguration.SessionDuration);
+                sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
                 break;
             case "mon":
                 sessiondetailConfirmationDialogBinding.monTimeTxt.setEnabled(true);
@@ -646,6 +690,9 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                 sessiondetailConfirmationDialogBinding.monTimeTxt.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.mondayBtn.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.monTimeTxt.setText(spiltTime[0]);
+                sessiondetailConfirmationDialogBinding.monHoursTxt.setText(AppConfiguration.SessionDuration);
+                sessiondetailConfirmationDialogBinding.monHoursTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.monHoursTxt.setAlpha(1);
                 break;
             case "tue":
                 sessiondetailConfirmationDialogBinding.tuesTimeTxt.setEnabled(true);
@@ -653,6 +700,9 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                 sessiondetailConfirmationDialogBinding.tuesTimeTxt.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.tuesdayBtn.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.tuesTimeTxt.setText(spiltTime[0]);
+                sessiondetailConfirmationDialogBinding.tuesHoursTxt.setText(AppConfiguration.SessionDuration);
+                sessiondetailConfirmationDialogBinding.tuesHoursTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.tuesHoursTxt.setAlpha(1);
                 break;
             case "wed":
                 sessiondetailConfirmationDialogBinding.wedTimeTxt.setEnabled(true);
@@ -660,6 +710,9 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                 sessiondetailConfirmationDialogBinding.wedTimeTxt.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.wednesdayBtn.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.wedTimeTxt.setText(spiltTime[0]);
+                sessiondetailConfirmationDialogBinding.wedHoursTxt.setText(AppConfiguration.SessionDuration);
+                sessiondetailConfirmationDialogBinding.wedHoursTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.wedHoursTxt.setAlpha(1);
                 break;
             case "thu":
                 sessiondetailConfirmationDialogBinding.thurTimeTxt.setEnabled(true);
@@ -667,6 +720,9 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                 sessiondetailConfirmationDialogBinding.thurTimeTxt.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.thursdayBtn.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.thurTimeTxt.setText(spiltTime[0]);
+                sessiondetailConfirmationDialogBinding.thurHoursTxt.setText(AppConfiguration.SessionDuration);
+                sessiondetailConfirmationDialogBinding.thurHoursTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.thurHoursTxt.setAlpha(1);
                 break;
             case "fri":
                 sessiondetailConfirmationDialogBinding.friTimeTxt.setEnabled(true);
@@ -674,6 +730,9 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                 sessiondetailConfirmationDialogBinding.friTimeTxt.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.fridayBtn.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.friTimeTxt.setText(spiltTime[0]);
+                sessiondetailConfirmationDialogBinding.friHoursTxt.setText(AppConfiguration.SessionDuration);
+                sessiondetailConfirmationDialogBinding.friHoursTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.friHoursTxt.setAlpha(1);
                 break;
             case "sat":
                 sessiondetailConfirmationDialogBinding.satTimeTxt.setEnabled(true);
@@ -681,6 +740,9 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                 sessiondetailConfirmationDialogBinding.satTimeTxt.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.saturdayBtn.setAlpha(1);
                 sessiondetailConfirmationDialogBinding.satTimeTxt.setText(spiltTime[0]);
+                sessiondetailConfirmationDialogBinding.satHoursTxt.setText(AppConfiguration.SessionDuration);
+                sessiondetailConfirmationDialogBinding.satHoursTxt.setEnabled(true);
+                sessiondetailConfirmationDialogBinding.satHoursTxt.setAlpha(1);
                 break;
             default:
 

@@ -80,36 +80,41 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
     public void init() {
 //        getLocation();
 
-        searchByUserBinding.locationEdt.setText("Ahmedabad");
+
         if (!Utils.getPref(mContext, "RegisterUserName").equalsIgnoreCase("")) {
             if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Coach")) {
                 Intent iDash = new Intent(mContext, DashBoardActivity.class);
                 iDash.putExtra("frontLogin", "beforeLogin");
                 startActivity(iDash);
             }
-//            searchByUserBinding.logout.setVisibility(View.VISIBLE);
-            searchByUserBinding.loginTxt.setText(Html.fromHtml("Logged as " + "<u> <b>" + Utils.getPref(mContext, "RegisterUserName") + "</u></b>"));
+            String[] userName = Utils.getPref(mContext, "RegisterUserName").split("\\s+");
+            searchByUserBinding.loginTxt.setText(" Hi");
+            searchByUserBinding.regiTxt.setText(Html.fromHtml( "<u><b>" + " "+userName[0] + "</u></b>"));
+            searchByUserBinding.regiTxt.setPadding(5,0,0,0);
+//            searchByUserBinding.regiTxt.setEnabled(false);
+            searchByUserBinding.loginMiddleTxt.setVisibility(View.GONE);
+
 
         } else {
-            searchByUserBinding.loginTxt.setText(Html.fromHtml("<u><b>Login / Register<u></b>"));
-//            searchByUserBinding.logout.setVisibility(View.GONE);
+            searchByUserBinding.regiTxt.setVisibility(View.VISIBLE);
+            searchByUserBinding.loginMiddleTxt.setVisibility(View.VISIBLE);
+            searchByUserBinding.loginTxt.setText(Html.fromHtml("<u><b>Login<u></b>"));
+            searchByUserBinding.regiTxt.setText(Html.fromHtml("<u><b>Register<u></b>"));
         }
 
 
     }
 
     public void setListner() {
-//        callSessionListApi();
+        callSessionListApi();
         searchByUserBinding.letsStudyTxt.setOnClickListener(this);
         searchByUserBinding.searchClassEdt.setOnClickListener(this);
         searchByUserBinding.searchTxt.setOnClickListener(this);
         searchByUserBinding.letsPlayTxt.setOnClickListener(this);
         searchByUserBinding.loginTxt.setOnClickListener(this);
         searchByUserBinding.locationEdt.setOnClickListener(this);
-//        searchByUserBinding.locationEdt.setOnItemClickListener(this);
-//        searchByUserBinding.searchClassEdt.setOnItemClickListener(this);
         searchByUserBinding.searchClassEdt.setOnEditorActionListener(this);
-
+        searchByUserBinding.regiTxt.setOnClickListener(this);
 
         searchByUserBinding.locationEdt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -124,7 +129,6 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 sessionName = String.valueOf(adapterView.getItemAtPosition(i));
                 Log.d("session", sessionName);
-//                fillCity();
             }
         });
     }
@@ -167,8 +171,6 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.login_txt:
                 if (!Utils.getPref(mContext, "RegisterUserName").equalsIgnoreCase("")) {
-//                    PopupWindow popupwindow_obj = popupDisplay();
-//                    popupwindow_obj.showAsDropDown(searchByUserBinding.linearLogin, 250, 10);
                     menuDialog();
                 } else {
                     Intent inClassDetail2 = new Intent(mContext, LoginActivity.class);
@@ -179,6 +181,15 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.location_edt:
                 searchByUserBinding.locationEdt.showDropDown();
+                break;
+            case R.id.regi_txt:
+                if (!Utils.getPref(mContext, "RegisterUserName").equalsIgnoreCase("")) {
+                    menuDialog();
+                }else {
+                    Intent intent = new Intent(mContext, RegistrationActivity.class);
+                    intent.putExtra("frontLogin", "beforeLogin");
+                    startActivity(intent);
+                }
                 break;
         }
     }
@@ -199,7 +210,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
     public void callSessionListApi() {
         if (Utils.checkNetwork(mContext)) {
 
-            Utils.showDialog(mContext);
+//            Utils.showDialog(mContext);
             ApiHandler.getApiService().get_SessionList_Automplated(getSessionListDetail(), new retrofit.Callback<SessionDetailModel>() {
                 @Override
                 public void success(SessionDetailModel cityInfo, Response response) {
@@ -220,8 +231,9 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
                         Utils.dismissDialog();
                         if (cityInfo.getData().size() > 0) {
                             dataResponse = cityInfo;
+                            searchByUserBinding.locationEdt.setText("Ahmedabad");
                             fillCity();
-                            fillSessionList();
+//                            fillSessionList();
                         }
                     }
                 }
@@ -308,20 +320,14 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
             Log.d("sessionName", ACaps);
         }
         AppConfiguration.ClassLocation = selectedLocationStr;
-//        selectedDataModel.setLocation(selectedLocationStr);
-//        selectedDataModel.setSessionName(selectedSessionNameStr);
-//        selectedDataModel.setSearchBy("1");
-//        selectedDataModel.setWheretoComeStr("withOutOR");
-//        selectedDataModel.setSearchfront("searchfront");
-
         if (!selectedLocationStr.equalsIgnoreCase("")) {//!selectedSessionNameStr.equalsIgnoreCase("") &&
             Utils.setPref(mContext, "location", selectedLocationStr);
             Utils.setPref(mContext, "sessionName", selectedSessionNameStr);
             Intent inClassDetail = new Intent(mContext, ClassDeatilScreen.class);
             inClassDetail.putExtra("city", selectedLocationStr);
             inClassDetail.putExtra("sessionName", selectedSessionNameStr);
-            inClassDetail.putExtra("SearchBy", "1");
-            inClassDetail.putExtra("withOR", "withOutOR");
+//            inClassDetail.putExtra("SearchBy", "1");
+//            inClassDetail.putExtra("withOR", "withOutOR");
             inClassDetail.putExtra("searchfront", "searchfront");
             if (flag = true) {
                 inClassDetail.putExtra("SearchPlaystudy", SearchPlaystudy);
@@ -331,7 +337,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
 //            inClassDetail.putExtra("searchType", "study");
             startActivity(inClassDetail);
         } else {
-            Utils.ping(mContext, getResources().getString(R.string.blank_value));
+            Utils.ping(mContext, getResources().getString(R.string.location_validation));
         }
     }
 

@@ -762,7 +762,7 @@
                 android:layout_height="@dimen/_30sdp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/_6sdp"
-                android:layout_marginLeft="@dimen/_25sdp"
+                android:layout_marginLeft="@dimen/_100sdp"
                 android:layout_marginTop="@dimen/_5sdp"
                 android:background="@drawable/submit_shape"
                 android:gravity="center"
@@ -771,20 +771,6 @@
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/done_btn"
-                android:layout_width="@dimen/_120sdp"
-                android:layout_height="@dimen/_30sdp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/_6sdp"
-                android:layout_marginLeft="@dimen/_10sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:background="@drawable/submit_shape"
-                android:gravity="center"
-                android:text="Done"
-                android:textColor="@color/blue"
-                android:textSize="@dimen/_12sdp"
-                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 </layout>

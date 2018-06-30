@@ -10,6 +10,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.adms.classsafari.Activites.SessionName;
 import com.adms.classsafari.Interface.bookClick;
@@ -34,34 +38,34 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     List<sessionDataModel> arrayList;
     int SessionHour = 0;
     Integer SessionMinit = 0;
-    String searchByStr, locationStr, classNameStr,
+    String locationStr, classNameStr,
             address, boardStr, streamStr, standardStr,
-            searchTypeStr, wheretoComeStr, searchfront,
-            sessionType, firsttimesearch, RegionName;
+            searchfront,
+            firsttimesearch, SearchPlaystudy, RegionName;//searchTypeStr, wheretoComeStr,
     onViewClick onViewClick;
     bookClick bookClick;
     CardLayoutBinding cardLayoutBinding;
+    String hours, minit;
     private Context mContext;
     private ArrayList<String> SessionDetail;
     private ArrayList<String> SessionBookDetail;
-    String hours,minit;
-    public ClassDetailAdapter(Context mContext, List<sessionDataModel> arrayList, String searchByStr, String locationStr,
-                              String classNameStr, String boardStr, String streamStr, String standardStr, String searchTypeStr,
-                              String wheretoComeStr, String searchfront, String sessionType, String firsttimesearch, String regionName,
-                              bookClick bookClick, onViewClick onViewClick) {
+
+    public ClassDetailAdapter(Context mContext, List<sessionDataModel> arrayList, String locationStr,
+                              String classNameStr, String boardStr, String streamStr, String standardStr,
+                              String SearchPlaystudy, String searchfront, String firsttimesearch, String regionName,
+                              bookClick bookClick, onViewClick onViewClick) {// searchByStr,   String wheretoComeStr, String searchTypeStr,
         this.mContext = mContext;
         this.arrayList = arrayList;
-        this.searchByStr = searchByStr;
+
         this.locationStr = locationStr;
         this.classNameStr = classNameStr;
         this.boardStr = boardStr;
         this.streamStr = streamStr;
         this.standardStr = standardStr;
-        this.searchTypeStr = searchTypeStr;
-        this.wheretoComeStr = wheretoComeStr;
+
         this.searchfront = searchfront;
         this.onViewClick = onViewClick;
-        this.sessionType = sessionType;
+        this.SearchPlaystudy = SearchPlaystudy;
         this.firsttimesearch = firsttimesearch;
         this.RegionName = regionName;
         this.bookClick = bookClick;
@@ -81,7 +85,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
         if (arrayList.get(position).getTotalRatingUser().equalsIgnoreCase("0")) {
             cardLayoutBinding.ratingUserTxt.setVisibility(View.GONE);
         } else {
@@ -99,7 +103,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
         if (arrayList.get(position).getSessionAmount().equalsIgnoreCase("0.00")) {
             cardLayoutBinding.priceTxt.setText("Free");
         } else {
-            cardLayoutBinding.priceTxt.setText("₹ " + arrayList.get(position).getSessionAmount());
+            cardLayoutBinding.priceTxt.setText("₹" + arrayList.get(position).getSessionAmount());
         }
         cardLayoutBinding.startDateTxt.setText(arrayList.get(position).getStartDate());
         cardLayoutBinding.endDateTxt.setText(arrayList.get(position).getEndDate());
@@ -110,20 +114,19 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     Intent inSession = new Intent(mContext, SessionName.class);
                     inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
-                    inSession.putExtra("SearchBy", searchByStr);
                     inSession.putExtra("city", locationStr);
                     inSession.putExtra("sessionName", classNameStr);
                     inSession.putExtra("board", boardStr);
                     inSession.putExtra("stream", streamStr);
                     inSession.putExtra("standard", standardStr);
-                    inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
+                    inSession.putExtra("lessionName", "");//arrayList.get(position).getLessionTypeName()
                     inSession.putExtra("sessiondate", cardLayoutBinding.startDateTxt.getText().toString() + " To " + cardLayoutBinding.endDateTxt.getText().toString());
-                    inSession.putExtra("duration", cardLayoutBinding.durationTxt.getText().toString());
+//                    inSession.putExtra("duration", cardLayoutBinding.durationTxt.getText().toString());
                     inSession.putExtra("gender", arrayList.get(position).getGenderID());
-                    inSession.putExtra("searchType", searchTypeStr);
-                    inSession.putExtra("withOR", wheretoComeStr);
+//                    inSession.putExtra("searchType", searchTypeStr);
+//                    inSession.putExtra("withOR", wheretoComeStr);
+                    inSession.putExtra("SearchPlaystudy", SearchPlaystudy);
                     inSession.putExtra("searchfront", searchfront);
-                    inSession.putExtra("sessionType", sessionType);
                     inSession.putExtra("firsttimesearch", firsttimesearch);
                     inSession.putExtra("RegionName", RegionName);
                     mContext.startActivity(inSession);
@@ -136,18 +139,18 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
             public void onClick(View view) {
                 Intent inSession = new Intent(mContext, SessionName.class);
                 inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
-                inSession.putExtra("SearchBy", searchByStr);
                 inSession.putExtra("city", locationStr);
                 inSession.putExtra("sessionName", classNameStr);
                 inSession.putExtra("board", boardStr);
                 inSession.putExtra("stream", streamStr);
                 inSession.putExtra("standard", standardStr);
-                inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
+                inSession.putExtra("lessionName", "");//arrayList.get(position).getLessionTypeName()
                 inSession.putExtra("sessiondate", cardLayoutBinding.startDateTxt.getText().toString() + " To " + cardLayoutBinding.endDateTxt.getText().toString());
-                inSession.putExtra("duration", cardLayoutBinding.durationTxt.getText().toString());
+//                inSession.putExtra("duration", cardLayoutBinding.durationTxt.getText().toString());
                 inSession.putExtra("gender", arrayList.get(position).getGenderID());
-                inSession.putExtra("searchType", searchTypeStr);
-                inSession.putExtra("withOR", wheretoComeStr);
+//                inSession.putExtra("searchType", searchTypeStr);
+//                inSession.putExtra("withOR", wheretoComeStr);
+                inSession.putExtra("SearchPlaystudy", SearchPlaystudy);
                 inSession.putExtra("firsttimesearch", firsttimesearch);
                 inSession.putExtra("RegionName", RegionName);
                 mContext.startActivity(inSession);
@@ -244,22 +247,22 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
         cardLayoutBinding.tutorNameTxt.setText(arrayList.get(position).getName());//"Sports " + "/" +
 //        }
         //String hours,minit;
-        if (SessionHour < 10) {
-            hours= "0"+SessionHour;
-        }else{
-            hours= String.valueOf(SessionHour);
-        }
-        if(SessionMinit<10){
-            minit="0"+SessionMinit;
-        }else{
-            minit=String.valueOf(SessionMinit);
-        }
-        if(minit.equalsIgnoreCase(("00"))) {
-            arrayList.get(position).setDuration(hours + " hr ");//+ " min"
-        }else{
-            arrayList.get(position).setDuration(hours + " hr " + minit + " min");//+ " min"
-        }
-        cardLayoutBinding.durationTxt.setText(arrayList.get(position).getDuration());
+//        if (SessionHour < 10) {
+//            hours = "0" + SessionHour;
+//        } else {
+//            hours = String.valueOf(SessionHour);
+//        }
+//        if (SessionMinit < 10) {
+//            minit = "0" + SessionMinit;
+//        } else {
+//            minit = String.valueOf(SessionMinit);
+//        }
+//        if (minit.equalsIgnoreCase(("00"))) {
+//            arrayList.get(position).setDuration(hours + " hr ");//+ " min"
+//        } else {
+//            arrayList.get(position).setDuration(hours + " hr " + minit + " min");//+ " min"
+//        }
+//        cardLayoutBinding.durationTxt.setText(arrayList.get(position).getDuration());
         cardLayoutBinding.locationTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -284,7 +287,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
 
     @Override
     public int getItemViewType(int position) {
-        return position;
+        return arrayList.size();
     }
 
     public void calculateHours(String time1, String time2) {
@@ -321,6 +324,12 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
+        Button book_session_btn,sunday_btn,saturday_btn,friday_btn,thursday_btn,wednesday_btn,tuesday_btn,monday_btn;
+        TextView sun_hours_txt, sat_hours_txt, fri_hours_txt, thur_hours_txt, wed_hours_txt, tues_hours_txt, mon_hours_txt;
+        TextView sun_time_txt, sat_time_txt, fri_time_txt, thur_time_txt, wed_time_txt, tues_time_txt, mon_time_txt,
+                price_txt,end_date_txt,start_date_txt,location_txt,tutor_name_txt,rating_user_txt,session_name_txt;
+        RatingBar rating_bar;
+        LinearLayout linear_click;
 
         public MyViewHolder(View view) {
             super(view);

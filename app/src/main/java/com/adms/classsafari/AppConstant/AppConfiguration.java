@@ -6,8 +6,8 @@ package com.adms.classsafari.AppConstant;
 
 public class AppConfiguration {
 
-    public static final String Mode="LIVE";
-//    public static final String Mode="TEST";
+//    public static final String Mode="LIVE";
+    public static final String Mode="TEST";
 
 
 
@@ -28,6 +28,8 @@ public class AppConfiguration {
     public static String ClassLocation;
     public static String SessionDate;
     public static String RegionName;
+    public static String SessionRating;
+    public static String SessionUserRating;
 
 
     //ClassSafari String
@@ -48,7 +50,4 @@ public class AppConfiguration {
             + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
             + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])){1}|"
             + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$";
-
-
-
 }

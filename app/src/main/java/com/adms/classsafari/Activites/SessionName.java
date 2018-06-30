@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
+import android.text.Html;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
@@ -62,16 +63,16 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
     String ratinguserStr,sessionratingcommentStr="";
     float rating=0;
 
-    String sessionIDStr, searchByStr, locationStr, classNameStr, genderStr, sessionDateStr, durationStr,
-            boardStr, standardStr, streamStr, searchTypeStr, subjectStr,wheretoComeStr, sessionId,
+    String sessionIDStr, locationStr, classNameStr, genderStr, sessionDateStr, durationStr,
+            boardStr, standardStr, streamStr,  subjectStr, sessionId,
             commentStr="", ratingValueStr, searchfront,familysessionfeesStr, familysessionnameStr,
-            familylocationStr, familysessionStudentStr, sessionType,firsttimesearch,RegionName;
+            familylocationStr, familysessionStudentStr,firsttimesearch,RegionName;
 
     ArrayList<String> purchaseSessionIDArray;
     SessionDetailModel dataResponse, dataResponseRating;
 
     //Use for Menu Dialog
-    String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr;
+    String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr,SearchPlaystudy;
     Dialog menuDialog, changeDialog;
     Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily;
     TextView userNameTxt;
@@ -84,7 +85,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         mContext = SessionName.this;
         subjectStr = getIntent().getStringExtra("lessionName");
         sessionIDStr = getIntent().getStringExtra("sessionID");
-        searchByStr = getIntent().getStringExtra("SearchBy");
+//        searchByStr = getIntent().getStringExtra("SearchBy");
         locationStr = getIntent().getStringExtra("city");
         classNameStr = getIntent().getStringExtra("sessionName");
         sessionDateStr = getIntent().getStringExtra("sessiondate");
@@ -92,13 +93,13 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         standardStr = getIntent().getStringExtra("standard");
         streamStr = getIntent().getStringExtra("stream");
         boardStr = getIntent().getStringExtra("board");
-        searchTypeStr = getIntent().getStringExtra("searchType");
+//        searchTypeStr = getIntent().getStringExtra("searchType");
         genderStr = getIntent().getStringExtra("gender");
-        wheretoComeStr = getIntent().getStringExtra("withOR");
+//        wheretoComeStr = getIntent().getStringExtra("withOR");
         searchfront = getIntent().getStringExtra("searchfront");
-        sessionType = getIntent().getStringExtra("sessionType");
         firsttimesearch = getIntent().getStringExtra("firsttimesearch");
         RegionName=getIntent().getStringExtra("RegionName");
+        SearchPlaystudy=getIntent().getStringExtra("SearchPlaystudy");
         init();
         setListner();
     }
@@ -133,30 +134,29 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                                 .setMessage("You are not login,So Please Login.")
                                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
-                                        setDialogData();
+//                                        setDialogData();
                                         Intent intentLogin = new Intent(mContext, LoginActivity.class);
                                         intentLogin.putExtra("frontLogin", "afterLogin");
                                         intentLogin.putExtra("sessionID", sessionIDStr);
-                                        intentLogin.putExtra("SearchBy", searchByStr);
+//                                        intentLogin.putExtra("SearchBy", searchByStr);
                                         intentLogin.putExtra("board", boardStr);
                                         intentLogin.putExtra("stream", streamStr);
                                         intentLogin.putExtra("standard", standardStr);
                                         intentLogin.putExtra("city", locationStr);
                                         intentLogin.putExtra("sessionName", classNameStr);
-                                        intentLogin.putExtra("searchType", searchTypeStr);
                                         intentLogin.putExtra("lessionName", subjectStr);
                                         intentLogin.putExtra("gender", genderStr);
-                                        intentLogin.putExtra("withOR", wheretoComeStr);
+//                                        intentLogin.putExtra("withOR", wheretoComeStr);
                                         intentLogin.putExtra("ratingLogin", "false");
-                                        intentLogin.putExtra("location", familylocationStr);
+//                                        intentLogin.putExtra("location", familylocationStr);
                                         intentLogin.putExtra("searchfront", searchfront);
-                                        intentLogin.putExtra("sessionType", sessionType);
                                         intentLogin.putExtra("firsttimesearch", firsttimesearch);
                                         intentLogin.putExtra("duration", durationStr);
                                         intentLogin.putExtra("sessiondate", sessionDateStr);
-                                        intentLogin.putExtra("sessionStudent", familysessionStudentStr);
+//                                        intentLogin.putExtra("sessionStudent", familysessionStudentStr);
                                         intentLogin.putExtra("RegionName",RegionName);
                                         intentLogin.putExtra("back","SessionName");
+                                        intentLogin.putExtra("SearchPlaystudy",SearchPlaystudy);
                                         startActivity(intentLogin);
                                         finish();
                                     }
@@ -170,52 +170,49 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                                 .setIcon(R.drawable.safari)
                                 .show();
                     } else {
-//                        ConformSessionDialog();
-                        setDialogData();
+//                        setDialogData();
                         Intent intent = new Intent(mContext, FamilyListActivity.class);
                         intent.putExtra("back","SessionName");
                         intent.putExtra("sessionID", sessionIDStr);
-                        intent.putExtra("duration", durationStr);
-                        intent.putExtra("sessiondate", sessionDateStr);
-                        intent.putExtra("sessionName", familysessionnameStr);
-                        intent.putExtra("location", familylocationStr);
-                        intent.putExtra("sessionfees", familysessionfeesStr);
-                        intent.putExtra("sessionStudent", familysessionStudentStr);
+                        intent.putExtra("SearchPlaystudy",SearchPlaystudy);
+//                        intent.putExtra("duration", durationStr);
+//                        intent.putExtra("sessiondate", sessionDateStr);
+                        intent.putExtra("sessionName", classNameStr);
+//                        intent.putExtra("location", familylocationStr);
+//                        intent.putExtra("sessionfees", familysessionfeesStr);
+//                        intent.putExtra("sessionStudent", familysessionStudentStr);
                         intent.putExtra("city", locationStr);
-                        intent.putExtra("SearchBy", searchByStr);
+//                        intent.putExtra("SearchBy", searchByStr);
                         intent.putExtra("board", boardStr);
                         intent.putExtra("stream", streamStr);
                         intent.putExtra("standard", standardStr);
-                        intent.putExtra("searchType", searchTypeStr);
                         intent.putExtra("lessionName", subjectStr);
-                        intent.putExtra("gender", genderStr);
-                        intent.putExtra("withOR", wheretoComeStr);
+//                        intent.putExtra("gender", genderStr);
+//                        intent.putExtra("withOR", wheretoComeStr);
                         intent.putExtra("froncontanct", "false");
                         intent.putExtra("searchfront", searchfront);
-                        intent.putExtra("sessionType", sessionType);
                         intent.putExtra("firsttimesearch", firsttimesearch);
-                        intent.putExtra("RegionName",RegionName);
+//                        intent.putExtra("RegionName",RegionName);
                         startActivity(intent);
                     }
                 break;
             case R.id.back:
                 Intent inback = new Intent(mContext, ClassDeatilScreen.class);
-                inback.putExtra("SearchBy", searchByStr);
+//                inback.putExtra("SearchBy", searchByStr);
                 inback.putExtra("city", locationStr);
                 inback.putExtra("sessionName", classNameStr);
                 inback.putExtra("board", boardStr);
                 inback.putExtra("stream", streamStr);
                 inback.putExtra("standard", standardStr);
-                inback.putExtra("searchType", searchTypeStr);
                 inback.putExtra("lessionName", subjectStr);
                 inback.putExtra("gender", genderStr);
-                inback.putExtra("withOR", wheretoComeStr);
+//                inback.putExtra("withOR", wheretoComeStr);
                 inback.putExtra("city", locationStr);
                 inback.putExtra("sessionName", classNameStr);
                 inback.putExtra("searchfront", searchfront);
-                inback.putExtra("sessionType", sessionType);
                 inback.putExtra("firsttimesearch", firsttimesearch);
                 inback.putExtra("RegionName",RegionName);
+                inback.putExtra("SearchPlaystudy",SearchPlaystudy);
                 startActivity(inback);
                 break;
             case R.id.menu:
@@ -230,24 +227,22 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         super.onBackPressed();
 
         Intent inback = new Intent(mContext, ClassDeatilScreen.class);
-        inback.putExtra("SearchBy", searchByStr);
+//        inback.putExtra("SearchBy", searchByStr);
         inback.putExtra("city", locationStr);
         inback.putExtra("sessionName", classNameStr);
         inback.putExtra("board", boardStr);
         inback.putExtra("stream", streamStr);
         inback.putExtra("standard", standardStr);
-        inback.putExtra("searchType", searchTypeStr);
         inback.putExtra("lessionName", subjectStr);
         inback.putExtra("gender", genderStr);
-        inback.putExtra("withOR", wheretoComeStr);
+//        inback.putExtra("withOR", wheretoComeStr);
         inback.putExtra("city", locationStr);
         inback.putExtra("sessionName", classNameStr);
         inback.putExtra("city", locationStr);
         inback.putExtra("searchfront", searchfront);
-        inback.putExtra("sessionName", classNameStr);
-        inback.putExtra("sessionType", sessionType);
         inback.putExtra("firsttimesearch", firsttimesearch);
         inback.putExtra("RegionName",RegionName);
+        inback.putExtra("SearchPlaystudy",SearchPlaystudy);
         inback.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(inback);
     }
@@ -385,10 +380,10 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                 dataResponse.getData().get(i).setSessionAmount("Free");
             }
             if (dataResponse.getData().get(i).getSessionAmount().equalsIgnoreCase("Free")) {
-                sessionNameBinding.rupesSymbol.setVisibility(View.GONE);
+                sessionNameBinding.rupesSymbol.setText("");
                 sessionNameBinding.priceTxt.setText(dataResponse.getData().get(i).getSessionAmount());
             } else {
-                sessionNameBinding.rupesSymbol.setVisibility(View.VISIBLE);
+                sessionNameBinding.rupesSymbol.setText(Html.fromHtml("<b>"+"₹"+"</b>"));
                 sessionNameBinding.priceTxt.setText(dataResponse.getData().get(i).getSessionAmount());//0.07F
             }
             AppConfiguration.classSessionName = dataResponse.getData().get(i).getSessionName();
@@ -428,19 +423,17 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                                     Intent intentLogin = new Intent(mContext, LoginActivity.class);
                                     intentLogin.putExtra("frontLogin", "afterLogin");
                                     intentLogin.putExtra("sessionID", sessionIDStr);
-                                    intentLogin.putExtra("SearchBy", searchByStr);
+//                                    intentLogin.putExtra("SearchBy", searchByStr);
                                     intentLogin.putExtra("board", boardStr);
                                     intentLogin.putExtra("stream", streamStr);
                                     intentLogin.putExtra("standard", standardStr);
                                     intentLogin.putExtra("city", locationStr);
                                     intentLogin.putExtra("sessionName", classNameStr);
-                                    intentLogin.putExtra("searchType", searchTypeStr);
                                     intentLogin.putExtra("lessionName", subjectStr);
                                     intentLogin.putExtra("gender", genderStr);
-                                    intentLogin.putExtra("withOR", wheretoComeStr);
+//                                    intentLogin.putExtra("withOR", wheretoComeStr);
                                     intentLogin.putExtra("ratingLogin", "ratingLoginSession");
                                     intentLogin.putExtra("searchfront", searchfront);
-                                    intentLogin.putExtra("sessionType", sessionType);
                                     intentLogin.putExtra("sessionStudent", familysessionStudentStr);
                                     startActivity(intentLogin);
                                     finish();
@@ -463,21 +456,6 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         sessionNameBinding.sessionListRecView.setAdapter(sessionDetailAdapter);
 
 
-    }
-
-    public void setDialogData() {
-
-        for (int i = 0; i < dataResponse.getData().size(); i++) {
-            familysessionfeesStr = dataResponse.getData().get(i).getSessionAmount();
-            familysessionnameStr = dataResponse.getData().get(i).getSessionName();
-            familylocationStr = dataResponse.getData().get(i).getAddressLine1()
-                    + ", " + dataResponse.getData().get(i).getRegionName()
-                    + ", " + dataResponse.getData().get(i).getAddressCity()
-                    + ", " + dataResponse.getData().get(i).getAddressState()
-                    + "- " + dataResponse.getData().get(i).getAddressZipCode();
-            familysessionStudentStr = dataResponse.getData().get(i).getName();
-
-        }
     }
 
     public void addRating() {
