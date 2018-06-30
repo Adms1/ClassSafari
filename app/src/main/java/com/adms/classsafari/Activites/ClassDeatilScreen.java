@@ -15,8 +15,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
@@ -94,7 +92,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
     String subjectStr, boardStr = "", standardStr = "", streamStr = "",
             locationStr, classNameStr, genderStr = "", sessionId, commentStr, ratingValueStr, popularsessionID = "",
             populardurationStr = "", populargenderStr = "", popluarsessiondateStr = "", firsttimesearch, RegionName = "", SearchPlaystudy, dialogselectareaStr = "";
-    SessionDetailModel dataResponse, populardataresponse;
+    SessionDetailModel dataResponse, populardataresponse,areadataResponse;
     List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
     boolean arrayfirst = true;
 
@@ -113,6 +111,10 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
     Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily;
     TextView userNameTxt;
     ChangePasswordDialogBinding changePasswordDialogBinding;
+
+    //area
+    ArrayList<sessionDataModel> afterremoveduplicate;
+    ArrayList<sessionDataModel> beforeremoveduplicate;
 
     @Override
 
@@ -169,61 +171,62 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         binding.addBtn.setOnClickListener(this);
         binding.menu.setOnClickListener(this);
 //        binding.multiautocompe.setOnClickListener(this);
-        binding.multiautocompe.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int count) {
-                Log.d("valueOf OnTextChange", "" + charSequence + i + i1);
-                if (charSequence.length() == 0) {
-//                    binding.inforTxt.setVisibility(View.VISIBLE);
-                    if (dataResponse.getSuccess().equalsIgnoreCase("True")) {
-                        if (dataResponse.getData().size() >= 0) {
-                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-                                if (arrayObj.getAddressCity().trim().toLowerCase().contains(locationStr.trim().toLowerCase()) &&
-                                        arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-                                    filterFinalArray.add(arrayObj);
-                                }
-                            }
-                            fillData(filterFinalArray);
-                        }
-                    } else {
-                        Utils.ping(mContext, "Location not found.");
-                    }
-                    arrayfirst = true;
-
-                } else {
-                    if (dataResponse.getSuccess().equalsIgnoreCase("True")) {
-                        if (dataResponse.getData().size() >= 0) {
-                            String[] spilt = charSequence.toString().trim().split("\\,");
-                            Log.d("spiltOnText", "" + spilt.length);
-                            for (int k = 0; k < spilt.length; k++) {
-                                List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-                                for (sessionDataModel arrayObj : dataResponse.getData()) {
-                                    if (arrayObj.getAddressCity().trim().toLowerCase().contains(locationStr.trim().toLowerCase()) &&
-                                            arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-                                        if (arrayObj.getRegionName().trim().toLowerCase().contains(spilt[k].trim().toLowerCase())) {
-                                            filterFinalArray.add(arrayObj);
-                                        }
-                                    }
-                                }
-                                fillData(filterFinalArray);
-                            }
-                        }
-                    } else {
-                        Utils.ping(mContext, "Location not found.");
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
+//        binding.multiautocompe.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int count) {
+//                Log.d("valueOf OnTextChange", "" + charSequence + i + i1);
+//                if (charSequence.length() == 0) {
+////                    binding.inforTxt.setVisibility(View.VISIBLE);
+//                    if (dataResponse.getSuccess().equalsIgnoreCase("True")) {
+//                        if (dataResponse.getData().size() >= 0) {
+//                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+//                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+//                                if (arrayObj.getAddressCity().trim().toLowerCase().contains(locationStr.trim().toLowerCase()) &&
+//                                        arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+//                                    filterFinalArray.add(arrayObj);
+//                                }
+//                            }
+//                            fillData(filterFinalArray);
+//                        }
+//                    } else {
+//                        Utils.ping(mContext, "Location not found.");
+//                    }
+//                    arrayfirst = true;
+//
+//                } else {
+//                    if (dataResponse.getSuccess().equalsIgnoreCase("True")) {
+//                        if (dataResponse.getData().size() >= 0) {
+//                            String[] spilt = charSequence.toString().trim().split("\\,");
+//                            Log.d("spiltOnText", "" + spilt.length);
+//                            for (int k = 0; k < spilt.length; k++) {
+//                                List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+//                                for (sessionDataModel arrayObj : dataResponse.getData()) {
+//                                    if (arrayObj.getAddressCity().trim().toLowerCase().contains(locationStr.trim().toLowerCase()) &&
+//                                            arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+//                                        if (arrayObj.getRegionName().trim().toLowerCase().contains(spilt[k].trim().toLowerCase())) {
+//                                            filterFinalArray.add(arrayObj);
+//                                        }
+//                                    }
+//                                }
+//                                fillData(filterFinalArray);
+//                            }
+//                        }
+//                    } else {
+//                        Utils.ping(mContext, "Location not found.");
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//            }
+//        });
+        ///////////////////////
 //
 //        binding.multiautocompe.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
@@ -783,7 +786,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                 String [] split=dialogselectareaStr.split("\\,");
                 for (int i=0;i<split.length;i++){
                     if(dataResponse.getData().get(j).getRegionName().equalsIgnoreCase(split[i])) {
-                      dataResponse.getData().get(j).setCheckStatus("1");
+                        dataResponse.getData().get(j).setCheckStatus("1");
                     }
                     else{
                         dataResponse.getData().get(j).setCheckStatus("0");
@@ -798,6 +801,88 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         filterBinding.displayAreaList.setAdapter(searchAreaAdapter);
 
         filterDialog.show();
+
+//                dialogselectareaStr = "";
+//                dialogselectarea = new ArrayList<>();
+//
+//                for (int i = 0; i < searchAreaAdapter.getCount(); i++) {
+//                    sessionDataModel sessionDetailModel = (sessionDataModel) searchAreaAdapter.getItem(i);
+//                    String status = sessionDetailModel.getData().get(i).getCheckStatus();
+//                    if (status.equalsIgnoreCase("1")) {
+//                        dialogselectarea.add(sessionDetailModel.getData().get(i).getCheckValue());
+//                    }
+//                }
+//                Log.d("Area", dialogselectarea.toString());
+//
+////
+////                for (int i = 0; i < filterBinding.displayAreaList.getChildCount(); i++) {
+////                    View viewGroup=(View)filterBinding.displayAreaList.getChildAt(i);
+////                    CheckBox chk=(CheckBox)viewGroup.findViewById(R.id.area_chk);
+////                    if (chk.isChecked()) {
+////                        dialogselectarea.add(chk.getText().toString());
+////                    }
+////                }
+//                for (String s : dialogselectarea) {
+//                    if (!s.equals("")) {
+//                        dialogselectareaStr = dialogselectareaStr + " , " + s;
+//                    }
+//
+//                }
+//                if (!dialogselectareaStr.equalsIgnoreCase("")) {
+//                    dialogselectareaStr = dialogselectareaStr.substring(1, dialogselectareaStr.length());
+//                    Log.d("dialogselectareaStr ", dialogselectareaStr);
+//                    binding.multiautocompe.setText(dialogselectareaStr);
+//                    binding.multiautocompe.setEnabled(false);
+//
+//                    List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+//                    for (int i = 0; i < dialogselectarea.size(); i++) {
+//                        for (int j = 0; j < areadataResponse.getData().size(); j++) {
+//                            if (areadataResponse.getData().get(j).getRegionName().trim().toLowerCase().contains(dialogselectarea.get(i).trim().toLowerCase())) {
+//                                filterFinalArray.add(areadataResponse.getData().get(j));
+//                            }
+//                        }
+//                    }
+//
+//                    fillData(filterFinalArray);
+//                } else {
+//                    binding.multiautocompe.setHint(getResources().getString(R.string.location_add));
+//                    binding.multiautocompe.setText("");
+//                    List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+//                    for (sessionDataModel arrayObj : areadataResponse.getData()) {
+//                        if (arrayObj.getAddressCity().trim().toLowerCase().contains(locationStr.trim().toLowerCase())) {
+//                            filterFinalArray.add(arrayObj);
+//                        }
+//                    }
+//                    fillData(filterFinalArray);
+//                }
+//                filterDialog.dismiss();
+//            }
+//        });
+//
+//
+//            if (dialogselectareaStr.equalsIgnoreCase("")) {
+//                for (int i=0;i<areadataResponse.getData().size();i++){
+//                    areadataResponse.getData().get(i).setCheckStatus("0");
+//                }
+//            } else {
+//                String[] split = dialogselectareaStr.split("\\,");
+//                for (int i = 0; i < split.length; i++) {
+//                    for (int j = 0; j < areadataResponse.getData().size(); j++) {
+//                        if (areadataResponse.getData().get(j).getRegionName().trim().equalsIgnoreCase(split[i].trim())) {
+//                            areadataResponse.getData().get(j).setCheckStatus("1");
+//                        } else {
+//                            areadataResponse.getData().get(j).setCheckStatus("0");
+//                        }
+//                    }
+//                }
+//            }
+//        searchAreaAdapter = new SearchAreaAdapter(mContext, areadataResponse, AreaName,dialogselectareaStr);
+////        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
+////        filterBinding.displayAreaList.setLayoutManager(mLayoutManager);
+////        filterBinding.displayAreaList.setItemAnimator(new DefaultItemAnimator());
+//        filterBinding.displayAreaList.setAdapter(searchAreaAdapter);
+//
+//        filterDialog.show();
     }
 
     //    //Use for SessionList
@@ -827,6 +912,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                         Utils.dismissDialog();
                         if (sessionInfo.getData().size() >= 0) {
                             dataResponse = sessionInfo;
+                            areadataResponse=sessionInfo;
                             fillArea();
                             List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                             for (sessionDataModel arrayObj : dataResponse.getData()) {

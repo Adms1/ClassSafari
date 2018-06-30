@@ -41,8 +41,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:fontFamily">DEFAULT</item>
     </style>
-
     <style name="AutoComplete" parent="Widget.AppCompat.AutoCompleteTextView">
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorHint">@color/white</item>

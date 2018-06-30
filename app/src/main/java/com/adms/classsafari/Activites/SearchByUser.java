@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -79,8 +80,15 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
 
     public void init() {
 //        getLocation();
+        Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
 
-
+        searchByUserBinding.loginTxt.setTypeface(custom_font);
+        searchByUserBinding.regiTxt.setTypeface(custom_font);
+        searchByUserBinding.searchClassEdt.setTypeface(custom_font);
+        searchByUserBinding.locationEdt.setTypeface(custom_font);
+        searchByUserBinding.letsPlayTxt.setTypeface(custom_font);
+        searchByUserBinding.letsStudyTxt.setTypeface(custom_font);
+        searchByUserBinding.orTxt.setTypeface(custom_font);
         if (!Utils.getPref(mContext, "RegisterUserName").equalsIgnoreCase("")) {
             if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Coach")) {
                 Intent iDash = new Intent(mContext, DashBoardActivity.class);
@@ -89,9 +97,10 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
             }
             String[] userName = Utils.getPref(mContext, "RegisterUserName").split("\\s+");
             searchByUserBinding.loginTxt.setText(" Hi");
-            searchByUserBinding.regiTxt.setText(Html.fromHtml( "<u><b>" + " "+userName[0] + "</u></b>"));
-            searchByUserBinding.regiTxt.setPadding(5,0,0,0);
+            searchByUserBinding.regiTxt.setText(Html.fromHtml("<u><b>" + " " + userName[0] + "</u></b>"));
+            searchByUserBinding.regiTxt.setPadding(5, 0, 0, 0);
 //            searchByUserBinding.regiTxt.setEnabled(false);
+            searchByUserBinding.regiTxt.setTextColor(getResources().getColor(R.color.gray));
             searchByUserBinding.loginMiddleTxt.setVisibility(View.GONE);
 
 
@@ -185,7 +194,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
             case R.id.regi_txt:
                 if (!Utils.getPref(mContext, "RegisterUserName").equalsIgnoreCase("")) {
                     menuDialog();
-                }else {
+                } else {
                     Intent intent = new Intent(mContext, RegistrationActivity.class);
                     intent.putExtra("frontLogin", "beforeLogin");
                     startActivity(intent);

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
@@ -87,6 +88,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
             checkUnmPwd();
         }
+
+        Typeface custom_font = Typeface.createFromAsset(getAssets(),  "font/TitilliumWeb-Regular.ttf");
+
+        loginScreenBinding.emailEdt.setTypeface(custom_font);
+        loginScreenBinding.passwordEdt.setTypeface(custom_font);
         setListner();
     }
 

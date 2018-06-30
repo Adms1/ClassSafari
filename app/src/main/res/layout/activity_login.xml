@@ -13,7 +13,7 @@
         <ImageView
             android:id="@+id/app_logo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/_120sdp"
             android:layout_marginTop="@dimen/_40sdp"
             android:src="@drawable/s_c_logo" />
 
@@ -83,7 +83,7 @@
                 android:layout_height="@dimen/_35sdp"
                 android:layout_marginLeft="@dimen/_15sdp"
                 android:layout_marginRight="@dimen/_15sdp"
-                android:layout_marginTop="@dimen/_95sdp"
+                android:layout_marginTop="@dimen/_60sdp"
                 android:background="@drawable/edit_text_line"
                 android:drawableRight="@drawable/email"
                 android:hint="@string/user_id"
@@ -129,21 +129,21 @@
                 android:layout_marginTop="@dimen/_5sdp"
                 android:layout_marginLeft="@dimen/_20sdp"
                 android:text="@string/forgot_pass"
-                android:textColor="@color/white"
+                android:textColor="@color/gray1"
                 android:textSize="@dimen/_13sdp"
                 android:textStyle="bold" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_25sdp"
+                android:layout_marginTop="@dimen/_20sdp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/register_str"
-                    android:textColor="@color/white"
+                    android:textColor="@color/blue"
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_35sdp"
                     android:gravity="center"
@@ -156,7 +156,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_2sdp"
                     android:text="@string/register"
-                    android:textColor="@color/white"
+                    android:textColor="@color/blue"
                     android:textSize="@dimen/_14sdp"
                     android:textStyle="bold" />
             </LinearLayout>

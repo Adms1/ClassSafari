@@ -10,10 +10,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RatingBar;
-import android.widget.TextView;
 
 import com.adms.classsafari.Activites.SessionName;
 import com.adms.classsafari.Interface.bookClick;
@@ -27,7 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by admsandroid on 3/5/2018.
@@ -38,37 +33,36 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     List<sessionDataModel> arrayList;
     int SessionHour = 0;
     Integer SessionMinit = 0;
-    String locationStr, classNameStr,
+    String searchByStr, locationStr, classNameStr,
             address, boardStr, streamStr, standardStr,
-            searchfront,
-            firsttimesearch, SearchPlaystudy, RegionName;//searchTypeStr, wheretoComeStr,
+            searchTypeStr, wheretoComeStr, searchfront,
+            sessionType, firsttimesearch;
     onViewClick onViewClick;
     bookClick bookClick;
     CardLayoutBinding cardLayoutBinding;
-    String hours, minit;
+
     private Context mContext;
     private ArrayList<String> SessionDetail;
     private ArrayList<String> SessionBookDetail;
 
-    public ClassDetailAdapter(Context mContext, List<sessionDataModel> arrayList, String locationStr,
-                              String classNameStr, String boardStr, String streamStr, String standardStr,
-                              String SearchPlaystudy, String searchfront, String firsttimesearch, String regionName,
-                              bookClick bookClick, onViewClick onViewClick) {// searchByStr,   String wheretoComeStr, String searchTypeStr,
+    public ClassDetailAdapter(Context mContext, List<sessionDataModel> arrayList, String searchByStr, String locationStr,
+                              String classNameStr, String boardStr, String streamStr, String standardStr, String searchTypeStr,
+                              String wheretoComeStr, String searchfront, bookClick bookClick, onViewClick onViewClick) {
         this.mContext = mContext;
         this.arrayList = arrayList;
-
+        this.searchByStr = searchByStr;
         this.locationStr = locationStr;
         this.classNameStr = classNameStr;
         this.boardStr = boardStr;
         this.streamStr = streamStr;
         this.standardStr = standardStr;
-
+        this.searchTypeStr = searchTypeStr;
+        this.wheretoComeStr = wheretoComeStr;
         this.searchfront = searchfront;
         this.onViewClick = onViewClick;
-        this.SearchPlaystudy = SearchPlaystudy;
+        this.sessionType = sessionType;
         this.firsttimesearch = firsttimesearch;
-        this.RegionName = regionName;
-        this.bookClick = bookClick;
+        this.bookClick=bookClick;
     }
 
     @Override
@@ -85,14 +79,13 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         if (arrayList.get(position).getTotalRatingUser().equalsIgnoreCase("0")) {
             cardLayoutBinding.ratingUserTxt.setVisibility(View.GONE);
         } else {
             cardLayoutBinding.ratingUserTxt.setVisibility(View.VISIBLE);
             cardLayoutBinding.ratingUserTxt.setText("(" + arrayList.get(position).getTotalRatingUser() + ")");
         }
-
         cardLayoutBinding.ratingBar.setRating(Float.parseFloat(arrayList.get(position).getRating()));
         address = arrayList.get(position).getAddressLine1() +
                 "," + arrayList.get(position).getRegionName() +
@@ -114,58 +107,67 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                     Intent inSession = new Intent(mContext, SessionName.class);
                     inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
+                    inSession.putExtra("SearchBy", searchByStr);
                     inSession.putExtra("city", locationStr);
                     inSession.putExtra("sessionName", classNameStr);
                     inSession.putExtra("board", boardStr);
                     inSession.putExtra("stream", streamStr);
                     inSession.putExtra("standard", standardStr);
-                    inSession.putExtra("lessionName", "");//arrayList.get(position).getLessionTypeName()
+                    inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
                     inSession.putExtra("sessiondate", cardLayoutBinding.startDateTxt.getText().toString() + " To " + cardLayoutBinding.endDateTxt.getText().toString());
 //                    inSession.putExtra("duration", cardLayoutBinding.durationTxt.getText().toString());
                     inSession.putExtra("gender", arrayList.get(position).getGenderID());
-//                    inSession.putExtra("searchType", searchTypeStr);
-//                    inSession.putExtra("withOR", wheretoComeStr);
-                    inSession.putExtra("SearchPlaystudy", SearchPlaystudy);
+                    inSession.putExtra("searchType", searchTypeStr);
+                    inSession.putExtra("withOR", wheretoComeStr);
                     inSession.putExtra("searchfront", searchfront);
+                    inSession.putExtra("sessionType", sessionType);
                     inSession.putExtra("firsttimesearch", firsttimesearch);
-                    inSession.putExtra("RegionName", RegionName);
                     mContext.startActivity(inSession);
                 }
                 return true;
             }
         });
+//        holder.linear_click.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent inSession = new Intent(mContext, SessionName.class);
+//                inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
+//                inSession.putExtra("SearchBy", searchByStr);
+//                inSession.putExtra("city", locationStr);
+//                inSession.putExtra("sessionName", classNameStr);
+//                inSession.putExtra("board", boardStr);
+//                inSession.putExtra("stream", streamStr);
+//                inSession.putExtra("standard", standardStr);
+//                inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
+//                inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() + " To " + holder.end_date_txt.getText().toString());
+//                inSession.putExtra("duration", holder.duration_txt.getText().toString());
+//                inSession.putExtra("gender", arrayList.get(position).getGenderID());
+//                inSession.putExtra("searchType", searchTypeStr);
+//                inSession.putExtra("withOR", wheretoComeStr);
+//                mContext.startActivity(inSession);
+//            }
+//        });
         cardLayoutBinding.sessionNameTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent inSession = new Intent(mContext, SessionName.class);
                 inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
+                inSession.putExtra("SearchBy", searchByStr);
                 inSession.putExtra("city", locationStr);
                 inSession.putExtra("sessionName", classNameStr);
                 inSession.putExtra("board", boardStr);
                 inSession.putExtra("stream", streamStr);
                 inSession.putExtra("standard", standardStr);
-                inSession.putExtra("lessionName", "");//arrayList.get(position).getLessionTypeName()
+                inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
                 inSession.putExtra("sessiondate", cardLayoutBinding.startDateTxt.getText().toString() + " To " + cardLayoutBinding.endDateTxt.getText().toString());
 //                inSession.putExtra("duration", cardLayoutBinding.durationTxt.getText().toString());
                 inSession.putExtra("gender", arrayList.get(position).getGenderID());
-//                inSession.putExtra("searchType", searchTypeStr);
-//                inSession.putExtra("withOR", wheretoComeStr);
-                inSession.putExtra("SearchPlaystudy", SearchPlaystudy);
+                inSession.putExtra("searchType", searchTypeStr);
+                inSession.putExtra("withOR", wheretoComeStr);
                 inSession.putExtra("firsttimesearch", firsttimesearch);
-                inSession.putExtra("RegionName", RegionName);
                 mContext.startActivity(inSession);
             }
         });
-        cardLayoutBinding.bookSessionBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SessionBookDetail = new ArrayList<>();
-                SessionBookDetail.add(arrayList.get(position).getSessionID());
-                bookClick.bookClick();
-            }
-        });
-
-
         cardLayoutBinding.ratingBar.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -175,6 +177,15 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                     onViewClick.getViewClick();
                 }
                 return true;
+            }
+        });
+
+       cardLayoutBinding.bookSessionBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+            public void onClick(View view) {
+                SessionBookDetail = new ArrayList<>();
+                SessionBookDetail.add(arrayList.get(position).getSessionID());
+                bookClick.bookClick();
             }
         });
         String[] spiltPipes = arrayList.get(position).getSchedule().split("\\|");
@@ -241,27 +252,13 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
 
             }
         }
-//        if (arrayList.get(position).getCoachTypeID().equalsIgnoreCase("1")) {
-//            cardLayoutBinding.tutorNameTxt.setText("Academic " + "/" + arrayList.get(position).getName());
-//        } else {
-        cardLayoutBinding.tutorNameTxt.setText(arrayList.get(position).getName());//"Sports " + "/" +
-//        }
-        //String hours,minit;
-//        if (SessionHour < 10) {
-//            hours = "0" + SessionHour;
-//        } else {
-//            hours = String.valueOf(SessionHour);
-//        }
-//        if (SessionMinit < 10) {
-//            minit = "0" + SessionMinit;
-//        } else {
-//            minit = String.valueOf(SessionMinit);
-//        }
-//        if (minit.equalsIgnoreCase(("00"))) {
-//            arrayList.get(position).setDuration(hours + " hr ");//+ " min"
-//        } else {
-//            arrayList.get(position).setDuration(hours + " hr " + minit + " min");//+ " min"
-//        }
+        if (arrayList.get(position).getCoachTypeID().equalsIgnoreCase("1")) {
+            cardLayoutBinding.tutorNameTxt.setText(arrayList.get(position).getName());
+        } else {
+            cardLayoutBinding.tutorNameTxt.setText(arrayList.get(position).getName());
+        }
+
+        arrayList.get(position).setDuration(SessionHour + " hr " + SessionMinit + " min");
 //        cardLayoutBinding.durationTxt.setText(arrayList.get(position).getDuration());
         cardLayoutBinding.locationTxt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -269,7 +266,6 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                 Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(address));
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
                 mapIntent.setPackage("com.google.android.apps.maps");
-
                 mContext.startActivity(mapIntent);
             }
         });
@@ -287,14 +283,14 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
 
     @Override
     public int getItemViewType(int position) {
-        return arrayList.size();
+        return position;
     }
 
     public void calculateHours(String time1, String time2) {
         Date date1, date2;
         int days, hours, min;
         String hourstr, minstr;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa", Locale.US);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
         try {
             date1 = simpleDateFormat.parse(time1);
             date2 = simpleDateFormat.parse(time2);
@@ -324,16 +320,554 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        Button book_session_btn,sunday_btn,saturday_btn,friday_btn,thursday_btn,wednesday_btn,tuesday_btn,monday_btn;
-        TextView sun_hours_txt, sat_hours_txt, fri_hours_txt, thur_hours_txt, wed_hours_txt, tues_hours_txt, mon_hours_txt;
-        TextView sun_time_txt, sat_time_txt, fri_time_txt, thur_time_txt, wed_time_txt, tues_time_txt, mon_time_txt,
-                price_txt,end_date_txt,start_date_txt,location_txt,tutor_name_txt,rating_user_txt,session_name_txt;
-        RatingBar rating_bar;
-        LinearLayout linear_click;
+//        public TextView session_name_txt, price_txt, start_date_txt, end_date_txt,
+//                mon_time_txt, tues_time_txt, wed_time_txt, thur_time_txt, fri_time_txt, sat_time_txt, sun_time_txt,
+//                location_txt, duration_txt, tutor_name_txt;
+//        public Button monday_btn, tuesday_btn, wednesday_btn, thursday_btn, friday_btn, saturday_btn, sunday_btn;
+//        public RatingBar rating_bar;
+//        public LinearLayout linear_click;
 
         public MyViewHolder(View view) {
             super(view);
+//            session_name_txt = (TextView) view.findViewById(R.id.session_name_txt);
+//            price_txt = (TextView) view.findViewById(R.id.price_txt);
+//            start_date_txt = (TextView) view.findViewById(R.id.start_date_txt);
+//            end_date_txt = (TextView) view.findViewById(R.id.end_date_txt);
+//
+//            mon_time_txt = (TextView) view.findViewById(R.id.mon_time_txt);
+//            tues_time_txt = (TextView) view.findViewById(R.id.tues_time_txt);
+//            wed_time_txt = (TextView) view.findViewById(R.id.wed_time_txt);
+//            thur_time_txt = (TextView) view.findViewById(R.id.thur_time_txt);
+//            fri_time_txt = (TextView) view.findViewById(R.id.fri_time_txt);
+//            sat_time_txt = (TextView) view.findViewById(R.id.sat_time_txt);
+//            sun_time_txt = (TextView) view.findViewById(R.id.sun_time_txt);
 
+
+//            location_txt = (TextView) view.findViewById(R.id.location_txt);
+//            duration_txt = (TextView) view.findViewById(R.id.duration_txt);
+//            tutor_name_txt = (TextView) view.findViewById(R.id.tutor_name_txt);
+//
+//            monday_btn = (Button) view.findViewById(R.id.monday_btn);
+//            tuesday_btn = (Button) view.findViewById(R.id.tuesday_btn);
+//            wednesday_btn = (Button) view.findViewById(R.id.wednesday_btn);
+//            thursday_btn = (Button) view.findViewById(R.id.thursday_btn);
+//            friday_btn = (Button) view.findViewById(R.id.friday_btn);
+//            saturday_btn = (Button) view.findViewById(R.id.saturday_btn);
+//            sunday_btn = (Button) view.findViewById(R.id.sunday_btn);
+//
+//            rating_bar = (RatingBar) view.findViewById(R.id.rating_bar);
+//
+//            linear_click = (LinearLayout) view.findViewById(R.id.linear_click);
         }
     }
 }
+
+//=======================================
+// holder.session_name_txt.setText(arrayList.get(position).getSessionName());
+//        if (arrayList.get(position).getSessionAmount().equalsIgnoreCase("0.00")) {
+//            holder.price_txt.setText("Free");
+//        } else {
+//            holder.price_txt.setText("₹ " + arrayList.get(position).getSessionAmount());
+//        }
+//        holder.start_date_txt.setText(arrayList.get(position).getStartDate());
+//        holder.end_date_txt.setText(arrayList.get(position).getEndDate());
+//        holder.location_txt.setText(arrayList.get(position).getRegionName());
+//        holder.linear_click.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+//                    Intent inSession = new Intent(mContext, SessionName.class);
+//                    inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
+//                    inSession.putExtra("SearchBy", searchByStr);
+//                    inSession.putExtra("city", locationStr);
+//                    inSession.putExtra("sessionName", classNameStr);
+//                    inSession.putExtra("board", boardStr);
+//                    inSession.putExtra("stream", streamStr);
+//                    inSession.putExtra("standard", standardStr);
+//                    inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
+//                    inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() + " To " + holder.end_date_txt.getText().toString());
+//                    inSession.putExtra("duration", holder.duration_txt.getText().toString());
+//                    inSession.putExtra("gender", arrayList.get(position).getGenderID());
+//                    inSession.putExtra("searchType", searchTypeStr);
+//                    inSession.putExtra("withOR", wheretoComeStr);
+//                    inSession.putExtra("searchfront", searchfront);
+//                    inSession.putExtra("sessionType", sessionType);
+//                    mContext.startActivity(inSession);
+//                }
+//                return true;
+//            }
+//        });
+////        holder.linear_click.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View view) {
+////                Intent inSession = new Intent(mContext, SessionName.class);
+////                inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
+////                inSession.putExtra("SearchBy", searchByStr);
+////                inSession.putExtra("city", locationStr);
+////                inSession.putExtra("sessionName", classNameStr);
+////                inSession.putExtra("board", boardStr);
+////                inSession.putExtra("stream", streamStr);
+////                inSession.putExtra("standard", standardStr);
+////                inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
+////                inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() + " To " + holder.end_date_txt.getText().toString());
+////                inSession.putExtra("duration", holder.duration_txt.getText().toString());
+////                inSession.putExtra("gender", arrayList.get(position).getGenderID());
+////                inSession.putExtra("searchType", searchTypeStr);
+////                inSession.putExtra("withOR", wheretoComeStr);
+////                mContext.startActivity(inSession);
+////            }
+////        });
+//        holder.session_name_txt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////                Intent inSession = new Intent(mContext, SessionName.class);
+////                inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
+////                inSession.putExtra("SearchBy", searchByStr);
+////                inSession.putExtra("city", locationStr);
+////                inSession.putExtra("sessionName", classNameStr);
+////                inSession.putExtra("board", boardStr);
+////                inSession.putExtra("stream", streamStr);
+////                inSession.putExtra("standard", standardStr);
+////                inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
+////                inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() + " To " + holder.end_date_txt.getText().toString());
+////                inSession.putExtra("duration", holder.duration_txt.getText().toString());
+////                inSession.putExtra("gender", arrayList.get(position).getGenderID());
+////                inSession.putExtra("searchType", searchTypeStr);
+////                inSession.putExtra("withOR", wheretoComeStr);
+////                mContext.startActivity(inSession);
+//            }
+//        });
+//        holder.rating_bar.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                SessionDetail = new ArrayList<>();
+//                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+//                    SessionDetail.add(arrayList.get(position).getSessionName() + "|" + arrayList.get(position).getSessionID());
+//                    onViewClick.getViewClick();
+//                }
+//                return true;
+//            }
+//        });
+//        String[] spiltPipes = arrayList.get(position).getSchedule().split("\\|");
+//        String[] spiltComma;
+//        String[] spiltDash;
+//        Log.d("spilt", "" + spiltPipes.toString());
+//        for (int i = 0; i < spiltPipes.length; i++) {
+//            spiltComma = spiltPipes[i].split("\\,");
+//            spiltDash = spiltComma[1].split("\\-");
+//            calculateHours(spiltDash[0], spiltDash[1]);
+//            arrayList.get(position).setDateTime(spiltDash[0]);
+//            Log.d("DateTime", spiltDash[0]);
+//            switch (spiltComma[0]) {
+//                case "sun":
+//                    holder.sun_time_txt.setEnabled(true);
+//                    holder.sunday_btn.setEnabled(true);
+//                    holder.sun_time_txt.setAlpha(1);
+//                    holder.sunday_btn.setAlpha(1);
+//                    holder.sun_time_txt.setText(arrayList.get(position).getDateTime());
+//                    break;
+//                case "mon":
+//                    holder.mon_time_txt.setEnabled(true);
+//                    holder.monday_btn.setEnabled(true);
+//                    holder.mon_time_txt.setAlpha(1);
+//                    holder.monday_btn.setAlpha(1);
+//                    holder.mon_time_txt.setText(arrayList.get(position).getDateTime());
+//                    break;
+//                case "tue":
+//                    holder.tues_time_txt.setEnabled(true);
+//                    holder.tuesday_btn.setEnabled(true);
+//                    holder.tues_time_txt.setAlpha(1);
+//                    holder.tuesday_btn.setAlpha(1);
+//                    holder.tues_time_txt.setText(arrayList.get(position).getDateTime());
+//                    break;
+//                case "wed":
+//                    holder.wed_time_txt.setEnabled(true);
+//                    holder.wednesday_btn.setEnabled(true);
+//                    holder.wed_time_txt.setAlpha(1);
+//                    holder.wednesday_btn.setAlpha(1);
+//                    holder.wed_time_txt.setText(arrayList.get(position).getDateTime());
+//                    break;
+//                case "thu":
+//                    holder.thur_time_txt.setEnabled(true);
+//                    holder.thursday_btn.setEnabled(true);
+//                    holder.thur_time_txt.setAlpha(1);
+//                    holder.thursday_btn.setAlpha(1);
+//                    holder.thur_time_txt.setText(arrayList.get(position).getDateTime());
+//                    break;
+//                case "fri":
+//                    holder.fri_time_txt.setEnabled(true);
+//                    holder.friday_btn.setEnabled(true);
+//                    holder.fri_time_txt.setAlpha(1);
+//                    holder.friday_btn.setAlpha(1);
+//                    holder.fri_time_txt.setText(arrayList.get(position).getDateTime());
+//                    break;
+//                case "sat":
+//                    holder.sat_time_txt.setEnabled(true);
+//                    holder.saturday_btn.setEnabled(true);
+//                    holder.sat_time_txt.setAlpha(1);
+//                    holder.saturday_btn.setAlpha(1);
+//                    holder.sat_time_txt.setText(arrayList.get(position).getDateTime());
+//                    break;
+//                default:
+//
+//            }
+//        }
+//        if (arrayList.get(position).getCoachTypeID().equalsIgnoreCase("1")) {
+//            holder.tutor_name_txt.setText("Academic " + "/" + arrayList.get(position).getLessionTypeName());
+//        } else {
+//            holder.tutor_name_txt.setText("Sport " + "/" + arrayList.get(position).getLessionTypeName());
+//        }
+//
+//        arrayList.get(position).setDuration(SessionHour + " hr " + SessionMinit + " min");
+//        holder.duration_txt.setText(arrayList.get(position).getDuration());
+//        holder.location_txt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(address));
+//                Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
+//                mapIntent.setPackage("com.google.android.apps.maps");
+//                mContext.startActivity(mapIntent);
+//            }
+//        });
+
+// extends RecyclerView.Adapter<ClassDetailAdapter.MyViewHolder> {
+//
+//    List<sessionDataModel> arrayList;
+//    int SessionHour = 0;
+//    Integer SessionMinit = 0;
+//    String locationStr, classNameStr,
+//            address, boardStr, streamStr, standardStr,
+//            searchfront,
+//            firsttimesearch, SearchPlaystudy, RegionName;//searchTypeStr, wheretoComeStr,
+//    onViewClick onViewClick;
+//    bookClick bookClick;
+//    CardLayoutBinding cardLayoutBinding;
+//    String hours, minit;
+//    private Context mContext;
+//    private ArrayList<String> SessionDetail;
+//    private ArrayList<String> SessionBookDetail;
+//
+//    public ClassDetailAdapter(Context mContext, List<sessionDataModel> arrayList, String locationStr,
+//                              String classNameStr, String boardStr, String streamStr, String standardStr,
+//                              String SearchPlaystudy, String searchfront, String firsttimesearch, String regionName,
+//                              bookClick bookClick, onViewClick onViewClick) {// searchByStr,   String wheretoComeStr, String searchTypeStr,
+//        this.mContext = mContext;
+//        this.arrayList = arrayList;
+//
+//        this.locationStr = locationStr;
+//        this.classNameStr = classNameStr;
+//        this.boardStr = boardStr;
+//        this.streamStr = streamStr;
+//        this.standardStr = standardStr;
+//
+//        this.searchfront = searchfront;
+//        this.onViewClick = onViewClick;
+//        this.SearchPlaystudy = SearchPlaystudy;
+//        this.firsttimesearch = firsttimesearch;
+//        this.RegionName = regionName;
+//        this.bookClick = bookClick;
+//    }
+//
+//    @Override
+//    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+//
+//        View itemView = LayoutInflater.from(parent.getContext())
+//                .inflate(R.layout.card_layout, parent, false);
+//
+////        cardLayoutBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.card_layout, parent, false);
+////
+////        View itemView = cardLayoutBinding.getRoot();
+//
+//        return new MyViewHolder(itemView);
+//    }
+//
+//    @Override
+//    public void onBindViewHolder(MyViewHolder holder, final int position) {
+//        if (arrayList.get(position).getTotalRatingUser().equalsIgnoreCase("0")) {
+//            holder.rating_user_txt.setVisibility(View.GONE);
+//        } else {
+//            holder.rating_user_txt.setVisibility(View.VISIBLE);
+//            holder.rating_user_txt.setText("(" + arrayList.get(position).getTotalRatingUser() + ")");
+//        }
+//
+//        holder.rating_bar.setRating(Float.parseFloat(arrayList.get(position).getRating()));
+//        address = arrayList.get(position).getAddressLine1() +
+//                "," + arrayList.get(position).getRegionName() +
+//                "," + arrayList.get(position).getAddressCity() +
+//                "," + arrayList.get(position).getAddressState() +
+//                "-" + arrayList.get(position).getAddressZipCode();
+//        holder.session_name_txt.setText(arrayList.get(position).getSessionName());
+//        if (arrayList.get(position).getSessionAmount().equalsIgnoreCase("0.00")) {
+//            holder.price_txt.setText("Free");
+//        } else {
+//            holder.price_txt.setText("₹" + arrayList.get(position).getSessionAmount());
+//        }
+//        holder.start_date_txt.setText(arrayList.get(position).getStartDate());
+//        holder.end_date_txt.setText(arrayList.get(position).getEndDate());
+//        holder.location_txt.setText(arrayList.get(position).getRegionName());
+//        holder.linear_click.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+//                    Intent inSession = new Intent(mContext, SessionName.class);
+//                    inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
+//                    inSession.putExtra("city", locationStr);
+//                    inSession.putExtra("sessionName", classNameStr);
+//                    inSession.putExtra("board", boardStr);
+//                    inSession.putExtra("stream", streamStr);
+//                    inSession.putExtra("standard", standardStr);
+//                    inSession.putExtra("lessionName", "");//arrayList.get(position).getLessionTypeName()
+//                    inSession.putExtra("sessiondate", cardLayoutBinding.startDateTxt.getText().toString() + " To " + cardLayoutBinding.endDateTxt.getText().toString());
+////                    inSession.putExtra("duration", cardLayoutBinding.durationTxt.getText().toString());
+//                    inSession.putExtra("gender", arrayList.get(position).getGenderID());
+////                    inSession.putExtra("searchType", searchTypeStr);
+////                    inSession.putExtra("withOR", wheretoComeStr);
+//                    inSession.putExtra("SearchPlaystudy", SearchPlaystudy);
+//                    inSession.putExtra("searchfront", searchfront);
+//                    inSession.putExtra("firsttimesearch", firsttimesearch);
+//                    inSession.putExtra("RegionName", RegionName);
+//                    mContext.startActivity(inSession);
+//                }
+//                return true;
+//            }
+//        });
+//        holder.session_name_txt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent inSession = new Intent(mContext, SessionName.class);
+//                inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
+//                inSession.putExtra("city", locationStr);
+//                inSession.putExtra("sessionName", classNameStr);
+//                inSession.putExtra("board", boardStr);
+//                inSession.putExtra("stream", streamStr);
+//                inSession.putExtra("standard", standardStr);
+//                inSession.putExtra("lessionName", "");//arrayList.get(position).getLessionTypeName()
+//                inSession.putExtra("sessiondate", cardLayoutBinding.startDateTxt.getText().toString() + " To " + cardLayoutBinding.endDateTxt.getText().toString());
+////                inSession.putExtra("duration", cardLayoutBinding.durationTxt.getText().toString());
+//                inSession.putExtra("gender", arrayList.get(position).getGenderID());
+////                inSession.putExtra("searchType", searchTypeStr);
+////                inSession.putExtra("withOR", wheretoComeStr);
+//                inSession.putExtra("SearchPlaystudy", SearchPlaystudy);
+//                inSession.putExtra("firsttimesearch", firsttimesearch);
+//                inSession.putExtra("RegionName", RegionName);
+//                mContext.startActivity(inSession);
+//            }
+//        });
+//        holder.book_session_btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                SessionBookDetail = new ArrayList<>();
+//                SessionBookDetail.add(arrayList.get(position).getSessionID());
+//                bookClick.bookClick();
+//            }
+//        });
+//
+//
+//        holder.rating_bar.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                SessionDetail = new ArrayList<>();
+//                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+//                    SessionDetail.add(arrayList.get(position).getSessionName() + "|" + arrayList.get(position).getSessionID());
+//                    onViewClick.getViewClick();
+//                }
+//                return true;
+//            }
+//        });
+//        String[] spiltPipes = arrayList.get(position).getSchedule().split("\\|");
+//        String[] spiltComma;
+//        String[] spiltDash;
+//        Log.d("spilt", "" + spiltPipes.toString());
+//        for (int i = 0; i < spiltPipes.length; i++) {
+//            spiltComma = spiltPipes[i].split("\\,");
+//            spiltDash = spiltComma[1].split("\\-");
+//            calculateHours(spiltDash[0], spiltDash[1]);
+//            arrayList.get(position).setDateTime(spiltDash[0]);
+//            Log.d("DateTime", spiltDash[0]);
+//            switch (spiltComma[0]) {
+//                case "sun":
+//                    holder.sun_time_txt.setEnabled(true);
+//                    holder.sunday_btn.setEnabled(true);
+//                    holder.sun_time_txt.setAlpha(1);
+//                    holder.sunday_btn.setAlpha(1);
+//                    holder.sun_time_txt.setText(arrayList.get(position).getDateTime());
+//                    break;
+//                case "mon":
+//                    holder.mon_time_txt.setEnabled(true);
+//                    holder.monday_btn.setEnabled(true);
+//                    holder.mon_time_txt.setAlpha(1);
+//                    holder.monday_btn.setAlpha(1);
+//                    holder.mon_time_txt.setText(arrayList.get(position).getDateTime());
+//                    break;
+//                case "tue":
+//                    holder.tues_time_txt.setEnabled(true);
+//                    holder.tuesday_btn.setEnabled(true);
+//                    holder.tues_time_txt.setAlpha(1);
+//                    holder.tuesday_btn.setAlpha(1);
+//                    holder.tues_time_txt.setText(arrayList.get(position).getDateTime());
+//                    break;
+//                case "wed":
+//                    holder.wed_time_txt.setEnabled(true);
+//                    holder.wednesday_btn.setEnabled(true);
+//                    holder.wed_time_txt.setAlpha(1);
+//                    holder.wednesday_btn.setAlpha(1);
+//                    holder.wed_time_txt.setText(arrayList.get(position).getDateTime());
+//                    break;
+//                case "thu":
+//                    holder.thur_time_txt.setEnabled(true);
+//                    holder.thursday_btn.setEnabled(true);
+//                    holder.thur_time_txt.setAlpha(1);
+//                    holder.thursday_btn.setAlpha(1);
+//                    holder.thur_time_txt.setText(arrayList.get(position).getDateTime());
+//                    break;
+//                case "fri":
+//                    holder.fri_time_txt.setEnabled(true);
+//                    holder.friday_btn.setEnabled(true);
+//                    holder.fri_time_txt.setAlpha(1);
+//                    holder.friday_btn.setAlpha(1);
+//                    holder.fri_time_txt.setText(arrayList.get(position).getDateTime());
+//                    break;
+//                case "sat":
+//                    holder.sat_time_txt.setEnabled(true);
+//                    holder.saturday_btn.setEnabled(true);
+//                    holder.sat_time_txt.setAlpha(1);
+//                    holder.saturday_btn.setAlpha(1);
+//                    holder.sat_time_txt.setText(arrayList.get(position).getDateTime());
+//                    break;
+//                default:
+//
+//            }
+//        }
+////        if (arrayList.get(position).getCoachTypeID().equalsIgnoreCase("1")) {
+////            cardLayoutBinding.tutorNameTxt.setText("Academic " + "/" + arrayList.get(position).getName());
+////        } else {
+//       holder.tutor_name_txt.setText(arrayList.get(position).getName());//"Sports " + "/" +
+////        }
+//        //String hours,minit;
+////        if (SessionHour < 10) {
+////            hours = "0" + SessionHour;
+////        } else {
+////            hours = String.valueOf(SessionHour);
+////        }
+////        if (SessionMinit < 10) {
+////            minit = "0" + SessionMinit;
+////        } else {
+////            minit = String.valueOf(SessionMinit);
+////        }
+////        if (minit.equalsIgnoreCase(("00"))) {
+////            arrayList.get(position).setDuration(hours + " hr ");//+ " min"
+////        } else {
+////            arrayList.get(position).setDuration(hours + " hr " + minit + " min");//+ " min"
+////        }
+////        cardLayoutBinding.durationTxt.setText(arrayList.get(position).getDuration());
+//       holder.location_txt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(address));
+//                Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
+//                mapIntent.setPackage("com.google.android.apps.maps");
+//
+//                mContext.startActivity(mapIntent);
+//            }
+//        });
+//    }
+//
+//    @Override
+//    public int getItemCount() {
+//        return arrayList.size();
+//    }
+//
+//    @Override
+//    public long getItemId(int position) {
+//        return position;
+//    }
+//
+//    @Override
+//    public int getItemViewType(int position) {
+//        return arrayList.size();
+//    }
+//
+//    public void calculateHours(String time1, String time2) {
+//        Date date1, date2;
+//        int days, hours, min;
+//        String hourstr, minstr;
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa", Locale.US);
+//        try {
+//            date1 = simpleDateFormat.parse(time1);
+//            date2 = simpleDateFormat.parse(time2);
+//
+//            long difference = date2.getTime() - date1.getTime();
+//            days = (int) (difference / (1000 * 60 * 60 * 24));
+//            hours = (int) ((difference - (1000 * 60 * 60 * 24 * days)) / (1000 * 60 * 60));
+//            min = (int) (difference - (1000 * 60 * 60 * 24 * days) - (1000 * 60 * 60 * hours)) / (1000 * 60);
+//            hours = (hours < 0 ? -hours : hours);
+//            SessionHour = hours;
+//            SessionMinit = min;
+//            Log.i("======= Hours", " :: " + hours + ":" + min);
+//
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//    }
+//
+//    public ArrayList<String> getSessionDetail() {
+//        return SessionDetail;
+//    }
+//
+//    public ArrayList<String> getSessionBookDetail() {
+//        return SessionBookDetail;
+//    }
+//
+//    public class MyViewHolder extends RecyclerView.ViewHolder {
+//        Button book_session_btn, sunday_btn, saturday_btn, friday_btn, thursday_btn, wednesday_btn, tuesday_btn, monday_btn;
+//        TextView sun_hours_txt, sat_hours_txt, fri_hours_txt, thur_hours_txt, wed_hours_txt, tues_hours_txt, mon_hours_txt;
+//        TextView sun_time_txt, sat_time_txt, fri_time_txt, thur_time_txt, wed_time_txt, tues_time_txt, mon_time_txt,
+//                price_txt, end_date_txt, start_date_txt, location_txt, tutor_name_txt, rating_user_txt, session_name_txt;
+//        RatingBar rating_bar;
+//        LinearLayout linear_click;
+//
+//        public MyViewHolder(View view) {
+//            super(view);
+//            book_session_btn = (Button) view.findViewById(R.id.book_session_btn);
+//            sunday_btn = (Button) view.findViewById(R.id.sunday_btn);
+//            saturday_btn = (Button) view.findViewById(R.id.saturday_btn);
+//            friday_btn = (Button) view.findViewById(R.id.friday_btn);
+//            thursday_btn = (Button) view.findViewById(R.id.thursday_btn);
+//            wednesday_btn = (Button) view.findViewById(R.id.wednesday_btn);
+//            tuesday_btn = (Button) view.findViewById(R.id.tuesday_btn);
+//            monday_btn = (Button) view.findViewById(R.id.monday_btn);
+//
+//
+//            sun_hours_txt = (TextView) view.findViewById(R.id.sun_hours_txt);
+//            sat_hours_txt = (TextView) view.findViewById(R.id.sat_hours_txt);
+//            fri_hours_txt = (TextView) view.findViewById(R.id.fri_hours_txt);
+//            thur_hours_txt = (TextView) view.findViewById(R.id.thur_hours_txt);
+//            wed_hours_txt = (TextView) view.findViewById(R.id.wed_hours_txt);
+//            tues_hours_txt = (TextView) view.findViewById(R.id.tues_hours_txt);
+//            mon_hours_txt = (TextView) view.findViewById(R.id.mon_hours_txt);
+//
+//            sun_time_txt = (TextView) view.findViewById(R.id.sun_time_txt);
+//            sat_time_txt = (TextView) view.findViewById(R.id.sat_time_txt);
+//            fri_time_txt = (TextView) view.findViewById(R.id.fri_time_txt);
+//            thur_time_txt = (TextView) view.findViewById(R.id.thur_time_txt);
+//            wed_time_txt = (TextView) view.findViewById(R.id.wed_time_txt);
+//            tues_time_txt = (TextView) view.findViewById(R.id.tues_time_txt);
+//            mon_time_txt = (TextView) view.findViewById(R.id.mon_time_txt);
+//
+//            price_txt = (TextView) view.findViewById(R.id.price_txt);
+//            end_date_txt = (TextView) view.findViewById(R.id.end_date_txt);
+//            start_date_txt = (TextView) view.findViewById(R.id.start_date_txt);
+//            location_txt = (TextView) view.findViewById(R.id.location_txt);
+//            tutor_name_txt = (TextView) view.findViewById(R.id.tutor_name_txt);
+//            rating_user_txt = (TextView) view.findViewById(R.id.rating_user_txt);
+//            session_name_txt = (TextView) view.findViewById(R.id.session_name_txt);
+//
+//            rating_bar = (RatingBar) view.findViewById(R.id.rating_bar);
+//
+//            linear_click = (LinearLayout) view.findViewById(R.id.linear_click);
+//
+//        }
+//    }
+//}

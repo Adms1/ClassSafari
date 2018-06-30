@@ -1687,7 +1687,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     }
                     if (sessionDetailModel.getSuccess().equalsIgnoreCase("True")) {
                         Utils.dismissDialog();
-                        Utils.ping(mContext, "Class created Successfully.");
+                        Utils.ping(mContext, "Class Created Successfully.");
                         Fragment fragment = new SessionFragment();
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

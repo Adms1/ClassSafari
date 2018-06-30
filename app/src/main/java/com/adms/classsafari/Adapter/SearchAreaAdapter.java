@@ -12,10 +12,12 @@ import android.widget.CompoundButton;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.R;
 
+import java.util.ArrayList;
+
 public class SearchAreaAdapter extends BaseAdapter {
-   SessionDetailModel arrayList;
+    SessionDetailModel arrayList;
     private Context mContext;
-String dialogselectareaStr;
+    String dialogselectareaStr;
 //    public SearchAreaAdapter(Context mContext, ArrayList<String> areaName, String dialogselectareaStr) {
 //        this.mContext = mContext;
 //        this.arrayList = areaName;
@@ -74,7 +76,7 @@ String dialogselectareaStr;
                 case "2":
                     viewHolder.areachk.setChecked(false);
                     break;
-                    default:
+                default:
             }
 
 //            if (!dialogselectareaStr.equalsIgnoreCase("")){

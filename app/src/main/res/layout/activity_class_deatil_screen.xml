@@ -217,7 +217,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/recView_linear"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -228,10 +228,11 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/class_list_recView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="none" />
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                />
 
-        </LinearLayout>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/no_record_txt"

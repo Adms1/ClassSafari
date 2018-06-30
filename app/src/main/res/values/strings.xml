@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Search Classes</string>
     <string name="contentDescription">x</string>
-    <string name="search_user">Search by Subject / Activity</string>
+    <string name="search_user">Search Subject / Activity</string>
     <string name="location">Location</string>
     <string name="lets_play">LET\'S PLAY!</string>
     <string name="lets_study">LET\'S STUDY!</string>
