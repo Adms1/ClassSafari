@@ -38,7 +38,9 @@ public class TeacherInfoModel {
     @SerializedName("LoginType")
     @Expose
     private String loginType;
-
+    @SerializedName("ClassName")
+    @Expose
+    private String className;
     @SerializedName("Data")
     @Expose
     private List<FamilyDetailModel> data = new ArrayList<FamilyDetailModel>();
@@ -117,6 +119,14 @@ public class TeacherInfoModel {
 
     public String getLoginType() {
         return loginType;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 
     public void setLoginType(String loginType) {

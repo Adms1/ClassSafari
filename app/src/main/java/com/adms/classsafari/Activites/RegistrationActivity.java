@@ -61,7 +61,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     int Year, Month, Day;
     Calendar calendar;
     int mYear, mMonth, mDay;
-    String firstNameStr, lastNameStr, emailStr, passwordStr, phonenoStr, gendarIdStr = "1", dateofbirthStr, coachTypeIDStr = "1",
+    String firstNameStr, lastNameStr, emailStr, passwordStr, phonenoStr, gendarIdStr = "1", dateofbirthStr, coachTypeIDStr = "1",oraganisationStr="",
             registerTypeStr = "family", contatIDstr, type, sessionIDStr, paymentStatusstr, orderIDStr, frontloginStr,
             boardStr, standardStr, streamStr, locationStr, classNameStr, sessionType, durationStr, sessionDateStr,
             subjectStr, genderStr, ratingLoginStr, searchfront, firsttimesearch, backStr, SearchPlaystudy, termscondition = "", frontRegister = "";
@@ -145,6 +145,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         registrationBinding.dateOfBirthEdt.setOnClickListener(this);
         registrationBinding.clickHere.setOnClickListener(this);
         registrationBinding.viewTxt.setOnClickListener(this);
+
 
         registrationBinding.emailEdt.setOnEditorActionListener(this);
         registrationBinding.passwordEdt.setOnEditorActionListener(this);
@@ -280,12 +281,19 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                     registrationBinding.typeOfRegi.setText("If you are a Student");
                     registrationBinding.session1TypeRg.setVisibility(View.GONE);
                     registerTypeStr = registrationBinding.clickHere.getTag().toString();
+
                     firsttime = true;
                 } else {
                     registrationBinding.typeOfRegi.setText("If you are a Teacher / Instructor");
                     registrationBinding.session1TypeRg.setVisibility(View.GONE);
                     registerTypeStr = "family";
                     firsttime = false;
+                }
+                if (registrationBinding.typeOfRegi.getText().toString().equalsIgnoreCase("If you are a Teacher / Instructor"))
+                {
+                    registrationBinding.classNameEdt.setVisibility(View.GONE);
+                }else{
+                    registrationBinding.classNameEdt.setVisibility(View.VISIBLE);
                 }
                 break;
         }
@@ -339,7 +347,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         passwordStr = registrationBinding.passwordEdt.getText().toString();
         phonenoStr = registrationBinding.phoneNoEdt.getText().toString();
         dateofbirthStr = registrationBinding.dateOfBirthEdt.getText().toString();
-
+        oraganisationStr=registrationBinding.classNameEdt.getText().toString();
         Utils.setPref(mContext, "Password", passwordStr);
     }
 
@@ -490,6 +498,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         map.put("GenderID", gendarIdStr);
         map.put("DateOfBirth", dateofbirthStr);
         map.put("CoachTypeID", coachTypeIDStr);
+        map.put("ClassName",oraganisationStr);
         return map;
     }
 

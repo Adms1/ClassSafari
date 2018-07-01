@@ -33,9 +33,9 @@
                 android:layout_marginLeft="@dimen/_25sdp"
                 android:gravity="start|center_vertical"
                 android:paddingLeft="@dimen/_55sdp"
-                android:text="Class Details"
+                android:text="CLASS DETAILS"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_15sdp"
+                android:textSize="@dimen/_14sdp"
                 android:textStyle="bold"
                />
             <ImageView

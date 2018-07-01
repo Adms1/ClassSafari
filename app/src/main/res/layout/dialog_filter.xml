@@ -43,7 +43,7 @@
                     android:gravity="end"
                     android:paddingRight="@dimen/_25sdp"
                     android:paddingTop="@dimen/_8sdp"
-                    android:text="Done"
+                    android:text="DONE"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_13sdp"
                     android:textStyle="bold" />

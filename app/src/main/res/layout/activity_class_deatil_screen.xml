@@ -101,7 +101,7 @@
 
                 <TextView
                     android:id="@+id/standard_txt"
-                    android:layout_width="@dimen/_35sdp"
+                    android:layout_width="@dimen/_25sdp"
                     android:layout_height="@dimen/_20sdp"
                     android:layout_marginBottom="@dimen/_2sdp"
                     android:layout_marginLeft="@dimen/_2sdp"

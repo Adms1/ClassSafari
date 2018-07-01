@@ -241,6 +241,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Utils.setPref(mContext, "RegisterUserName", teacherInfoModel.getName());
                         Utils.setPref(mContext, "RegisterEmail", teacherInfoModel.getEmailID());
                         Utils.setPref(mContext, "LoginType", teacherInfoModel.getLoginType());
+                        Utils.setPref(mContext,"ClassName",teacherInfoModel.getClassName());
                         AppConfiguration.coachId = teacherInfoModel.getCoachID();
                         type = teacherInfoModel.getLoginType();
                         contatIDstr = splitCoachID[0];

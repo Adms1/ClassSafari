@@ -20,7 +20,7 @@
             android:paddingLeft="@dimen/_5sdp"
             android:text="@string/home"
             android:textColor="@color/blue"
-            android:textSize="@dimen/_16sdp"
+            android:textSize="@dimen/_14sdp"
             android:textStyle="bold" />
 
         <View
@@ -160,7 +160,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/_20sdp"
-                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -168,12 +168,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/_35sdp"
+                    android:layout_marginLeft="@dimen/_2sdp"
                     android:gravity="center"
                     android:text="@string/register_str"
-                    android:textColor="@color/blue"
+                    android:textColor="@color/gray1"
                     android:textSize="@dimen/_13sdp"
-                    android:textStyle="normal" />
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -187,16 +187,17 @@
                         android:layout_marginLeft="@dimen/_2sdp"
                         android:text="@string/register"
                         android:textColor="@color/blue"
+                        android:background="@drawable/orange_line"
                         android:textSize="@dimen/_14sdp"
                         android:textStyle="bold" />
 
-                    <View
-                        android:layout_width="@dimen/_60sdp"
-                        android:layout_height="2dp"
-                        android:layout_marginRight="@dimen/_70sdp"
-                        android:layout_marginTop="@dimen/_1sdp"
-                        android:layout_gravity="right"
-                        android:background="@drawable/orange_line" />
+                    <!--<View-->
+                        <!--android:layout_width="@dimen/_60sdp"-->
+                        <!--android:layout_height="2dp"-->
+                        <!--android:layout_marginRight="@dimen/_70sdp"-->
+                        <!--android:layout_marginTop="@dimen/_1sdp"-->
+                        <!--android:layout_gravity="right"-->
+                        <!--android:background="@drawable/orange_line" />-->
                 </LinearLayout>
             </LinearLayout>
 

@@ -51,11 +51,11 @@
     <string name="mycontanct">My Family Contacts</string>
     <string name="agevalidation">Date of Birth should be > 1year .</string>
     <string name="close">DONE</string>
-    <string name="click_here"><b><u>Click Here</u></b></string>
+    <string name="click_here"><b>Click Here</b></string>
     <string name="checkboc_text">All-inclusive price(coupon &amp; wallet applied)</string>
     <string name="payment">Payment</string>
     <string name="selection_info">\u2022  Please Select at least one of the following contacts to enroll in the selected class.</string>
-    <string name="view_term"><u>View</u></string>
+    <string name="view_term">View</string>
 
     <!--Webservice String-->
     <string name="internet_error">Internet Connection !</string>

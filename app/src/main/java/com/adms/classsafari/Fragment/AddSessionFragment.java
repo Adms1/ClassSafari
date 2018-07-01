@@ -397,21 +397,21 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         addSessionBinding.selectSessionAddressBtn.setTypeface(custom_font);
         addSessionBinding.submitBtn.setTypeface(custom_font);
 
-        sun_start_time_txt.setTypeface(custom_font);
-        sun_end_time_txt.setTypeface(custom_font);
-        mon_start_time_txt.setTypeface(custom_font);
-        mon_end_time_txt.setTypeface(custom_font);
-        tue_start_time_txt.setTypeface(custom_font);
-        tue_end_time_txt.setTypeface(custom_font);
-        wed_start_time_txt.setTypeface(custom_font);
-        wed_end_time_txt.setTypeface(custom_font);
-        thu_start_time_txt.setTypeface(custom_font);
-        thu_end_time_txt.setTypeface(custom_font);
-        fri_end_time_txt.setTypeface(custom_font);
-        fri_start_time_txt.setTypeface(custom_font);
-        sat_end_time_txt.setTypeface(custom_font);
-        sat_start_time_txt.setTypeface(custom_font);
-        confirm_title_txt.setTypeface(custom_font);
+//        sun_start_time_txt.setTypeface(custom_font);
+//        sun_end_time_txt.setTypeface(custom_font);
+//        mon_start_time_txt.setTypeface(custom_font);
+//        mon_end_time_txt.setTypeface(custom_font);
+//        tue_start_time_txt.setTypeface(custom_font);
+//        tue_end_time_txt.setTypeface(custom_font);
+//        wed_start_time_txt.setTypeface(custom_font);
+//        wed_end_time_txt.setTypeface(custom_font);
+//        thu_start_time_txt.setTypeface(custom_font);
+//        thu_end_time_txt.setTypeface(custom_font);
+//        fri_end_time_txt.setTypeface(custom_font);
+//        fri_start_time_txt.setTypeface(custom_font);
+//        sat_end_time_txt.setTypeface(custom_font);
+//        sat_start_time_txt.setTypeface(custom_font);
+//        confirm_title_txt.setTypeface(custom_font);
 
 
     }
@@ -427,6 +427,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         timegapArray.add("1 day before");
         Log.d("timegapArray", "" + timegapArray);
 
+        addSessionBinding.sessionNameEdt.setText(Utils.getPref(mContext,"ClassName"));
     }
 
     public void setListners() {
