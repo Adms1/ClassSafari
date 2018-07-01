@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -71,12 +72,17 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         sessionDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_session_detail);
         mContext = this;
-
+setTypeface();
         init();
         setListner();
     }
+    public void setTypeface() {
+        Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
 
-    public void init() {
+        sessionDetailBinding.sessionTxt.setTypeface(custom_font);
+
+
+    }    public void init() {
         wheretocometypeStr = getIntent().getStringExtra("wheretocometype");
         sessionIDStr = getIntent().getStringExtra("sessionID");
         callSessionListApi();
@@ -458,10 +464,10 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onClick(View view) {
                 menuDialog.dismiss();
-                new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AlertDialogTheme))
                         .setCancelable(false)
-                        .setTitle("Logout")
-                        .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+//                        .setTitle("Logout")
+//                        .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
                         .setMessage("Are you sure you want to logout?")
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -486,7 +492,7 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
 
                             }
                         })
-                        .setIcon(R.drawable.safari)
+//                        .setIcon(R.drawable.safari)
                         .show();
             }
         });

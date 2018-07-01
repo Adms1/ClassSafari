@@ -3,6 +3,7 @@ package com.adms.classsafari.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -71,6 +72,13 @@ public class ExpandableSelectStudentListAdapter extends BaseExpandableListAdapte
             itembinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
                     R.layout.list_item_select_student, parent, false);
             convertView = itembinding.getRoot();
+            Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
+
+            itembinding.nameRb.setTypeface(custom_font);
+            itembinding.phoneNoTxt.setTypeface(custom_font);
+            itembinding.ageTxt.setTypeface(custom_font);
+            itembinding.genderTxt.setTypeface(custom_font);
+            itembinding.phoneNoTxt.setTypeface(custom_font);
 
             final ChildDetailModel childDetail = getChild(groupPosition, childPosition - 1);
             itembinding.nameRb.setText(childDetail.getFirstName() + " " + childDetail.getLastName());
@@ -215,6 +223,12 @@ public class ExpandableSelectStudentListAdapter extends BaseExpandableListAdapte
                 R.layout.list_group_family_list, parent, false);
         convertView = groupbinding.getRoot();
 
+            Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
+
+        groupbinding.familynameRb.setTypeface(custom_font);
+        groupbinding.noTxt.setTypeface(custom_font);
+        groupbinding.addchildTxt.setTypeface(custom_font);
+
         if (arraowStr.equalsIgnoreCase("Activity")) {
             groupbinding.arrowImg.setVisibility(View.GONE);
             groupbinding.addchildTxt.setVisibility(View.GONE);
@@ -223,15 +237,16 @@ public class ExpandableSelectStudentListAdapter extends BaseExpandableListAdapte
             groupbinding.addchildTxt.setVisibility(View.VISIBLE);
             groupbinding.arrowImg.setImageResource(R.drawable.down_add_family);
         }
-        if (isExpanded) {
-            convertView.setBackgroundResource(R.drawable.selected_header);
-//            groupbinding.arrowImg.setBackgroundResource(R.drawable.round_yello);
-            groupbinding.arrowImg.setImageResource(R.drawable.up_add_family);
-        } else {
-            convertView.setBackgroundResource(R.drawable.unselected_header);
-//            groupbinding.arrowImg.setBackgroundResource(R.drawable.round_yello);
-            groupbinding.arrowImg.setImageResource(R.drawable.down_add_family);
-        }
+//        if (isExpanded) {
+//            groupbinding.llHeader.setBackgroundColor(mContext.getResources().getColor(R.color.blue));
+////            groupbinding.arrowImg.setBackgroundResource(R.drawable.round_yello);
+//            groupbinding.arrowImg.setImageResource(R.drawable.up_add_family);
+//        } else {
+//            groupbinding.llHeader.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+////            convertView.setBackgroundResource(R.drawable.unselected_header);
+////            groupbinding.arrowImg.setBackgroundResource(R.drawable.round_yello);
+//            groupbinding.arrowImg.setImageResource(R.drawable.down_add_family);
+//        }
         groupbinding.familynameRb.setText(spiltValue[0] + " " + spiltValue[1]);
         groupbinding.noTxt.setText(spiltValue[2]);
         FamilyID = spiltValue[3];

@@ -3,6 +3,7 @@ package com.adms.classsafari.Fragment;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -33,10 +34,9 @@ import static android.view.View.GONE;
 public class PaymentSucessFragment extends Fragment {
 
     FragmentPaymentSucessBinding paymentSucessBinding;
+    String status;
     private View rootView;
     private Context mContext;
-
-    String status;
 
     public PaymentSucessFragment() {
     }
@@ -50,11 +50,22 @@ public class PaymentSucessFragment extends Fragment {
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mContext = getActivity();
         ((DashBoardActivity) getActivity()).setActionBar(14, "false");
-
+        setTypeface();
         init();
         setListner();
         callSessionPaymentApi();
         return rootView;
+    }
+
+    public void setTypeface() {
+
+        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
+        paymentSucessBinding.txtUserName.setTypeface(custom_font);
+        paymentSucessBinding.txtSucessFail.setTypeface(custom_font);
+        paymentSucessBinding.txtSucessFailDesc.setTypeface(custom_font);
+        paymentSucessBinding.txtTransactionID.setTypeface(custom_font);
+        paymentSucessBinding.txtValue.setTypeface(custom_font);
+        paymentSucessBinding.btnNewCharge.setTypeface(custom_font);
     }
 
     public void init() {

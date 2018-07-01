@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -35,11 +37,13 @@ import com.adms.classsafari.Adapter.ClassDetailAdapter;
 import com.adms.classsafari.Adapter.PopularClassListAdapter;
 import com.adms.classsafari.Adapter.SearchAreaAdapter;
 import com.adms.classsafari.AppConstant.ApiHandler;
+import com.adms.classsafari.AppConstant.AtoZ;
 import com.adms.classsafari.AppConstant.HighToLowSortRating;
 import com.adms.classsafari.AppConstant.HightToLowSortSessionPrice;
 import com.adms.classsafari.AppConstant.LowToHighSortRating;
 import com.adms.classsafari.AppConstant.LowToHighSortSessionPrice;
 import com.adms.classsafari.AppConstant.Utils;
+import com.adms.classsafari.AppConstant.ZtoA;
 import com.adms.classsafari.BottomNavigationViewHelper;
 import com.adms.classsafari.Interface.bookClick;
 import com.adms.classsafari.Interface.onViewClick;
@@ -92,7 +96,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
     String subjectStr, boardStr = "", standardStr = "", streamStr = "",
             locationStr, classNameStr, genderStr = "", sessionId, commentStr, ratingValueStr, popularsessionID = "",
             populardurationStr = "", populargenderStr = "", popluarsessiondateStr = "", firsttimesearch, RegionName = "", SearchPlaystudy, dialogselectareaStr = "";
-    SessionDetailModel dataResponse, populardataresponse,areadataResponse;
+    SessionDetailModel dataResponse, populardataresponse, areadataResponse;
     List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
     boolean arrayfirst = true;
 
@@ -122,9 +126,22 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_class_deatil_screen);
         mContext = ClassDeatilScreen.this;
-
+        setTypeface();
         init();
         setListner();
+    }
+
+    public void setTypeface() {
+        Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
+
+        binding.subjectTxt.setTypeface(custom_font);
+        binding.cityTxt.setTypeface(custom_font);
+        binding.boardTxt.setTypeface(custom_font);
+        binding.standardTxt.setTypeface(custom_font);
+        binding.streamTxt.setTypeface(custom_font);
+        binding.multiautocompe.setTypeface(custom_font);
+        binding.inforTxt.setTypeface(custom_font);
+        binding.noRecordTxt.setTypeface(custom_font);
     }
 
     public void init() {
@@ -459,8 +476,8 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         priceBinding.rangeSeekbar.setOnRangeSeekbarChangeListener(new OnRangeSeekbarChangeListener() {
             @Override
             public void valueChanged(Number minValue, Number maxValue) {
-                priceBinding.priceRange1Txt.setText("₹ " + String.valueOf(minValue));
-                priceBinding.priceRange2Txt.setText("₹ " + String.valueOf(maxValue));
+                priceBinding.priceRange1Txt.setText("₹" + String.valueOf(minValue) + "/-");
+                priceBinding.priceRange2Txt.setText("₹" + String.valueOf(maxValue) + "/-");
                 Log.d("select vlue", "min value" + minValue + "maxvalue" + maxValue);
                 if (dataResponse.getData().size() >= 0) {
                     List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
@@ -482,8 +499,8 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         priceBinding.rangeSeekbar.setOnRangeSeekbarFinalValueListener(new OnRangeSeekbarFinalValueListener() {
             @Override
             public void finalValue(Number minValue, Number maxValue) {
-                priceBinding.priceRange1Txt.setText("₹ " + String.valueOf(minValue));
-                priceBinding.priceRange2Txt.setText("₹ " + String.valueOf(maxValue));
+                priceBinding.priceRange1Txt.setText("₹" + String.valueOf(minValue) + "/-");
+                priceBinding.priceRange2Txt.setText("₹" + String.valueOf(maxValue) + "/-");
                 Log.d("final vlue", "min value" + minValue + "maxvalue" + maxValue);
             }
         });
@@ -698,6 +715,42 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                 }
             }
         });
+        sortBinding.asceDesendRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                int radioButtonLocation = sortBinding.asceDesendRg.getCheckedRadioButtonId();
+                switch (radioButtonLocation) {
+                    case R.id.asce_rb:
+                        if (dataResponse.getData().size() >= 0) {
+                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+                                        arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+                                    filterFinalArray.add(arrayObj);
+                                    Collections.sort(filterFinalArray, new AtoZ());
+                                }
+                            }
+                            fillData(filterFinalArray);
+                            sortDialog.dismiss();
+                        }
+                        break;
+                    case R.id.decending_rb:
+                        if (dataResponse.getData().size() >= 0) {
+                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+                            for (sessionDataModel arrayObj : dataResponse.getData()) {
+                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
+                                        arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
+                                    filterFinalArray.add(arrayObj);
+                                    Collections.sort(filterFinalArray, new ZtoA());
+                                }
+                            }
+                            fillData(filterFinalArray);
+                            sortDialog.dismiss();
+                        }
+                        break;
+                }
+            }
+        });
         sortDialog.show();
     }
 
@@ -783,12 +836,11 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
             if (dialogselectareaStr.equalsIgnoreCase("")) {
                 dataResponse.getData().get(j).setCheckStatus("0");
             } else {
-                String [] split=dialogselectareaStr.split("\\,");
-                for (int i=0;i<split.length;i++){
-                    if(dataResponse.getData().get(j).getRegionName().equalsIgnoreCase(split[i])) {
+                String[] split = dialogselectareaStr.split("\\,");
+                for (int i = 0; i < split.length; i++) {
+                    if (dataResponse.getData().get(j).getRegionName().equalsIgnoreCase(split[i])) {
                         dataResponse.getData().get(j).setCheckStatus("1");
-                    }
-                    else{
+                    } else {
                         dataResponse.getData().get(j).setCheckStatus("0");
                     }
                 }
@@ -912,7 +964,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                         Utils.dismissDialog();
                         if (sessionInfo.getData().size() >= 0) {
                             dataResponse = sessionInfo;
-                            areadataResponse=sessionInfo;
+                            areadataResponse = sessionInfo;
                             fillArea();
                             List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                             for (sessionDataModel arrayObj : dataResponse.getData()) {
@@ -997,11 +1049,11 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                     startActivity(intentLogin);
                     finish();
                 } else {
-                    new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                    new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AlertDialogTheme))
                             .setCancelable(false)
-                            .setTitle("Login")
-                            .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
-                            .setMessage("You are not login,So Please Login.")
+//                            .setTitle("Login")
+//                            .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+                            .setMessage("Please Login to continue.")
                             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent intentLogin = new Intent(mContext, LoginActivity.class);
@@ -1030,7 +1082,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 
                                 }
                             })
-                            .setIcon(R.drawable.safari)
+//                            .setIcon(R.drawable.safari)
                             .show();
                 }
             }
@@ -1040,11 +1092,10 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                 if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
                     addRating();
                 } else {
-                    new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                    new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AlertDialogTheme))
                             .setCancelable(false)
-                            .setTitle("Login")
-                            .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
-                            .setMessage("You are not login,So Please Login.")
+//                            .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+                            .setMessage("Please Login to continue.")
                             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent intentLogin = new Intent(mContext, LoginActivity.class);
@@ -1072,7 +1123,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 
                                 }
                             })
-                            .setIcon(R.drawable.safari)
                             .show();
                 }
             }
@@ -1163,6 +1213,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
             public void onShow(DialogInterface dialog) {
 
                 Button b = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                Button b1 = mAlertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
                 b.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -1187,6 +1238,8 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                         }
                     }
                 });
+                    b.setTextColor(getResources().getColor(R.color.blue));
+                b1.setTextColor(getResources().getColor(R.color.gray1));
             }
         });
         mAlertDialog.show();
@@ -1568,10 +1621,10 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(View view) {
                 menuDialog.dismiss();
-                new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AlertDialogTheme))
                         .setCancelable(false)
-                        .setTitle("Logout")
-                        .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+//                        .setTitle("Logout")
+//                        .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
                         .setMessage("Are you sure you want to logout?")
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {

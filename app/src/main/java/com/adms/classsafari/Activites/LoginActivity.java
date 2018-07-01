@@ -93,6 +93,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         loginScreenBinding.emailEdt.setTypeface(custom_font);
         loginScreenBinding.passwordEdt.setTypeface(custom_font);
+        loginScreenBinding.loginBtn.setTypeface(custom_font);
+        loginScreenBinding.forgotPassTxt.setTypeface(custom_font);
+        loginScreenBinding.registerTxt.setTypeface(custom_font);
+        loginScreenBinding.txt.setTypeface(custom_font);
         setListner();
     }
 
@@ -102,11 +106,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginScreenBinding.loginBtn.setOnClickListener(this);
         loginScreenBinding.facebookImg.setOnClickListener(this);
         loginScreenBinding.forgotPassTxt.setOnClickListener(this);
+        loginScreenBinding.homeTxt.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.home_txt:
+                Intent intent=new Intent(mContext,SearchByUser.class);
+                startActivity(intent);
+                break;
             case R.id.register_txt:
                 Intent inregister = new Intent(mContext, RegistrationActivity.class);
                 inregister.putExtra("sessionID", sessionIDStr);

@@ -54,7 +54,8 @@
             android:layout_height="0dp"
             android:layout_weight="0.6"
             android:background="#e9e9e9"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
             <TextView
                 android:id="@+id/result1_txt"
                 android:layout_width="wrap_content"
@@ -117,8 +118,7 @@
 
                 <TextView
                     android:id="@+id/price_range1_txt"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.8"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_10sdp"
                     android:layout_marginTop="@dimen/_15sdp"
@@ -128,19 +128,18 @@
                     android:textSize="@dimen/_15sdp" />
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="0.1"
+                    android:layout_width="wrap_content"
+
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_1sdp"
                     android:layout_marginTop="@dimen/_15sdp"
-                    android:text="-"
+                    android:text=""
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_15sdp" />
 
                 <TextView
                     android:id="@+id/price_range2_txt"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.8"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_2sdp"
                     android:layout_marginTop="@dimen/_15sdp"
@@ -149,8 +148,7 @@
                     android:textSize="@dimen/_15sdp" />
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1.8"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_15sdp"
                     android:text="Per Session"

@@ -2,6 +2,7 @@ package com.adms.classsafari.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -69,6 +70,15 @@ public class StudentAttendanceAdapter extends BaseAdapter {
             viewHolder.absent_chk = (RadioButton) convertView.findViewById(R.id.absent_chk);
             viewHolder.leave_chk = (RadioButton) convertView.findViewById(R.id.leave_chk);
             viewHolder.remark_txt = (EditText) convertView.findViewById(R.id.remark_txt);
+
+            Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
+           viewHolder.name_txt.setTypeface(custom_font);
+            viewHolder.present_chk.setTypeface(custom_font);
+            viewHolder.absent_chk.setTypeface(custom_font);
+            viewHolder.leave_chk.setTypeface(custom_font);
+            viewHolder.remark_txt.setTypeface(custom_font);
+
+
 
             final sessionDataModel session = studentList.get(position);
             viewHolder.name_txt.setText(session.getFirstName() + " " + session.getLastName());

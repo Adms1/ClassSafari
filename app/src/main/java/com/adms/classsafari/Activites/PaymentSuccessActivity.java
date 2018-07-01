@@ -3,6 +3,7 @@ package com.adms.classsafari.Activites;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -32,8 +33,21 @@ public class PaymentSuccessActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         paymentSuccessBinding= DataBindingUtil.setContentView(this,R.layout.activity_payment_success);
         mContext = this;
+        setTypeface();
         init();
         setListner();
+    }
+    public void setTypeface() {
+        Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
+
+        paymentSuccessBinding.sessionTxt.setTypeface(custom_font);
+        paymentSuccessBinding.txtUserName.setTypeface(custom_font);
+        paymentSuccessBinding.txtSucessFail.setTypeface(custom_font);
+        paymentSuccessBinding.txtSucessFailDesc.setTypeface(custom_font);
+        paymentSuccessBinding.txtTransactionID.setTypeface(custom_font);
+        paymentSuccessBinding.txtValue.setTypeface(custom_font);
+        paymentSuccessBinding.btnNewCharge.setTypeface(custom_font);
+
     }
 
     public void init() {

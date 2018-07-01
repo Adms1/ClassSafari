@@ -1,6 +1,7 @@
 package com.adms.classsafari.Adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,11 +51,21 @@ public class PaymentSucessReportAdapter extends RecyclerView.Adapter<PaymentSuce
          itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.payment_report_list_item1, parent, false);
         }
+
+
+
         return new PaymentSucessReportAdapter.MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(final PaymentSucessReportAdapter.MyViewHolder holder, int position) {
+        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
+
+       holder.srno_txt.setTypeface(custom_font);
+        holder.sucess_txt.setTypeface(custom_font);
+        holder.date_txt.setTypeface(custom_font);
+        holder.transactionID_txt.setTypeface(custom_font);
+        holder.amount_txt.setTypeface(custom_font);
 
         String str = String.valueOf(position + 1);
         holder.srno_txt.setText(str);

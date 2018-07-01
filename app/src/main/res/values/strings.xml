@@ -29,31 +29,33 @@
     <string name="phone">Phone</string>
     <string name="session_reviews">Reviews</string>
     <string name="user_name">Felicia Richi Bwown</string>
-    <string name="book_session">BOOK CLASS</string>
+    <string name="book_session">BOOK NOW</string>
     <string name="class_search">SEARCH</string>
     <string name="search_string">City</string>
     <string name="search_session">Subject</string>
     <string name="search_stream">Stream</string>
     <string name="search_MF">M/F</string>
-    <string name="search_class">Class Name / Teacher Name</string>
+    <string name="search_class">Class Name</string>
+    <string name="teacher">Teacher Name</string>
     <string name="comment_hint">Write Your Comment</string>
     <string name="login"><u><b>Login</b></u></string>
     <string name="sortby">SORT BY</string>
     <string name="most_recent">Most Recent</string>
     <string name="addsession">Add Class</string>
-    <string name="my_Account">My Payment</string>
-    <string name="my_session">Upcoming Classes</string>
+    <string name="my_Account">MY PAYMENT</string>
+    <string name="my_session">UPCOMING CLASSES</string>
     <string name="my_change_pass">Change Password</string>
     <string name="reviews">Reviews</string>
     <string name="logout">Logout</string>
     <string name="addchildsopuse">Add Family Contacts</string>
     <string name="mycontanct">My Family Contacts</string>
     <string name="agevalidation">Date of Birth should be > 1year .</string>
-    <string name="close">Close</string>
+    <string name="close">DONE</string>
     <string name="click_here"><b><u>Click Here</u></b></string>
     <string name="checkboc_text">All-inclusive price(coupon &amp; wallet applied)</string>
     <string name="payment">Payment</string>
     <string name="selection_info">\u2022  Please Select at least one of the following contacts to enroll in the selected class.</string>
+    <string name="view_term"><u>View</u></string>
 
     <!--Webservice String-->
     <string name="internet_error">Internet Connection !</string>
@@ -71,16 +73,17 @@
 
     <!--SafariTeacher-->
     <!--<b>\u2014</b> OR <b>\u2014-->
+    <string name="home"><b>Home</b></string>
     <string name="or"><b> OR </b></string>
     <string name="user_id">Email Address</string>
     <string name="user_pass">Password</string>
     <string name="register_str">Don\’t have an account?</string>
-    <string name="register"><u>Register</u></string>
+    <string name="register">Register</string>
     <string name="forgot_pass">Forgot Password?</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="phone_no">Phone Number</string>
-    <string name="family_register1">Registration</string>
+    <string name="family_register1">REGISTRATION</string>
     <string name="forgot">Forgot Password</string>
     <string name="title_activity_dash_board">DashBoardActivity</string>
     <string name="session_time">Add Class Time</string>
@@ -94,7 +97,7 @@
     <string name="session_name">Class Name</string>
     <string name="session_standard">Standard</string>
     <string name="search_board">Board</string>
-    <string name="payment_success">Payment Success</string>
+    <string name="payment_success">PAYMENT SUCCESS</string>
     <string name="payment_report">Payment Report</string>
     <string name="search_standard">Standard</string>
     <string name="session_board">Board</string>
@@ -114,7 +117,7 @@
     <string name="play">Activity</string>
     <string name="family_regi">Family</string>
     <string name="teacher_regi">Teacher</string>
-    <string name="add_Student">Add Contact</string>
+    <string name="add_Student">ADD CONTACT</string>
     <string name="age">Age</string>
     <string name="dob">Date of Birth</string>
     <string name="gender">Gender</string>
@@ -149,10 +152,10 @@
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
-        <item>Class Calendar</item>
-        <item>Add Class</item>
-        <item>Payment Report</item>
-        <item>Student Attendance</item>
+        <item>CLASS CALENDER</item>
+        <item>ADD CLASS</item>
+        <item>PAYMENT REPORT</item>
+        <item>STUDENT ATTENDANCE</item>
         <!--<item>Change Password</item>-->
         <!--<item>Logout</item>-->
     </string-array>

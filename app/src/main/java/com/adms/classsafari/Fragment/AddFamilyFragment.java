@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -90,7 +91,26 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         Log.d("ADMStype", type + familyNameStr);
         return rootView;
     }
+    public void setTypeface() {
+        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
 
+        addFamilyBinding.familynameTxt.setTypeface(custom_font);
+        addFamilyBinding.familynameTxtView.setTypeface(custom_font);
+        addFamilyBinding.selfChk.setTypeface(custom_font);
+        addFamilyBinding.childChk.setTypeface(custom_font);
+        addFamilyBinding.spouseChk.setTypeface(custom_font);
+        addFamilyBinding.firstNameEdt.setTypeface(custom_font);
+        addFamilyBinding.lastNameEdt.setTypeface(custom_font);
+        addFamilyBinding.emailEdt.setTypeface(custom_font);
+        addFamilyBinding.passwordEdt.setTypeface(custom_font);
+        addFamilyBinding.phoneNoEdt.setTypeface(custom_font);
+        addFamilyBinding.dateOfBirthEdt.setTypeface(custom_font);
+        addFamilyBinding.maleChk.setTypeface(custom_font);
+        addFamilyBinding.femaleChk.setTypeface(custom_font);
+        addFamilyBinding.cancelBtn.setTypeface(custom_font);
+        addFamilyBinding.registerBtn.setTypeface(custom_font);
+
+    }
     public void initViews() {
         calendar = Calendar.getInstance();
         Year = calendar.get(Calendar.YEAR);

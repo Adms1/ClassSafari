@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -44,17 +45,11 @@ import retrofit.client.Response;
 
 public class StudentAttendanceFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
 
-    private FragmentStudentAttendanceBinding studentAttendanceBinding;
-    private View rootView;
-    private Context mContext;
-    private Fragment fragment = null;
-    private FragmentManager fragmentManager = null;
     String monthDisplayStr, MonthInt, TimeInt, finaldateStr;
     String[] spiltmonth;
     String[] spilttime;
     int Year, Month, Day;
     Calendar calendar;
-    private DatePickerDialog datePickerDialog;
     int mYear, mMonth, mDay;
     StudentAttendanceAdapter studentAttendanceAdapter;
     ArrayList<String> arrayList;
@@ -64,8 +59,24 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
     List<sessionDataModel> studentList;
     HashMap<Integer, String> spinnerClassMap;
     String classType = "";
+    private FragmentStudentAttendanceBinding studentAttendanceBinding;
+    private View rootView;
+    private Context mContext;
+    private Fragment fragment = null;
+    private FragmentManager fragmentManager = null;
+    private DatePickerDialog datePickerDialog;
 
     public StudentAttendanceFragment() {
+    }
+
+    public static boolean isPackageInstalled(String packagename, Context context) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            pm.getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 
     @Nullable
@@ -77,10 +88,32 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mContext = getActivity();
         ((DashBoardActivity) getActivity()).setActionBar(3, "true");
+        setTypeface();
         initViews();
         setListners();
 
         return rootView;
+    }
+
+    public void setTypeface() {
+        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
+        studentAttendanceBinding.submitBtn.setTypeface(custom_font);
+        studentAttendanceBinding.noRecordTxt.setTypeface(custom_font);
+        studentAttendanceBinding.sessionTxt.setTypeface(custom_font);
+        studentAttendanceBinding.sessionNameTxt.setTypeface(custom_font);
+        studentAttendanceBinding.sessionLessonTxt.setTypeface(custom_font);
+        studentAttendanceBinding.subjectTxt.setTypeface(custom_font);
+        studentAttendanceBinding.sessionBoardTxt.setTypeface(custom_font);
+        studentAttendanceBinding.boardTxt.setTypeface(custom_font);
+        studentAttendanceBinding.sessionStandardTxt.setTypeface(custom_font);
+        studentAttendanceBinding.standardTxt.setTypeface(custom_font);
+        studentAttendanceBinding.dateTxt.setTypeface(custom_font);
+        studentAttendanceBinding.dateTxtView.setTypeface(custom_font);
+        studentAttendanceBinding.timeTxt.setTypeface(custom_font);
+        studentAttendanceBinding.timeTxtView.setTypeface(custom_font);
+        studentAttendanceBinding.sessionStudentTxt.setTypeface(custom_font);
+        studentAttendanceBinding.totalStudentTxt.setTypeface(custom_font);
+        studentAttendanceBinding.sessionClassTxt.setTypeface(custom_font);
     }
 
     public void initViews() {
@@ -137,16 +170,6 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
             }
         });
 
-    }
-
-    public static boolean isPackageInstalled(String packagename, Context context) {
-        PackageManager pm = context.getPackageManager();
-        try {
-            pm.getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);
-            return true;
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
-        }
     }
 
     public void getMonthFun(int month) {
@@ -550,16 +573,16 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
             String classValue;
             if (AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
                 classValue = "Free Class";
-            }else{
-                classValue="Regular Class";
+            } else {
+                classValue = "Regular Class";
             }
             for (int m = 0; m < spinnerclassIdArray.length; m++) {
-                    if (classValue.equalsIgnoreCase((spinnerclassIdArray[m]))) {
-                        Log.d("spinnerValue", spinnerclassIdArray[m]);
-                        int index = m;
-                        Log.d("indexOf", String.valueOf(index));
-                        studentAttendanceBinding.classSpinner.setSelection(m);
-                    }
+                if (classValue.equalsIgnoreCase((spinnerclassIdArray[m]))) {
+                    Log.d("spinnerValue", spinnerclassIdArray[m]);
+                    int index = m;
+                    Log.d("indexOf", String.valueOf(index));
+                    studentAttendanceBinding.classSpinner.setSelection(m);
+                }
 
             }
         }

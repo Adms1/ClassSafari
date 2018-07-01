@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -30,6 +31,15 @@ public class SessionDetailModel {
     }
 
     public List<sessionDataModel> getData() {
+        for (sessionDataModel model:data){
+            model.setWeekMonDays();
+            model.setWeekTueDays();
+            model.setWeekWedDays();
+            model.setWeekThurDays();
+            model.setWeekFriDays();
+            model.setWeekSatDays();
+            model.setWeekSunDays();
+        }
         return data;
     }
 
@@ -44,4 +54,6 @@ public class SessionDetailModel {
     public void setRatingAvg(String ratingAvg) {
         this.ratingAvg = ratingAvg;
     }
+
+
 }

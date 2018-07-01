@@ -3,6 +3,7 @@ package com.adms.classsafari.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -62,7 +63,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
         this.onViewClick = onViewClick;
         this.sessionType = sessionType;
         this.firsttimesearch = firsttimesearch;
-        this.bookClick=bookClick;
+        this.bookClick = bookClick;
     }
 
     @Override
@@ -74,6 +75,37 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
         cardLayoutBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.card_layout, parent, false);
 
         View itemView = cardLayoutBinding.getRoot();
+
+
+        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
+        cardLayoutBinding.sessionNameTxt.setTypeface(custom_font);
+        cardLayoutBinding.ratingUserTxt.setTypeface(custom_font);
+        cardLayoutBinding.tutorNameTxt.setTypeface(custom_font);
+        cardLayoutBinding.locationTxt.setTypeface(custom_font);
+        cardLayoutBinding.startDateTxt.setTypeface(custom_font);
+        cardLayoutBinding.endDateTxt.setTypeface(custom_font);
+        cardLayoutBinding.priceTxt.setTypeface(custom_font);
+        cardLayoutBinding.monTimeTxt.setTypeface(custom_font);
+        cardLayoutBinding.tuesTimeTxt.setTypeface(custom_font);
+        cardLayoutBinding.wedTimeTxt.setTypeface(custom_font);
+        cardLayoutBinding.thurTimeTxt.setTypeface(custom_font);
+        cardLayoutBinding.friTimeTxt.setTypeface(custom_font);
+        cardLayoutBinding.satTimeTxt.setTypeface(custom_font);
+        cardLayoutBinding.sunTimeTxt.setTypeface(custom_font);
+        cardLayoutBinding.monHoursTxt.setTypeface(custom_font);
+        cardLayoutBinding.tuesHoursTxt.setTypeface(custom_font);
+        cardLayoutBinding.wedHoursTxt.setTypeface(custom_font);
+        cardLayoutBinding.thurHoursTxt.setTypeface(custom_font);
+        cardLayoutBinding.friHoursTxt.setTypeface(custom_font);
+        cardLayoutBinding.satHoursTxt.setTypeface(custom_font);
+        cardLayoutBinding.sunHoursTxt.setTypeface(custom_font);
+        cardLayoutBinding.mondayBtn.setTypeface(custom_font);
+        cardLayoutBinding.tuesdayBtn.setTypeface(custom_font);
+        cardLayoutBinding.wednesdayBtn.setTypeface(custom_font);
+        cardLayoutBinding.thursdayBtn.setTypeface(custom_font);
+        cardLayoutBinding.fridayBtn.setTypeface(custom_font);
+        cardLayoutBinding.saturdayBtn.setTypeface(custom_font);
+        cardLayoutBinding.sundayBtn.setTypeface(custom_font);
 
         return new MyViewHolder(itemView);
     }
@@ -180,85 +212,138 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
             }
         });
 
-       cardLayoutBinding.bookSessionBtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
+        cardLayoutBinding.bookSessionBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View view) {
                 SessionBookDetail = new ArrayList<>();
                 SessionBookDetail.add(arrayList.get(position).getSessionID());
                 bookClick.bookClick();
             }
         });
-        String[] spiltPipes = arrayList.get(position).getSchedule().split("\\|");
-        String[] spiltComma;
-        String[] spiltDash;
-        Log.d("spilt", "" + spiltPipes.toString());
-        for (int i = 0; i < spiltPipes.length; i++) {
-            spiltComma = spiltPipes[i].split("\\,");
-            spiltDash = spiltComma[1].split("\\-");
-            calculateHours(spiltDash[0], spiltDash[1]);
-            arrayList.get(position).setDateTime(spiltDash[0]);
-            Log.d("DateTime", spiltDash[0]);
-            switch (spiltComma[0]) {
-                case "sun":
-                    cardLayoutBinding.sunTimeTxt.setEnabled(true);
+//        String[] spiltPipes = arrayList.get(position).getSchedule().split("\\|");
+//        String[] spiltComma;
+//        String[] spiltDash;
+//        Log.d("spilt", "" + spiltPipes.toString());
+//        for (int i = 0; i < spiltPipes.length; i++) {
+//            spiltComma = spiltPipes[i].split("\\,");
+//            spiltDash = spiltComma[1].split("\\-");
+//            calculateHours(spiltDash[0], spiltDash[1]);
+//            arrayList.get(position).setDateTime(spiltDash[0]);
+//            Log.d("DateTime", spiltDash[0]);
+//            switch (spiltComma[0]) {
+//                case "sun":
+//                    cardLayoutBinding.sunTimeTxt.setEnabled(true);
+//                    cardLayoutBinding.sundayBtn.setEnabled(true);
+//                    cardLayoutBinding.sunTimeTxt.setAlpha(1);
+//                    cardLayoutBinding.sundayBtn.setAlpha(1);
+//                    cardLayoutBinding.sunTimeTxt.setText(arrayList.get(position).getDateTime());
+//                    break;
+//                case "mon":
+//                    cardLayoutBinding.monTimeTxt.setEnabled(true);
+//                    cardLayoutBinding.mondayBtn.setEnabled(true);
+//                    cardLayoutBinding.monTimeTxt.setAlpha(1);
+//                    cardLayoutBinding.mondayBtn.setAlpha(1);
+//                    cardLayoutBinding.monTimeTxt.setText(arrayList.get(position).getDateTime());
+//                    break;
+//                case "tue":
+//                    cardLayoutBinding.tuesTimeTxt.setEnabled(true);
+//                    cardLayoutBinding.tuesdayBtn.setEnabled(true);
+//                    cardLayoutBinding.tuesTimeTxt.setAlpha(1);
+//                    cardLayoutBinding.tuesdayBtn.setAlpha(1);
+//                    cardLayoutBinding.tuesTimeTxt.setText(arrayList.get(position).getDateTime());
+//                    break;
+//                case "wed":
+//                    cardLayoutBinding.wedTimeTxt.setEnabled(true);
+//                    cardLayoutBinding.wednesdayBtn.setEnabled(true);
+//                    cardLayoutBinding.wedTimeTxt.setAlpha(1);
+//                    cardLayoutBinding.wednesdayBtn.setAlpha(1);
+//                    cardLayoutBinding.wedTimeTxt.setText(arrayList.get(position).getDateTime());
+//                    break;
+//                case "thu":
+//                    cardLayoutBinding.thurTimeTxt.setEnabled(true);
+//                    cardLayoutBinding.thursdayBtn.setEnabled(true);
+//                    cardLayoutBinding.thurTimeTxt.setAlpha(1);
+//                    cardLayoutBinding.thursdayBtn.setAlpha(1);
+//                    cardLayoutBinding.thurTimeTxt.setText(arrayList.get(position).getDateTime());
+//                    break;
+//                case "fri":
+//                    cardLayoutBinding.friTimeTxt.setEnabled(true);
+//                    cardLayoutBinding.fridayBtn.setEnabled(true);
+//                    cardLayoutBinding.friTimeTxt.setAlpha(1);
+//                    cardLayoutBinding.fridayBtn.setAlpha(1);
+//                    cardLayoutBinding.friTimeTxt.setText(arrayList.get(position).getDateTime());
+//                    break;
+//                case "sat":
+//                    cardLayoutBinding.satTimeTxt.setEnabled(true);
+//                    cardLayoutBinding.saturdayBtn.setEnabled(true);
+//                    cardLayoutBinding.satTimeTxt.setAlpha(1);
+//                    cardLayoutBinding.saturdayBtn.setAlpha(1);
+//                    cardLayoutBinding.satTimeTxt.setText(arrayList.get(position).getDateTime());
+//                    break;
+//                default:
+//
+//            }
+//        }
+//        sessionDataModel.setWeekDay(arrayList.get(position).getSchedule());
+        if (!arrayList.get(position).getMondayTimeStr().equalsIgnoreCase("")) {
+            cardLayoutBinding.monTimeTxt.setEnabled(true);
+            cardLayoutBinding.mondayBtn.setEnabled(true);
+            cardLayoutBinding.monTimeTxt.setAlpha(1);
+            cardLayoutBinding.mondayBtn.setAlpha(1);
+            cardLayoutBinding.monTimeTxt.setText(arrayList.get(position).getMondayTimeStr());
+        }
+        if (!arrayList.get(position).getTuesdayTimeStr().equalsIgnoreCase("")) {
+            cardLayoutBinding.tuesTimeTxt.setEnabled(true);
+            cardLayoutBinding.tuesdayBtn.setEnabled(true);
+            cardLayoutBinding.tuesTimeTxt.setAlpha(1);
+            cardLayoutBinding.tuesdayBtn.setAlpha(1);
+            cardLayoutBinding.tuesTimeTxt.setText(arrayList.get(position).getTuesdayTimeStr());
+        }
+        if (!arrayList.get(position).getWeddayTimeStr().equalsIgnoreCase("")) {
+            cardLayoutBinding.wedTimeTxt.setEnabled(true);
+            cardLayoutBinding.wednesdayBtn.setEnabled(true);
+            cardLayoutBinding.wedTimeTxt.setAlpha(1);
+            cardLayoutBinding.wednesdayBtn.setAlpha(1);
+            cardLayoutBinding.wedTimeTxt.setText(arrayList.get(position).getWeddayTimeStr());
+        }
+        if (!arrayList.get(position).getThursdayTimeStr().equalsIgnoreCase("")) {
+            cardLayoutBinding.thurTimeTxt.setEnabled(true);
+                    cardLayoutBinding.thursdayBtn.setEnabled(true);
+                    cardLayoutBinding.thurTimeTxt.setAlpha(1);
+                    cardLayoutBinding.thursdayBtn.setAlpha(1);
+                    cardLayoutBinding.thurTimeTxt.setText(arrayList.get(position).getThursdayTimeStr());
+        }
+        if (!arrayList.get(position).getFridayTimeStr().equalsIgnoreCase("")) {
+            cardLayoutBinding.friTimeTxt.setEnabled(true);
+                    cardLayoutBinding.fridayBtn.setEnabled(true);
+                    cardLayoutBinding.friTimeTxt.setAlpha(1);
+                    cardLayoutBinding.fridayBtn.setAlpha(1);
+                    cardLayoutBinding.friTimeTxt.setText(arrayList.get(position).getFridayTimeStr());
+        }
+        if (!arrayList.get(position).getSatdayTimeStr().equalsIgnoreCase("")) {
+            cardLayoutBinding.satTimeTxt.setEnabled(true);
+                    cardLayoutBinding.saturdayBtn.setEnabled(true);
+                    cardLayoutBinding.satTimeTxt.setAlpha(1);
+                    cardLayoutBinding.saturdayBtn.setAlpha(1);
+                    cardLayoutBinding.satTimeTxt.setText(arrayList.get(position).getSatdayTimeStr());
+        }
+        if (!arrayList.get(position).getSundayTimeStr().equalsIgnoreCase("")) {
+            cardLayoutBinding.sunTimeTxt.setEnabled(true);
                     cardLayoutBinding.sundayBtn.setEnabled(true);
                     cardLayoutBinding.sunTimeTxt.setAlpha(1);
                     cardLayoutBinding.sundayBtn.setAlpha(1);
                     cardLayoutBinding.sunTimeTxt.setText(arrayList.get(position).getDateTime());
-                    break;
-                case "mon":
-                    cardLayoutBinding.monTimeTxt.setEnabled(true);
-                    cardLayoutBinding.mondayBtn.setEnabled(true);
-                    cardLayoutBinding.monTimeTxt.setAlpha(1);
-                    cardLayoutBinding.mondayBtn.setAlpha(1);
-                    cardLayoutBinding.monTimeTxt.setText(arrayList.get(position).getDateTime());
-                    break;
-                case "tue":
-                    cardLayoutBinding.tuesTimeTxt.setEnabled(true);
-                    cardLayoutBinding.tuesdayBtn.setEnabled(true);
-                    cardLayoutBinding.tuesTimeTxt.setAlpha(1);
-                    cardLayoutBinding.tuesdayBtn.setAlpha(1);
-                    cardLayoutBinding.tuesTimeTxt.setText(arrayList.get(position).getDateTime());
-                    break;
-                case "wed":
-                    cardLayoutBinding.wedTimeTxt.setEnabled(true);
-                    cardLayoutBinding.wednesdayBtn.setEnabled(true);
-                    cardLayoutBinding.wedTimeTxt.setAlpha(1);
-                    cardLayoutBinding.wednesdayBtn.setAlpha(1);
-                    cardLayoutBinding.wedTimeTxt.setText(arrayList.get(position).getDateTime());
-                    break;
-                case "thu":
-                    cardLayoutBinding.thurTimeTxt.setEnabled(true);
-                    cardLayoutBinding.thursdayBtn.setEnabled(true);
-                    cardLayoutBinding.thurTimeTxt.setAlpha(1);
-                    cardLayoutBinding.thursdayBtn.setAlpha(1);
-                    cardLayoutBinding.thurTimeTxt.setText(arrayList.get(position).getDateTime());
-                    break;
-                case "fri":
-                    cardLayoutBinding.friTimeTxt.setEnabled(true);
-                    cardLayoutBinding.fridayBtn.setEnabled(true);
-                    cardLayoutBinding.friTimeTxt.setAlpha(1);
-                    cardLayoutBinding.fridayBtn.setAlpha(1);
-                    cardLayoutBinding.friTimeTxt.setText(arrayList.get(position).getDateTime());
-                    break;
-                case "sat":
-                    cardLayoutBinding.satTimeTxt.setEnabled(true);
-                    cardLayoutBinding.saturdayBtn.setEnabled(true);
-                    cardLayoutBinding.satTimeTxt.setAlpha(1);
-                    cardLayoutBinding.saturdayBtn.setAlpha(1);
-                    cardLayoutBinding.satTimeTxt.setText(arrayList.get(position).getDateTime());
-                    break;
-                default:
-
-            }
         }
+
+
         if (arrayList.get(position).getCoachTypeID().equalsIgnoreCase("1")) {
             cardLayoutBinding.tutorNameTxt.setText(arrayList.get(position).getName());
         } else {
             cardLayoutBinding.tutorNameTxt.setText(arrayList.get(position).getName());
         }
 
-        arrayList.get(position).setDuration(SessionHour + " hr " + SessionMinit + " min");
+
+//        arrayList.get(position).setDuration(SessionHour + " hr " + SessionMinit + " min");
 //        cardLayoutBinding.durationTxt.setText(arrayList.get(position).getDuration());
         cardLayoutBinding.locationTxt.setOnClickListener(new View.OnClickListener() {
             @Override

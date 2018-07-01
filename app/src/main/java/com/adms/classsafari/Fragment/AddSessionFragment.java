@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -120,7 +121,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
     ArrayList<Integer> totalHours;
     ArrayList<Integer> totalMinit;
     int avgHoursvalue, avgMinitvalue;
-    boolean checkfalse=false;
+    boolean checkfalse = false;
     private FragmentAddSessionBinding addSessionBinding;
     private View rootView;
     private Context mContext;
@@ -337,8 +338,81 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         callRegionApi();
         fillCity();
         callAddressApi();
+        setTypeface();
         initViews();
         setListners();
+
+    }
+
+    public void setTypeface() {
+        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
+
+        addSessionBinding.AcademicRb.setTypeface(custom_font);
+        addSessionBinding.playRb.setTypeface(custom_font);
+        addSessionBinding.recurringRb.setTypeface(custom_font);
+        addSessionBinding.singleRb.setTypeface(custom_font);
+        addSessionBinding.sessionNameEdt.setTypeface(custom_font);
+        addSessionBinding.boardNameEdt.setTypeface(custom_font);
+        addSessionBinding.standardEdt.setTypeface(custom_font);
+        addSessionBinding.streamEdt.setTypeface(custom_font);
+        addSessionBinding.subjectEdt.setTypeface(custom_font);
+        addSessionBinding.descriptionEdt.setTypeface(custom_font);
+        addSessionBinding.addressEdt.setTypeface(custom_font);
+        addSessionBinding.areaEdt.setTypeface(custom_font);
+        addSessionBinding.cityEdt.setTypeface(custom_font);
+        addSessionBinding.stateEdt.setTypeface(custom_font);
+        addSessionBinding.zipcodeEdt.setTypeface(custom_font);
+
+        addSessionBinding.mondayBtn.setTypeface(custom_font);
+        addSessionBinding.tuesdayBtn.setTypeface(custom_font);
+        addSessionBinding.wednesdayBtn.setTypeface(custom_font);
+        addSessionBinding.thursdayBtn.setTypeface(custom_font);
+        addSessionBinding.fridayBtn.setTypeface(custom_font);
+        addSessionBinding.saturdayBtn.setTypeface(custom_font);
+        addSessionBinding.sundayBtn.setTypeface(custom_font);
+        addSessionBinding.startDateTxt.setTypeface(custom_font);
+        addSessionBinding.endDateTxt.setTypeface(custom_font);
+
+        addSessionBinding.monTimeTxt.setTypeface(custom_font);
+        addSessionBinding.thurTimeTxt.setTypeface(custom_font);
+        addSessionBinding.wedTimeTxt.setTypeface(custom_font);
+        addSessionBinding.thurTimeTxt.setTypeface(custom_font);
+        addSessionBinding.friTimeTxt.setTypeface(custom_font);
+        addSessionBinding.satTimeTxt.setTypeface(custom_font);
+        addSessionBinding.sunTimeTxt.setTypeface(custom_font);
+
+        addSessionBinding.monHoursTxt.setTypeface(custom_font);
+        addSessionBinding.tuesHoursTxt.setTypeface(custom_font);
+        addSessionBinding.wedHoursTxt.setTypeface(custom_font);
+        addSessionBinding.thurHoursTxt.setTypeface(custom_font);
+        addSessionBinding.friHoursTxt.setTypeface(custom_font);
+        addSessionBinding.satHoursTxt.setTypeface(custom_font);
+        addSessionBinding.sunHoursTxt.setTypeface(custom_font);
+
+
+        addSessionBinding.sessionTimeTxt.setTypeface(custom_font);
+        addSessionBinding.addSessionBtn.setTypeface(custom_font);
+
+        addSessionBinding.sessionSelectAddressTxt.setTypeface(custom_font);
+        addSessionBinding.selectSessionAddressBtn.setTypeface(custom_font);
+        addSessionBinding.submitBtn.setTypeface(custom_font);
+
+        sun_start_time_txt.setTypeface(custom_font);
+        sun_end_time_txt.setTypeface(custom_font);
+        mon_start_time_txt.setTypeface(custom_font);
+        mon_end_time_txt.setTypeface(custom_font);
+        tue_start_time_txt.setTypeface(custom_font);
+        tue_end_time_txt.setTypeface(custom_font);
+        wed_start_time_txt.setTypeface(custom_font);
+        wed_end_time_txt.setTypeface(custom_font);
+        thu_start_time_txt.setTypeface(custom_font);
+        thu_end_time_txt.setTypeface(custom_font);
+        fri_end_time_txt.setTypeface(custom_font);
+        fri_start_time_txt.setTypeface(custom_font);
+        sat_end_time_txt.setTypeface(custom_font);
+        sat_start_time_txt.setTypeface(custom_font);
+        confirm_title_txt.setTypeface(custom_font);
+
 
     }
 
@@ -375,10 +449,10 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         addSessionBinding.session1TypeRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                if (checkfalse==true){
+                if (checkfalse == true) {
 //                    addSessionBinding.recurringRb.setChecked(true);
 //                    addSessionBinding.singleRb.setChecked(true);
-                }else{
+                } else {
                     addSessionBinding.recurringRb.setChecked(false);
                     addSessionBinding.singleRb.setChecked(false);
                 }
@@ -2191,7 +2265,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
     }
 
     public void fillEditSessionFiled() {
-        checkfalse=true;
+        checkfalse = true;
         scheduleStr = "";
         for (int i = 0; i < dataResponse.getData().size(); i++) {
             switch (dataResponse.getData().get(i).getSessionType()) {

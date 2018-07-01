@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -35,18 +36,18 @@ import retrofit.client.Response;
 
 public class PaymentReportFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
 
-    private FragmentPaymentReportBinding paymentReportBinding;
-    private View rootView;
-    private Context mContext;
+    private static boolean isFromDate = false;
     String MonthInt;
     int Year, Month, Day;
     Calendar calendar;
-    private DatePickerDialog datePickerDialog;
     int mYear, mMonth, mDay;
-    private static boolean isFromDate = false;
     PaymentSucessReportAdapter paymentSucessReportAdapter;
     List<FamilyDetailModel> paymentReportList;
-    String startDateStr,endDateStr,flag;
+    String startDateStr, endDateStr, flag;
+    private FragmentPaymentReportBinding paymentReportBinding;
+    private View rootView;
+    private Context mContext;
+    private DatePickerDialog datePickerDialog;
 
     public PaymentReportFragment() {
     }
@@ -61,10 +62,19 @@ public class PaymentReportFragment extends Fragment implements DatePickerDialog.
         mContext = getActivity();
 
         ((DashBoardActivity) getActivity()).setActionBar(2, "true");
+        setTypeface();
         initViews();
         setListners();
 
         return rootView;
+    }
+
+    public void setTypeface() {
+        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
+        paymentReportBinding.txtStartDate.setTypeface(custom_font);
+        paymentReportBinding.txtEndDate.setTypeface(custom_font);
+        paymentReportBinding.btnShow.setTypeface(custom_font);
+        paymentReportBinding.noRecordTxt.setTypeface(custom_font);
     }
 
     public void initViews() {
@@ -110,10 +120,10 @@ public class PaymentReportFragment extends Fragment implements DatePickerDialog.
             @Override
             public void onClick(View view) {
 
-                if(!startDateStr.equalsIgnoreCase("dd/MM/yyyy")&&!endDateStr.equalsIgnoreCase("dd/MM/yyyy")) {
+                if (!startDateStr.equalsIgnoreCase("dd/MM/yyyy") && !endDateStr.equalsIgnoreCase("dd/MM/yyyy")) {
                     callPaymentReportApi();
-                }else{
-                    Utils.ping(mContext,"Please Select StartDate and EndDate.");
+                } else {
+                    Utils.ping(mContext, "Please Select StartDate and EndDate.");
                 }
             }
         });
@@ -174,8 +184,8 @@ public class PaymentReportFragment extends Fragment implements DatePickerDialog.
                             paymentReportBinding.noRecordTxt.setVisibility(View.GONE);
                             paymentReportBinding.listLinear.setVisibility(View.VISIBLE);
                             paymentReportBinding.headerLinear.setVisibility(View.VISIBLE);
-                            flag="1";
-                            paymentSucessReportAdapter = new PaymentSucessReportAdapter(mContext, paymentReportList,flag);
+                            flag = "1";
+                            paymentSucessReportAdapter = new PaymentSucessReportAdapter(mContext, paymentReportList, flag);
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
                             paymentReportBinding.reportRcList.setLayoutManager(mLayoutManager);
                             paymentReportBinding.reportRcList.setItemAnimator(new DefaultItemAnimator());
@@ -202,8 +212,8 @@ public class PaymentReportFragment extends Fragment implements DatePickerDialog.
     }
 
     private Map<String, String> getReportDetail() {
-        startDateStr=paymentReportBinding.txtStartDate.getText().toString();
-        endDateStr=paymentReportBinding.txtEndDate.getText().toString();
+        startDateStr = paymentReportBinding.txtStartDate.getText().toString();
+        endDateStr = paymentReportBinding.txtEndDate.getText().toString();
         Map<String, String> map = new HashMap<>();
         map.put("CoachID", Utils.getPref(mContext, "coachID"));
         map.put("StartDate", startDateStr);

@@ -4,7 +4,6 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_37sdp"
-        android:background="@color/unselected_header"
         android:descendantFocusability="blocksDescendants"
         android:orientation="vertical">
 
@@ -14,6 +13,7 @@
             android:layout_height="@dimen/_36sdp"
             android:layout_gravity="center_vertical"
             android:orientation="horizontal"
+            android:background="@color/blue"
             android:paddingBottom="@dimen/_2sdp"
             android:visibility="visible">
 
@@ -34,7 +34,7 @@
                     android:paddingLeft="@dimen/_3sdp"
                     android:tag="1"
                     android:text="@string/academic"
-                    android:textColor="@color/text_color"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/_10sdp" />
 
             </RadioGroup>
@@ -46,9 +46,9 @@
                 android:gravity="center|center_vertical"
                 android:paddingLeft="@dimen/_2sdp"
                 android:text="7843568412"
-                android:drawableLeft="@drawable/add_family_mob"
+                android:drawableLeft="@drawable/mobile"
                 android:textAlignment="center"
-                android:textColor="@color/text_color"
+                android:textColor="@color/white"
                 android:textSize="@dimen/_10sdp" />
 
             <Button

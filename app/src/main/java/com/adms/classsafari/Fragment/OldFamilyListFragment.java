@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -80,11 +81,18 @@ public class OldFamilyListFragment extends Fragment {
         ((DashBoardActivity) getActivity()).setActionBar(13, "false");
         sessionIDStr = Utils.getPref(mContext, "sessionID");
         Log.d("sessionID", sessionIDStr);
+        setTypeface();
         initViews();
         setListners();
         callFamilyListApi();
         froncontanctStr = "false";
         return rootView;
+    }
+
+    public void setTypeface() {
+        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
+        oldFamilyListBinding.text.setTypeface(custom_font);
+        oldFamilyListBinding.noRecordTxt.setTypeface(custom_font);
     }
 
     public void initViews() {
@@ -121,17 +129,17 @@ public class OldFamilyListFragment extends Fragment {
             }
 
         });
-        oldFamilyListBinding.sessionCal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment fragment = new SessionFragment();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.frame, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-        });
+//        oldFamilyListBinding.sessionCal.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Fragment fragment = new SessionFragment();
+//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.replace(R.id.frame, fragment);
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+//            }
+//        });
     }
 
 

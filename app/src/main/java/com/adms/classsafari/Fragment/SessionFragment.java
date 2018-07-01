@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -82,7 +83,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
     ArrayList<Integer> totalHours;
     ArrayList<Integer> totalMinit;
     int avgHoursvalue, avgMinitvalue;
-    String SessionDuration ;
+    String SessionDuration;
     //Use for PaymentConfirmation Dialog
     Dialog confimDialog;
     String contatIDstr, orderIDStr, familyNameStr;
@@ -116,10 +117,17 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
         } else {
 
         }
-
+setTypeface();
         setListner();
         return rootView;
     }
+
+    public void setTypeface() {
+        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
+        calendarBinding.monthYearTxt.setTypeface(custom_font);
+    }
+
+
 
     public void init() {
         if (Utils.checkAndRequestPermissions(mContext)) {

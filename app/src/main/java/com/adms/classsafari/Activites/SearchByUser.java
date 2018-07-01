@@ -89,6 +89,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
         searchByUserBinding.letsPlayTxt.setTypeface(custom_font);
         searchByUserBinding.letsStudyTxt.setTypeface(custom_font);
         searchByUserBinding.orTxt.setTypeface(custom_font);
+
         if (!Utils.getPref(mContext, "RegisterUserName").equalsIgnoreCase("")) {
             if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Coach")) {
                 Intent iDash = new Intent(mContext, DashBoardActivity.class);
@@ -513,10 +514,10 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 menuDialog.dismiss();
-                new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AlertDialogTheme))
                         .setCancelable(false)
-                        .setTitle("Logout")
-                        .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+//                        .setTitle("Logout")
+//                        .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
                         .setMessage("Are you sure you want to logout?")
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -541,7 +542,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
 
                             }
                         })
-                        .setIcon(R.drawable.safari)
+//                        .setIcon(R.drawable.safari)
                         .show();
             }
         });

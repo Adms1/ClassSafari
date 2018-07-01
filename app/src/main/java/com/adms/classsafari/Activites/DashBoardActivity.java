@@ -230,10 +230,10 @@ public class DashBoardActivity extends AppCompatActivity {
                 changePasswordDialog();
                 break;
             case 4:
-                new AlertDialog.Builder(new ContextThemeWrapper(mContex, R.style.AppTheme))
+                new AlertDialog.Builder(new ContextThemeWrapper(mContex, R.style.AlertDialogTheme))
                         .setCancelable(false)
-                        .setTitle("Logout")
-                        .setIcon(mContex.getResources().getDrawable(R.drawable.safari))
+//                        .setTitle("Logout")
+//                        .setIcon(mContex.getResources().getDrawable(R.drawable.safari))
                         .setMessage("Are you sure you want to logout?")
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -255,7 +255,7 @@ public class DashBoardActivity extends AppCompatActivity {
 
                             }
                         })
-                        .setIcon(R.drawable.safari)
+//                        .setIcon(R.drawable.safari)
                         .show();
                 break;
         }
@@ -398,31 +398,31 @@ public class DashBoardActivity extends AppCompatActivity {
 
     public void setActionBar(int session, String flag) {
         if (session == 1 && flag.equalsIgnoreCase("edit")) {
-            getSupportActionBar().setTitle("Edit Class");
+            getSupportActionBar().setTitle("EDIT CLASS");
             session_cal.setVisibility(View.VISIBLE);
         } else if (session == 1 && flag.equalsIgnoreCase("add")) {
-            getSupportActionBar().setTitle("Add Class");
+            getSupportActionBar().setTitle("ADD CLASS");
             session_cal.setVisibility(View.VISIBLE);
         } else if (session == 1 && flag.equalsIgnoreCase("view")) {
-            getSupportActionBar().setTitle("View Class");
+            getSupportActionBar().setTitle("VIEW CLASS");
             session_cal.setVisibility(View.VISIBLE);
         } else if (session == 10 && flag.equalsIgnoreCase("false")) {
-            getSupportActionBar().setTitle("Add Family");
+            getSupportActionBar().setTitle("ADD FAMILY");
             session_cal.setVisibility(View.GONE);
         } else if (session == 11 && flag.equalsIgnoreCase("false")) {
-            getSupportActionBar().setTitle("Add Contact");
+            getSupportActionBar().setTitle("ADD CONTACT");
             session_cal.setVisibility(View.GONE);
         } else if (session == 12 && flag.equalsIgnoreCase("false")) {
-            getSupportActionBar().setTitle("Payment");
+            getSupportActionBar().setTitle("PAYMENT");
             session_cal.setVisibility(View.VISIBLE);
         } else if (session == 13 && flag.equalsIgnoreCase("false")) {
-            getSupportActionBar().setTitle("Family List");
+            getSupportActionBar().setTitle("FAMILY LIST");
             session_cal.setVisibility(View.VISIBLE);
         } else if (session == 14 && flag.equalsIgnoreCase("false")) {
-            getSupportActionBar().setTitle("Payment Sucess");
+            getSupportActionBar().setTitle("PAYMENT SUCESS");
             session_cal.setVisibility(View.GONE);
         } else if (session == 3 && flag.equalsIgnoreCase("true")) {
-            getSupportActionBar().setTitle("Student Attendance");
+            getSupportActionBar().setTitle("STUDENT ATTENDANCE");
             session_cal.setVisibility(View.VISIBLE);
         }
 //        else if (session == 15 && flag.equalsIgnoreCase("false")) {

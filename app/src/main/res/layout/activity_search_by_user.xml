@@ -17,32 +17,38 @@
             android:layout_marginTop="@dimen/_20sdp"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/login_txt"
-                android:layout_width="@dimen/_50sdp"
-                android:layout_height="@dimen/_30sdp"
-                android:layout_marginLeft="@dimen/_177sdp"
-                android:gravity="end"
-                android:layout_gravity="right"
-                android:text="@string/login"
-                android:textColor="@color/gray1"
-                android:textSize="@dimen/_14sdp"
-                android:textStyle="normal"/>
+
+                <TextView
+                    android:id="@+id/login_txt"
+                    android:layout_width="@dimen/_50sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:layout_gravity="right"
+                    android:layout_marginLeft="@dimen/_177sdp"
+                    android:gravity="end"
+                    android:text="@string/login"
+                    android:textColor="@color/gray1"
+                    android:textSize="@dimen/_14sdp"
+                    android:textStyle="normal" />
+
+
             <TextView
                 android:id="@+id/login_middle_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_30sdp"
-                android:gravity="start"
                 android:layout_gravity="right"
-                android:text="/"
+                android:layout_marginLeft="@dimen/_1sdp"
+                android:gravity="start"
+                android:text="|"
                 android:textColor="@color/search_boder"
                 android:textSize="@dimen/_14sdp"
                 android:textStyle="normal" />
+
             <TextView
                 android:id="@+id/regi_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_gravity="right"
+                android:layout_marginLeft="@dimen/_1sdp"
                 android:gravity="start"
                 android:text="Register"
                 android:textColor="@color/blue"
@@ -92,7 +98,7 @@
                     android:imeOptions="actionSearch"
                     android:paddingLeft="@dimen/_4sdp"
                     android:paddingRight="@dimen/_8sdp"
-                    android:singleLine="true"/>
+                    android:singleLine="true" />
 
                 <TextView
                     android:id="@+id/search_txt"
@@ -101,8 +107,7 @@
                     android:layout_gravity="center_vertical"
                     android:background="@color/search_class"
                     android:drawableLeft="@drawable/search"
-                    android:paddingLeft="@dimen/_1sdp"
-                    />
+                    android:paddingLeft="@dimen/_1sdp" />
             </LinearLayout>
 
             <LinearLayout
@@ -126,7 +131,7 @@
                     android:hint="@string/location"
                     android:paddingLeft="@dimen/_9sdp"
                     android:paddingRight="@dimen/_9sdp"
-                    android:singleLine="true"/>
+                    android:singleLine="true" />
             </LinearLayout>
         </LinearLayout>
 
@@ -160,8 +165,8 @@
             <View
                 android:layout_width="@dimen/_130sdp"
                 android:layout_height="@dimen/_20sdp"
-                android:layout_marginRight="@dimen/_5sdp"
                 android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginRight="@dimen/_5sdp"
                 android:background="@drawable/orange_line" />
         </LinearLayout>
 

@@ -24,19 +24,20 @@
 
                 <ImageView
                     android:id="@+id/back"
-                    android:layout_width="@dimen/_25sdp"
-                    android:layout_height="@dimen/_25sdp"
+                    android:layout_width="@dimen/_17sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:layout_gravity="center|center_horizontal"
                     android:layout_marginTop="@dimen/_9sdp"
-                    android:src="@drawable/white_arrow" />
+                    android:src="@drawable/search_left" />
 
                 <TextView
                     android:id="@+id/activity_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/_30sdp"
                     android:layout_gravity="center|center_horizontal"
                     android:layout_marginLeft="@dimen/_15sdp"
                     android:layout_marginTop="@dimen/_10sdp"
+                    android:paddingLeft="@dimen/_60sdp"
                     android:paddingTop="@dimen/_2sdp"
                     android:text="@string/family_register1"
                     android:textColor="@color/white"
@@ -102,21 +103,35 @@
                         android:id="@+id/type_of_regi"
                         android:layout_width="wrap_content"
                         android:layout_height="@dimen/_30sdp"
+                        android:layout_marginLeft="@dimen/_5sdp"
                         android:paddingLeft="@dimen/_5sdp"
                         android:text="If you are a Teacher / Instructor"
-                        android:layout_marginLeft="@dimen/_5sdp"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_12sdp" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/click_here"
-                        android:layout_width="@dimen/_120sdp"
-                        android:layout_height="@dimen/_30sdp"
-                        android:paddingLeft="@dimen/_5sdp"
-                        android:text="@string/click_here"
-                        android:tag="teacher"
-                        android:textColor="@color/search_boder"
-                        android:textSize="@dimen/_12sdp" />
+                        <TextView
+                            android:id="@+id/click_here"
+                            android:layout_width="@dimen/_120sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:paddingLeft="@dimen/_5sdp"
+                            android:tag="teacher"
+                            android:text="@string/click_here"
+                            android:textColor="@color/blue"
+                            android:textSize="@dimen/_12sdp" />
+
+                        <View
+                            android:layout_width="@dimen/_55sdp"
+                            android:layout_height="2dp"
+                            android:layout_marginRight="@dimen/_60sdp"
+                            android:layout_marginTop="@dimen/_1sdp"
+                            android:layout_gravity="right"
+                            android:background="@drawable/orange_line" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
                 <RadioGroup
@@ -164,7 +179,7 @@
                     style="@style/RegiAutoComplete"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_30sdp"
-                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginTop="@dimen/_5sdp"
                     android:drawableRight="@drawable/user_white"
                     android:hint="@string/first_name" />
 
@@ -266,17 +281,50 @@
                         android:textColor="@color/white"
                         android:textSize="@dimen/_12sdp" />
                 </RadioGroup>
-                <CheckBox
-                    android:id="@+id/chkTermsAndCondi"
-                    android:layout_width="wrap_content"
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/strIAccTermsAndCond"
-                    android:textColor="@color/white"
-                    android:tag="click"
-                    android:theme="@style/MyCheckBox"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/chkTermsAndCondi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:tag="click"
+                        android:text="@string/strIAccTermsAndCond"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:theme="@style/MyCheckBox" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/view_txt"
+                            android:layout_width="@dimen/_80sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_marginTop="@dimen/_5sdp"
+                            android:gravity="center_vertical|center"
+                            android:text="@string/view_term"
+                            android:textColor="@color/blue"
+                            android:textSize="@dimen/_13sdp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="@dimen/_35sdp"
+                            android:layout_height="2dp"
+                            android:layout_marginRight="@dimen/_29sdp"
+                            android:layout_marginTop="@dimen/_1sdp"
+                            android:layout_gravity="right"
+                            android:background="@drawable/orange_line" />
+                    </LinearLayout>
+                </LinearLayout>
+
             </LinearLayout>
 
 
@@ -286,7 +334,7 @@
                 android:layout_height="@dimen/_35sdp"
                 android:layout_marginLeft="@dimen/_15sdp"
                 android:layout_marginRight="@dimen/_15sdp"
-                android:layout_marginTop="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_10sdp"
                 android:background="@drawable/register_btn"
                 android:text="Register"
                 android:textAllCaps="true"

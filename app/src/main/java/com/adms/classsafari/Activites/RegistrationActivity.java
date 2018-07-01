@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
@@ -62,21 +64,22 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     String firstNameStr, lastNameStr, emailStr, passwordStr, phonenoStr, gendarIdStr = "1", dateofbirthStr, coachTypeIDStr = "1",
             registerTypeStr = "family", contatIDstr, type, sessionIDStr, paymentStatusstr, orderIDStr, frontloginStr,
             boardStr, standardStr, streamStr, locationStr, classNameStr, sessionType, durationStr, sessionDateStr,
-            subjectStr, genderStr, ratingLoginStr, searchfront, firsttimesearch, backStr, SearchPlaystudy, termscondition = "",frontRegister="";
+            subjectStr, genderStr, ratingLoginStr, searchfront, firsttimesearch, backStr, SearchPlaystudy, termscondition = "", frontRegister = "";
     //Use for Confirmation Dialog
-    Dialog confimDialog,optionDialog;
+    Dialog confimDialog, optionDialog;
     boolean firsttime = false;
 
     SessionDetailModel dataResponse;
     int SessionHour = 0;
     Integer SessionMinit = 0;
-    String SessionDuration ;
-    String hours, minit;
+    String SessionDuration;
+    String hours, minit,viewStr;
     boolean callservice = false;
-    private DatePickerDialog datePickerDialog;
     ArrayList<Integer> totalHours;
     ArrayList<Integer> totalMinit;
     int avgHoursvalue, avgMinitvalue;
+    private DatePickerDialog datePickerDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,9 +102,32 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         firsttimesearch = getIntent().getStringExtra("firsttimesearch");
         backStr = getIntent().getStringExtra("back");
         SearchPlaystudy = getIntent().getStringExtra("SearchPlaystudy");
-        frontRegister=getIntent().getStringExtra("frontRegister");
+        frontRegister = getIntent().getStringExtra("frontRegister");
+        setTypeface();
+
         init();
         setListner();
+    }
+
+    public void setTypeface() {
+        Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
+
+        registrationBinding.activityName.setTypeface(custom_font);
+        registrationBinding.typeOfRegi.setTypeface(custom_font);
+        registrationBinding.clickHere.setTypeface(custom_font);
+        registrationBinding.firstNameEdt.setTypeface(custom_font);
+        registrationBinding.lastNameEdt.setTypeface(custom_font);
+        registrationBinding.emailEdt.setTypeface(custom_font);
+        registrationBinding.passwordEdt.setTypeface(custom_font);
+        registrationBinding.phoneNoEdt.setTypeface(custom_font);
+        registrationBinding.dateOfBirthEdt.setTypeface(custom_font);
+        registrationBinding.maleChk.setTypeface(custom_font);
+        registrationBinding.femaleChk.setTypeface(custom_font);
+        registrationBinding.chkTermsAndCondi.setTypeface(custom_font);
+        registrationBinding.registerBtn.setTypeface(custom_font);
+        registrationBinding.viewTxt.setTypeface(custom_font);
+
+
     }
 
     public void init() {
@@ -118,6 +144,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         registrationBinding.registerBtn.setOnClickListener(this);
         registrationBinding.dateOfBirthEdt.setOnClickListener(this);
         registrationBinding.clickHere.setOnClickListener(this);
+        registrationBinding.viewTxt.setOnClickListener(this);
 
         registrationBinding.emailEdt.setOnEditorActionListener(this);
         registrationBinding.passwordEdt.setOnEditorActionListener(this);
@@ -169,6 +196,11 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.view_txt:
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://classsafari.admssvc.com/terms.aspx"));
+                startActivity(browserIntent);
+                break;
             case R.id.date_of_birth_edt:
                 registrationBinding.dateOfBirthEdt.setError(null);
                 datePickerDialog = com.wdullaer.materialdatetimepicker.date.DatePickerDialog.newInstance(RegistrationActivity.this, Year, Month, Day);
@@ -220,7 +252,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                 if (frontloginStr.equalsIgnoreCase("beforeLogin")) {
                     Intent iSearchByUser = new Intent(mContext, SearchByUser.class);
                     startActivity(iSearchByUser);
-                }else {
+                } else {
                     Intent inback = new Intent(mContext, LoginActivity.class);
                     inback.putExtra("frontLogin", frontloginStr);
                     inback.putExtra("searchfront", searchfront);
@@ -317,7 +349,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         if (frontloginStr.equalsIgnoreCase("beforeLogin")) {
             Intent iSearchByUser = new Intent(mContext, SearchByUser.class);
             startActivity(iSearchByUser);
-        }else {
+        } else {
             Intent inback = new Intent(mContext, LoginActivity.class);
 //        inback.putExtra("SearchBy", searchByStr);
             inback.putExtra("sessionID", sessionIDStr);
@@ -824,9 +856,9 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                                 sessiondetailConfirmationDialogBinding.locationTxt.setText(dataResponse.getData().get(j).getRegionName());
                                 sessiondetailConfirmationDialogBinding.startDateTxt.setText(dataResponse.getData().get(j).getStartDate());
                                 sessiondetailConfirmationDialogBinding.endDateTxt.setText(dataResponse.getData().get(j).getEndDate());
-                                sessiondetailConfirmationDialogBinding.priceTxt.setText("₹"+dataResponse.getData().get(j).getSessionAmount());
-                                if(!dataResponse.getData().get(j).getTotalRatingUser().equalsIgnoreCase("0")) {
-                                    sessiondetailConfirmationDialogBinding.ratingUserTxt.setText("( "+dataResponse.getData().get(j).getTotalRatingUser()+" )");
+                                sessiondetailConfirmationDialogBinding.priceTxt.setText("₹" + dataResponse.getData().get(j).getSessionAmount());
+                                if (!dataResponse.getData().get(j).getTotalRatingUser().equalsIgnoreCase("0")) {
+                                    sessiondetailConfirmationDialogBinding.ratingUserTxt.setText("( " + dataResponse.getData().get(j).getTotalRatingUser() + " )");
                                 }
 
 
@@ -964,8 +996,9 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         map.put("SessionID", sessionIDStr);
         return map;
     }
+
     public void averageHours(List<Integer> list) {
-        if(list!=null) {
+        if (list != null) {
             int sum = 0;
             int n = list.size();
             for (int i = 0; i < n; i++)
@@ -975,8 +1008,9 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
             Log.d("value", "" + avgHoursvalue);
         }
     }
+
     public void averageMinit(List<Integer> list) {
-        if(list!=null) {
+        if (list != null) {
             int sum = 0;
             int n = list.size();
             for (int i = 0; i < n; i++)
@@ -985,6 +1019,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
             Log.d("value", "" + avgMinitvalue);
         }
     }
+
     public void calculateHours(String time1, String time2) {
         Date date1, date2;
         int days, hours, min;
@@ -1008,14 +1043,15 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
 ////            if(SessionMinit>0) {
 //            totalMinit.add(SessionMinit);
 ////            }
-            if(SessionMinit>0){
-                if(SessionMinit<10) {
+            if (SessionMinit > 0) {
+                if (SessionMinit < 10) {
                     SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf("0" + SessionMinit + " hrs");
-                }else{SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf(SessionMinit + " hrs");
+                } else {
+                    SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf(SessionMinit + " hrs");
 
                 }
-            }else{
-                SessionDuration=String.valueOf(SessionHour)+" hrs";
+            } else {
+                SessionDuration = String.valueOf(SessionHour) + " hrs";
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -1049,7 +1085,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
             public void onClick(View view) {
                 Intent inLogin = new Intent(mContext, DashBoardActivity.class);
                 inLogin.putExtra("frontLogin", frontloginStr);
-                inLogin.putExtra("position","1");
+                inLogin.putExtra("position", "1");
                 startActivity(inLogin);
                 optionDialog.dismiss();
             }
@@ -1059,7 +1095,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
             public void onClick(View view) {
                 Intent inLogin = new Intent(mContext, DashBoardActivity.class);
                 inLogin.putExtra("frontLogin", frontloginStr);
-                inLogin.putExtra("position","0");
+                inLogin.putExtra("position", "0");
                 startActivity(inLogin);
                 optionDialog.dismiss();
             }
@@ -1070,10 +1106,10 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                 registrationBinding.emailEdt.setText("");
                 registrationBinding.passwordEdt.setText("");
                 Utils.setPref(mContext, "coachID", "");
-                Utils.setPref(mContext, "coachTypeID","");
-                Utils.setPref(mContext, "RegisterUserName","");
-                Utils.setPref(mContext, "RegisterEmail","");
-                Utils.setPref(mContext, "LoginType","");
+                Utils.setPref(mContext, "coachTypeID", "");
+                Utils.setPref(mContext, "RegisterUserName", "");
+                Utils.setPref(mContext, "RegisterEmail", "");
+                Utils.setPref(mContext, "LoginType", "");
                 optionDialog.dismiss();
             }
         });
