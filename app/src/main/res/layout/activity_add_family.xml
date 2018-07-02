@@ -31,9 +31,9 @@
             android:layout_width="@dimen/_215sdp"
             android:layout_height="@dimen/_30sdp"
             android:layout_marginLeft="@dimen/_25sdp"
-            android:fontFamily="monospace"
             android:gravity="center"
             android:text="@string/family_list"
+            android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="@dimen/_15sdp"
             android:textStyle="bold" />

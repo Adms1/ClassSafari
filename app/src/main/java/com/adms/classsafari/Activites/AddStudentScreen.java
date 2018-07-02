@@ -64,7 +64,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
     String pageTitle, type, firstNameStr, lastNameStr, emailStr = "", passwordStr="",
             phonenoStr="", gendarIdStr = "1", dateofbirthStr, contactTypeIDStr,
             familyIDStr, contatIDstr, orderIDStr, sessionIDStr, classStr = "Child",
-            familyNameStr, paymentStatusstr, familylocationStr, familysessionStudentStr,
+            familyNameStr, paymentStatusstr, familylocationStr, familysessionStudentStr,TeacherName,
             sessionDateStr, durationStr, familysessionfeesStr, familysessionnameStr, locationStr,
             boardStr, standardStr, streamStr,  subjectStr, froncontanctStr, RegionName,
             /*wheretoComeStr, searchByStr,searchTypeStr,*/ genderStr, wheretocometypeStr, searchfront, sessionType, firsttimesearch, backStr,SearchPlaystudy;
@@ -134,6 +134,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
         sessionType = getIntent().getStringExtra("sessionType");
         firsttimesearch = getIntent().getStringExtra("firsttimesearch");
         RegionName = getIntent().getStringExtra("RegionName");
+        TeacherName=getIntent().getStringExtra("TeacherName");
         SearchPlaystudy=getIntent().getStringExtra("SearchPlaystudy");
         Log.d("familyName", familyNameStr + familyIDStr);
         addStudentScreenBinding.familynameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
@@ -175,6 +176,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                     intent.putExtra("firsttimesearch", firsttimesearch);
                     intent.putExtra("RegionName", RegionName);
                     intent.putExtra("back", backStr);
+                    intent.putExtra("TeacherName",TeacherName);
                     intent.putExtra("SearchPlaystudy",SearchPlaystudy);
                     startActivity(intent);
                 } else {
@@ -350,6 +352,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                     intent.putExtra("firsttimesearch", firsttimesearch);
                     intent.putExtra("RegionName", RegionName);
                     intent.putExtra("back", backStr);
+                    intent.putExtra("TeacherName",TeacherName);
                     intent.putExtra("SearchPlaystudy",SearchPlaystudy);
                     startActivity(intent);
                 } else {

@@ -68,7 +68,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
     String paymentStatusstr, sessionIDStr, familysessionfeesStr, familysessionnameStr,
             familylocationStr, familysessionStudentStr, sessionDateStr, durationStr,
             orderIDStr, contatIDstr, type, familyIdStr = "", familyNameStr = "", locationStr,
-            boardStr, standardStr, streamStr, searchTypeStr, subjectStr, searchfront, arraowStr,
+            boardStr, standardStr, streamStr, searchTypeStr, subjectStr, searchfront, arraowStr,TeacherName,
     /* wheretoComeStr, searchByStr,*/ genderStr, froncontanctStr, wheretocometypeStr, sessionType, RegionName,
             firsttimesearch, selectedfamilyNameStr, selectedfamilytagStr, bactStr, sessionNameStr, SearchPlaystudy;
     int SessionHour = 0;
@@ -129,6 +129,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         firsttimesearch = getIntent().getStringExtra("firsttimesearch");
 //        RegionName = getIntent().getStringExtra("RegionName");
         bactStr = getIntent().getStringExtra("back");
+        TeacherName=getIntent().getStringExtra("TeacherName");
         sessionConfirmationDetailModel = getIntent().getParcelableExtra("detail");
     }
     public void setTypeface() {
@@ -177,6 +178,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                         intent.putExtra("firsttimesearch", firsttimesearch);
 //                        intent.putExtra("RegionName", RegionName);
                         intent.putExtra("back", bactStr);
+                        intent.putExtra("TeacherName",TeacherName);
                         startActivity(intent);
                     } else {
                         Intent intentClassDetail = new Intent(mContext, ClassDeatilScreen.class);
@@ -196,6 +198,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
 //                        intentClassDetail.putExtra("gender", genderStr);
                         intentClassDetail.putExtra("searchfront", searchfront);
 //                        intentClassDetail.putExtra("sessionType", sessionType);
+                        intentClassDetail.putExtra("TeacherName",TeacherName);
                         startActivity(intentClassDetail);
 
                         startActivity(intentClassDetail);
@@ -244,6 +247,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
 //                    addchild.putExtra("RegionName", RegionName);
                     addchild.putExtra("back", bactStr);
                     addchild.putExtra("SearchPlaystudy", SearchPlaystudy);
+                    addchild.putExtra("TeacherName",TeacherName);
                     startActivity(addchild);
                 } else {
                     Intent addchild = new Intent(mContext, AddStudentScreen.class);
@@ -897,8 +901,8 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                                             sessiondetailConfirmationDialogBinding.sunHoursTxt.setText(SessionDuration);
                                             break;
                                         case "mon":
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.monHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.monHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.monTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.mondayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.monTimeTxt.setAlpha(1);
@@ -907,8 +911,8 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                                             sessiondetailConfirmationDialogBinding.monHoursTxt.setText(SessionDuration);
                                             break;
                                         case "tue":
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.tuesHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.tuesHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.tuesTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.tuesdayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.tuesTimeTxt.setAlpha(1);
@@ -917,8 +921,8 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                                             sessiondetailConfirmationDialogBinding.tuesHoursTxt.setText(SessionDuration);
                                             break;
                                         case "wed":
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.wedHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.wedHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.wedTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.wednesdayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.wedTimeTxt.setAlpha(1);
@@ -927,8 +931,8 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                                             sessiondetailConfirmationDialogBinding.wedHoursTxt.setText(SessionDuration);
                                             break;
                                         case "thu":
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.thurHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.thurHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.thurTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.thursdayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.thurTimeTxt.setAlpha(1);
@@ -937,8 +941,8 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                                             sessiondetailConfirmationDialogBinding.thurHoursTxt.setText(SessionDuration);
                                             break;
                                         case "fri":
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.friHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.friHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.friTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.fridayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.friTimeTxt.setAlpha(1);
@@ -947,8 +951,8 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                                             sessiondetailConfirmationDialogBinding.friHoursTxt.setText(SessionDuration);
                                             break;
                                         case "sat":
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.satHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.satHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.satTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.saturdayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.satTimeTxt.setAlpha(1);

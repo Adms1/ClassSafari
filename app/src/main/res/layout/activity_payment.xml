@@ -33,6 +33,7 @@
             android:layout_marginLeft="@dimen/_25sdp"
             android:gravity="center"
             android:text="@string/payment"
+            android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="@dimen/_15sdp"
             android:textStyle="bold"/>

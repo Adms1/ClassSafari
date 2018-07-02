@@ -3,6 +3,7 @@ package com.adms.classsafari.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,10 +30,10 @@ import java.util.List;
 public class SessionDetailAdapter extends RecyclerView.Adapter {
 
     private final static int HEADER_VIEW = 0;
-    private final static int ROW_VIEW = 2;
-    private final static int CONTENT_VIEW = 3;
+    private final static int ROW_VIEW = 1;
+    private final static int CONTENT_VIEW = 2;
     //    private final static int DESCRIPTION_ROW_VIEW = 1;
-    private final static int DESCRIPTION_VIEW = 1;
+//    private final static int DESCRIPTION_VIEW = 1;
     SessionCardLayout1Binding sessionCardLayout1Binding;
     SessionDescriptionItemBinding descriptionItemBinding;
     ListItemReviewsBinding itemReviewsBinding;
@@ -70,11 +71,11 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
             view = sessionCardLayout1Binding.getRoot();
             return new SessionCard(view);
         }
-        if (viewType == DESCRIPTION_VIEW) {
-            descriptionItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.session_description_item, parent, false);
-            view = descriptionItemBinding.getRoot();
-            return new DescriptionView(view);
-        }
+//        if (viewType == DESCRIPTION_VIEW) {
+//            descriptionItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.session_description_item, parent, false);
+//            view = descriptionItemBinding.getRoot();
+//            return new DescriptionView(view);
+//        }
         if (viewType == ROW_VIEW) {
             itemReviewsBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.list_item_reviews, parent, false);
             view = itemReviewsBinding.getRoot();
@@ -92,6 +93,17 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof SessionCard) {
             final SessionCard headerHolder = (SessionCard) holder;
+//            Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
+//            sessionCardLayout1Binding.sessionNameTxt.setTypeface(custom_font);
+//            sessionCardLayout1Binding.sessionDetailNameTxt
+//            sessionCardLayout1Binding.sessionBoardTxt
+//            sessionCardLayout1Binding.sessionStandardTxt
+//            sessionCardLayout1Binding.sessionStreamTxt
+//            sessionCardLayout1Binding.sessionTotalStudentTxt
+//            sessionCardLayout1Binding.addressTxt
+//            sessionCardLayout1Binding.emailTxt
+//            sessionCardLayout1Binding.phoneTxt
+
             sessionCardLayout1Binding.sessionNameTxt.setText(arrayList.get(position).getSessionName());
             sessionCardLayout1Binding.sessionRatingbar.setRating(Float.parseFloat(arrayList.get(position).getRating()));
             if (arrayList.get(position).getCoachTypeID().equalsIgnoreCase("1")) {
@@ -106,6 +118,7 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
                 sessionCardLayout1Binding.sessionTypeTxt.setText("Sports");
             }
             address = arrayList.get(position).getAddressLine1() +
+                    "," + arrayList.get(position).getAddressLine2() +
                     "," + arrayList.get(position).getRegionName() +
                     "," + arrayList.get(position).getAddressCity() +
                     "," + arrayList.get(position).getAddressState() +
@@ -119,6 +132,14 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
             sessionCardLayout1Binding.emailTxt.setText(arrayList.get(position).getEmailAddress());
             sessionCardLayout1Binding.phoneTxt.setText(arrayList.get(position).getContactPhoneNumber());
             sessionCardLayout1Binding.teacherNameTxt.setText(arrayList.get(position).getName());
+            if (arrayList.get(position).getDescription().equalsIgnoreCase("")){
+             sessionCardLayout1Binding.descriptionTxt.setVisibility(View.GONE);
+             sessionCardLayout1Binding.descriptionTxtView.setVisibility(View.GONE);
+            }else {
+                sessionCardLayout1Binding.descriptionTxt.setVisibility(View.VISIBLE);
+                sessionCardLayout1Binding.descriptionTxtView.setVisibility(View.VISIBLE);
+                sessionCardLayout1Binding.descriptionTxt.setText(arrayList.get(position).getDescription());
+            }
             if (ratinguserStr.equalsIgnoreCase("0")) {
                 sessionCardLayout1Binding.ratingTxt.setVisibility(View.GONE);
             } else {
@@ -131,8 +152,7 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
                 sessionCardLayout1Binding.sessionImage.setImageResource(R.drawable.all_sports_image);
             }
 
-
-            sessionCardLayout1Binding.phoneTxtView.setOnClickListener(new View.OnClickListener() {
+            sessionCardLayout1Binding.phone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (Utils.checkAndRequestPermissions(mContext)) {
@@ -142,7 +162,37 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
                     mContext.startActivity(intent);
                 }
             });
-            sessionCardLayout1Binding.adressTxtView.setOnClickListener(new View.OnClickListener() {
+            sessionCardLayout1Binding.addressLoc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(address));
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
+                    mapIntent.setPackage("com.google.android.apps.maps");
+                    mContext.startActivity(mapIntent);
+                }
+            });
+            sessionCardLayout1Binding.emailImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_SEND);
+                    String[] recipients = {arrayList.get(position).getEmailAddress()};
+                    intent.putExtra(Intent.EXTRA_EMAIL, recipients);
+                    intent.setType("text/html");
+                    intent.setPackage("com.google.android.gm");
+                    mContext.startActivity(Intent.createChooser(intent, "Send mail"));
+                }
+            });
+            sessionCardLayout1Binding.phoneTxt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (Utils.checkAndRequestPermissions(mContext)) {
+                    }
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.fromParts("tel", sessionCardLayout1Binding.phoneTxt.getText().toString(), null));
+                    mContext.startActivity(intent);
+                }
+            });
+            sessionCardLayout1Binding.addressTxt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(address));
@@ -162,7 +212,7 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
                     return true;
                 }
             });
-            sessionCardLayout1Binding.emailTxtView.setOnClickListener(new View.OnClickListener() {
+            sessionCardLayout1Binding.emailTxt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(Intent.ACTION_SEND);
@@ -174,10 +224,10 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
                 }
             });
         }
-        if (holder instanceof DescriptionView) {
-            final DescriptionView descriptionHolder = (DescriptionView) holder;
-            descriptionItemBinding.descriptionTxt.setText(descriptionviewarray.get(position - arrayList.size()));
-        }
+//        if (holder instanceof DescriptionView) {
+//            final DescriptionView descriptionHolder = (DescriptionView) holder;
+//            descriptionItemBinding.descriptionTxt.setText(descriptionviewarray.get(position - arrayList.size()));
+//        }
         if (holder instanceof RowView) {
 
         }
@@ -199,10 +249,10 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
         if (position < arrayList.size()) {
             return HEADER_VIEW;
         }
-        if (position - arrayList.size() < descriptionviewarray.size()) {
-            return DESCRIPTION_VIEW;
-        }
-        if (position - arrayList.size() - descriptionviewarray.size() < reviewarray.size()) {
+//        if (position - arrayList.size() < descriptionviewarray.size()) {
+//            return DESCRIPTION_VIEW;
+//        }
+        if (position - arrayList.size() < reviewarray.size()) {//- descriptionviewarray.size()
             return ROW_VIEW;
         }
         if (position - arrayList.size() - descriptionviewarray.size() - reviewarray.size() < sessionRatingList.size()) {
@@ -213,7 +263,7 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return arrayList.size() + descriptionviewarray.size() + reviewarray.size() + sessionRatingList.size();
+        return arrayList.size() + reviewarray.size() + sessionRatingList.size();// + descriptionviewarray.size()
     }
 
     public ArrayList<String> getSessionDetail() {

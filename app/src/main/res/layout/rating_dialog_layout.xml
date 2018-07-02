@@ -71,7 +71,7 @@
                     android:layout_marginTop="@dimen/_1sdp"
                     android:gravity="start|center_vertical"
                     android:paddingLeft="@dimen/_2sdp"
-                    android:text="SESSION NAME"
+                    android:text="CLASS NAME"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />

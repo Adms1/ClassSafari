@@ -709,6 +709,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
             inSearchUser.putExtra("searchfront", searchfront);
             inSearchUser.putExtra("RegionName", classSearchScreenBinding.regionNameTxt.getText().toString());
             inSearchUser.putExtra("firsttimesearch", "false");
+            inSearchUser.putExtra("teacherName",classSearchScreenBinding.teacherAutoTxt.getText().toString());
             startActivity(inSearchUser);
         } else {
             classSearchScreenBinding.sessionAutoTxt.setError("Please Enter Subject.");

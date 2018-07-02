@@ -1,11 +1,17 @@
 package com.adms.classsafari.Model.Session;
 
+import android.util.Log;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by admsandroid on 3/22/2018.
@@ -13,6 +19,13 @@ import java.util.List;
 
 public class sessionDataModel {
     // SessionDuration time
+
+    public String mondayTimeStr = "", tuesdayTimeStr = "", weddayTimeStr = "", thursdayTimeStr = "", fridayTimeStr = "", satdayTimeStr = "", sundayTimeStr = "",
+            mondayHoursStr = "", tuesdayHoursStr = "", weddayHoursStr = "", thursdayHoursStr = "", fridayHoursStr = "", satdayHoursStr = "", sundayHoursStr = "";
+    int SessionHour = 0;
+    Integer SessionMinit = 0;
+    String SessionDurationminit="",SessionDurationHours="";
+    private int count = 1;
 
     @SerializedName("Board_ID")
     @Expose
@@ -233,6 +246,7 @@ public class sessionDataModel {
     @SerializedName("CheckValue")
     @Expose
     private String checkValue;
+
     @SerializedName("Status")
     @Expose
     private String status;
@@ -246,6 +260,15 @@ public class sessionDataModel {
     @SerializedName("Comment")
     @Expose
     private String comment;
+
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int i) {
+        this.count = i;
+    }
 
     public String getSession() {
         return session;
@@ -331,6 +354,8 @@ public class sessionDataModel {
         return duration;
     }
 
+    //    =======================================================
+
     public void setDuration(String duration) {
         this.duration = duration;
     }
@@ -342,8 +367,6 @@ public class sessionDataModel {
     public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
     }
-
-    //    =======================================================
 
     public String getSessionDetailID() {
         return sessionDetailID;
@@ -397,6 +420,8 @@ public class sessionDataModel {
         return attendanceID;
     }
 
+    //====================
+
     public void setAttendanceID(String attendanceID) {
         this.attendanceID = attendanceID;
     }
@@ -408,8 +433,6 @@ public class sessionDataModel {
     public void setReason(String reason) {
         this.reason = reason;
     }
-
-    //====================
 
     public String getStatus() {
         return status;
@@ -807,6 +830,9 @@ public class sessionDataModel {
         return streamDescription;
     }
 
+
+    //======================User Session_List =========================
+
     public void setStreamDescription(String streamDescription) {
         this.streamDescription = streamDescription;
     }
@@ -818,7 +844,7 @@ public class sessionDataModel {
     public void setIsActive(String isActive) {
         this.isActive = isActive;
     }
-    //======================User Session_List =========================
+    //=================================================================
 
     public String getCreateDate() {
         return createDate;
@@ -831,7 +857,6 @@ public class sessionDataModel {
     public String getContactEnrollmentID() {
         return contactEnrollmentID;
     }
-    //=================================================================
 
     public void setContactEnrollmentID(String contactEnrollmentID) {
         this.contactEnrollmentID = contactEnrollmentID;
@@ -844,6 +869,7 @@ public class sessionDataModel {
     public void setSessionPrice(String sessionPrice) {
         this.sessionPrice = sessionPrice;
     }
+    //===================================================================
 
     public Double getRatingValue() {
         return ratingValue;
@@ -856,274 +882,135 @@ public class sessionDataModel {
     public String getComment() {
         return comment;
     }
-    //===================================================================
 
     public void setComment(String comment) {
         this.comment = comment;
     }
 
-    public static String mondayTimeStr = "", tuesdayTimeStr = "", weddayTimeStr = "", thursdayTimeStr = "", fridayTimeStr = "", satdayTimeStr = "", sundayTimeStr = "",
-            mondayHoursStr = "", tuesdayHoursStr = "", weddayHoursStr = "", thursdayHoursStr = "", fridayHoursStr = "", satdayHoursStr = "", sundayHoursStr = "";
-
-    public void setWeekMonDays() {
-    if (schedule!=null) {
+    public void setWeekDays() {
+//        String data = "Mon,10:00 AM - 12:30PM|Tue,10:00 AM - 12:30PM";
         String data = schedule;
-        List<String> list = new ArrayList<String>(Arrays.asList(data.split("\\|")));
-        for (String item : list) {
-            if (item.contains("mon")) {
-                String []split =item.substring(4).split("\\-");
-                mondayTimeStr= split[0];
-            }
-            if (item.contains("tue")) {
-                String []split =item.substring(4).split("\\-");
-                tuesdayTimeStr =  split[0];
-            }
-            if (item.contains("wed")) {
-                String []split =item.substring(4).split("\\-");
-                weddayTimeStr =  split[0];
-            }
-            if (item.contains("thu")) {
-                String []split =item.substring(4).split("\\-");
-                thursdayTimeStr =  split[0];
-            }
-            if (item.contains("fri")) {
-                String []split =item.substring(4).split("\\-");
-                fridayTimeStr =  split[0];
-            }
-            if (item.contains("sat")) {
-                String []split =item.substring(4).split("\\-");
-                satdayTimeStr =  split[0];
-            }
-            if (item.contains("sun")) {
-                String []split =item.substring(4).split("\\-");
-                sundayTimeStr =  split[0];
-            }
-        }
-    }
-    }
-
-    public void setWeekTueDays() {
-        if (schedule!=null) {
-            String data = schedule;
+        if (schedule != null) {
             List<String> list = new ArrayList<String>(Arrays.asList(data.split("\\|")));
             for (String item : list) {
                 if (item.contains("mon")) {
                     String []split =item.substring(4).split("\\-");
                     mondayTimeStr= split[0];
+                    String []split1=split[1].split("\\,");
+                    calculateHours(split[0], split1[0]);
+                    mondayHoursStr=SessionDurationHours;
                 }
                 if (item.contains("tue")) {
                     String []split =item.substring(4).split("\\-");
                     tuesdayTimeStr =  split[0];
+                    String []split1=split[1].split("\\,");
+                    calculateHours(split[0], split1[0]);
+                    tuesdayHoursStr=SessionDurationHours;
                 }
                 if (item.contains("wed")) {
                     String []split =item.substring(4).split("\\-");
                     weddayTimeStr =  split[0];
+                    String []split1=split[1].split("\\,");
+                    calculateHours(split[0], split1[0]);
+                    weddayHoursStr=SessionDurationHours;
                 }
                 if (item.contains("thu")) {
                     String []split =item.substring(4).split("\\-");
                     thursdayTimeStr =  split[0];
+                    String []split1=split[1].split("\\,");
+                    calculateHours(split[0], split1[0]);
+                    thursdayHoursStr=SessionDurationHours;
                 }
                 if (item.contains("fri")) {
                     String []split =item.substring(4).split("\\-");
                     fridayTimeStr =  split[0];
+                    String []split1=split[1].split("\\,");
+                    calculateHours(split[0], split1[0]);
+                    fridayHoursStr=SessionDurationHours;
                 }
                 if (item.contains("sat")) {
                     String []split =item.substring(4).split("\\-");
                     satdayTimeStr =  split[0];
+                    String []split1=split[1].split("\\,");
+                    calculateHours(split[0], split1[0]);
+                    satdayHoursStr=SessionDurationHours;
                 }
                 if (item.contains("sun")) {
                     String []split =item.substring(4).split("\\-");
                     sundayTimeStr =  split[0];
+                    String []split1=split[1].split("\\,");
+                    calculateHours(split[0], split1[0]);
+                    sundayHoursStr=SessionDurationHours;
                 }
             }
         }
+
     }
 
-    public void setWeekWedDays() {
-        if (schedule!=null) {
-            String data = schedule;
-            List<String> list = new ArrayList<String>(Arrays.asList(data.split("\\|")));
-            for (String item : list) {
-                if (item.contains("mon")) {
-                    String []split =item.substring(4).split("\\-");
-                    mondayTimeStr= split[0];
+    public void calculateHours(String time1, String time2) {
+        Date date1, date2;
+        int days, hours, min;
+        String hourstr, minstr;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa", Locale.US);
+        try {
+            date1 = simpleDateFormat.parse(time1);
+            date2 = simpleDateFormat.parse(time2);
+
+            long difference = date2.getTime() - date1.getTime();
+            days = (int) (difference / (1000 * 60 * 60 * 24));
+            hours = (int) ((difference - (1000 * 60 * 60 * 24 * days)) / (1000 * 60 * 60));
+            min = (int) (difference - (1000 * 60 * 60 * 24 * days) - (1000 * 60 * 60 * hours)) / (1000 * 60);
+            hours = (hours < 0 ? -hours : hours);
+            SessionHour = hours;
+            SessionMinit = min;
+            Log.i("======= Hours", " :: " + hours + ":" + min);
+            if (SessionMinit > 0) {
+                if (SessionMinit < 10) {
+                       SessionDurationHours=SessionHour+": "+"0"+SessionMinit+" hrs";
+                }else{
+                    SessionDurationHours=SessionHour+": "+SessionMinit+" hrs";
                 }
-                if (item.contains("tue")) {
-                    String []split =item.substring(4).split("\\-");
-                    tuesdayTimeStr =  split[0];
-                }
-                if (item.contains("wed")) {
-                    String []split =item.substring(4).split("\\-");
-                    weddayTimeStr =  split[0];
-                }
-                if (item.contains("thu")) {
-                    String []split =item.substring(4).split("\\-");
-                    thursdayTimeStr =  split[0];
-                }
-                if (item.contains("fri")) {
-                    String []split =item.substring(4).split("\\-");
-                    fridayTimeStr =  split[0];
-                }
-                if (item.contains("sat")) {
-                    String []split =item.substring(4).split("\\-");
-                    satdayTimeStr =  split[0];
-                }
-                if (item.contains("sun")) {
-                    String []split =item.substring(4).split("\\-");
-                    sundayTimeStr =  split[0];
-                }
+            }else{
+                SessionDurationHours=SessionHour +" hrs";
             }
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 
-    public void setWeekThurDays() {
-        if (schedule!=null) {
-            String data = schedule;
-            List<String> list = new ArrayList<String>(Arrays.asList(data.split("\\|")));
-            for (String item : list) {
-                if (item.contains("mon")) {
-                    String []split =item.substring(4).split("\\-");
-                    mondayTimeStr= split[0];
-                }
-                if (item.contains("tue")) {
-                    String []split =item.substring(4).split("\\-");
-                    tuesdayTimeStr =  split[0];
-                }
-                if (item.contains("wed")) {
-                    String []split =item.substring(4).split("\\-");
-                    weddayTimeStr =  split[0];
-                }
-                if (item.contains("thu")) {
-                    String []split =item.substring(4).split("\\-");
-                    thursdayTimeStr =  split[0];
-                }
-                if (item.contains("fri")) {
-                    String []split =item.substring(4).split("\\-");
-                    fridayTimeStr =  split[0];
-                }
-                if (item.contains("sat")) {
-                    String []split =item.substring(4).split("\\-");
-                    satdayTimeStr =  split[0];
-                }
-                if (item.contains("sun")) {
-                    String []split =item.substring(4).split("\\-");
-                    sundayTimeStr =  split[0];
-                }
-            }
-        }
+    public int getSessionHour() {
+        return SessionHour;
     }
 
-    public void setWeekFriDays() {
-        if (schedule!=null) {
-            String data = schedule;
-            List<String> list = new ArrayList<String>(Arrays.asList(data.split("\\|")));
-            for (String item : list) {
-                if (item.contains("mon")) {
-                    String []split =item.substring(4).split("\\-");
-                    mondayTimeStr= split[0];
-                }
-                if (item.contains("tue")) {
-                    String []split =item.substring(4).split("\\-");
-                    tuesdayTimeStr =  split[0];
-                }
-                if (item.contains("wed")) {
-                    String []split =item.substring(4).split("\\-");
-                    weddayTimeStr =  split[0];
-                }
-                if (item.contains("thu")) {
-                    String []split =item.substring(4).split("\\-");
-                    thursdayTimeStr =  split[0];
-                }
-                if (item.contains("fri")) {
-                    String []split =item.substring(4).split("\\-");
-                    fridayTimeStr =  split[0];
-                }
-                if (item.contains("sat")) {
-                    String []split =item.substring(4).split("\\-");
-                    satdayTimeStr =  split[0];
-                }
-                if (item.contains("sun")) {
-                    String []split =item.substring(4).split("\\-");
-                    sundayTimeStr =  split[0];
-                }
-            }
-        }
+    public void setSessionHour(int sessionHour) {
+        SessionHour = sessionHour;
     }
 
-    public void setWeekSatDays() {
-        if (schedule!=null) {
-            String data = schedule;
-            List<String> list = new ArrayList<String>(Arrays.asList(data.split("\\|")));
-            for (String item : list) {
-                if (item.contains("mon")) {
-                    String []split =item.substring(4).split("\\-");
-                    mondayTimeStr= split[0];
-                }
-                if (item.contains("tue")) {
-                    String []split =item.substring(4).split("\\-");
-                    tuesdayTimeStr =  split[0];
-                }
-                if (item.contains("wed")) {
-                    String []split =item.substring(4).split("\\-");
-                    weddayTimeStr =  split[0];
-                }
-                if (item.contains("thu")) {
-                    String []split =item.substring(4).split("\\-");
-                    thursdayTimeStr =  split[0];
-                }
-                if (item.contains("fri")) {
-                    String []split =item.substring(4).split("\\-");
-                    fridayTimeStr =  split[0];
-                }
-                if (item.contains("sat")) {
-                    String []split =item.substring(4).split("\\-");
-                    satdayTimeStr =  split[0];
-                }
-                if (item.contains("sun")) {
-                    String []split =item.substring(4).split("\\-");
-                    sundayTimeStr =  split[0];
-                }
-            }
-        }
+    public Integer getSessionMinit() {
+        return SessionMinit;
     }
 
-    public void setWeekSunDays() {
-        if (schedule!=null) {
-            String data = schedule;
-            List<String> list = new ArrayList<String>(Arrays.asList(data.split("\\|")));
-            for (String item : list) {
-                if (item.contains("mon")) {
-                    String []split =item.substring(4).split("\\-");
-                    mondayTimeStr= split[0];
-                }
-                if (item.contains("tue")) {
-                    String []split =item.substring(4).split("\\-");
-                    tuesdayTimeStr =  split[0];
-                }
-                if (item.contains("wed")) {
-                    String []split =item.substring(4).split("\\-");
-                    weddayTimeStr =  split[0];
-                }
-                if (item.contains("thu")) {
-                    String []split =item.substring(4).split("\\-");
-                    thursdayTimeStr =  split[0];
-                }
-                if (item.contains("fri")) {
-                    String []split =item.substring(4).split("\\-");
-                    fridayTimeStr =  split[0];
-                }
-                if (item.contains("sat")) {
-                    String []split =item.substring(4).split("\\-");
-                    satdayTimeStr =  split[0];
-                }
-                if (item.contains("sun")) {
-                    String []split =item.substring(4).split("\\-");
-                    sundayTimeStr =  split[0];
-                }
-            }
-        }
+    public void setSessionMinit(Integer sessionMinit) {
+        SessionMinit = sessionMinit;
     }
 
+    public String getSessionDurationminit() {
+        return SessionDurationminit;
+    }
+
+    public void setSessionDurationminit(String sessionDurationminit) {
+        SessionDurationminit = sessionDurationminit;
+    }
+
+    public String getSessionDurationHours() {
+        return SessionDurationHours;
+    }
+
+    public void setSessionDurationHours(String sessionDurationHours) {
+        SessionDurationHours = sessionDurationHours;
+    }
 
     public String getMondayTimeStr() {
         return mondayTimeStr;

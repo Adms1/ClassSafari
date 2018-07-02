@@ -307,7 +307,8 @@
                         android:layout_marginTop="@dimen/_2sdp"
                         android:gravity="start|center_vertical"
                         android:text="@string/session_time"
-                        android:textColor="@color/text_color" />
+                        android:textColor="@color/text_color"
+                        android:textStyle="bold"/>
 
                     <Button
                         android:id="@+id/add_session_btn"
@@ -320,6 +321,7 @@
                         android:background="@drawable/round_btn"
                         android:gravity="center"
                         android:text="+"
+                        android:textStyle="bold"
                         android:textColor="@color/blue"
                         android:textSize="@dimen/_13sdp" />
                 </LinearLayout>
@@ -763,7 +765,8 @@
                         android:layout_marginTop="@dimen/_2sdp"
                         android:gravity="start|center_vertical"
                         android:text="Select Address"
-                        android:textColor="@color/text_color" />
+                        android:textColor="@color/text_color"
+                        android:textStyle="bold"/>
 
                     <Button
                         android:id="@+id/select_session_address_btn"
@@ -777,7 +780,8 @@
                         android:gravity="center"
                         android:text="+"
                         android:textColor="@color/blue"
-                        android:textSize="@dimen/_13sdp" />
+                        android:textSize="@dimen/_13sdp"
+                        android:textStyle="bold"/>
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/session_address_linear"
@@ -800,9 +804,33 @@
                         style="@style/addSessionEditText"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_25sdp"
+                        android:maxLength="20"
                         android:hint="@string/address" />
                 </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/session_address_linear1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:orientation="horizontal">
 
+                    <ImageView
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_2sdp"
+                        android:src="@drawable/ad" />
+
+                    <AutoCompleteTextView
+                        android:id="@+id/address_edt1"
+                        style="@style/addSessionEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_25sdp"
+                        android:maxLength="20"
+                        android:hint="@string/address" />
+                </LinearLayout>
                 <LinearLayout
                     android:id="@+id/session_area_linear"
                     android:layout_width="match_parent"

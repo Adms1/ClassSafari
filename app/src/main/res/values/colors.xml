@@ -11,6 +11,7 @@
         <color name="text_color">#000000</color>
         <color name="gray">#CC323131</color>
         <color name="white">#ffffff</color>
+        <color name="trasparent">#00000000</color>
         <color name="gray1">#6c6c6d</color>
         <!--<color name="blue">#1d91f5</color>-->
         <color name="blue">#0094da</color>

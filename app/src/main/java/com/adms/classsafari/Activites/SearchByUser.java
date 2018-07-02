@@ -29,6 +29,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,13 +83,13 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
 //        getLocation();
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
 
-        searchByUserBinding.loginTxt.setTypeface(custom_font);
-        searchByUserBinding.regiTxt.setTypeface(custom_font);
-        searchByUserBinding.searchClassEdt.setTypeface(custom_font);
-        searchByUserBinding.locationEdt.setTypeface(custom_font);
-        searchByUserBinding.letsPlayTxt.setTypeface(custom_font);
-        searchByUserBinding.letsStudyTxt.setTypeface(custom_font);
-        searchByUserBinding.orTxt.setTypeface(custom_font);
+//        searchByUserBinding.loginTxt.setTypeface(custom_font);
+//        searchByUserBinding.regiTxt.setTypeface(custom_font);
+//        searchByUserBinding.searchClassEdt.setTypeface(custom_font);
+//        searchByUserBinding.locationEdt.setTypeface(custom_font);
+//        searchByUserBinding.letsPlayTxt.setTypeface(custom_font);
+//        searchByUserBinding.letsStudyTxt.setTypeface(custom_font);
+//        searchByUserBinding.orTxt.setTypeface(custom_font);
 
         if (!Utils.getPref(mContext, "RegisterUserName").equalsIgnoreCase("")) {
             if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Coach")) {
@@ -97,19 +98,25 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
                 startActivity(iDash);
             }
             String[] userName = Utils.getPref(mContext, "RegisterUserName").split("\\s+");
-            searchByUserBinding.loginTxt.setText(" Hi");
-            searchByUserBinding.regiTxt.setText(Html.fromHtml("<u><b>" + " " + userName[0] + "</u></b>"));
+            searchByUserBinding.loginTxt.setTextColor(getResources().getColor(R.color.blue));
+            searchByUserBinding.regiTxt.setTextColor(getResources().getColor(R.color.blue));
+            searchByUserBinding.loginTxt.setText(Html.fromHtml("<b>" +" Hi"+ "</b>"));
+            searchByUserBinding.regiTxt.setText(Html.fromHtml("<b>" + "" + userName[0] + "</b>"));
             searchByUserBinding.regiTxt.setPadding(5, 0, 0, 0);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            lp.setMargins(510, 0, 0,0);
+            searchByUserBinding.loginTxt.setLayoutParams(lp);
 //            searchByUserBinding.regiTxt.setEnabled(false);
-            searchByUserBinding.regiTxt.setTextColor(getResources().getColor(R.color.gray));
+            searchByUserBinding.loginTxt.setBackgroundResource(0);
+            searchByUserBinding.regiTxt.setBackground(getResources().getDrawable(R.drawable.orange_line));
             searchByUserBinding.loginMiddleTxt.setVisibility(View.GONE);
 
 
         } else {
             searchByUserBinding.regiTxt.setVisibility(View.VISIBLE);
             searchByUserBinding.loginMiddleTxt.setVisibility(View.VISIBLE);
-            searchByUserBinding.loginTxt.setText(Html.fromHtml("<u><b>Login<u></b>"));
-            searchByUserBinding.regiTxt.setText(Html.fromHtml("<u><b>Register<u></b>"));
+            searchByUserBinding.loginTxt.setText(Html.fromHtml("<b>Login</b>"));
+            searchByUserBinding.regiTxt.setText(Html.fromHtml("<b>Register</b>"));
         }
 
 

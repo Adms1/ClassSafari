@@ -99,6 +99,7 @@ public class PurchaseSessionDetailAdapter extends RecyclerView.Adapter {
                 sessionCardLayout1Binding.sessionTypeTxt.setText("Sports");
             }
             address = arrayList.get(position).getAddressLine1() +
+                    ","+arrayList.get(position).getAddressLine2()+
                     "," + arrayList.get(position).getRegionName() +
                     "," + arrayList.get(position).getAddressCity() +
                     "," + arrayList.get(position).getAddressState() +
@@ -113,7 +114,7 @@ public class PurchaseSessionDetailAdapter extends RecyclerView.Adapter {
             sessionCardLayout1Binding.phoneTxt.setText(arrayList.get(position).getContactPhoneNumber());
             sessionCardLayout1Binding.teacherNameTxt.setText(arrayList.get(position).getName());
 
-            sessionCardLayout1Binding.phoneTxtView.setOnClickListener(new View.OnClickListener() {
+            sessionCardLayout1Binding.phoneTxt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (Utils.checkAndRequestPermissions(mContext)) {
@@ -123,7 +124,7 @@ public class PurchaseSessionDetailAdapter extends RecyclerView.Adapter {
                     mContext.startActivity(intent);
                 }
             });
-            sessionCardLayout1Binding.adressTxtView.setOnClickListener(new View.OnClickListener() {
+            sessionCardLayout1Binding.addressTxt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(address));
@@ -143,7 +144,7 @@ public class PurchaseSessionDetailAdapter extends RecyclerView.Adapter {
                     return true;
                 }
             });
-            sessionCardLayout1Binding.emailTxtView.setOnClickListener(new View.OnClickListener() {
+            sessionCardLayout1Binding.emailTxt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(Intent.ACTION_SEND);

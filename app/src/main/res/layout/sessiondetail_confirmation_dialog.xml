@@ -23,7 +23,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_35sdp"
-                        android:text="Please Confirm"
+                        android:text="Please Confirm Your Enrollment"
                         android:textColor="@color/blue"
                         android:paddingLeft="@dimen/_5sdp"
                         android:textSize="@dimen/_14sdp"
@@ -88,20 +88,21 @@
 
                     <TextView
                         android:id="@+id/location_txt"
-                        android:layout_width="@dimen/_120sdp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/_2sdp"
-                        android:layout_marginLeft="@dimen/_25sdp"
                         android:drawableLeft="@drawable/location_blue"
+                        android:layout_marginLeft="@dimen/_30sdp"
                         android:drawablePadding="@dimen/_2sdp"
+                        android:gravity="right"
                         android:paddingBottom="@dimen/_2sdp"
-                        android:paddingLeft="@dimen/_5sdp"
                         android:paddingTop="@dimen/_2sdp"
                         android:text="@string/location"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_10sdp" />
                 </LinearLayout>
-
+                <!---->
+                <!---->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
@@ -115,7 +116,7 @@
 
                     <TextView
                         android:id="@+id/start_date_txt"
-                        android:layout_width="wrap_content"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_7sdp"
                         android:text="@string/start_date"
@@ -124,7 +125,7 @@
 
                     <TextView
                         android:id="@+id/end_date_txt"
-                        android:layout_width="wrap_content"
+                        android:layout_width="@dimen/_60sdp"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/_32sdp"
                         android:text="@string/end_date"
@@ -133,10 +134,12 @@
 
                     <TextView
                         android:id="@+id/price_txt"
-                        android:layout_width="wrap_content"
+                        android:layout_width="@dimen/_100sdp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/_45sdp"
-                        android:text=""
+                        android:layout_marginLeft="@dimen/_11sdp"
+                        android:text="Free"
+                        android:paddingRight="@dimen/_10sdp"
+                        android:gravity="right"
                         android:textColor="@color/text_color"
                         android:textSize="@dimen/_12sdp"
                         android:textStyle="bold" />
@@ -469,7 +472,7 @@
                         android:layout_height="@dimen/_35sdp"
                         android:layout_marginRight="@dimen/_1sdp"
                         android:layout_weight="0.9"
-                        android:background="@drawable/blue_btn"
+                        android:background="@drawable/gray1_btn"
                         android:layout_marginLeft="@dimen/_15sdp"
                         android:gravity="center_vertical|center"
                         android:text="Cancel"

@@ -362,6 +362,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         addSessionBinding.cityEdt.setTypeface(custom_font);
         addSessionBinding.stateEdt.setTypeface(custom_font);
         addSessionBinding.zipcodeEdt.setTypeface(custom_font);
+        addSessionBinding.addressEdt1.setTypeface(custom_font);
 
         addSessionBinding.mondayBtn.setTypeface(custom_font);
         addSessionBinding.tuesdayBtn.setTypeface(custom_font);
@@ -396,24 +397,6 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         addSessionBinding.sessionSelectAddressTxt.setTypeface(custom_font);
         addSessionBinding.selectSessionAddressBtn.setTypeface(custom_font);
         addSessionBinding.submitBtn.setTypeface(custom_font);
-
-//        sun_start_time_txt.setTypeface(custom_font);
-//        sun_end_time_txt.setTypeface(custom_font);
-//        mon_start_time_txt.setTypeface(custom_font);
-//        mon_end_time_txt.setTypeface(custom_font);
-//        tue_start_time_txt.setTypeface(custom_font);
-//        tue_end_time_txt.setTypeface(custom_font);
-//        wed_start_time_txt.setTypeface(custom_font);
-//        wed_end_time_txt.setTypeface(custom_font);
-//        thu_start_time_txt.setTypeface(custom_font);
-//        thu_end_time_txt.setTypeface(custom_font);
-//        fri_end_time_txt.setTypeface(custom_font);
-//        fri_start_time_txt.setTypeface(custom_font);
-//        sat_end_time_txt.setTypeface(custom_font);
-//        sat_start_time_txt.setTypeface(custom_font);
-//        confirm_title_txt.setTypeface(custom_font);
-
-
     }
 
     public void initViews() {
@@ -426,6 +409,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         timegapArray.add("1 hour before");
         timegapArray.add("1 day before");
         Log.d("timegapArray", "" + timegapArray);
+
 
         addSessionBinding.sessionNameEdt.setText(Utils.getPref(mContext,"ClassName"));
     }
@@ -661,6 +645,26 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
 
         done_btn = (Button) popularDialog.findViewById(R.id.done_btn);
         cancel_btn = (Button) popularDialog.findViewById(R.id.cancel_btn);
+        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
+
+        sun_start_time_txt.setTypeface(custom_font);
+        sun_end_time_txt.setTypeface(custom_font);
+        mon_start_time_txt.setTypeface(custom_font);
+        mon_end_time_txt.setTypeface(custom_font);
+        tue_start_time_txt.setTypeface(custom_font);
+        tue_end_time_txt.setTypeface(custom_font);
+        wed_start_time_txt.setTypeface(custom_font);
+        wed_end_time_txt.setTypeface(custom_font);
+        thu_start_time_txt.setTypeface(custom_font);
+        thu_end_time_txt.setTypeface(custom_font);
+        fri_end_time_txt.setTypeface(custom_font);
+        fri_start_time_txt.setTypeface(custom_font);
+        sat_end_time_txt.setTypeface(custom_font);
+        sat_start_time_txt.setTypeface(custom_font);
+        confirm_title_txt.setTypeface(custom_font);
+        done_btn.setTypeface(custom_font);
+        cancel_btn.setTypeface(custom_font);
+
         Log.d("flag", flag);
         if (flag.equalsIgnoreCase("edit")) {
             confirm_title_txt.setText("EDIT CLASS TIME");
@@ -1724,7 +1728,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         standardStr = addSessionBinding.standardEdt.getText().toString();
         streamStr = addSessionBinding.streamEdt.getText().toString();
         address1Str = addSessionBinding.addressEdt.getText().toString();
-        address2Str = addSessionBinding.addressEdt.getText().toString();
+        address2Str = addSessionBinding.addressEdt1.getText().toString();
         regionStr = addSessionBinding.areaEdt.getText().toString();
         cityStr = addSessionBinding.cityEdt.getText().toString();
         stateStr = addSessionBinding.stateEdt.getText().toString();
@@ -2191,6 +2195,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                 for (int i = 0; i < addressResponse.getData().size(); i++) {
                     if (String.valueOf(i).equalsIgnoreCase(strPosition)) {
                         addSessionBinding.addressEdt.setText(addressResponse.getData().get(i).getAddressLine1());
+                        addSessionBinding.addressEdt1.setText(addressResponse.getData().get(i).getAddressLine2());
                         addSessionBinding.areaEdt.setText(addressResponse.getData().get(i).getRegionName());
                         addSessionBinding.cityEdt.setText(addressResponse.getData().get(i).getAddressCity());
                         addSessionBinding.stateEdt.setText(addressResponse.getData().get(i).getAddressState());

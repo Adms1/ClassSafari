@@ -32,13 +32,8 @@ public class SessionDetailModel {
 
     public List<sessionDataModel> getData() {
         for (sessionDataModel model:data){
-            model.setWeekMonDays();
-            model.setWeekTueDays();
-            model.setWeekWedDays();
-            model.setWeekThurDays();
-            model.setWeekFriDays();
-            model.setWeekSatDays();
-            model.setWeekSunDays();
+            model.setWeekDays();
+
         }
         return data;
     }

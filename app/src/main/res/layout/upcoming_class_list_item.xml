@@ -155,8 +155,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content">
 
                     <Button
                         android:id="@+id/monday_btn"
@@ -256,8 +255,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    android:orientation="horizontal">
+                    android:layout_marginTop="@dimen/_3sdp">
 
                     <TextView
                         android:id="@+id/mon_time_txt"
@@ -334,7 +332,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_3sdp"
-                    android:orientation="horizontal"
                     android:layout_marginTop="@dimen/_3sdp">
 
                     <TextView
@@ -345,7 +342,7 @@
                         android:alpha="0.2"
                         android:text=""
                         android:textColor="@color/search_boder"
-                        android:textSize="@dimen/_8sdp" />
+                        android:textSize="@dimen/_9sdp" />
 
                     <TextView
                         android:id="@+id/tues_hours_txt"
@@ -355,7 +352,7 @@
                         android:alpha="0.2"
                         android:text=""
                         android:textColor="@color/search_boder"
-                        android:textSize="@dimen/_8sdp" />
+                        android:textSize="@dimen/_9sdp" />
 
                     <TextView
                         android:id="@+id/wed_hours_txt"
@@ -365,7 +362,7 @@
                         android:alpha="0.2"
                         android:text=""
                         android:textColor="@color/search_boder"
-                        android:textSize="@dimen/_8sdp" />
+                        android:textSize="@dimen/_9sdp" />
 
                     <TextView
                         android:id="@+id/thur_hours_txt"
@@ -375,7 +372,7 @@
                         android:alpha="0.2"
                         android:text=""
                         android:textColor="@color/search_boder"
-                        android:textSize="@dimen/_8sdp" />
+                        android:textSize="@dimen/_9sdp" />
 
                     <TextView
                         android:id="@+id/fri_hours_txt"
@@ -385,7 +382,7 @@
                         android:alpha="0.2"
                         android:text=""
                         android:textColor="@color/search_boder"
-                        android:textSize="@dimen/_8sdp" />
+                        android:textSize="@dimen/_9sdp" />
 
                     <TextView
                         android:id="@+id/sat_hours_txt"
@@ -395,7 +392,7 @@
                         android:alpha="0.2"
                         android:text=""
                         android:textColor="@color/search_boder"
-                        android:textSize="@dimen/_8sdp" />
+                        android:textSize="@dimen/_9sdp" />
 
                     <TextView
                         android:id="@+id/sun_hours_txt"
@@ -405,7 +402,7 @@
                         android:alpha="0.2"
                         android:text=""
                         android:textColor="@color/search_boder"
-                        android:textSize="@dimen/_8sdp" />
+                        android:textSize="@dimen/_9sdp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -426,11 +423,12 @@
                         android:id="@+id/book_session_btn"
                         android:layout_width="@dimen/_100sdp"
                         android:layout_height="@dimen/_30sdp"
-                        android:layout_marginLeft="@dimen/_65sdp"
-                        android:background="@drawable/submit_shape"
-                        android:text="BOOK NOW"
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/_11sdp" />
+                        android:layout_marginLeft="@dimen/_165sdp"
+                        android:background="@drawable/round_yello"
+                        android:text="Unpaid"
+                        android:textColor="@color/search_boder"
+                        android:textSize="@dimen/_11sdp"
+                        android:visibility="gone"/>
                 </LinearLayout>
 
 

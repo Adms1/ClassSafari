@@ -6,7 +6,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/family_register1_bg"
+        android:background="@drawable/bg_registration"
         tools:context="com.adms.classsafari.Activites.RegistrationScreen">
 
 
@@ -41,7 +41,9 @@
                     android:paddingTop="@dimen/_2sdp"
                     android:text="@string/family_register1"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/_15sdp" />
+                    android:textSize="@dimen/_15sdp"
+                    android:textAllCaps="true"
+                    android:textStyle="bold"/>
             </LinearLayout>
 
 

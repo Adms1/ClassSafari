@@ -67,7 +67,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
     String sessionIDStr, locationStr, classNameStr, genderStr, sessionDateStr, durationStr,
             boardStr, standardStr, streamStr, subjectStr, sessionId,
             commentStr = "", ratingValueStr, searchfront, familysessionfeesStr, familysessionnameStr,
-            familylocationStr, familysessionStudentStr, firsttimesearch, RegionName;
+            familylocationStr, familysessionStudentStr, firsttimesearch, RegionName,TeacherName;
 
     ArrayList<String> purchaseSessionIDArray;
     SessionDetailModel dataResponse, dataResponseRating;
@@ -101,6 +101,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         firsttimesearch = getIntent().getStringExtra("firsttimesearch");
         RegionName = getIntent().getStringExtra("RegionName");
         SearchPlaystudy = getIntent().getStringExtra("SearchPlaystudy");
+        TeacherName=getIntent().getStringExtra("TeacherName");
         setTypeface();
         init();
         setListner();
@@ -109,7 +110,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
     public void setTypeface() {
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
 
-        sessionNameBinding.sessionTxt.setTypeface(custom_font);
+//        sessionNameBinding.sessionTxt.setTypeface(custom_font);
         sessionNameBinding.rupesSymbol.setTypeface(custom_font);
         sessionNameBinding.priceTxt.setTypeface(custom_font);
         sessionNameBinding.bookSessionBtn.setTypeface(custom_font);
@@ -139,11 +140,11 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         switch (view.getId()) {
             case R.id.book_session_btn:
                 if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
-                    new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                    new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AlertDialogTheme))
                             .setCancelable(false)
-                            .setTitle("Login")
-                            .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
-                            .setMessage("You are not login,So Please Login.")
+//                            .setTitle("Login")
+//                            .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+                            .setMessage(getResources().getString(R.string.loginmsg))
                             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
 //                                        setDialogData();
@@ -169,6 +170,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                                     intentLogin.putExtra("RegionName", RegionName);
                                     intentLogin.putExtra("back", "SessionName");
                                     intentLogin.putExtra("SearchPlaystudy", SearchPlaystudy);
+                                    intentLogin.putExtra("TeacherName",TeacherName);
                                     startActivity(intentLogin);
                                     finish();
                                 }
@@ -179,7 +181,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
 
                                 }
                             })
-                            .setIcon(R.drawable.safari)
+//                            .setIcon(R.drawable.safari)
                             .show();
                 } else {
 //                        setDialogData();
@@ -204,6 +206,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                     intent.putExtra("froncontanct", "false");
                     intent.putExtra("searchfront", searchfront);
                     intent.putExtra("firsttimesearch", firsttimesearch);
+                    intent.putExtra("TeacherName",TeacherName);
 //                        intent.putExtra("RegionName",RegionName);
                     startActivity(intent);
                 }
@@ -225,6 +228,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                 inback.putExtra("firsttimesearch", firsttimesearch);
                 inback.putExtra("RegionName", RegionName);
                 inback.putExtra("SearchPlaystudy", SearchPlaystudy);
+                inback.putExtra("TeacherName",TeacherName);
                 startActivity(inback);
                 break;
             case R.id.menu:
@@ -255,6 +259,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         inback.putExtra("firsttimesearch", firsttimesearch);
         inback.putExtra("RegionName", RegionName);
         inback.putExtra("SearchPlaystudy", SearchPlaystudy);
+        inback.putExtra("TeacherName",TeacherName);
         inback.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(inback);
     }
@@ -425,11 +430,11 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                 if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
                     addRating();
                 } else {
-                    new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                    new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AlertDialogTheme))
                             .setCancelable(false)
-                            .setTitle("Login")
-                            .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
-                            .setMessage("You are not login,So Please Login.")
+//                            .setTitle("Login")
+//                            .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+                            .setMessage(getResources().getString(R.string.loginmsg))
                             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent intentLogin = new Intent(mContext, LoginActivity.class);
@@ -447,6 +452,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                                     intentLogin.putExtra("ratingLogin", "ratingLoginSession");
                                     intentLogin.putExtra("searchfront", searchfront);
                                     intentLogin.putExtra("sessionStudent", familysessionStudentStr);
+                                    intentLogin.putExtra("TeacherName",TeacherName);
                                     startActivity(intentLogin);
                                     finish();
                                 }
@@ -457,7 +463,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
 
                                 }
                             })
-                            .setIcon(R.drawable.safari)
+//                            .setIcon(R.drawable.safari)
                             .show();
                 }
             }
@@ -543,6 +549,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
             public void onShow(DialogInterface dialog) {
 
                 Button b = mAlertDialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE);
+                Button b1 = mAlertDialog.getButton(android.app.AlertDialog.BUTTON_NEGATIVE);
                 b.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -568,6 +575,8 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                         }
                     }
                 });
+                b.setTextColor(getResources().getColor(R.color.blue));
+                b1.setTextColor(getResources().getColor(R.color.gray1));
             }
         });
         mAlertDialog.show();

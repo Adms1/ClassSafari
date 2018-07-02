@@ -64,7 +64,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     String firstNameStr, lastNameStr, emailStr, passwordStr, phonenoStr, gendarIdStr = "1", dateofbirthStr, coachTypeIDStr = "1",oraganisationStr="",
             registerTypeStr = "family", contatIDstr, type, sessionIDStr, paymentStatusstr, orderIDStr, frontloginStr,
             boardStr, standardStr, streamStr, locationStr, classNameStr, sessionType, durationStr, sessionDateStr,
-            subjectStr, genderStr, ratingLoginStr, searchfront, firsttimesearch, backStr, SearchPlaystudy, termscondition = "", frontRegister = "";
+            subjectStr, genderStr, ratingLoginStr, searchfront, firsttimesearch, backStr,TeacherName, SearchPlaystudy, termscondition = "", frontRegister = "";
     //Use for Confirmation Dialog
     Dialog confimDialog, optionDialog;
     boolean firsttime = false;
@@ -103,6 +103,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         backStr = getIntent().getStringExtra("back");
         SearchPlaystudy = getIntent().getStringExtra("SearchPlaystudy");
         frontRegister = getIntent().getStringExtra("frontRegister");
+        TeacherName=getIntent().getStringExtra("TeacherName");
         setTypeface();
 
         init();
@@ -160,6 +161,8 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
                     termscondition = registrationBinding.chkTermsAndCondi.getTag().toString();
+                }else{
+                    termscondition="";
                 }
             }
         });
@@ -273,6 +276,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                     inback.putExtra("firsttimesearch", firsttimesearch);
                     inback.putExtra("back", backStr);
                     inback.putExtra("SearchPlaystudy", SearchPlaystudy);
+                    inback.putExtra("TeacherName",TeacherName);
                     startActivity(inback);
                 }
                 break;
@@ -378,6 +382,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
             inback.putExtra("firsttimesearch", firsttimesearch);
             inback.putExtra("back", backStr);
             inback.putExtra("SearchPlaystudy", SearchPlaystudy);
+            inback.putExtra("TeacherName",TeacherName);
             startActivity(inback);
         }
     }
@@ -588,6 +593,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                         Utils.setPref(mContext, "RegisterUserName", teacherInfoModel.getName());
                         Utils.setPref(mContext, "RegisterEmail", teacherInfoModel.getEmailID());
                         Utils.setPref(mContext, "LoginType", teacherInfoModel.getLoginType());
+                        Utils.setPref(mContext,"ClassName",teacherInfoModel.getClassName());
                         AppConfiguration.RegisterEmail = emailStr;
                         AppConfiguration.coachId = teacherInfoModel.getCoachID();
                         type = teacherInfoModel.getLoginType();

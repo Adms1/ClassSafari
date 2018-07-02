@@ -11,6 +11,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.adms.classsafari.Activites.SessionName;
 import com.adms.classsafari.Interface.bookClick;
@@ -32,12 +36,11 @@ import java.util.List;
 public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.MyViewHolder> {
 
     List<sessionDataModel> arrayList;
-    int SessionHour = 0;
-    Integer SessionMinit = 0;
+
     String searchByStr, locationStr, classNameStr,
             address, boardStr, streamStr, standardStr,
             searchTypeStr, wheretoComeStr, searchfront,
-            sessionType, firsttimesearch;
+            sessionType, firsttimesearch, TeacherName;
     onViewClick onViewClick;
     bookClick bookClick;
     CardLayoutBinding cardLayoutBinding;
@@ -48,7 +51,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
 
     public ClassDetailAdapter(Context mContext, List<sessionDataModel> arrayList, String searchByStr, String locationStr,
                               String classNameStr, String boardStr, String streamStr, String standardStr, String searchTypeStr,
-                              String wheretoComeStr, String searchfront, bookClick bookClick, onViewClick onViewClick) {
+                              String wheretoComeStr, String searchfront, String teacherName, bookClick bookClick, onViewClick onViewClick) {
         this.mContext = mContext;
         this.arrayList = arrayList;
         this.searchByStr = searchByStr;
@@ -64,76 +67,183 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
         this.sessionType = sessionType;
         this.firsttimesearch = firsttimesearch;
         this.bookClick = bookClick;
+        this.TeacherName = TeacherName;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-//        View itemView = LayoutInflater.from(parent.getContext())
-//                .inflate(R.layout.card_layout, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.card_layout, parent, false);
 
-        cardLayoutBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.card_layout, parent, false);
-
-        View itemView = cardLayoutBinding.getRoot();
-
-
-        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
-        cardLayoutBinding.sessionNameTxt.setTypeface(custom_font);
-        cardLayoutBinding.ratingUserTxt.setTypeface(custom_font);
-        cardLayoutBinding.tutorNameTxt.setTypeface(custom_font);
-        cardLayoutBinding.locationTxt.setTypeface(custom_font);
-        cardLayoutBinding.startDateTxt.setTypeface(custom_font);
-        cardLayoutBinding.endDateTxt.setTypeface(custom_font);
-        cardLayoutBinding.priceTxt.setTypeface(custom_font);
-        cardLayoutBinding.monTimeTxt.setTypeface(custom_font);
-        cardLayoutBinding.tuesTimeTxt.setTypeface(custom_font);
-        cardLayoutBinding.wedTimeTxt.setTypeface(custom_font);
-        cardLayoutBinding.thurTimeTxt.setTypeface(custom_font);
-        cardLayoutBinding.friTimeTxt.setTypeface(custom_font);
-        cardLayoutBinding.satTimeTxt.setTypeface(custom_font);
-        cardLayoutBinding.sunTimeTxt.setTypeface(custom_font);
-        cardLayoutBinding.monHoursTxt.setTypeface(custom_font);
-        cardLayoutBinding.tuesHoursTxt.setTypeface(custom_font);
-        cardLayoutBinding.wedHoursTxt.setTypeface(custom_font);
-        cardLayoutBinding.thurHoursTxt.setTypeface(custom_font);
-        cardLayoutBinding.friHoursTxt.setTypeface(custom_font);
-        cardLayoutBinding.satHoursTxt.setTypeface(custom_font);
-        cardLayoutBinding.sunHoursTxt.setTypeface(custom_font);
-        cardLayoutBinding.mondayBtn.setTypeface(custom_font);
-        cardLayoutBinding.tuesdayBtn.setTypeface(custom_font);
-        cardLayoutBinding.wednesdayBtn.setTypeface(custom_font);
-        cardLayoutBinding.thursdayBtn.setTypeface(custom_font);
-        cardLayoutBinding.fridayBtn.setTypeface(custom_font);
-        cardLayoutBinding.saturdayBtn.setTypeface(custom_font);
-        cardLayoutBinding.sundayBtn.setTypeface(custom_font);
+//        cardLayoutBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.card_layout, parent, false);
+//
+//        View itemView = cardLayoutBinding.getRoot();
+//
+//
+//        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
+//        cardLayoutBinding.sessionNameTxt.setTypeface(custom_font);
+//        cardLayoutBinding.ratingUserTxt.setTypeface(custom_font);
+//        cardLayoutBinding.tutorNameTxt.setTypeface(custom_font);
+//        cardLayoutBinding.locationTxt.setTypeface(custom_font);
+//        cardLayoutBinding.startDateTxt.setTypeface(custom_font);
+//        cardLayoutBinding.endDateTxt.setTypeface(custom_font);
+//        cardLayoutBinding.priceTxt.setTypeface(custom_font);
+//        cardLayoutBinding.monTimeTxt.setTypeface(custom_font);
+//        cardLayoutBinding.tuesTimeTxt.setTypeface(custom_font);
+//        cardLayoutBinding.wedTimeTxt.setTypeface(custom_font);
+//        cardLayoutBinding.thurTimeTxt.setTypeface(custom_font);
+//        cardLayoutBinding.friTimeTxt.setTypeface(custom_font);
+//        cardLayoutBinding.satTimeTxt.setTypeface(custom_font);
+//        cardLayoutBinding.sunTimeTxt.setTypeface(custom_font);
+//        cardLayoutBinding.monHoursTxt.setTypeface(custom_font);
+//        cardLayoutBinding.tuesHoursTxt.setTypeface(custom_font);
+//        cardLayoutBinding.wedHoursTxt.setTypeface(custom_font);
+//        cardLayoutBinding.thurHoursTxt.setTypeface(custom_font);
+//        cardLayoutBinding.friHoursTxt.setTypeface(custom_font);
+//        cardLayoutBinding.satHoursTxt.setTypeface(custom_font);
+//        cardLayoutBinding.sunHoursTxt.setTypeface(custom_font);
+//        cardLayoutBinding.mondayBtn.setTypeface(custom_font);
+//        cardLayoutBinding.tuesdayBtn.setTypeface(custom_font);
+//        cardLayoutBinding.wednesdayBtn.setTypeface(custom_font);
+//        cardLayoutBinding.thursdayBtn.setTypeface(custom_font);
+//        cardLayoutBinding.fridayBtn.setTypeface(custom_font);
+//        cardLayoutBinding.saturdayBtn.setTypeface(custom_font);
+//        cardLayoutBinding.sundayBtn.setTypeface(custom_font);
 
         return new MyViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
+
+        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
+        holder.session_name_txt.setTypeface(custom_font);
+        holder.price_txt.setTypeface(custom_font);
+        holder.start_date_txt.setTypeface(custom_font);
+        holder.end_date_txt.setTypeface(custom_font);
+        holder.mon_time_txt.setTypeface(custom_font);
+        holder.tues_time_txt.setTypeface(custom_font);
+        holder.wed_time_txt.setTypeface(custom_font);
+        holder.thur_time_txt.setTypeface(custom_font);
+        holder.fri_time_txt.setTypeface(custom_font);
+        holder.sat_time_txt.setTypeface(custom_font);
+        holder.sun_time_txt.setTypeface(custom_font);
+        holder.location_txt.setTypeface(custom_font);
+//        holder.duration_txt.setTypeface(custom_font);
+        holder.tutor_name_txt.setTypeface(custom_font);
+        holder.mon_hours_txt.setTypeface(custom_font);
+        holder.tues_hours_txt.setTypeface(custom_font);
+        holder.wed_hours_txt.setTypeface(custom_font);
+        holder.thur_hours_txt.setTypeface(custom_font);
+        holder.fri_hours_txt.setTypeface(custom_font);
+        holder.sat_hours_txt.setTypeface(custom_font);
+        holder.sun_hours_txt.setTypeface(custom_font);
+        holder.rating_user_txt.setTypeface(custom_font);
+        holder.view_more_session_btn.setTypeface(custom_font);
+        holder.monday_btn.setTypeface(custom_font);
+        holder.tuesday_btn.setTypeface(custom_font);
+        holder.wednesday_btn.setTypeface(custom_font);
+        holder.thursday_btn.setTypeface(custom_font);
+        holder.friday_btn.setTypeface(custom_font);
+        holder.saturday_btn.setTypeface(custom_font);
+        holder.sunday_btn.setTypeface(custom_font);
+        holder.book_session_btn.setTypeface(custom_font);
+
         if (arrayList.get(position).getTotalRatingUser().equalsIgnoreCase("0")) {
-            cardLayoutBinding.ratingUserTxt.setVisibility(View.GONE);
+            holder.rating_user_txt.setVisibility(View.GONE);
         } else {
-            cardLayoutBinding.ratingUserTxt.setVisibility(View.VISIBLE);
-            cardLayoutBinding.ratingUserTxt.setText("(" + arrayList.get(position).getTotalRatingUser() + ")");
+            holder.rating_user_txt.setVisibility(View.VISIBLE);
+            holder.rating_user_txt.setText("(" + arrayList.get(position).getTotalRatingUser() + ")");
         }
-        cardLayoutBinding.ratingBar.setRating(Float.parseFloat(arrayList.get(position).getRating()));
+        holder.rating_bar.setRating(Float.parseFloat(arrayList.get(position).getRating()));
         address = arrayList.get(position).getAddressLine1() +
                 "," + arrayList.get(position).getRegionName() +
                 "," + arrayList.get(position).getAddressCity() +
                 "," + arrayList.get(position).getAddressState() +
                 "-" + arrayList.get(position).getAddressZipCode();
-        cardLayoutBinding.sessionNameTxt.setText(arrayList.get(position).getSessionName());
+        holder.session_name_txt.setText(arrayList.get(position).getSessionName());
         if (arrayList.get(position).getSessionAmount().equalsIgnoreCase("0.00")) {
-            cardLayoutBinding.priceTxt.setText("Free");
+            holder.price_txt.setText("Free");
         } else {
-            cardLayoutBinding.priceTxt.setText("₹" + arrayList.get(position).getSessionAmount());
+            holder.price_txt.setText("₹" + arrayList.get(position).getSessionAmount());
         }
-        cardLayoutBinding.startDateTxt.setText(arrayList.get(position).getStartDate());
-        cardLayoutBinding.endDateTxt.setText(arrayList.get(position).getEndDate());
-        cardLayoutBinding.locationTxt.setText(arrayList.get(position).getRegionName());
-        cardLayoutBinding.linearClick.setOnTouchListener(new View.OnTouchListener() {
+        holder.start_date_txt.setText(arrayList.get(position).getStartDate());
+        holder.end_date_txt.setText(arrayList.get(position).getEndDate());
+        holder.location_txt.setText(arrayList.get(position).getRegionName());
+        if (!arrayList.get(position).getMondayTimeStr().equalsIgnoreCase("")) {
+            holder.mon_time_txt.setEnabled(true);
+            holder.monday_btn.setEnabled(true);
+            holder.mon_hours_txt.setEnabled(true);
+            holder.mon_time_txt.setAlpha(1);
+            holder.monday_btn.setAlpha(1);
+            holder.mon_hours_txt.setAlpha(1);
+            holder.mon_time_txt.setText(arrayList.get(position).getMondayTimeStr());
+            holder.mon_hours_txt.setText(arrayList.get(position).getMondayHoursStr());
+        }
+        if (!arrayList.get(position).getTuesdayTimeStr().equalsIgnoreCase("")) {
+            holder.tues_time_txt.setEnabled(true);
+            holder.tues_time_txt.setAlpha(1);
+            holder.tues_time_txt.setText(arrayList.get(position).getTuesdayTimeStr());
+            holder.tuesday_btn.setEnabled(true);
+            holder.tuesday_btn.setAlpha(1);
+            holder.tues_hours_txt.setEnabled(true);
+            holder.tues_hours_txt.setAlpha(1);
+            holder.tues_hours_txt.setText(arrayList.get(position).getTuesdayHoursStr());
+        }
+        if (!arrayList.get(position).getWeddayTimeStr().equalsIgnoreCase("")) {
+            holder.wed_time_txt.setEnabled(true);
+            holder.wed_time_txt.setAlpha(1);
+            holder.wed_time_txt.setText(arrayList.get(position).getWeddayTimeStr());
+            holder.wednesday_btn.setEnabled(true);
+            holder.wednesday_btn.setAlpha(1);
+            holder.wed_hours_txt.setEnabled(true);
+            holder.wed_hours_txt.setAlpha(1);
+            holder.wed_hours_txt.setText(arrayList.get(position).getWeddayHoursStr());
+        }
+        if (!arrayList.get(position).getThursdayTimeStr().equalsIgnoreCase("")) {
+            holder.thur_time_txt.setEnabled(true);
+            holder.thur_time_txt.setAlpha(1);
+            holder.thur_time_txt.setText(arrayList.get(position).getThursdayTimeStr());
+            holder.thursday_btn.setEnabled(true);
+            holder.thursday_btn.setAlpha(1);
+            holder.thur_hours_txt.setEnabled(true);
+            holder.thur_hours_txt.setAlpha(1);
+            holder.thur_hours_txt.setText(arrayList.get(position).getThursdayHoursStr());
+        }
+        if (!arrayList.get(position).getFridayTimeStr().equalsIgnoreCase("")) {
+            holder.fri_time_txt.setEnabled(true);
+            holder.fri_time_txt.setAlpha(1);
+            holder.fri_time_txt.setText(arrayList.get(position).getFridayTimeStr());
+            holder.friday_btn.setEnabled(true);
+            holder.friday_btn.setAlpha(1);
+            holder.fri_hours_txt.setEnabled(true);
+            holder.fri_hours_txt.setAlpha(1);
+            holder.fri_hours_txt.setText(arrayList.get(position).getFridayHoursStr());
+        }
+        if (!arrayList.get(position).getSatdayTimeStr().equalsIgnoreCase("")) {
+            holder.sat_time_txt.setEnabled(true);
+            holder.sat_time_txt.setAlpha(1);
+            holder.sat_time_txt.setText(arrayList.get(position).getSatdayTimeStr());
+            holder.saturday_btn.setEnabled(true);
+            holder.saturday_btn.setAlpha(1);
+            holder.sat_hours_txt.setEnabled(true);
+            holder.sat_hours_txt.setAlpha(1);
+            holder.sat_hours_txt.setText(arrayList.get(position).getSatdayHoursStr());
+        }
+        if (!arrayList.get(position).getSundayTimeStr().equalsIgnoreCase("")) {
+            holder.sun_time_txt.setEnabled(true);
+            holder.sun_time_txt.setAlpha(1);
+            holder.sun_time_txt.setText(arrayList.get(position).getSundayTimeStr());
+            holder.sunday_btn.setEnabled(true);
+            holder.sunday_btn.setAlpha(1);
+            holder.sun_hours_txt.setEnabled(true);
+            holder.sun_hours_txt.setAlpha(1);
+            holder.sun_hours_txt.setText(arrayList.get(position).getSundayHoursStr());
+        }
+
+
+        holder.linear_click.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
@@ -146,7 +256,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                     inSession.putExtra("stream", streamStr);
                     inSession.putExtra("standard", standardStr);
                     inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
-                    inSession.putExtra("sessiondate", cardLayoutBinding.startDateTxt.getText().toString() + " To " + cardLayoutBinding.endDateTxt.getText().toString());
+                    inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() + " To " + holder.end_date_txt.getText().toString());
 //                    inSession.putExtra("duration", cardLayoutBinding.durationTxt.getText().toString());
                     inSession.putExtra("gender", arrayList.get(position).getGenderID());
                     inSession.putExtra("searchType", searchTypeStr);
@@ -154,32 +264,13 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                     inSession.putExtra("searchfront", searchfront);
                     inSession.putExtra("sessionType", sessionType);
                     inSession.putExtra("firsttimesearch", firsttimesearch);
+                    inSession.putExtra("TeacherName", TeacherName);
                     mContext.startActivity(inSession);
                 }
                 return true;
             }
         });
-//        holder.linear_click.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent inSession = new Intent(mContext, SessionName.class);
-//                inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
-//                inSession.putExtra("SearchBy", searchByStr);
-//                inSession.putExtra("city", locationStr);
-//                inSession.putExtra("sessionName", classNameStr);
-//                inSession.putExtra("board", boardStr);
-//                inSession.putExtra("stream", streamStr);
-//                inSession.putExtra("standard", standardStr);
-//                inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
-//                inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() + " To " + holder.end_date_txt.getText().toString());
-//                inSession.putExtra("duration", holder.duration_txt.getText().toString());
-//                inSession.putExtra("gender", arrayList.get(position).getGenderID());
-//                inSession.putExtra("searchType", searchTypeStr);
-//                inSession.putExtra("withOR", wheretoComeStr);
-//                mContext.startActivity(inSession);
-//            }
-//        });
-        cardLayoutBinding.sessionNameTxt.setOnClickListener(new View.OnClickListener() {
+        holder.view_more_session_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent inSession = new Intent(mContext, SessionName.class);
@@ -191,16 +282,39 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                 inSession.putExtra("stream", streamStr);
                 inSession.putExtra("standard", standardStr);
                 inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
-                inSession.putExtra("sessiondate", cardLayoutBinding.startDateTxt.getText().toString() + " To " + cardLayoutBinding.endDateTxt.getText().toString());
+                inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() + " To " + holder.end_date_txt.getText().toString());
 //                inSession.putExtra("duration", cardLayoutBinding.durationTxt.getText().toString());
                 inSession.putExtra("gender", arrayList.get(position).getGenderID());
                 inSession.putExtra("searchType", searchTypeStr);
                 inSession.putExtra("withOR", wheretoComeStr);
                 inSession.putExtra("firsttimesearch", firsttimesearch);
+                inSession.putExtra("TeacherName", TeacherName);
                 mContext.startActivity(inSession);
             }
         });
-        cardLayoutBinding.ratingBar.setOnTouchListener(new View.OnTouchListener() {
+        holder.session_name_txt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent inSession = new Intent(mContext, SessionName.class);
+                inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
+                inSession.putExtra("SearchBy", searchByStr);
+                inSession.putExtra("city", locationStr);
+                inSession.putExtra("sessionName", classNameStr);
+                inSession.putExtra("board", boardStr);
+                inSession.putExtra("stream", streamStr);
+                inSession.putExtra("standard", standardStr);
+                inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
+                inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() + " To " + holder.end_date_txt.getText().toString());
+//                inSession.putExtra("duration", cardLayoutBinding.durationTxt.getText().toString());
+                inSession.putExtra("gender", arrayList.get(position).getGenderID());
+                inSession.putExtra("searchType", searchTypeStr);
+                inSession.putExtra("withOR", wheretoComeStr);
+                inSession.putExtra("firsttimesearch", firsttimesearch);
+                inSession.putExtra("TeacherName", TeacherName);
+                mContext.startActivity(inSession);
+            }
+        });
+        holder.rating_bar.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 SessionDetail = new ArrayList<>();
@@ -212,7 +326,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
             }
         });
 
-        cardLayoutBinding.bookSessionBtn.setOnClickListener(new View.OnClickListener() {
+        holder.book_session_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 SessionBookDetail = new ArrayList<>();
@@ -285,67 +399,15 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
 //            }
 //        }
 //        sessionDataModel.setWeekDay(arrayList.get(position).getSchedule());
-        if (!arrayList.get(position).getMondayTimeStr().equalsIgnoreCase("")) {
-            cardLayoutBinding.monTimeTxt.setEnabled(true);
-            cardLayoutBinding.mondayBtn.setEnabled(true);
-            cardLayoutBinding.monTimeTxt.setAlpha(1);
-            cardLayoutBinding.mondayBtn.setAlpha(1);
-            cardLayoutBinding.monTimeTxt.setText(arrayList.get(position).getMondayTimeStr());
-        }
-        if (!arrayList.get(position).getTuesdayTimeStr().equalsIgnoreCase("")) {
-            cardLayoutBinding.tuesTimeTxt.setEnabled(true);
-            cardLayoutBinding.tuesdayBtn.setEnabled(true);
-            cardLayoutBinding.tuesTimeTxt.setAlpha(1);
-            cardLayoutBinding.tuesdayBtn.setAlpha(1);
-            cardLayoutBinding.tuesTimeTxt.setText(arrayList.get(position).getTuesdayTimeStr());
-        }
-        if (!arrayList.get(position).getWeddayTimeStr().equalsIgnoreCase("")) {
-            cardLayoutBinding.wedTimeTxt.setEnabled(true);
-            cardLayoutBinding.wednesdayBtn.setEnabled(true);
-            cardLayoutBinding.wedTimeTxt.setAlpha(1);
-            cardLayoutBinding.wednesdayBtn.setAlpha(1);
-            cardLayoutBinding.wedTimeTxt.setText(arrayList.get(position).getWeddayTimeStr());
-        }
-        if (!arrayList.get(position).getThursdayTimeStr().equalsIgnoreCase("")) {
-            cardLayoutBinding.thurTimeTxt.setEnabled(true);
-                    cardLayoutBinding.thursdayBtn.setEnabled(true);
-                    cardLayoutBinding.thurTimeTxt.setAlpha(1);
-                    cardLayoutBinding.thursdayBtn.setAlpha(1);
-                    cardLayoutBinding.thurTimeTxt.setText(arrayList.get(position).getThursdayTimeStr());
-        }
-        if (!arrayList.get(position).getFridayTimeStr().equalsIgnoreCase("")) {
-            cardLayoutBinding.friTimeTxt.setEnabled(true);
-                    cardLayoutBinding.fridayBtn.setEnabled(true);
-                    cardLayoutBinding.friTimeTxt.setAlpha(1);
-                    cardLayoutBinding.fridayBtn.setAlpha(1);
-                    cardLayoutBinding.friTimeTxt.setText(arrayList.get(position).getFridayTimeStr());
-        }
-        if (!arrayList.get(position).getSatdayTimeStr().equalsIgnoreCase("")) {
-            cardLayoutBinding.satTimeTxt.setEnabled(true);
-                    cardLayoutBinding.saturdayBtn.setEnabled(true);
-                    cardLayoutBinding.satTimeTxt.setAlpha(1);
-                    cardLayoutBinding.saturdayBtn.setAlpha(1);
-                    cardLayoutBinding.satTimeTxt.setText(arrayList.get(position).getSatdayTimeStr());
-        }
-        if (!arrayList.get(position).getSundayTimeStr().equalsIgnoreCase("")) {
-            cardLayoutBinding.sunTimeTxt.setEnabled(true);
-                    cardLayoutBinding.sundayBtn.setEnabled(true);
-                    cardLayoutBinding.sunTimeTxt.setAlpha(1);
-                    cardLayoutBinding.sundayBtn.setAlpha(1);
-                    cardLayoutBinding.sunTimeTxt.setText(arrayList.get(position).getDateTime());
-        }
 
 
         if (arrayList.get(position).getCoachTypeID().equalsIgnoreCase("1")) {
-            cardLayoutBinding.tutorNameTxt.setText(arrayList.get(position).getName());
+            holder.tutor_name_txt.setText(arrayList.get(position).getName());
         } else {
-            cardLayoutBinding.tutorNameTxt.setText(arrayList.get(position).getName());
+            holder.tutor_name_txt.setText(arrayList.get(position).getName());
         }
 
-
-//        arrayList.get(position).setDuration(SessionHour + " hr " + SessionMinit + " min");
-//        cardLayoutBinding.durationTxt.setText(arrayList.get(position).getDuration());
-        cardLayoutBinding.locationTxt.setOnClickListener(new View.OnClickListener() {
+        holder.location_txt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(address));
@@ -371,30 +433,6 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
         return position;
     }
 
-    public void calculateHours(String time1, String time2) {
-        Date date1, date2;
-        int days, hours, min;
-        String hourstr, minstr;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a");
-        try {
-            date1 = simpleDateFormat.parse(time1);
-            date2 = simpleDateFormat.parse(time2);
-
-            long difference = date2.getTime() - date1.getTime();
-            days = (int) (difference / (1000 * 60 * 60 * 24));
-            hours = (int) ((difference - (1000 * 60 * 60 * 24 * days)) / (1000 * 60 * 60));
-            min = (int) (difference - (1000 * 60 * 60 * 24 * days) - (1000 * 60 * 60 * hours)) / (1000 * 60);
-            hours = (hours < 0 ? -hours : hours);
-            SessionHour = hours;
-            SessionMinit = min;
-            Log.i("======= Hours", " :: " + hours + ":" + min);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-
-    }
 
     public ArrayList<String> getSessionDetail() {
         return SessionDetail;
@@ -405,44 +443,54 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-//        public TextView session_name_txt, price_txt, start_date_txt, end_date_txt,
-//                mon_time_txt, tues_time_txt, wed_time_txt, thur_time_txt, fri_time_txt, sat_time_txt, sun_time_txt,
-//                location_txt, duration_txt, tutor_name_txt;
-//        public Button monday_btn, tuesday_btn, wednesday_btn, thursday_btn, friday_btn, saturday_btn, sunday_btn;
-//        public RatingBar rating_bar;
-//        public LinearLayout linear_click;
+        public TextView session_name_txt, price_txt, start_date_txt, end_date_txt,
+                mon_time_txt, tues_time_txt, wed_time_txt, thur_time_txt, fri_time_txt, sat_time_txt, sun_time_txt,
+                location_txt, duration_txt, tutor_name_txt, mon_hours_txt, tues_hours_txt, wed_hours_txt, thur_hours_txt,
+                fri_hours_txt, sat_hours_txt, sun_hours_txt, rating_user_txt;
+        public Button monday_btn, tuesday_btn, wednesday_btn, thursday_btn, friday_btn, saturday_btn, sunday_btn, book_session_btn, view_more_session_btn;
+        public RatingBar rating_bar;
+        public LinearLayout linear_click;
 
         public MyViewHolder(View view) {
             super(view);
-//            session_name_txt = (TextView) view.findViewById(R.id.session_name_txt);
-//            price_txt = (TextView) view.findViewById(R.id.price_txt);
-//            start_date_txt = (TextView) view.findViewById(R.id.start_date_txt);
-//            end_date_txt = (TextView) view.findViewById(R.id.end_date_txt);
-//
-//            mon_time_txt = (TextView) view.findViewById(R.id.mon_time_txt);
-//            tues_time_txt = (TextView) view.findViewById(R.id.tues_time_txt);
-//            wed_time_txt = (TextView) view.findViewById(R.id.wed_time_txt);
-//            thur_time_txt = (TextView) view.findViewById(R.id.thur_time_txt);
-//            fri_time_txt = (TextView) view.findViewById(R.id.fri_time_txt);
-//            sat_time_txt = (TextView) view.findViewById(R.id.sat_time_txt);
-//            sun_time_txt = (TextView) view.findViewById(R.id.sun_time_txt);
+            book_session_btn = (Button) view.findViewById(R.id.book_session_btn);
+            sunday_btn = (Button) view.findViewById(R.id.sunday_btn);
+            saturday_btn = (Button) view.findViewById(R.id.saturday_btn);
+            friday_btn = (Button) view.findViewById(R.id.friday_btn);
+            thursday_btn = (Button) view.findViewById(R.id.thursday_btn);
+            wednesday_btn = (Button) view.findViewById(R.id.wednesday_btn);
+            tuesday_btn = (Button) view.findViewById(R.id.tuesday_btn);
+            monday_btn = (Button) view.findViewById(R.id.monday_btn);
+            view_more_session_btn = (Button) view.findViewById(R.id.view_more_session_btn);
 
 
-//            location_txt = (TextView) view.findViewById(R.id.location_txt);
-//            duration_txt = (TextView) view.findViewById(R.id.duration_txt);
-//            tutor_name_txt = (TextView) view.findViewById(R.id.tutor_name_txt);
-//
-//            monday_btn = (Button) view.findViewById(R.id.monday_btn);
-//            tuesday_btn = (Button) view.findViewById(R.id.tuesday_btn);
-//            wednesday_btn = (Button) view.findViewById(R.id.wednesday_btn);
-//            thursday_btn = (Button) view.findViewById(R.id.thursday_btn);
-//            friday_btn = (Button) view.findViewById(R.id.friday_btn);
-//            saturday_btn = (Button) view.findViewById(R.id.saturday_btn);
-//            sunday_btn = (Button) view.findViewById(R.id.sunday_btn);
-//
-//            rating_bar = (RatingBar) view.findViewById(R.id.rating_bar);
-//
-//            linear_click = (LinearLayout) view.findViewById(R.id.linear_click);
+            sun_hours_txt = (TextView) view.findViewById(R.id.sun_hours_txt);
+            sat_hours_txt = (TextView) view.findViewById(R.id.sat_hours_txt);
+            fri_hours_txt = (TextView) view.findViewById(R.id.fri_hours_txt);
+            thur_hours_txt = (TextView) view.findViewById(R.id.thur_hours_txt);
+            wed_hours_txt = (TextView) view.findViewById(R.id.wed_hours_txt);
+            tues_hours_txt = (TextView) view.findViewById(R.id.tues_hours_txt);
+            mon_hours_txt = (TextView) view.findViewById(R.id.mon_hours_txt);
+
+            sun_time_txt = (TextView) view.findViewById(R.id.sun_time_txt);
+            sat_time_txt = (TextView) view.findViewById(R.id.sat_time_txt);
+            fri_time_txt = (TextView) view.findViewById(R.id.fri_time_txt);
+            thur_time_txt = (TextView) view.findViewById(R.id.thur_time_txt);
+            wed_time_txt = (TextView) view.findViewById(R.id.wed_time_txt);
+            tues_time_txt = (TextView) view.findViewById(R.id.tues_time_txt);
+            mon_time_txt = (TextView) view.findViewById(R.id.mon_time_txt);
+
+            price_txt = (TextView) view.findViewById(R.id.price_txt);
+            end_date_txt = (TextView) view.findViewById(R.id.end_date_txt);
+            start_date_txt = (TextView) view.findViewById(R.id.start_date_txt);
+            location_txt = (TextView) view.findViewById(R.id.location_txt);
+            tutor_name_txt = (TextView) view.findViewById(R.id.tutor_name_txt);
+            rating_user_txt = (TextView) view.findViewById(R.id.rating_user_txt);
+            session_name_txt = (TextView) view.findViewById(R.id.session_name_txt);
+
+            rating_bar = (RatingBar) view.findViewById(R.id.rating_bar);
+
+            linear_click = (LinearLayout) view.findViewById(R.id.linear_click);
         }
     }
 }

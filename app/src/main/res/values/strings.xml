@@ -42,13 +42,13 @@
     <string name="sortby">SORT BY</string>
     <string name="most_recent">Most Recent</string>
     <string name="addsession">Add Class</string>
-    <string name="my_Account">MY PAYMENT</string>
-    <string name="my_session">UPCOMING CLASSES</string>
+    <string name="my_Account">My Payments</string>
+    <string name="my_session">Upcoming Classes</string>
     <string name="my_change_pass">Change Password</string>
     <string name="reviews">Reviews</string>
     <string name="logout">Logout</string>
     <string name="addchildsopuse">Add Family Contacts</string>
-    <string name="mycontanct">My Family Contacts</string>
+    <string name="mycontanct">My Contacts</string>
     <string name="agevalidation">Date of Birth should be > 1year .</string>
     <string name="close">DONE</string>
     <string name="click_here"><b>Click Here</b></string>
@@ -97,7 +97,7 @@
     <string name="session_name">Class Name</string>
     <string name="session_standard">Standard</string>
     <string name="search_board">Board</string>
-    <string name="payment_success">PAYMENT SUCCESS</string>
+    <string name="payment_success">ENROLLMENT SUCCESSFULL</string>
     <string name="payment_report">Payment Report</string>
     <string name="search_standard">Standard</string>
     <string name="session_board">Board</string>
@@ -225,4 +225,5 @@
     <string name="rating_row">How much do you like this class?</string>
     <string name="not_loging">you are not login.</string>
     <string name="class_type">Please Select Class type.</string>
+    <string name="loginmsg">Please login to continue.</string>
 </resources>

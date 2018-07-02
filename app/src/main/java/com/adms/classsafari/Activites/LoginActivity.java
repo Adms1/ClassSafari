@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             boardStr, standardStr, streamStr, locationStr, classNameStr,
             subjectStr, genderStr, frontloginStr,
             ratingLoginStr, searchfront, sessionType, durationStr,
-            sessionDateStr, RegionName, backStr, SearchPlaystudy;
+            sessionDateStr, RegionName, backStr, SearchPlaystudy,TeacherName;
     //    Use for Dialog
     Dialog forgotDialog;
     String EmailIdStr, type, familylocationStr, familysessionStudentStr, firsttimesearch;
@@ -85,6 +85,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         RegionName = getIntent().getStringExtra("RegionName");
         backStr = getIntent().getStringExtra("back");
         SearchPlaystudy = getIntent().getStringExtra("SearchPlaystudy");
+        TeacherName=getIntent().getStringExtra("TeacherName");
         if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
             checkUnmPwd();
         }
@@ -138,6 +139,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 inregister.putExtra("sessionStudent", familysessionStudentStr);
                 inregister.putExtra("firsttimesearch", firsttimesearch);
                 inregister.putExtra("RegionName", RegionName);
+                inregister.putExtra("TeacherName",TeacherName);
                 inregister.putExtra("back", backStr);
                 startActivity(inregister);
                 break;
@@ -203,6 +205,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             intent.putExtra("firsttimesearch", firsttimesearch);
             intent.putExtra("RegionName", RegionName);
             intent.putExtra("back", backStr);
+            intent.putExtra("TeacherName",TeacherName);
             intent.addCategory(Intent.CATEGORY_HOME);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -271,6 +274,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     iSearchByUser.putExtra("sessionType", sessionType);
                                     iSearchByUser.putExtra("firsttimesearch", firsttimesearch);
                                     iSearchByUser.putExtra("RegionName", RegionName);
+                                    iSearchByUser.putExtra("TeacherName",TeacherName);
                                     startActivity(iSearchByUser);
                                 } else if (ratingLoginStr.equalsIgnoreCase("ratingLoginSession")) {
                                     Intent iSearchByUser = new Intent(mContext, SessionName.class);
@@ -291,6 +295,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     iSearchByUser.putExtra("sessionType", sessionType);
                                     iSearchByUser.putExtra("firsttimesearch", firsttimesearch);
                                     iSearchByUser.putExtra("RegionName", RegionName);
+                                    iSearchByUser.putExtra("TeacherName",TeacherName);
                                     startActivity(iSearchByUser);
                                 } else {
                                     Intent iFamilyList = new Intent(mContext, FamilyListActivity.class);
@@ -316,6 +321,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     iFamilyList.putExtra("firsttimesearch", firsttimesearch);
                                     iFamilyList.putExtra("RegionName", RegionName);
                                     iFamilyList.putExtra("back", backStr);
+                                    iFamilyList.putExtra("TeacherName",TeacherName);
                                     startActivity(iFamilyList);
                                 }
                             }

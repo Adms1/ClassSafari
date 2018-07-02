@@ -35,7 +35,7 @@
                 android:paddingLeft="@dimen/_55sdp"
                 android:text="CLASS DETAILS"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_14sdp"
+                android:textSize="@dimen/_15sdp"
                 android:textStyle="bold"
                />
             <ImageView

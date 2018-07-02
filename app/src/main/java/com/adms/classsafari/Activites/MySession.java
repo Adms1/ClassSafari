@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.adms.classsafari.Adapter.UserSessionListAdapter;
+import com.adms.classsafari.Adapter.UserSessionListAdapter1;
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.AppConfiguration;
 import com.adms.classsafari.AppConstant.Utils;
@@ -63,7 +64,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
     SessiondetailConfirmationDialogBinding sessiondetailConfirmationDialogBinding;
 
     Context mContext;
-    UserSessionListAdapter userSessionListAdapter;
+    UserSessionListAdapter1 userSessionListAdapter;
     List<sessionDataModel> sessionList;
 
     //Use for Dialog
@@ -154,7 +155,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                         sessionList = sessionModel.getData();
 
                         if (sessionModel.getData().size() > 0) {
-                            mySessionBinding.headerLinear.setVisibility(View.VISIBLE);
+                            mySessionBinding.headerLinear.setVisibility(View.GONE);
                             mySessionBinding.noRecordTxt.setVisibility(View.GONE);
                             fillSessionList();
                         } else {
@@ -186,7 +187,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
     }
 
     public void fillSessionList() {
-        userSessionListAdapter = new UserSessionListAdapter(mContext, sessionList, new onViewClick() {
+        userSessionListAdapter = new UserSessionListAdapter1(mContext, sessionList, new onViewClick() {
             @Override
             public void getViewClick() {
                 ArrayList<String> selectedId = new ArrayList<String>();

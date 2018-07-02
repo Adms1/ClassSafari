@@ -29,6 +29,7 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -94,7 +95,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
     ArrayList<String> dialogselectarea;
 
     String subjectStr, boardStr = "", standardStr = "", streamStr = "",
-            locationStr, classNameStr, genderStr = "", sessionId, commentStr, ratingValueStr, popularsessionID = "",
+            locationStr, classNameStr, genderStr = "", sessionId, commentStr, ratingValueStr, popularsessionID = "", TeacherName = "",
             populardurationStr = "", populargenderStr = "", popluarsessiondateStr = "", firsttimesearch, RegionName = "", SearchPlaystudy, dialogselectareaStr = "";
     SessionDetailModel dataResponse, populardataresponse, areadataResponse;
     List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
@@ -155,6 +156,19 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         } else {
             binding.menu.setVisibility(View.VISIBLE);
         }
+        if (!RegionName.equalsIgnoreCase("")) {
+            binding.header1Linear.setVisibility(View.VISIBLE);
+            binding.header1Linear.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, .4f));
+            binding.headerLinear.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 0.7f));
+            binding.recViewLinear.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 0, 3.9f));
+            binding.bottomNavigationView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        } else {
+            binding.headerLinear.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 0.7f));
+            binding.recViewLinear.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 4.3f));
+            binding.bottomNavigationView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            binding.header1Linear.setVisibility(View.GONE);
+        }
+
         callSessionListApi();
 
     }
@@ -727,9 +741,10 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                                 if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
                                         arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
                                     filterFinalArray.add(arrayObj);
-                                    Collections.sort(filterFinalArray, new AtoZ());
+
                                 }
                             }
+                            Collections.sort(filterFinalArray, new AtoZ());
                             fillData(filterFinalArray);
                             sortDialog.dismiss();
                         }
@@ -741,9 +756,10 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                                 if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
                                         arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
                                     filterFinalArray.add(arrayObj);
-                                    Collections.sort(filterFinalArray, new ZtoA());
+
                                 }
                             }
+                            Collections.sort(filterFinalArray, new ZtoA());
                             fillData(filterFinalArray);
                             sortDialog.dismiss();
                         }
@@ -786,26 +802,25 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                 }
                 Log.d("Area", dialogselectarea.toString());
 
-//
-//                for (int i = 0; i < filterBinding.displayAreaList.getChildCount(); i++) {
-//                    View viewGroup=(View)filterBinding.displayAreaList.getChildAt(i);
-//                    CheckBox chk=(CheckBox)viewGroup.findViewById(R.id.area_chk);
-//                    if (chk.isChecked()) {
-//                        dialogselectarea.add(chk.getText().toString());
+//                for (String s : dialogselectarea) {
+//                    if (!s.equals("")) {
+//                        dialogselectareaStr = dialogselectareaStr + " , " + s;
 //                    }
+//
 //                }
-                for (String s : dialogselectarea) {
-                    if (!s.equals("")) {
-                        dialogselectareaStr = dialogselectareaStr + " , " + s;
-                    }
-
+                dialogselectareaStr = dialogselectarea.toString();
+                if (!dialogselectareaStr.equalsIgnoreCase("")) {
+                    dialogselectareaStr = dialogselectareaStr.substring(1, dialogselectareaStr.length() - 1);
                 }
                 if (!dialogselectareaStr.equalsIgnoreCase("")) {
-                    dialogselectareaStr = dialogselectareaStr.substring(1, dialogselectareaStr.length());
                     Log.d("dialogselectareaStr ", dialogselectareaStr);
                     binding.multiautocompe.setText(dialogselectareaStr);
                     binding.multiautocompe.setEnabled(false);
-
+                    binding.header1Linear.setVisibility(View.VISIBLE);
+                    binding.header1Linear.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, .4f));
+                    binding.headerLinear.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 0.7f));
+                    binding.recViewLinear.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 0, 3.9f));
+                    binding.bottomNavigationView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                     List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                     for (int i = 0; i < dialogselectarea.size(); i++) {
                         for (int j = 0; j < dataResponse.getData().size(); j++) {
@@ -817,14 +832,15 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 
                     fillData(filterFinalArray);
                 } else {
+                    binding.headerLinear.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 0.7f));
+                    binding.recViewLinear.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 4.3f));
+                    binding.bottomNavigationView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    binding.header1Linear.setVisibility(View.GONE);
                     binding.multiautocompe.setHint(getResources().getString(R.string.location_add));
                     binding.multiautocompe.setText("");
                     List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
                     for (sessionDataModel arrayObj : dataResponse.getData()) {
-                        if (arrayObj.getAddressCity().trim().toLowerCase().contains(locationStr.trim().toLowerCase()) &&
-                                arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-                            filterFinalArray.add(arrayObj);
-                        }
+                        filterFinalArray.add(arrayObj);
                     }
                     fillData(filterFinalArray);
                 }
@@ -832,12 +848,15 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
             }
         });
 
-        for (int j = 0; j < dataResponse.getData().size(); j++) {
-            if (dialogselectareaStr.equalsIgnoreCase("")) {
+
+        if (dialogselectareaStr.equalsIgnoreCase("")) {
+            for (int j = 0; j < dataResponse.getData().size(); j++) {
                 dataResponse.getData().get(j).setCheckStatus("0");
-            } else {
-                String[] split = dialogselectareaStr.split("\\,");
-                for (int i = 0; i < split.length; i++) {
+            }
+        } else {
+            String[] split = dialogselectareaStr.split("\\,");
+            for (int i = 0; i < split.length; i++) {
+                for (int j = 0; j < dataResponse.getData().size(); j++) {
                     if (dataResponse.getData().get(j).getRegionName().equalsIgnoreCase(split[i])) {
                         dataResponse.getData().get(j).setCheckStatus("1");
                     } else {
@@ -846,6 +865,8 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                 }
             }
         }
+
+
         searchAreaAdapter = new SearchAreaAdapter(mContext, dataResponse, dialogselectareaStr);
 //        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
 //        filterBinding.displayAreaList.setLayoutManager(mLayoutManager);
@@ -853,88 +874,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         filterBinding.displayAreaList.setAdapter(searchAreaAdapter);
 
         filterDialog.show();
-
-//                dialogselectareaStr = "";
-//                dialogselectarea = new ArrayList<>();
-//
-//                for (int i = 0; i < searchAreaAdapter.getCount(); i++) {
-//                    sessionDataModel sessionDetailModel = (sessionDataModel) searchAreaAdapter.getItem(i);
-//                    String status = sessionDetailModel.getData().get(i).getCheckStatus();
-//                    if (status.equalsIgnoreCase("1")) {
-//                        dialogselectarea.add(sessionDetailModel.getData().get(i).getCheckValue());
-//                    }
-//                }
-//                Log.d("Area", dialogselectarea.toString());
-//
-////
-////                for (int i = 0; i < filterBinding.displayAreaList.getChildCount(); i++) {
-////                    View viewGroup=(View)filterBinding.displayAreaList.getChildAt(i);
-////                    CheckBox chk=(CheckBox)viewGroup.findViewById(R.id.area_chk);
-////                    if (chk.isChecked()) {
-////                        dialogselectarea.add(chk.getText().toString());
-////                    }
-////                }
-//                for (String s : dialogselectarea) {
-//                    if (!s.equals("")) {
-//                        dialogselectareaStr = dialogselectareaStr + " , " + s;
-//                    }
-//
-//                }
-//                if (!dialogselectareaStr.equalsIgnoreCase("")) {
-//                    dialogselectareaStr = dialogselectareaStr.substring(1, dialogselectareaStr.length());
-//                    Log.d("dialogselectareaStr ", dialogselectareaStr);
-//                    binding.multiautocompe.setText(dialogselectareaStr);
-//                    binding.multiautocompe.setEnabled(false);
-//
-//                    List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                    for (int i = 0; i < dialogselectarea.size(); i++) {
-//                        for (int j = 0; j < areadataResponse.getData().size(); j++) {
-//                            if (areadataResponse.getData().get(j).getRegionName().trim().toLowerCase().contains(dialogselectarea.get(i).trim().toLowerCase())) {
-//                                filterFinalArray.add(areadataResponse.getData().get(j));
-//                            }
-//                        }
-//                    }
-//
-//                    fillData(filterFinalArray);
-//                } else {
-//                    binding.multiautocompe.setHint(getResources().getString(R.string.location_add));
-//                    binding.multiautocompe.setText("");
-//                    List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                    for (sessionDataModel arrayObj : areadataResponse.getData()) {
-//                        if (arrayObj.getAddressCity().trim().toLowerCase().contains(locationStr.trim().toLowerCase())) {
-//                            filterFinalArray.add(arrayObj);
-//                        }
-//                    }
-//                    fillData(filterFinalArray);
-//                }
-//                filterDialog.dismiss();
-//            }
-//        });
-//
-//
-//            if (dialogselectareaStr.equalsIgnoreCase("")) {
-//                for (int i=0;i<areadataResponse.getData().size();i++){
-//                    areadataResponse.getData().get(i).setCheckStatus("0");
-//                }
-//            } else {
-//                String[] split = dialogselectareaStr.split("\\,");
-//                for (int i = 0; i < split.length; i++) {
-//                    for (int j = 0; j < areadataResponse.getData().size(); j++) {
-//                        if (areadataResponse.getData().get(j).getRegionName().trim().equalsIgnoreCase(split[i].trim())) {
-//                            areadataResponse.getData().get(j).setCheckStatus("1");
-//                        } else {
-//                            areadataResponse.getData().get(j).setCheckStatus("0");
-//                        }
-//                    }
-//                }
-//            }
-//        searchAreaAdapter = new SearchAreaAdapter(mContext, areadataResponse, AreaName,dialogselectareaStr);
-////        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
-////        filterBinding.displayAreaList.setLayoutManager(mLayoutManager);
-////        filterBinding.displayAreaList.setItemAnimator(new DefaultItemAnimator());
-//        filterBinding.displayAreaList.setAdapter(searchAreaAdapter);
-//
-//        filterDialog.show();
     }
 
     //    //Use for SessionList
@@ -1007,7 +946,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         map.put("Gender_ID", genderStr);
         map.put("CoachType_ID", SearchPlaystudy);
         map.put("RegionName", RegionName);
-
+        map.put("TeacherName", TeacherName);
 
         return map;
     }
@@ -1016,7 +955,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
     public void fillData(List<sessionDataModel> array) {
         classDetailAdapter = new ClassDetailAdapter(mContext, array, locationStr,
                 classNameStr, boardStr, streamStr, standardStr, SearchPlaystudy, /*searchTypeStr, wheretoComeStr, searchByStr,*/
-                searchfront, firsttimesearch, RegionName, new bookClick() {
+                searchfront, firsttimesearch, RegionName, TeacherName, new bookClick() {
             @Override
             public void bookClick() {
                 ArrayList<String> selectedId = new ArrayList<String>();
@@ -1046,6 +985,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                     intentLogin.putExtra("firsttimesearch", firsttimesearch);
                     intentLogin.putExtra("RegionName", RegionName);
                     intentLogin.putExtra("SearchPlaystudy", SearchPlaystudy);
+                    intentLogin.putExtra("TeacherName", TeacherName);
                     startActivity(intentLogin);
                     finish();
                 } else {
@@ -1053,7 +993,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                             .setCancelable(false)
 //                            .setTitle("Login")
 //                            .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
-                            .setMessage("Please Login to continue.")
+                            .setMessage(getResources().getString(R.string.loginmsg))
                             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent intentLogin = new Intent(mContext, LoginActivity.class);
@@ -1072,6 +1012,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                                     intentLogin.putExtra("RegionName", RegionName);
                                     intentLogin.putExtra("back", "classDeatil");
                                     intentLogin.putExtra("SearchPlaystudy", SearchPlaystudy);
+                                    intentLogin.putExtra("TeacherName", TeacherName);
                                     startActivity(intentLogin);
                                     finish();
                                 }
@@ -1095,7 +1036,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                     new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AlertDialogTheme))
                             .setCancelable(false)
 //                            .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
-                            .setMessage("Please Login to continue.")
+                            .setMessage(getResources().getString(R.string.loginmsg))
                             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     Intent intentLogin = new Intent(mContext, LoginActivity.class);
@@ -1113,6 +1054,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                                     intentLogin.putExtra("firsttimesearch", firsttimesearch);
                                     intentLogin.putExtra("RegionName", RegionName);
                                     intentLogin.putExtra("SearchPlaystudy", SearchPlaystudy);
+                                    intentLogin.putExtra("TeacherName", TeacherName);
                                     startActivity(intentLogin);
                                     finish();
                                 }
@@ -1238,7 +1180,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                         }
                     }
                 });
-                    b.setTextColor(getResources().getColor(R.color.blue));
+                b.setTextColor(getResources().getColor(R.color.blue));
                 b1.setTextColor(getResources().getColor(R.color.gray1));
             }
         });
@@ -1535,6 +1477,11 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
             firsttimesearch = getIntent().getStringExtra("firsttimesearch");
         } else {
             firsttimesearch = "";
+        }
+        if (getIntent().getStringExtra("teacherName") != null) {
+            TeacherName = getIntent().getStringExtra("teacherName");
+        } else {
+            TeacherName = "";
         }
         if (!boardStr.equalsIgnoreCase("")) {
             binding.boardTxt.setVisibility(View.VISIBLE);
