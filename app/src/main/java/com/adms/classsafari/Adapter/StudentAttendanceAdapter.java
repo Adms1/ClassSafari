@@ -33,7 +33,7 @@ public class StudentAttendanceAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        TextView name_txt;
+        TextView name_txt,no_txt;
         EditText remark_txt;
         RadioGroup attendance_status_rg;
         RadioButton present_chk, absent_chk, leave_chk;
@@ -70,6 +70,7 @@ public class StudentAttendanceAdapter extends BaseAdapter {
             viewHolder.absent_chk = (RadioButton) convertView.findViewById(R.id.absent_chk);
             viewHolder.leave_chk = (RadioButton) convertView.findViewById(R.id.leave_chk);
             viewHolder.remark_txt = (EditText) convertView.findViewById(R.id.remark_txt);
+            viewHolder.no_txt=(TextView)convertView.findViewById(R.id.no_txt);
 
             Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
            viewHolder.name_txt.setTypeface(custom_font);
@@ -78,7 +79,8 @@ public class StudentAttendanceAdapter extends BaseAdapter {
             viewHolder.leave_chk.setTypeface(custom_font);
             viewHolder.remark_txt.setTypeface(custom_font);
 
-
+            String sr = String.valueOf(position + 1);
+            viewHolder.no_txt.setText(sr);
 
             final sessionDataModel session = studentList.get(position);
             viewHolder.name_txt.setText(session.getFirstName() + " " + session.getLastName());

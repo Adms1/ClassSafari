@@ -12,20 +12,35 @@ import android.widget.TextView;
 
 import com.adms.classsafari.Interface.onViewClick;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
+import com.adms.classsafari.Model.Session.sessionDataModel;
 import com.adms.classsafari.R;
 
 import java.util.ArrayList;
 
 public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.MyViewHolder> {
 
-    SessionDetailModel arrayList;
+    ArrayList<sessionDataModel> arrayList;
     private Context mContext;
     private onViewClick onViewClick;
     private ArrayList<String> addressCheck;
+    String firstValueStr,secondValueStr;
 
     public AddressListAdapter(Context mContext, SessionDetailModel sessionList, onViewClick onViewClick) {
         this.mContext = mContext;
-        this.arrayList = sessionList;
+        arrayList=new ArrayList<>();
+        synchronized (this){
+            for (sessionDataModel model : sessionList.getData()) {
+                boolean needToAdd = true;
+                for (sessionDataModel sessionDataModel : arrayList) {
+                    firstValueStr=sessionDataModel.getAddressLine1()+","+sessionDataModel.getAddressLine2()+","+sessionDataModel.getRegionName()+","+sessionDataModel.getAddressCity()+","+sessionDataModel.getAddressState()+" "+sessionDataModel.getAddressZipCode();
+                    secondValueStr=model.getAddressLine1()+","+model.getAddressLine2()+","+model.getRegionName()+","+model.getAddressCity()+","+model.getAddressState()+" "+model.getAddressZipCode();
+                    if (firstValueStr.equalsIgnoreCase(secondValueStr)) {
+                        needToAdd = false;
+                    }
+                }
+                if (needToAdd) arrayList.add(model);
+            }
+        }
         this.onViewClick = onViewClick;
     }
 
@@ -44,12 +59,12 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
 
         holder.address_rb.setTypeface(custom_font);
 
-        holder.address_rb.setText(arrayList.getData().get(position).getAddressLine1() + ", " +
-                arrayList.getData().get(position).getAddressLine2() + "," +
-                arrayList.getData().get(position).getRegionName() + ", " +
-                arrayList.getData().get(position).getAddressCity() + ", " +
-                arrayList.getData().get(position).getAddressState() + ", " +
-                arrayList.getData().get(position).getAddressZipCode());
+        holder.address_rb.setText(arrayList.get(position).getAddressLine1() + ", " +
+                arrayList.get(position).getAddressLine2() + "," +
+                arrayList.get(position).getRegionName() + ", " +
+                arrayList.get(position).getAddressCity() + ", " +
+                arrayList.get(position).getAddressState() + ", " +
+                arrayList.get(position).getAddressZipCode());
 
         holder.address_rb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +78,7 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
 
     @Override
     public int getItemCount() {
-        return arrayList.getData().size();
+        return arrayList.size();
     }
 
     public ArrayList<String> getAddress() {

@@ -6,6 +6,7 @@ import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -27,6 +28,7 @@ import com.adms.classsafari.Activites.DashBoardActivity;
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.AppConfiguration;
 import com.adms.classsafari.AppConstant.Utils;
+import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ConfirmSessionTeacherBinding;
@@ -39,6 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit.RetrofitError;
@@ -67,7 +70,10 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
     private View rootView;
     private Context mContext;
     private DatePickerDialog datePickerDialog;
-
+    int SessionHour = 0;
+    Integer SessionMinit = 0;
+    String SessionDuration;
+    SessionDetailModel dataResponse;
     public AddFamilyFragment() {
     }
 
@@ -77,7 +83,7 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         addFamilyBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_family, container, false);
 
         rootView = addFamilyBinding.getRoot();
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mContext = getActivity();
         pageTitle = getArguments().getString("session");
         type = getArguments().getString("type");
@@ -107,7 +113,7 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         addFamilyBinding.dateOfBirthEdt.setTypeface(custom_font);
         addFamilyBinding.maleChk.setTypeface(custom_font);
         addFamilyBinding.femaleChk.setTypeface(custom_font);
-        addFamilyBinding.cancelBtn.setTypeface(custom_font);
+//        addFamilyBinding.cancelBtn.setTypeface(custom_font);
         addFamilyBinding.registerBtn.setTypeface(custom_font);
 
     }
@@ -128,11 +134,13 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
             addFamilyBinding.passwordEdt.setVisibility(View.GONE);
             addFamilyBinding.phoneNoEdt.setVisibility(View.GONE);
         }
+
+        AppConfiguration.UserName=familyNameStr;
     }
 
     public void setListners() {
         addFamilyBinding.dateOfBirthEdt.setOnClickListener(this);
-        addFamilyBinding.cancelBtn.setOnClickListener(this);
+//        addFamilyBinding.cancelBtn.setOnClickListener(this);
         addFamilyBinding.registerBtn.setOnClickListener(this);
 
         addFamilyBinding.emailEdt.setOnEditorActionListener(this);
@@ -161,42 +169,42 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
                                                     callservice = true;
                                                     callCheckEmailIdApi();
                                                 }else {
-                                                    addFamilyBinding.phoneNoEdt.setError("Enter 10 digit Phone Number.");
+                                                    addFamilyBinding.phoneNoEdt.setError("Enter 10 digit phone number");
                                                 }
                                             } else {
-                                                addFamilyBinding.passwordEdt.setError("Password must be 4-8 Characters.");
+                                                addFamilyBinding.passwordEdt.setError("Password must be 4-8 characters");
                                             }
                                         } else {
-                                            addFamilyBinding.emailEdt.setError("Please Enter Valid Email Addres.");
+                                            addFamilyBinding.emailEdt.setError("Please enter valid email address");
                                         }
                                     }else{
                                         callNewChildApi();
                                     }
                                 } else {
-                                    addFamilyBinding.dateOfBirthEdt.setError("Please Select Your Birth Date.");
+                                    addFamilyBinding.dateOfBirthEdt.setError("Please select your birthdate");
                                 }
                             } else {
-                                addFamilyBinding.femaleChk.setError("Select Gender.");
+                                addFamilyBinding.femaleChk.setError("Select gender");
                             }
 //
                         } else {
-                            addFamilyBinding.lastNameEdt.setError("Please Enter LastName.");
+                            addFamilyBinding.lastNameEdt.setError("Please enter last name");
                         }
                     } else {
-                        addFamilyBinding.firstNameEdt.setError("Please Enter First Name");
+                        addFamilyBinding.firstNameEdt.setError("Please enter first name");
                     }
                 } else {
-                    Utils.ping(mContext, "Please Select ClassType.");
+                    Utils.ping(mContext, "Please select class type");
                 }
                 break;
-            case R.id.cancel_btn:
-                Fragment fragment = new OldFamilyListFragment();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.frame, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-                break;
+//            case R.id.cancel_btn:
+//                Fragment fragment = new OldFamilyListFragment();
+//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.replace(R.id.frame, fragment);
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+//                break;
             case R.id.date_of_birth_edt:
                 addFamilyBinding.dateOfBirthEdt.setError(null);
                 datePickerDialog = com.wdullaer.materialdatetimepicker.date.DatePickerDialog.newInstance(AddFamilyFragment.this, Year, Month, Day);
@@ -545,111 +553,25 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         wlp.gravity = Gravity.TOP;
         window.setAttributes(wlp);
 
-        confimDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-
+        //confimDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        confimDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         confimDialog.setCancelable(false);
         confimDialog.setContentView(sessiondetailConfirmationDialogBinding.getRoot());
+        callEditSessionApi();
         AppConfiguration.UserName = firstNameStr + " " + lastNameStr;
         sessiondetailConfirmationDialogBinding.tutorNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
         sessiondetailConfirmationDialogBinding.sessionNameTxt.setText(AppConfiguration.SessionName);
         sessiondetailConfirmationDialogBinding.locationTxt.setText(AppConfiguration.RegionName);
         sessiondetailConfirmationDialogBinding.durationTxt.setText(AppConfiguration.SessionDuration);
-        sessiondetailConfirmationDialogBinding.startDateTxt.setText(AppConfiguration.SessionDate);
-        sessiondetailConfirmationDialogBinding.endDateTxt.setText(AppConfiguration.SessionDate);
+//        sessiondetailConfirmationDialogBinding.startDateTxt.setText(AppConfiguration.SessionDate);
+//        sessiondetailConfirmationDialogBinding.endDateTxt.setText(AppConfiguration.SessionDate);
         sessiondetailConfirmationDialogBinding.priceTxt.setText("₹"+AppConfiguration.SessionPrice);
         sessiondetailConfirmationDialogBinding.ratingBar.setRating(Float.parseFloat(AppConfiguration.SessionRating));
         sessiondetailConfirmationDialogBinding.ratingUserTxt.setText(AppConfiguration.SessionUserRating);
         String[] spiltTime = AppConfiguration.SessionTime.split("\\-");
         AppConfiguration.UserName = familyNameStr;
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
-        SimpleDateFormat outsdf = new SimpleDateFormat("EEE");
-        Date date = null;
-        String inputstr = null;
-        try {
-            date = sdf.parse(AppConfiguration.SessionDate);
-            inputstr = outsdf.format(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        Log.d("DateTime", inputstr);
-        switch (inputstr.toLowerCase()) {
-            case "sun":
-                sessiondetailConfirmationDialogBinding.sunTimeTxt.setEnabled(true);
-                sessiondetailConfirmationDialogBinding.sundayBtn.setEnabled(true);
-                sessiondetailConfirmationDialogBinding.sunTimeTxt.setAlpha(1);
-                sessiondetailConfirmationDialogBinding.sundayBtn.setAlpha(1);
-                sessiondetailConfirmationDialogBinding.sunTimeTxt.setText(spiltTime[0]);
-                sessiondetailConfirmationDialogBinding.sunHoursTxt.setText(AppConfiguration.SessionDuration);
-                sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
-                sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
-                break;
-            case "mon":
-                sessiondetailConfirmationDialogBinding.monTimeTxt.setEnabled(true);
-                sessiondetailConfirmationDialogBinding.mondayBtn.setEnabled(true);
-                sessiondetailConfirmationDialogBinding.monTimeTxt.setAlpha(1);
-                sessiondetailConfirmationDialogBinding.mondayBtn.setAlpha(1);
-                sessiondetailConfirmationDialogBinding.monTimeTxt.setText(spiltTime[0]);
-                sessiondetailConfirmationDialogBinding.monHoursTxt.setText(AppConfiguration.SessionDuration);
-                sessiondetailConfirmationDialogBinding.monHoursTxt.setEnabled(true);
-                sessiondetailConfirmationDialogBinding.monHoursTxt.setAlpha(1);
-                break;
-            case "tue":
-                sessiondetailConfirmationDialogBinding.tuesTimeTxt.setEnabled(true);
-                sessiondetailConfirmationDialogBinding.tuesdayBtn.setEnabled(true);
-                sessiondetailConfirmationDialogBinding.tuesTimeTxt.setAlpha(1);
-                sessiondetailConfirmationDialogBinding.tuesdayBtn.setAlpha(1);
-                sessiondetailConfirmationDialogBinding.tuesTimeTxt.setText(spiltTime[0]);
-                sessiondetailConfirmationDialogBinding.tuesHoursTxt.setText(AppConfiguration.SessionDuration);
-                sessiondetailConfirmationDialogBinding.tuesHoursTxt.setEnabled(true);
-                sessiondetailConfirmationDialogBinding.tuesHoursTxt.setAlpha(1);
-                break;
-            case "wed":
-                sessiondetailConfirmationDialogBinding.wedTimeTxt.setEnabled(true);
-                sessiondetailConfirmationDialogBinding.wednesdayBtn.setEnabled(true);
-                sessiondetailConfirmationDialogBinding.wedTimeTxt.setAlpha(1);
-                sessiondetailConfirmationDialogBinding.wednesdayBtn.setAlpha(1);
-                sessiondetailConfirmationDialogBinding.wedTimeTxt.setText(spiltTime[0]);
-                sessiondetailConfirmationDialogBinding.wedHoursTxt.setText(AppConfiguration.SessionDuration);
-                sessiondetailConfirmationDialogBinding.wedHoursTxt.setEnabled(true);
-                sessiondetailConfirmationDialogBinding.wedHoursTxt.setAlpha(1);
-                break;
-            case "thu":
-                sessiondetailConfirmationDialogBinding.thurTimeTxt.setEnabled(true);
-                sessiondetailConfirmationDialogBinding.thursdayBtn.setEnabled(true);
-                sessiondetailConfirmationDialogBinding.thurTimeTxt.setAlpha(1);
-                sessiondetailConfirmationDialogBinding.thursdayBtn.setAlpha(1);
-                sessiondetailConfirmationDialogBinding.thurTimeTxt.setText(spiltTime[0]);
-                sessiondetailConfirmationDialogBinding.thurHoursTxt.setText(AppConfiguration.SessionDuration);
-                sessiondetailConfirmationDialogBinding.thurHoursTxt.setEnabled(true);
-                sessiondetailConfirmationDialogBinding.thurHoursTxt.setAlpha(1);
-                break;
-            case "fri":
-                sessiondetailConfirmationDialogBinding.friTimeTxt.setEnabled(true);
-                sessiondetailConfirmationDialogBinding.fridayBtn.setEnabled(true);
-                sessiondetailConfirmationDialogBinding.friTimeTxt.setAlpha(1);
-                sessiondetailConfirmationDialogBinding.fridayBtn.setAlpha(1);
-                sessiondetailConfirmationDialogBinding.friTimeTxt.setText(spiltTime[0]);
-                sessiondetailConfirmationDialogBinding.friHoursTxt.setText(AppConfiguration.SessionDuration);
-                sessiondetailConfirmationDialogBinding.friHoursTxt.setEnabled(true);
-                sessiondetailConfirmationDialogBinding.friHoursTxt.setAlpha(1);
-                break;
-            case "sat":
-                sessiondetailConfirmationDialogBinding.satTimeTxt.setEnabled(true);
-                sessiondetailConfirmationDialogBinding.saturdayBtn.setEnabled(true);
-                sessiondetailConfirmationDialogBinding.satTimeTxt.setAlpha(1);
-                sessiondetailConfirmationDialogBinding.saturdayBtn.setAlpha(1);
-                sessiondetailConfirmationDialogBinding.satTimeTxt.setText(spiltTime[0]);
-                sessiondetailConfirmationDialogBinding.satHoursTxt.setText(AppConfiguration.SessionDuration);
-                sessiondetailConfirmationDialogBinding.satHoursTxt.setEnabled(true);
-                sessiondetailConfirmationDialogBinding.satHoursTxt.setAlpha(1);
-                break;
-            default:
-
-        }
         sessiondetailConfirmationDialogBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -666,7 +588,178 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         confimDialog.show();
 
     }
+    //Use for EditSession
+    public void callEditSessionApi() {
+        if (Utils.isNetworkConnected(mContext)) {
 
+//            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_SessionDetailBySessionID(getEditSessionDeatil(), new retrofit.Callback<SessionDetailModel>() {
+                @Override
+                public void success(SessionDetailModel editsessionInfo, Response response) {
+                    Utils.dismissDialog();
+                    if (editsessionInfo == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (editsessionInfo.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (editsessionInfo.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.dismissDialog();
+                        Utils.ping(mContext, getString(R.string.false_msg));
+                        return;
+                    }
+                    if (editsessionInfo.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.dismissDialog();
+                        if (editsessionInfo.getData().size() > 0) {
+                            dataResponse = editsessionInfo;
+                            for (int i = 0; i < dataResponse.getData().size(); i++) {
+                                sessiondetailConfirmationDialogBinding.startDateTxt.setText(dataResponse.getData().get(i).getStartDate());
+                                sessiondetailConfirmationDialogBinding.endDateTxt.setText(dataResponse.getData().get(i).getEndDate());
+                                String[] spiltPipes = dataResponse.getData().get(i).getSchedule().split("\\|");
+                                String[] spiltComma;
+                                String[] spiltDash;
+                                Log.d("spilt", "" + spiltPipes.toString());
+                                for (int j = 0; j < spiltPipes.length; j++) {
+                                    spiltComma = spiltPipes[j].split("\\,");
+                                    spiltDash = spiltComma[1].split("\\-");
+                                    calculateHours(spiltDash[0], spiltDash[1]);
+                                    switch (spiltComma[0]) {
+                                        case "sun":
+                                            sessiondetailConfirmationDialogBinding.sunTimeTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.sundayBtn.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.sunTimeTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.sundayBtn.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.sunTimeTxt.setText(spiltDash[0]);
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setText(SessionDuration);
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
+                                            break;
+                                        case "mon":
+                                            sessiondetailConfirmationDialogBinding.monTimeTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.mondayBtn.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.monTimeTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.mondayBtn.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.monTimeTxt.setText(spiltDash[0]);
+                                            sessiondetailConfirmationDialogBinding.monHoursTxt.setText(SessionDuration);
+                                            sessiondetailConfirmationDialogBinding.monHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.monHoursTxt.setAlpha(1);
+                                            break;
+                                        case "tue":
+                                            sessiondetailConfirmationDialogBinding.tuesTimeTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.tuesdayBtn.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.tuesTimeTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.tuesdayBtn.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.tuesTimeTxt.setText(spiltDash[0]);
+                                            sessiondetailConfirmationDialogBinding.tuesHoursTxt.setText(SessionDuration);
+                                            sessiondetailConfirmationDialogBinding.tuesHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.tuesHoursTxt.setAlpha(1);
+                                            break;
+                                        case "wed":
+                                            sessiondetailConfirmationDialogBinding.wedTimeTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.wednesdayBtn.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.wedTimeTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.wednesdayBtn.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.wedTimeTxt.setText(spiltDash[0]);
+                                            sessiondetailConfirmationDialogBinding.wedHoursTxt.setText(SessionDuration);
+                                            sessiondetailConfirmationDialogBinding.wedHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.wedHoursTxt.setAlpha(1);
+                                            break;
+                                        case "thu":
+                                            sessiondetailConfirmationDialogBinding.thurTimeTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.thursdayBtn.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.thurTimeTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.thursdayBtn.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.thurTimeTxt.setText(spiltDash[0]);
+                                            sessiondetailConfirmationDialogBinding.thurHoursTxt.setText(SessionDuration);
+                                            sessiondetailConfirmationDialogBinding.thurHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.thurHoursTxt.setAlpha(1);
+                                            break;
+                                        case "fri":
+                                            sessiondetailConfirmationDialogBinding.friTimeTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.fridayBtn.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.friTimeTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.fridayBtn.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.friTimeTxt.setText(spiltDash[0]);
+                                            sessiondetailConfirmationDialogBinding.friHoursTxt.setText(SessionDuration);
+                                            sessiondetailConfirmationDialogBinding.friHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.friHoursTxt.setAlpha(1);
+                                            break;
+                                        case "sat":
+                                            sessiondetailConfirmationDialogBinding.satTimeTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.saturdayBtn.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.satTimeTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.saturdayBtn.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.satTimeTxt.setText(spiltDash[0]);
+                                            sessiondetailConfirmationDialogBinding.satHoursTxt.setText(SessionDuration);
+                                            sessiondetailConfirmationDialogBinding.satHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.satHoursTxt.setAlpha(1);
+                                            break;
+                                        default:
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getEditSessionDeatil() {
+        Map<String, String> map = new HashMap<>();
+        map.put("CoachID", Utils.getPref(mContext, "coachID"));//coachIdStr
+        map.put("SessionID", sessionIDStr);
+        return map;
+    }
+    public void calculateHours(String time1, String time2) {
+        Date date1, date2;
+        int days, hours, min;
+        String hourstr, minstr;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa", Locale.US);
+        try {
+            date1 = simpleDateFormat.parse(time1);
+            date2 = simpleDateFormat.parse(time2);
+
+            long difference = date2.getTime() - date1.getTime();
+            days = (int) (difference / (1000 * 60 * 60 * 24));
+            hours = (int) ((difference - (1000 * 60 * 60 * 24 * days)) / (1000 * 60 * 60));
+            min = (int) (difference - (1000 * 60 * 60 * 24 * days) - (1000 * 60 * 60 * hours)) / (1000 * 60);
+            hours = (hours < 0 ? -hours : hours);
+            SessionHour = hours;
+
+            SessionMinit = min;
+//            totalHours.add(SessionHour);
+//            totalMinit.add(SessionMinit);
+            Log.i("======= Hours", " :: " + hours + ":" + min);
+
+            if (SessionMinit > 0) {
+                if (SessionMinit < 10) {
+                    SessionDuration= String.valueOf(SessionHour) + ":" + String.valueOf("0" + SessionMinit + " hrs");
+                } else {
+                    SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf(SessionMinit + " hrs");
+
+                }
+            } else {
+                SessionDuration = String.valueOf(SessionHour) + " hrs";
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
     //Use for paymentRequest
     public void callpaymentRequestApi() {
         if (Utils.isNetworkConnected(mContext)) {
@@ -754,9 +847,9 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
                     }
                     if (sessionconfirmationInfoModel.getSuccess().equalsIgnoreCase("True")) {
                         if (type.equalsIgnoreCase("Child")) {
-                            Utils.ping(mContext, "Child Confirmation Successfully.");
+                            Utils.ping(mContext, "Child confirmation successfully");
                         } else {
-                            Utils.ping(mContext, "Family Confirmation Successfully.");
+                            Utils.ping(mContext, "Family confirmation successfully");
                         }
                         Fragment fragment = new SessionFragment();
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();

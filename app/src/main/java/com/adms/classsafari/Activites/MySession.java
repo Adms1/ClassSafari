@@ -1,10 +1,12 @@
 package com.adms.classsafari.Activites;
 
+import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -78,7 +80,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
     //Use for Menu Dialog
     String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr;
     Dialog menuDialog;
-    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily;
+    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily,btnMyenroll,btnMyprofile;
     TextView userNameTxt;
     ArrayList<Integer> totalHours;
     ArrayList<Integer> totalMinit;
@@ -91,7 +93,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
 
         mContext = this;
         getIntenttValue();
-        setTypeface();
+//        setTypeface();
         init();
         setListner();
     }
@@ -134,7 +136,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         if (Utils.isNetworkConnected(mContext)) {
 
             Utils.showDialog(mContext);
-            ApiHandler.getApiService().get_FamilySessionList_ByContactID(getSessionReportDetail(), new retrofit.Callback<SessionDetailModel>() {
+            ApiHandler.getApiService().get_FamilySessionList_ByFamilyID(getSessionReportDetail(), new retrofit.Callback<SessionDetailModel>() {
                 @Override
                 public void success(SessionDetailModel sessionModel, Response response) {
                     Utils.dismissDialog();
@@ -146,8 +148,9 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                         Utils.ping(mContext, getString(R.string.something_wrong));
                         return;
                     }
-                    if (sessionModel.getSuccess().equalsIgnoreCase("false")) {
+                    if (sessionModel.getSuccess().equalsIgnoreCase("False")) {
                         Utils.ping(mContext,"Classes not found");
+                        mySessionBinding.noRecordTxt.setVisibility(View.VISIBLE);
                         return;
                     }
                     if (sessionModel.getSuccess().equalsIgnoreCase("True")) {
@@ -182,7 +185,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
     private Map<String, String> getSessionReportDetail() {
 
         Map<String, String> map = new HashMap<>();
-        map.put("ContactID", Utils.getPref(mContext, "coachID"));
+        map.put("FamilyID", Utils.getPref(mContext, "coachTypeID"));
         return map;
     }
 
@@ -298,7 +301,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                         return;
                     }
                     if (sessionconfirmationInfoModel.getSuccess().equalsIgnoreCase("True")) {
-                        Utils.ping(mContext, "Login Succesfully");
+                        Utils.ping(mContext, "Login succesfully");
                         confimDialog.dismiss();
                         Intent isearchBYuser = new Intent(mContext, SearchByUser.class);
                         startActivity(isearchBYuser);
@@ -566,15 +569,15 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         changePasswordDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.change_password_dialog, (ViewGroup) mySessionBinding.getRoot(), false);
 
-        changeDialog = new Dialog(mContext, R.style.Theme_Dialog);
+        changeDialog = new Dialog(mContext,R.style.Theme_Dialog);//, R.style.Theme_Dialog
         Window window = changeDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         changeDialog.getWindow().getAttributes().verticalMargin = 0.0f;
         wlp.gravity = Gravity.CENTER;
         window.setAttributes(wlp);
 
-        changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-
+        //changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        changeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         changeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         changeDialog.setCancelable(false);
         changeDialog.setContentView(changePasswordDialogBinding.getRoot());
@@ -633,7 +636,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                         return;
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("false")) {
-                        Utils.ping(mContext, "Please Enter Valid Password.");
+                        Utils.ping(mContext, "Please enter valid password");
                         return;
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("True")) {
@@ -678,17 +681,30 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
 //        menuDialog.setContentView(menuBinding.getRoot());
         menuDialog.setContentView(R.layout.layout_menu);
 
+        btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
         btnMyReport = (Button) menuDialog.findViewById(R.id.btnMyReport);
         btnMySession = (Button) menuDialog.findViewById(R.id.btnMySession);
         btnChangePassword = (Button) menuDialog.findViewById(R.id.btnChangePassword);
         btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
+        btnMyenroll=(Button)menuDialog.findViewById(R.id.btnMyenroll);
 
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
-        btnMySession.setVisibility(View.GONE);
+        btnMyenroll.setVisibility(View.GONE);
 
+
+       btnMyprofile.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               Intent imyaccount = new Intent(mContext, AddStudentScreen.class);
+               imyaccount.putExtra("wheretocometype", "menu");
+               imyaccount.putExtra("myprofile","true");
+               imyaccount.putExtra("type", "myprofile");
+               startActivity(imyaccount);
+           }
+       });
         btnMyReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -697,13 +713,21 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                 startActivity(imyaccount);
             }
         });
-        btnMySession.setOnClickListener(new View.OnClickListener() {
+        btnMyenroll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent isession = new Intent(mContext, MySession.class);
                 isession.putExtra("wheretocometype", "menu");
                 startActivity(isession);
                 menuDialog.dismiss();
+            }
+        });
+        btnMySession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, UpcomingActivity.class);
+                intent.putExtra("wheretocometype", "menu");
+                startActivity(intent);
             }
         });
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
@@ -773,8 +797,8 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         wlp.gravity = Gravity.TOP;
         window.setAttributes(wlp);
 
-        confimDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-
+       // confimDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        confimDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         confimDialog.setCancelable(false);
         confimDialog.setContentView(sessiondetailConfirmationDialogBinding.getRoot());
@@ -790,6 +814,8 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         sessiondetailConfirmationDialogBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AppConfiguration.TeacherSessionIdStr = selectedsessionIDStr;
+                AppConfiguration.TeacherSessionContactIdStr = Utils.getPref(mContext, "coachID");
                 if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("") &&
                         !selectedsessionIDStr.equalsIgnoreCase("") &&
                         !sessionPriceStr.equalsIgnoreCase("0.00")) {

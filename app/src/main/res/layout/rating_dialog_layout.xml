@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_340sdp"
+    android:layout_height="@dimen/_430sdp"
     android:orientation="vertical">
 
     <LinearLayout
@@ -16,31 +16,21 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.5"
+            android:layout_weight="0.4"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/confirm_title_txt"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.2"
+                android:layout_weight="0.4"
+                android:paddingTop="@dimen/_5sdp"
+                android:paddingBottom="@dimen/_8sdp"
                 android:gravity="center_vertical|center"
-                android:paddingLeft="@dimen/_15sdp"
                 android:text="@string/rating_header"
                 android:textColor="@color/blue"
                 android:textSize="@dimen/_14sdp"
                 android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.2"
-                android:gravity="center_vertical|center"
-                android:paddingLeft="@dimen/_15sdp"
-                android:text="@string/rating_row"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/_11sdp"
-                android:textStyle="normal" />
 
         </LinearLayout>
 
@@ -52,19 +42,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="3.4"
+            android:layout_weight="3.6"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_33sdp"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_marginRight="@dimen/_1sdp"
                 android:layout_marginTop="@dimen/_10sdp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/session_name_txt_view"
-                    android:layout_width="@dimen/_105sdp"
+                    android:layout_width="@dimen/_90sdp"
                     android:layout_height="@dimen/_25sdp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/_4sdp"
@@ -73,26 +63,70 @@
                     android:paddingLeft="@dimen/_2sdp"
                     android:text="CLASS NAME"
                     android:textColor="@color/text_color"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_11sdp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/_30sdp"
+                    android:layout_height="@dimen/_25sdp"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/_4sdp"
                     android:layout_marginTop="@dimen/_1sdp"
-                    android:gravity="center"
+                    android:gravity="center|center_vertical"
                     android:text=":"
                     android:textColor="@color/text_color"
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_11sdp"
                     android:textStyle="normal" />
 
                 <TextView
                     android:id="@+id/session_name_txt"
                     android:layout_width="@dimen/_185sdp"
-                    android:layout_height="@dimen/_30sdp"
+                    android:layout_height="@dimen/_25sdp"
                     android:layout_gravity="center"
+                    android:gravity="start|center_vertical"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:paddingLeft="@dimen/_5sdp"
+                    android:text="PHYSICS"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_11sdp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:layout_marginRight="@dimen/_1sdp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/teacher_name_txt_view"
+                    android:layout_width="@dimen/_90sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/_4sdp"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:gravity="start|center_vertical"
+                    android:paddingLeft="@dimen/_2sdp"
+                    android:text="TEACHER NAME"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_11sdp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:gravity="center|center_vertical"
+                    android:text=":"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_11sdp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/teacher_name_txt"
+                    android:layout_width="@dimen/_185sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/_1sdp"
                     android:gravity="start|center_vertical"
                     android:paddingLeft="@dimen/_5sdp"
                     android:text="PHYSICS"
@@ -100,11 +134,10 @@
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="normal" />
             </LinearLayout>
-
             <TextView
                 android:id="@+id/session_rating_view_txt"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_30sdp"
+                android:layout_height="@dimen/_25sdp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/_3sdp"
                 android:layout_marginRight="@dimen/_3sdp"
@@ -121,14 +154,46 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|center_vertical"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_1sdp"
                 android:theme="@style/RatingBar"/>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginLeft="@dimen/_8sdp"
+                    android:gravity="start"
+                    android:text="Very poor"
+                    android:textColor="@color/blue"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_1sdp"
+                    android:paddingRight="@dimen/_3sdp"
+                    android:gravity="end"
+                    android:text="Excellent"
+                    android:textColor="@color/blue"
+                    android:textSize="@dimen/_12sdp"
+                    android:textStyle="normal" />
+            </LinearLayout>
             <EditText
                 android:id="@+id/comment_edt"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_60sdp"
-                android:layout_margin="@dimen/_7sdp"
+                android:layout_height="@dimen/_55sdp"
+                android:layout_margin="@dimen/_6sdp"
                 android:background="@drawable/editbox_comment"
                 android:padding="@dimen/_5sdp"
                 android:gravity="top|center_vertical"

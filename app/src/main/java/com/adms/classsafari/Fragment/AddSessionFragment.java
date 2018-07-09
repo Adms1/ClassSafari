@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -31,8 +32,10 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.adms.classsafari.Activites.DashBoardActivity;
 import com.adms.classsafari.Adapter.AddressListAdapter;
@@ -77,6 +80,8 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
             tue_start_add_session_btn, tue_end_add_session_btn, wed_start_add_session_btn, wed_end_add_session_btn,
             thu_start_add_session_btn, thu_end_add_session_btn, fri_start_add_session_btn, fri_end_add_session_btn,
             sat_start_add_session_btn, sat_end_add_session_btn;
+    static RadioGroup rg;
+    static RadioButton recurringrb, singlerb;
     static LinearLayout sun_start_linear, mon_start_linear, tue_start_linear, wed_start_linear, thu_start_linear, fri_start_linear, sat_start_linear,
             sun_end_linear, mon_end_linear, tue_end_linear, wed_end_linear, thu_end_linear, fri_end_linear, sat_end_linear;
     static ArrayList<String> days;
@@ -98,7 +103,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
     //Use for selectedSessionTimeValue
     String coachIdStr, lessionTypeNameStr = "", sessionNameStr = "", boardStr = "", standardStr = "", streamStr = "", startDateStr = "", endDateStr = "",
             address1Str = "", address2Str = "", regionStr = "", cityStr = "", stateStr = "", zipcodeStr = "", descriptionStr = "", sessionamtStr = "0",
-            sessioncapacityStr = "", alerttimeStr = "", scheduleStr = "", sessiontypeStr = "1", sessionTypeValueStr = "", sessionTypeStr = "Academic", doneStartDate = "", doneEndDate = "", selectprice = "Free";
+            sessioncapacityStr = "", alerttimeStr = "", scheduleStr = "", sessiontypeStr = "1", sessionTypeValueStr = "", sessionTypeStr = "", doneStartDate = "", doneEndDate = "", selectprice = "Free";
     String sunstartTimeStr, sunendTimeStr, finalsunTimeStr, monstartTimeStr, monendTimeStr, finalmonTimeStr,
             tuestartTimeStr, tueendTimeStr, finaltueTimeStr, wedstartTimeStr, wedendTimeStr, finalwedTimeStr,
             thustartTimeStr, thuendTimeStr, finalthuTimeStr, fristartTimeStr, friendTimeStr, finalfriTimeStr,
@@ -278,7 +283,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         addSessionBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_session, container, false);
 
         rootView = addSessionBinding.getRoot();
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mContext = getActivity();
         flag = getArguments().getString("flag");
 
@@ -318,6 +323,8 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
 
 
         if (flag.equalsIgnoreCase("edit")) {
+            addSessionBinding.sessionTimeTxt.setText("Edit Class Time");
+            addSessionBinding.sessionSelectAddressTxt.setText("Edit Class Address");
             if (!studentAvailable.equalsIgnoreCase("0")) {
                 addSessionBinding.sessionTimeLinear.setVisibility(View.GONE);
             } else {
@@ -338,65 +345,65 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         callRegionApi();
         fillCity();
         callAddressApi();
-        setTypeface();
+        //setTypeface();
         initViews();
         setListners();
 
     }
 
     public void setTypeface() {
-        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
-
-        addSessionBinding.AcademicRb.setTypeface(custom_font);
-        addSessionBinding.playRb.setTypeface(custom_font);
-        addSessionBinding.recurringRb.setTypeface(custom_font);
-        addSessionBinding.singleRb.setTypeface(custom_font);
-        addSessionBinding.sessionNameEdt.setTypeface(custom_font);
-        addSessionBinding.boardNameEdt.setTypeface(custom_font);
-        addSessionBinding.standardEdt.setTypeface(custom_font);
-        addSessionBinding.streamEdt.setTypeface(custom_font);
-        addSessionBinding.subjectEdt.setTypeface(custom_font);
-        addSessionBinding.descriptionEdt.setTypeface(custom_font);
-        addSessionBinding.addressEdt.setTypeface(custom_font);
-        addSessionBinding.areaEdt.setTypeface(custom_font);
-        addSessionBinding.cityEdt.setTypeface(custom_font);
-        addSessionBinding.stateEdt.setTypeface(custom_font);
-        addSessionBinding.zipcodeEdt.setTypeface(custom_font);
-        addSessionBinding.addressEdt1.setTypeface(custom_font);
-
-        addSessionBinding.mondayBtn.setTypeface(custom_font);
-        addSessionBinding.tuesdayBtn.setTypeface(custom_font);
-        addSessionBinding.wednesdayBtn.setTypeface(custom_font);
-        addSessionBinding.thursdayBtn.setTypeface(custom_font);
-        addSessionBinding.fridayBtn.setTypeface(custom_font);
-        addSessionBinding.saturdayBtn.setTypeface(custom_font);
-        addSessionBinding.sundayBtn.setTypeface(custom_font);
-        addSessionBinding.startDateTxt.setTypeface(custom_font);
-        addSessionBinding.endDateTxt.setTypeface(custom_font);
-
-        addSessionBinding.monTimeTxt.setTypeface(custom_font);
-        addSessionBinding.thurTimeTxt.setTypeface(custom_font);
-        addSessionBinding.wedTimeTxt.setTypeface(custom_font);
-        addSessionBinding.thurTimeTxt.setTypeface(custom_font);
-        addSessionBinding.friTimeTxt.setTypeface(custom_font);
-        addSessionBinding.satTimeTxt.setTypeface(custom_font);
-        addSessionBinding.sunTimeTxt.setTypeface(custom_font);
-
-        addSessionBinding.monHoursTxt.setTypeface(custom_font);
-        addSessionBinding.tuesHoursTxt.setTypeface(custom_font);
-        addSessionBinding.wedHoursTxt.setTypeface(custom_font);
-        addSessionBinding.thurHoursTxt.setTypeface(custom_font);
-        addSessionBinding.friHoursTxt.setTypeface(custom_font);
-        addSessionBinding.satHoursTxt.setTypeface(custom_font);
-        addSessionBinding.sunHoursTxt.setTypeface(custom_font);
-
-
-        addSessionBinding.sessionTimeTxt.setTypeface(custom_font);
-        addSessionBinding.addSessionBtn.setTypeface(custom_font);
-
-        addSessionBinding.sessionSelectAddressTxt.setTypeface(custom_font);
-        addSessionBinding.selectSessionAddressBtn.setTypeface(custom_font);
-        addSessionBinding.submitBtn.setTypeface(custom_font);
+//        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
+//
+//        addSessionBinding.AcademicRb.setTypeface(custom_font);
+//        addSessionBinding.playRb.setTypeface(custom_font);
+//        addSessionBinding.recurringRb.setTypeface(custom_font);
+//        addSessionBinding.singleRb.setTypeface(custom_font);
+//        addSessionBinding.sessionNameEdt.setTypeface(custom_font);
+//        addSessionBinding.boardNameEdt.setTypeface(custom_font);
+//        addSessionBinding.standardEdt.setTypeface(custom_font);
+//        addSessionBinding.streamEdt.setTypeface(custom_font);
+//        addSessionBinding.subjectEdt.setTypeface(custom_font);
+//        addSessionBinding.descriptionEdt.setTypeface(custom_font);
+//        addSessionBinding.addressEdt.setTypeface(custom_font);
+//        addSessionBinding.areaEdt.setTypeface(custom_font);
+//        addSessionBinding.cityEdt.setTypeface(custom_font);
+//        addSessionBinding.stateEdt.setTypeface(custom_font);
+//        addSessionBinding.zipcodeEdt.setTypeface(custom_font);
+//        addSessionBinding.addressEdt1.setTypeface(custom_font);
+//
+//        addSessionBinding.mondayBtn.setTypeface(custom_font);
+//        addSessionBinding.tuesdayBtn.setTypeface(custom_font);
+//        addSessionBinding.wednesdayBtn.setTypeface(custom_font);
+//        addSessionBinding.thursdayBtn.setTypeface(custom_font);
+//        addSessionBinding.fridayBtn.setTypeface(custom_font);
+//        addSessionBinding.saturdayBtn.setTypeface(custom_font);
+//        addSessionBinding.sundayBtn.setTypeface(custom_font);
+//        addSessionBinding.startDateTxt.setTypeface(custom_font);
+//        addSessionBinding.endDateTxt.setTypeface(custom_font);
+//
+//        addSessionBinding.monTimeTxt.setTypeface(custom_font);
+//        addSessionBinding.thurTimeTxt.setTypeface(custom_font);
+//        addSessionBinding.wedTimeTxt.setTypeface(custom_font);
+//        addSessionBinding.thurTimeTxt.setTypeface(custom_font);
+//        addSessionBinding.friTimeTxt.setTypeface(custom_font);
+//        addSessionBinding.satTimeTxt.setTypeface(custom_font);
+//        addSessionBinding.sunTimeTxt.setTypeface(custom_font);
+//
+//        addSessionBinding.monHoursTxt.setTypeface(custom_font);
+//        addSessionBinding.tuesHoursTxt.setTypeface(custom_font);
+//        addSessionBinding.wedHoursTxt.setTypeface(custom_font);
+//        addSessionBinding.thurHoursTxt.setTypeface(custom_font);
+//        addSessionBinding.friHoursTxt.setTypeface(custom_font);
+//        addSessionBinding.satHoursTxt.setTypeface(custom_font);
+//        addSessionBinding.sunHoursTxt.setTypeface(custom_font);
+//
+//
+//        addSessionBinding.sessionTimeTxt.setTypeface(custom_font);
+//        addSessionBinding.addSessionBtn.setTypeface(custom_font);
+//
+//        addSessionBinding.sessionSelectAddressTxt.setTypeface(custom_font);
+//        addSessionBinding.selectSessionAddressBtn.setTypeface(custom_font);
+//        addSessionBinding.submitBtn.setTypeface(custom_font);
     }
 
     public void initViews() {
@@ -411,10 +418,11 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         Log.d("timegapArray", "" + timegapArray);
 
 
-        addSessionBinding.sessionNameEdt.setText(Utils.getPref(mContext,"ClassName"));
+        addSessionBinding.sessionNameEdt.setText(Utils.getPref(mContext, "ClassName"));
     }
 
     public void setListners() {
+
         addSessionBinding.fessStatusRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -434,13 +442,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         addSessionBinding.session1TypeRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                if (checkfalse == true) {
-//                    addSessionBinding.recurringRb.setChecked(true);
-//                    addSessionBinding.singleRb.setChecked(true);
-                } else {
-                    addSessionBinding.recurringRb.setChecked(false);
-                    addSessionBinding.singleRb.setChecked(false);
-                }
+
                 int radioButtonId = addSessionBinding.session1TypeRg.getCheckedRadioButtonId();
                 switch (radioButtonId) {
                     case R.id.Academic_rb:
@@ -448,12 +450,23 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                         addSessionBinding.sessionBoardLinear.setVisibility(View.VISIBLE);
                         addSessionBinding.sessionStandardLinear.setVisibility(View.VISIBLE);
                         addSessionBinding.sessionStreamLinear.setVisibility(View.VISIBLE);
+                        if (flag.equalsIgnoreCase("edit")) {
+                            addSessionBinding.recurringRb.setChecked(false);
+                            addSessionBinding.singleRb.setChecked(false);
+                        }
+//                    addSessionBinding.singleRb.setChecked(false);
+                        addSessionBinding.subjectEdt.setHint("Subject");
                         break;
                     case R.id.play_rb:
                         sessionTypeStr = addSessionBinding.playRb.getTag().toString();
                         addSessionBinding.sessionBoardLinear.setVisibility(View.GONE);
                         addSessionBinding.sessionStandardLinear.setVisibility(View.GONE);
                         addSessionBinding.sessionStreamLinear.setVisibility(View.GONE);
+                        addSessionBinding.subjectEdt.setHint("Activity");
+                        if (flag.equalsIgnoreCase("edit")) {
+                            addSessionBinding.recurringRb.setChecked(false);
+                            addSessionBinding.singleRb.setChecked(false);
+                        }
                         break;
 
                 }
@@ -462,27 +475,34 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         addSessionBinding.sessionTypeRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                int radioButtonId = addSessionBinding.sessionTypeRg.getCheckedRadioButtonId();
-                switch (radioButtonId) {
-                    case R.id.recurring_rb:
-                        sessiontypeStr = "1";
-                        if (sessionTypeStr.equalsIgnoreCase("Academic")) {
-                            sessionTypeValueStr = "1";
-                        } else {
-                            sessionTypeValueStr = "3";
+                    int radioButtonId = addSessionBinding.sessionTypeRg.getCheckedRadioButtonId();
+                    switch (radioButtonId) {
+                        case R.id.recurring_rb:
+                            sessiontypeStr = "1";
+                            if (sessionTypeStr.equalsIgnoreCase("Academic")) {
+                                if (addSessionBinding.recurringRb.isChecked()) {
+                                    sessionTypeValueStr = "1";
+                                }
+                            } else {
+                                if (addSessionBinding.recurringRb.isChecked()) {
+                                    sessionTypeValueStr = "3";
+                                }
 
-                        }
-                        break;
-                    case R.id.single_rb:
-                        sessiontypeStr = "2";
-                        if (sessionTypeStr.equalsIgnoreCase("Academic")) {
-                            sessionTypeValueStr = "2";
-                        } else {
-                            sessionTypeValueStr = "4";
-
-                        }
-                        break;
-                    default:
+                            }
+                            break;
+                        case R.id.single_rb:
+                                sessiontypeStr = "2";
+                                if (sessionTypeStr.equalsIgnoreCase("Academic")) {
+                                    if (addSessionBinding.singleRb.isChecked()) {
+                                        sessionTypeValueStr = "2";
+                                    }
+                                } else {
+                                    if (addSessionBinding.singleRb.isChecked()) {
+                                        sessionTypeValueStr = "4";
+                                    }
+                                }
+                            break;
+                        default:
                 }
             }
         });
@@ -518,7 +538,29 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         addSessionBinding.selectSessionAddressBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                addSessionBinding.sessionAddressLinear.setVisibility(View.GONE);
+                addSessionBinding.sessionAddressLinear1.setVisibility(View.GONE);
+                addSessionBinding.sessionAreaLinear.setVisibility(View.GONE);
+                addSessionBinding.stateLinear.setVisibility(View.GONE);
                 AddressDialog();
+            }
+        });
+        addSessionBinding.newSessionAddressBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addSessionBinding.addressEdt.setText("");
+                addSessionBinding.addressEdt1.setText("");
+                addSessionBinding.areaEdt.setText("");
+                addSessionBinding.cityEdt.setText("");
+                addSessionBinding.stateEdt.setText("");
+                addSessionBinding.zipcodeEdt.setText("");
+                addSessionBinding.sessionAddressLinear1.setVisibility(View.VISIBLE);
+                addSessionBinding.sessionAreaLinear.setVisibility(View.VISIBLE);
+                addSessionBinding.stateLinear.setVisibility(View.VISIBLE);
+                addSessionBinding.sessionAddressLinear.setVisibility(View.VISIBLE);
+                addSessionBinding.sessionAddressLinear1.setVisibility(View.VISIBLE);
+                addSessionBinding.sessionAreaLinear.setVisibility(View.VISIBLE);
+                addSessionBinding.stateLinear.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -575,8 +617,8 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         window.setAttributes(wlp);
 
-        popularDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-
+        //popularDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        popularDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         popularDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         popularDialog.setCancelable(false);
         if (flag.equalsIgnoreCase("view")) {
@@ -640,30 +682,81 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         sat_start_add_session_btn = (Button) popularDialog.findViewById(R.id.sat_start_add_session_btn);
         sat_end_add_session_btn = (Button) popularDialog.findViewById(R.id.sat_end_add_session_btn);
 
+        rg = (RadioGroup) popularDialog.findViewById(R.id.rg);
+        recurringrb = (RadioButton) popularDialog.findViewById(R.id.recurring_rb);
+        singlerb = (RadioButton) popularDialog.findViewById(R.id.single_rb);
+
 
         day_name_rcView = (RecyclerView) popularDialog.findViewById(R.id.day_name_rcView);
 
         done_btn = (Button) popularDialog.findViewById(R.id.done_btn);
         cancel_btn = (Button) popularDialog.findViewById(R.id.cancel_btn);
-        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
 
-        sun_start_time_txt.setTypeface(custom_font);
-        sun_end_time_txt.setTypeface(custom_font);
-        mon_start_time_txt.setTypeface(custom_font);
-        mon_end_time_txt.setTypeface(custom_font);
-        tue_start_time_txt.setTypeface(custom_font);
-        tue_end_time_txt.setTypeface(custom_font);
-        wed_start_time_txt.setTypeface(custom_font);
-        wed_end_time_txt.setTypeface(custom_font);
-        thu_start_time_txt.setTypeface(custom_font);
-        thu_end_time_txt.setTypeface(custom_font);
-        fri_end_time_txt.setTypeface(custom_font);
-        fri_start_time_txt.setTypeface(custom_font);
-        sat_end_time_txt.setTypeface(custom_font);
-        sat_start_time_txt.setTypeface(custom_font);
-        confirm_title_txt.setTypeface(custom_font);
-        done_btn.setTypeface(custom_font);
-        cancel_btn.setTypeface(custom_font);
+        if (!sessionTypeValueStr.equalsIgnoreCase("")) {
+            switch (sessionTypeValueStr) {
+                case "1":
+                    recurringrb.setChecked(true);
+                    break;
+                case "2":
+                    singlerb.setChecked(true);
+                    break;
+                case "3":
+                    recurringrb.setChecked(true);
+                    break;
+                case "4":
+                    singlerb.setChecked(true);
+                    break;
+            }
+        }
+
+
+        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                int radioButtonId = rg.getCheckedRadioButtonId();
+                switch (radioButtonId) {
+                    case R.id.recurring_rb:
+                        sessiontypeStr = "1";
+                        if (sessionTypeStr.equalsIgnoreCase("Academic")) {
+                            sessionTypeValueStr = "1";
+                        } else {
+                            sessionTypeValueStr = "3";
+
+                        }
+                        break;
+                    case R.id.single_rb:
+                        sessiontypeStr = "2";
+                        if (sessionTypeStr.equalsIgnoreCase("Academic")) {
+                            sessionTypeValueStr = "2";
+                        } else {
+                            sessionTypeValueStr = "4";
+
+                        }
+                        break;
+                    default:
+                }
+            }
+        });
+
+//        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
+//
+//        sun_start_time_txt.setTypeface(custom_font);
+//        sun_end_time_txt.setTypeface(custom_font);
+//        mon_start_time_txt.setTypeface(custom_font);
+//        mon_end_time_txt.setTypeface(custom_font);
+//        tue_start_time_txt.setTypeface(custom_font);
+//        tue_end_time_txt.setTypeface(custom_font);
+//        wed_start_time_txt.setTypeface(custom_font);
+//        wed_end_time_txt.setTypeface(custom_font);
+//        thu_start_time_txt.setTypeface(custom_font);
+//        thu_end_time_txt.setTypeface(custom_font);
+//        fri_end_time_txt.setTypeface(custom_font);
+//        fri_start_time_txt.setTypeface(custom_font);
+//        sat_end_time_txt.setTypeface(custom_font);
+//        sat_start_time_txt.setTypeface(custom_font);
+//        confirm_title_txt.setTypeface(custom_font);
+//        done_btn.setTypeface(custom_font);
+//        cancel_btn.setTypeface(custom_font);
 
         Log.d("flag", flag);
         if (flag.equalsIgnoreCase("edit")) {
@@ -1078,31 +1171,55 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                             scheduleStr = scheduleStr.substring(1, scheduleStr.length());
                             Log.d("responseString ", scheduleStr);
                         }
+                        if (sessionTypeValueStr.equalsIgnoreCase("")) {
+                            Utils.ping(mContext, "Please select classtype");
+                        }
 //                if (days.size() == scheduleArray.size()) {
+
+                        if (!sessionTypeValueStr.equalsIgnoreCase("")) {
+                            switch (sessionTypeValueStr) {
+                                case "1":
+                                    addSessionBinding.recurringRb.setChecked(true);
+                                    break;
+                                case "2":
+                                    addSessionBinding.singleRb.setChecked(true);
+                                    break;
+                                case "3":
+                                    addSessionBinding.recurringRb.setChecked(true);
+                                    break;
+                                case "4":
+                                    addSessionBinding.singleRb.setChecked(true);
+                                    break;
+                            }
+                        }
+
+
                         if (sessiontypeStr.equalsIgnoreCase("1")) {
                             if (!scheduleStr.equalsIgnoreCase("")) {
                                 popularDialog.dismiss();
                             } else {
-                                Utils.ping(mContext, "Please Select Time.");
+                                Utils.ping(mContext, "Please select time");
                             }
                         } else {
                             if (startDateStr.equalsIgnoreCase(endDateStr)) {
                                 if (!scheduleStr.equalsIgnoreCase("")) {
                                     popularDialog.dismiss();
                                 } else {
-                                    Utils.ping(mContext, "Please Select Time.");
+                                    Utils.ping(mContext, "Please select time");
                                 }
                             } else {
-                                Utils.ping(mContext, "Please select class start date and end date should be same.");
+                                Utils.ping(mContext, "Please select class start date and end date should be same");
                             }
 
                         }
+
+
 //                }else{
 //                    Utils.ping(mContext,"Please Enter Proper Time");
 //                }
 
                     } else {
-                        Utils.ping(mContext, "Please Select ProperTime.");
+                        Utils.ping(mContext, "Please select propertime");
 
                     }
                     fillTimeGrid();
@@ -1766,7 +1883,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     }
                     if (sessionDetailModel.getSuccess().equalsIgnoreCase("True")) {
                         Utils.dismissDialog();
-                        Utils.ping(mContext, "Class Created Successfully.");
+                        Utils.ping(mContext, "Class created successfully");
                         Fragment fragment = new SessionFragment();
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -2144,7 +2261,9 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                                 addSessionBinding.sessionSelectAddressLinear.setVisibility(View.VISIBLE);
                             }
                         } else {
-                            addSessionBinding.sessionSelectAddressLinear.setVisibility(View.GONE);
+                            addSessionBinding.selectSessionAddressBtn.setVisibility(View.GONE);
+                            addSessionBinding.sessionSelectAddressTxt.setText("Add Class Address");
+                            // addSessionBinding.sessionSelectAddressLinear.setVisibility(View.GONE);
                         }
                     }
                 }
@@ -2178,11 +2297,12 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         wlp.gravity = Gravity.TOP;
         window.setAttributes(wlp);
 
-        addressDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-
+        //addressDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        addressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         addressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         addressDialog.setCancelable(false);
         addressDialog.setContentView(displayTimeGridBinding.getRoot());
+
 
         addressListAdapter = new AddressListAdapter(mContext, addressResponse, new onViewClick() {
             @Override
@@ -2194,8 +2314,17 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                 Log.d("Address", strPosition);
                 for (int i = 0; i < addressResponse.getData().size(); i++) {
                     if (String.valueOf(i).equalsIgnoreCase(strPosition)) {
+                        addSessionBinding.sessionAddressLinear.setVisibility(View.VISIBLE);
+                        addSessionBinding.sessionAddressLinear1.setVisibility(View.VISIBLE);
+                        addSessionBinding.sessionAreaLinear.setVisibility(View.VISIBLE);
+                        addSessionBinding.stateLinear.setVisibility(View.VISIBLE);
                         addSessionBinding.addressEdt.setText(addressResponse.getData().get(i).getAddressLine1());
-                        addSessionBinding.addressEdt1.setText(addressResponse.getData().get(i).getAddressLine2());
+                        if (addressResponse.getData().get(i).getAddressLine2().equalsIgnoreCase("")) {
+                            addSessionBinding.sessionAddressLinear1.setVisibility(View.GONE);
+                        } else {
+                            addSessionBinding.sessionAddressLinear1.setVisibility(View.VISIBLE);
+                            addSessionBinding.addressEdt1.setText(addressResponse.getData().get(i).getAddressLine2());
+                        }
                         addSessionBinding.areaEdt.setText(addressResponse.getData().get(i).getRegionName());
                         addSessionBinding.cityEdt.setText(addressResponse.getData().get(i).getAddressCity());
                         addSessionBinding.stateEdt.setText(addressResponse.getData().get(i).getAddressState());
@@ -2276,20 +2405,27 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         for (int i = 0; i < dataResponse.getData().size(); i++) {
             switch (dataResponse.getData().get(i).getSessionType()) {
                 case "1":
-                    addSessionBinding.recurringRb.setChecked(true);
                     addSessionBinding.AcademicRb.setChecked(true);
+                    //sessionTypeStr="Academic";
+                    addSessionBinding.recurringRb.setChecked(true);
+
                     break;
                 case "2":
-                    addSessionBinding.singleRb.setChecked(true);
                     addSessionBinding.AcademicRb.setChecked(true);
+                    //sessionTypeStr="Academic";
+                    addSessionBinding.singleRb.setChecked(true);
+
                     break;
                 case "3":
-                    addSessionBinding.recurringRb.setChecked(true);
                     addSessionBinding.playRb.setChecked(true);
+                    //sessionTypeStr="Sports";
+                    addSessionBinding.recurringRb.setChecked(true);
+
                     break;
                 case "4":
-                    addSessionBinding.singleRb.setChecked(true);
                     addSessionBinding.playRb.setChecked(true);
+                    //sessionTypeStr="Sports";
+                    addSessionBinding.singleRb.setChecked(true);
                     break;
                 default:
             }
@@ -2305,11 +2441,26 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
             endDateStr = EditEndDateStr;
             scheduleStr = EditScheduleStr;
             Log.d("EditscheduleStr ", scheduleStr);
-            addSessionBinding.addressEdt.setText(dataResponse.getData().get(i).getAddressLine1());
-            addSessionBinding.areaEdt.setText(dataResponse.getData().get(i).getRegionName());
-            addSessionBinding.cityEdt.setText(dataResponse.getData().get(i).getAddressCity());
-            addSessionBinding.stateEdt.setText(dataResponse.getData().get(i).getAddressState());
-            addSessionBinding.zipcodeEdt.setText(dataResponse.getData().get(i).getAddressZipCode());
+            addSessionBinding.sessionAddressLinear.setVisibility(View.VISIBLE);
+            addSessionBinding.sessionAreaLinear.setVisibility(View.VISIBLE);
+            addSessionBinding.stateLinear.setVisibility(View.VISIBLE);
+            addSessionBinding.stateEdt.setVisibility(View.VISIBLE);
+
+            if (dataResponse.getData().get(i).getAddressLine2().equalsIgnoreCase("")) {
+                addSessionBinding.addressEdt.setText(dataResponse.getData().get(i).getAddressLine1());
+                addSessionBinding.areaEdt.setText(dataResponse.getData().get(i).getRegionName());
+                addSessionBinding.cityEdt.setText(dataResponse.getData().get(i).getAddressCity());
+                addSessionBinding.stateEdt.setText(dataResponse.getData().get(i).getAddressState());
+                addSessionBinding.zipcodeEdt.setText(dataResponse.getData().get(i).getAddressZipCode());
+            }else{
+                addSessionBinding.sessionAddressLinear1.setVisibility(View.VISIBLE);
+                addSessionBinding.addressEdt.setText(dataResponse.getData().get(i).getAddressLine1());
+                addSessionBinding.addressEdt1.setText(dataResponse.getData().get(i).getAddressLine2());
+                addSessionBinding.areaEdt.setText(dataResponse.getData().get(i).getRegionName());
+                addSessionBinding.cityEdt.setText(dataResponse.getData().get(i).getAddressCity());
+                addSessionBinding.stateEdt.setText(dataResponse.getData().get(i).getAddressState());
+                addSessionBinding.zipcodeEdt.setText(dataResponse.getData().get(i).getAddressZipCode());
+            }
             addSessionBinding.descriptionEdt.setText(dataResponse.getData().get(i).getDescription());
             if (dataResponse.getData().get(i).getSessionAmount().equalsIgnoreCase("0.00")) {
                 addSessionBinding.freeRb.setChecked(true);
@@ -2346,7 +2497,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     }
                     if (updatesessionDetailModel.getSuccess().equalsIgnoreCase("True")) {
                         Utils.dismissDialog();
-                        Utils.ping(mContext, "Class Updated Successfully.");
+                        Utils.ping(mContext, "Class updated successfully");
                         Fragment fragment = new SessionFragment();
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -2672,6 +2823,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         addSessionBinding.streamEdt.setEnabled(false);
         addSessionBinding.subjectEdt.setEnabled(false);
         addSessionBinding.addressEdt.setEnabled(false);
+        addSessionBinding.addressEdt1.setEnabled(false);
         addSessionBinding.areaEdt.setEnabled(false);
         addSessionBinding.cityEdt.setEnabled(false);
         addSessionBinding.stateEdt.setEnabled(false);
@@ -2684,7 +2836,11 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         addSessionBinding.sessionPriceEdt.setEnabled(false);
         addSessionBinding.AcademicRb.setEnabled(false);
         addSessionBinding.playRb.setEnabled(false);
-        addSessionBinding.sessionSelectAddressLinear.setVisibility(View.GONE);
+        addSessionBinding.selectSessionAddressBtn.setVisibility(View.GONE);
+        addSessionBinding.newSessionAddressBtn.setVisibility(View.GONE);
+        addSessionBinding.sessionSelectAddressLinear.setVisibility(View.VISIBLE);
+        addSessionBinding.sessionSelectAddressTxt.setText("View Class Address");
+
     }
 
     public void diableDialogControl() {

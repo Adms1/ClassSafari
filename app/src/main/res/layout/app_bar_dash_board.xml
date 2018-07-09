@@ -22,6 +22,17 @@
             android:textAllCaps="true"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
+            <TextView
+                android:id="@+id/title_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                android:text="Enrollment successful"
+                android:gravity="center|center_vertical"
+                android:layout_gravity="center"
+                android:textAllCaps="true"
+                android:textSize="@dimen/_15sdp"
+                android:textColor="@color/white"
+                android:textStyle="bold"/>
             <ImageView
                 android:id="@+id/session_cal"
                 android:layout_width="@dimen/_25sdp"
@@ -29,7 +40,7 @@
                 android:layout_gravity="end"
                 android:layout_marginRight="@dimen/_20sdp"
                 android:src="@drawable/s_cal"
-                android:visibility="gone"/>
+                android:visibility="visible"/>
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

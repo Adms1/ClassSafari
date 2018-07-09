@@ -416,7 +416,7 @@
                         android:layout_height="@dimen/_30sdp"
                         android:layout_marginLeft="@dimen/_5sdp"
                         android:background="@drawable/gray_btn"
-                        android:text="View More"
+                        android:text="View Details"
                         android:textColor="@color/gray1"
                         android:textSize="@dimen/_11sdp" />
                     <Button

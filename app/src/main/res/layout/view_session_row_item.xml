@@ -48,7 +48,7 @@
             android:textAlignment="center"
             android:textColor="@color/blue"
             android:textSize="@dimen/_10sdp"
-            android:visibility="gone" />
+            android:visibility="visible" />
 
         <TextView
             android:id="@+id/paid_txt"
@@ -60,6 +60,7 @@
             android:layout_weight="0.9"
             android:gravity="center_vertical|center"
             android:text=""
+            android:textAllCaps="true"
             android:textColor="@color/search_boder"
             android:textSize="@dimen/_10sdp"
             android:textStyle="bold"

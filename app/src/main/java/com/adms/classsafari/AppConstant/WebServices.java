@@ -31,7 +31,9 @@ public interface WebServices {
     @FormUrlEncoded
     @POST("/Create_Session")
     public void getCreate_Session(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
-
+    @FormUrlEncoded
+    @POST("/Get_Family_RegisterStatus")
+    public void getFamily_RegisterStatus(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
     @FormUrlEncoded
     @POST("/Get_Board")
     public void get_Board(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
@@ -75,6 +77,10 @@ public interface WebServices {
     public void get_AddFamilyContact(@FieldMap Map<String, String> map, Callback<TeacherInfoModel> callback);
 
     @FormUrlEncoded
+    @POST("/Update_Family")
+    public void get_Update_FamilyContact(@FieldMap Map<String, String> map, Callback<TeacherInfoModel> callback);
+
+    @FormUrlEncoded
     @POST("/Get_FamiliyByFamilyID")
     public void get_FamiliyByFamilyID(@FieldMap Map<String, String> map, Callback<TeacherInfoModel> callback);
 
@@ -109,6 +115,10 @@ public interface WebServices {
     @FormUrlEncoded
     @POST("/Add_Payment")
     public void get_Add_Payment(@FieldMap Map<String, String> map, Callback<TeacherInfoModel> callback);
+
+    @FormUrlEncoded
+    @POST("/Add_BankDetail")
+    public void get_Add_BankDetail(@FieldMap Map<String, String> map, Callback<TeacherInfoModel> callback);
 
     @FormUrlEncoded
     @POST("/Get_Payment_ByCoachID")
@@ -151,8 +161,21 @@ public interface WebServices {
     public void get_Payment_ByContactID(@FieldMap Map<String, String> map, Callback<TeacherInfoModel> callback);
 
     @FormUrlEncoded
+    @POST("/Get_Payment_By_FamilyID")
+    public void get_Payment_ByFamilyID(@FieldMap Map<String, String> map, Callback<TeacherInfoModel> callback);
+
+    @FormUrlEncoded
+    @POST("/Get_Upcomming_Classes")
+    public void get_Upcoming_Classes(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
+
+    @FormUrlEncoded
     @POST("/Get_FamilySessionList_ByContactID")
     public void get_FamilySessionList_ByContactID(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
+
+
+    @FormUrlEncoded
+    @POST("/Get_FamilySessionList_By_FamiliID")
+    public void get_FamilySessionList_ByFamilyID(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
 
     @FormUrlEncoded
     @POST("/Get_SessionRating_By_Session_ID")

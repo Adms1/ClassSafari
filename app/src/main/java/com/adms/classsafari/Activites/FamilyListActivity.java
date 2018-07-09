@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -21,6 +22,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.adms.classsafari.Adapter.ExapndableListAdapterFromFront;
+import com.adms.classsafari.Adapter.ExpandableListAdapterIn;
 import com.adms.classsafari.Adapter.ExpandableSelectStudentListAdapter;
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.AppConfiguration;
@@ -62,18 +65,19 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
     List<FamilyDetailModel> finalFamilyDetail;
     List<String> listDataHeader;
     HashMap<String, List<ChildDetailModel>> listDataChild;
-    ExpandableSelectStudentListAdapter expandableSelectStudentListAdapter;
+    ExpandableListAdapterIn expandableListAdapterIn;
     //Conformation Dialog
     Dialog confimDialog;
     String paymentStatusstr, sessionIDStr, familysessionfeesStr, familysessionnameStr,
             familylocationStr, familysessionStudentStr, sessionDateStr, durationStr,
             orderIDStr, contatIDstr, type, familyIdStr = "", familyNameStr = "", locationStr,
-            boardStr, standardStr, streamStr, searchTypeStr, subjectStr, searchfront, arraowStr,TeacherName,
+            boardStr, standardStr, streamStr, searchTypeStr, subjectStr, searchfront, arraowStr, TeacherName,
     /* wheretoComeStr, searchByStr,*/ genderStr, froncontanctStr, wheretocometypeStr, sessionType, RegionName,
             firsttimesearch, selectedfamilyNameStr, selectedfamilytagStr, bactStr, sessionNameStr, SearchPlaystudy;
+    String fNstr, lNstr, cIdstr, eAstr, gIdstr, dobstr, pNstr, cnIdstr, updateTypestr;
     int SessionHour = 0;
     Integer SessionMinit = 0;
-    String SessionDuration ;
+    String SessionDuration;
     String hours, minit;
     ArrayList<String> selectedId;
     //Purchase dialog
@@ -82,12 +86,13 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
     //Use for Menu Dialog
     String passWordStr, confirmpassWordStr, currentpasswordStr;
     Dialog menuDialog, changeDialog;
-    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily;
+    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
     TextView userNameTxt;
     SessionConfirmationDetailModel sessionConfirmationDetailModel;
     ArrayList<Integer> totalHours;
     ArrayList<Integer> totalMinit;
     int avgHoursvalue, avgMinitvalue;
+    ExapndableListAdapterFromFront exapndableListAdapterFromFront;
     private int lastExpandedPosition = -1;
 
     @Override
@@ -129,9 +134,10 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         firsttimesearch = getIntent().getStringExtra("firsttimesearch");
 //        RegionName = getIntent().getStringExtra("RegionName");
         bactStr = getIntent().getStringExtra("back");
-        TeacherName=getIntent().getStringExtra("TeacherName");
+        TeacherName = getIntent().getStringExtra("TeacherName");
         sessionConfirmationDetailModel = getIntent().getParcelableExtra("detail");
     }
+
     public void setTypeface() {
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
 
@@ -141,7 +147,10 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
     }
 
     public void init() {
+
+        familyBinding.lvExpfamilylist.setEnabled(false);
         callFamilyListApi();
+
 
     }
 
@@ -178,7 +187,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                         intent.putExtra("firsttimesearch", firsttimesearch);
 //                        intent.putExtra("RegionName", RegionName);
                         intent.putExtra("back", bactStr);
-                        intent.putExtra("TeacherName",TeacherName);
+                        intent.putExtra("TeacherName", TeacherName);
                         startActivity(intent);
                     } else {
                         Intent intentClassDetail = new Intent(mContext, ClassDeatilScreen.class);
@@ -198,7 +207,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
 //                        intentClassDetail.putExtra("gender", genderStr);
                         intentClassDetail.putExtra("searchfront", searchfront);
 //                        intentClassDetail.putExtra("sessionType", sessionType);
-                        intentClassDetail.putExtra("TeacherName",TeacherName);
+                        intentClassDetail.putExtra("TeacherName", TeacherName);
                         startActivity(intentClassDetail);
 
                         startActivity(intentClassDetail);
@@ -247,7 +256,9 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
 //                    addchild.putExtra("RegionName", RegionName);
                     addchild.putExtra("back", bactStr);
                     addchild.putExtra("SearchPlaystudy", SearchPlaystudy);
-                    addchild.putExtra("TeacherName",TeacherName);
+                    addchild.putExtra("TeacherName", TeacherName);
+                    addchild.putExtra("updateProfile", "false");
+                    addchild.putExtra("phone", pNstr);
                     startActivity(addchild);
                 } else {
                     Intent addchild = new Intent(mContext, AddStudentScreen.class);
@@ -257,6 +268,8 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                     addchild.putExtra("searchfront", searchfront);
                     addchild.putExtra("type", "menu");
                     addchild.putExtra("firsttimesearch", firsttimesearch);
+                    addchild.putExtra("updateProfile", "false");
+                    addchild.putExtra("phone", pNstr);
                     startActivity(addchild);
                 }
                 break;
@@ -295,27 +308,109 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                             if (familyInfoModel.getData().size() > 0) {
                                 if (!froncontanctStr.equalsIgnoreCase("true")) {
                                     familyBinding.text.setVisibility(View.VISIBLE);
-                                }else{
+                                } else {
                                     familyBinding.text.setVisibility(View.GONE);
                                 }
 
                                 familyBinding.listLinear.setVisibility(View.VISIBLE);
                                 familyBinding.noRecordTxt.setVisibility(View.GONE);
                                 fillExpLV();
-                                expandableSelectStudentListAdapter = new ExpandableSelectStudentListAdapter(mContext, listDataHeader, listDataChild, froncontanctStr, arraowStr, new onChlidClick() {
-                                    @Override
-                                    public void getChilClick() {
+                                if (froncontanctStr.equalsIgnoreCase("true")) {
+                                    exapndableListAdapterFromFront = new ExapndableListAdapterFromFront(mContext, listDataHeader, listDataChild, new onViewClick() {
+                                        @Override
+                                        public void getViewClick() {
+                                            selectedId = new ArrayList<String>();
+
+                                            selectedId = exapndableListAdapterFromFront.getFamilyID();
+                                            Log.d("selectedId", "" + selectedId);
+                                            for (int i = 0; i < selectedId.size(); i++) {
+                                                String[] spilt = selectedId.get(i).split("\\|");
+                                                fNstr = spilt[0];
+                                                lNstr = spilt[1];
+                                                cIdstr = spilt[3];
+                                                eAstr = spilt[4];
+                                                gIdstr = spilt[5];
+                                                dobstr = spilt[6];
+                                                pNstr = spilt[2];
+                                                cnIdstr = "1";
+                                                updateTypestr = spilt[7];
+
+                                            }
+                                            Intent addchild = new Intent(mContext, AddStudentScreen.class);
+                                            addchild.putExtra("familyNameStr", familyNameStr);
+                                            addchild.putExtra("froncontanct", froncontanctStr);
+                                            addchild.putExtra("wheretocometype", wheretocometypeStr);
+                                            addchild.putExtra("searchfront", searchfront);
+                                            addchild.putExtra("type", "menu");
+                                            addchild.putExtra("firsttimesearch", firsttimesearch);
+                                            addchild.putExtra("firstName", fNstr);
+                                            addchild.putExtra("lastName", lNstr);
+                                            addchild.putExtra("contactId", cIdstr);
+                                            addchild.putExtra("email", eAstr);
+                                            addchild.putExtra("gender", gIdstr);
+                                            addchild.putExtra("dob", dobstr);
+                                            addchild.putExtra("phone", pNstr);
+                                            addchild.putExtra("contacttypeId", cnIdstr);
+                                            addchild.putExtra("updateProfile", "true");
+                                            addchild.putExtra("Family", updateTypestr);
+                                            startActivity(addchild);
+                                        }
+                                    }, new onChlidClick() {
+                                        @Override
+                                        public void getChilClick() {
+                                            selectedId = new ArrayList<String>();
+
+                                            selectedId = exapndableListAdapterFromFront.getFamilyID();
+                                            Log.d("selectedId", "" + selectedId);
+                                            for (int i = 0; i < selectedId.size(); i++) {
+                                                String[] spilt = selectedId.get(i).split("\\|");
+                                                fNstr = spilt[1];
+                                                lNstr = spilt[2];
+                                                cIdstr = spilt[0];
+                                                gIdstr = spilt[4];
+                                                dobstr = spilt[5];
+                                                cnIdstr = spilt[3];
+                                                updateTypestr = spilt[6];
+                                                pNstr = spilt[7];
+
+                                            }
+                                            Intent addchild = new Intent(mContext, AddStudentScreen.class);
+                                            addchild.putExtra("familyNameStr", familyNameStr);
+                                            addchild.putExtra("froncontanct", froncontanctStr);
+                                            addchild.putExtra("wheretocometype", wheretocometypeStr);
+                                            addchild.putExtra("searchfront", searchfront);
+                                            addchild.putExtra("type", "menu");
+                                            addchild.putExtra("firsttimesearch", firsttimesearch);
+                                            addchild.putExtra("firstName", fNstr);
+                                            addchild.putExtra("lastName", lNstr);
+                                            addchild.putExtra("contactId", cIdstr);
+                                            addchild.putExtra("gender", gIdstr);
+                                            addchild.putExtra("dob", dobstr);
+                                            addchild.putExtra("contacttypeId", cnIdstr);
+                                            addchild.putExtra("updateProfile", "true");
+                                            addchild.putExtra("phone", pNstr);
+                                            addchild.putExtra("Family", updateTypestr);
+                                            startActivity(addchild);
+                                        }
+                                    });
+                                    familyBinding.lvExpfamilylist.setAdapter(exapndableListAdapterFromFront);
+                                } else {
+                                    expandableListAdapterIn = new ExpandableListAdapterIn(mContext, listDataHeader, listDataChild, froncontanctStr, arraowStr, new onChlidClick() {
+                                        @Override
+                                        public void getChilClick() {
 //                                        getFamilyID();
 
-                                    }
-                                }, new onViewClick() {
-                                    @Override
-                                    public void getViewClick() {
-                                        getsessionID();
-                                        callSessionReportApi();
-                                    }
-                                });
-                                familyBinding.lvExpfamilylist.setAdapter(expandableSelectStudentListAdapter);
+                                        }
+                                    }, new onViewClick() {
+                                        @Override
+                                        public void getViewClick() {
+                                            getsessionID();
+                                            callSessionReportApi();
+                                        }
+                                    });
+                                    familyBinding.lvExpfamilylist.setAdapter(expandableListAdapterIn);
+
+                                }
                                 familyBinding.lvExpfamilylist.expandGroup(0);
                             } else {
                                 familyBinding.text.setVisibility(View.GONE);
@@ -354,7 +449,11 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                     + finalFamilyDetail.get(i).getLastName() + "|"
                     + finalFamilyDetail.get(i).getContactPhoneNumber() + "|"
                     + finalFamilyDetail.get(i).getFamilyID() + "|"
-                    + finalFamilyDetail.get(i).getContactID());
+                    + finalFamilyDetail.get(i).getContactID() + "|"
+                    + finalFamilyDetail.get(i).getEmailAddress() + "|"
+                    + finalFamilyDetail.get(i).getGenderID() + "|"
+                    + finalFamilyDetail.get(i).getDateofBirth());
+            pNstr=finalFamilyDetail.get(i).getContactPhoneNumber();
             Log.d("header", "" + listDataHeader);
             ArrayList<ChildDetailModel> row = new ArrayList<ChildDetailModel>();
             for (int j = 0; j < finalFamilyDetail.get(i).getFamilyContact().size(); j++) {
@@ -448,9 +547,11 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                         return;
                     }
                     if (sessionconfirmationInfoModel.getSuccess().equalsIgnoreCase("True")) {
-                        Utils.ping(mContext, "Login Succesfully");
+                        //Utils.ping(mContext, "Login succesfully");
                         confimDialog.dismiss();
-                        Intent isearchBYuser = new Intent(mContext, MySession.class);
+                        Intent isearchBYuser = new Intent(mContext, PaymentSuccessActivity.class);
+                        isearchBYuser.putExtra("transactionId", "1234");
+                        isearchBYuser.putExtra("responseCode", "0");
                         startActivity(isearchBYuser);
 
                     }
@@ -480,7 +581,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
     public void getsessionID() {
         selectedId = new ArrayList<String>();
 
-        selectedId = expandableSelectStudentListAdapter.getSessionDetail();
+        selectedId = expandableListAdapterIn.getSessionDetail();
         Log.d("selectedId", "" + selectedId);
         for (int i = 0; i < selectedId.size(); i++) {
 //            contatIDstr = selectedId.get(i);
@@ -501,7 +602,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
     public void getFamilyID() {
         selectedId = new ArrayList<String>();
 
-        selectedId = expandableSelectStudentListAdapter.getFamilyID();
+        selectedId = expandableListAdapterIn.getFamilyID();
         Log.d("selectedId", "" + selectedId);
         for (int i = 0; i < selectedId.size(); i++) {
             String[] spiltValue = selectedId.get(i).split("\\|");
@@ -594,8 +695,8 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         wlp.gravity = Gravity.CENTER;
         window.setAttributes(wlp);
 
-        changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-
+        //changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        changeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         changeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         changeDialog.setCancelable(false);
         changeDialog.setContentView(changePasswordDialogBinding.getRoot());
@@ -654,7 +755,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                         return;
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("false")) {
-                        Utils.ping(mContext, "Please Enter Valid Password.");
+                        Utils.ping(mContext, "Please enter valid password");
                         return;
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("True")) {
@@ -705,11 +806,21 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
-
+        btnMyenroll = (Button) menuDialog.findViewById(R.id.btnMyenroll);
+        btnMyprofile = (Button) menuDialog.findViewById(R.id.btnMyprofile);
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
         btnmyfamily.setVisibility(View.GONE);
-
+        btnMyprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent imyaccount = new Intent(mContext, AddStudentScreen.class);
+                imyaccount.putExtra("wheretocometype", "menu");
+                imyaccount.putExtra("myprofile", "true");
+                imyaccount.putExtra("type", "myprofile");
+                startActivity(imyaccount);
+            }
+        });
         btnMyReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -718,13 +829,21 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                 startActivity(imyaccount);
             }
         });
-        btnMySession.setOnClickListener(new View.OnClickListener() {
+        btnMyenroll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent isession = new Intent(mContext, MySession.class);
                 isession.putExtra("wheretocometype", "menu");
                 startActivity(isession);
                 menuDialog.dismiss();
+            }
+        });
+        btnMySession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, UpcomingActivity.class);
+                intent.putExtra("wheretocometype", "menu");
+                startActivity(intent);
             }
         });
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
@@ -794,8 +913,8 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         wlp.gravity = Gravity.TOP;
         window.setAttributes(wlp);
 
-        confimDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-
+        // confimDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        confimDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         confimDialog.setCancelable(false);
 //        confimDialog.setContentView(R.layout.confirm_session_dialog);
@@ -810,6 +929,8 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         sessiondetailConfirmationDialogBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AppConfiguration.TeacherSessionIdStr = sessionIDStr;
+                AppConfiguration.TeacherSessionContactIdStr = contatIDstr;
                 if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
                     callpaymentRequestApi();
                 } else {
@@ -855,9 +976,9 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                                 sessiondetailConfirmationDialogBinding.locationTxt.setText(dataResponse.getData().get(j).getRegionName());
                                 sessiondetailConfirmationDialogBinding.startDateTxt.setText(dataResponse.getData().get(j).getStartDate());
                                 sessiondetailConfirmationDialogBinding.endDateTxt.setText(dataResponse.getData().get(j).getEndDate());
-                                sessiondetailConfirmationDialogBinding.priceTxt.setText("₹"+dataResponse.getData().get(j).getSessionAmount());
-                                if(!dataResponse.getData().get(j).getTotalRatingUser().equalsIgnoreCase("0")) {
-                                    sessiondetailConfirmationDialogBinding.ratingUserTxt.setText("( "+dataResponse.getData().get(j).getTotalRatingUser()+" )");
+                                sessiondetailConfirmationDialogBinding.priceTxt.setText("₹" + dataResponse.getData().get(j).getSessionAmount());
+                                if (!dataResponse.getData().get(j).getTotalRatingUser().equalsIgnoreCase("0")) {
+                                    sessiondetailConfirmationDialogBinding.ratingUserTxt.setText("( " + dataResponse.getData().get(j).getTotalRatingUser() + " )");
                                 }
                                 AppConfiguration.classsessionPrice = dataResponse.getData().get(j).getSessionAmount();
                                 totalHours = new ArrayList<>();
@@ -1043,14 +1164,15 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
 //            totalMinit.add(SessionMinit);
 ////            }
 
-            if(SessionMinit>0){
-                if(SessionMinit<10) {
+            if (SessionMinit > 0) {
+                if (SessionMinit < 10) {
                     SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf("0" + SessionMinit + " hrs");
-                }else{SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf(SessionMinit + " hrs");
+                } else {
+                    SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf(SessionMinit + " hrs");
 
                 }
-            }else{
-                SessionDuration=String.valueOf(SessionHour)+" hrs";
+            } else {
+                SessionDuration = String.valueOf(SessionHour) + " hrs";
             }
 
         } catch (ParseException e) {

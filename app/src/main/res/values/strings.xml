@@ -44,6 +44,8 @@
     <string name="addsession">Add Class</string>
     <string name="my_Account">My Payments</string>
     <string name="my_session">Upcoming Classes</string>
+    <string name="my_enroll">My Enrollment</string>
+    <string name="my_profile">My Profile</string>
     <string name="my_change_pass">Change Password</string>
     <string name="reviews">Reviews</string>
     <string name="logout">Logout</string>
@@ -54,20 +56,20 @@
     <string name="click_here"><b>Click Here</b></string>
     <string name="checkboc_text">All-inclusive price(coupon &amp; wallet applied)</string>
     <string name="payment">Payment</string>
-    <string name="selection_info">\u2022  Please Select at least one of the following contacts to enroll in the selected class.</string>
+    <string name="selection_info">Select a contact to enroll. </string>
     <string name="view_term">View</string>
-
+    <!--Please Select at least one of the following contacts to enroll in the selected class.-->
     <!--Webservice String-->
     <string name="internet_error">Internet Connection !</string>
-    <string name="internet_connection_error">ClassSafari requires an internet connection.Make sure Wi-Fi or mobile networks are turned on, then try again.</string>
-    <string name="something_wrong">Something Wrong</string>
-    <string name="blank">Blank Filed Not Allowed</string>
+    <string name="internet_connection_error">ClassSafari requires an internet connection.Make sure wi-fi or mobile networks are turned on, then try again.</string>
+    <string name="something_wrong">Something wrong</string>
+    <string name="blank">Blank filed not allowed</string>
     <string name="false_msg">Record not found</string>
-    <string name="true_msg">Send Successfully</string>
-    <string name="validation_msg">Enter Proper Value</string>
+    <string name="true_msg">Send successfully</string>
+    <string name="validation_msg">Enter proper value</string>
 
     <!--Network Dialog String-->
-    <string name="alert_msg">Alert Msg</string>
+    <string name="alert_msg">Alert msg</string>
     <string name="ok">OK</string>
 
 
@@ -115,6 +117,8 @@
     <string name="single">Single</string>
     <string name="academic">Academic</string>
     <string name="play">Activity</string>
+    <string name="saving">Saving</string>
+    <string name="current">Current</string>
     <string name="family_regi">Family</string>
     <string name="teacher_regi">Teacher</string>
     <string name="add_Student">ADD CONTACT</string>
@@ -137,22 +141,24 @@
     <string name="openDrawer">open_drawer</string>
     <string name="closeDrawer">close_drawer</string>
     <string name="session_price">Class Price</string>
-    <string name="s_subject">Lesson</string>
+    <string name="s_subject">Subject</string>
     <string name="batch_time">Time</string>
-    <string name="total_student">Student</string>
+    <string name="total_student">Students</string>
     <string name="start_date">Start Date</string>
     <string name="end_date">End Date</string>
     <string name="sports">No of Students</string>
     <string name="sports1">Open Spot</string>
     <string name="add_familyname">Family Name</string>
-    <string name="family_list">Family List</string>
-<string name="strIAccTermsAndCond">I accept the terms and conditions</string>
+    <string name="family_list">My Contacts</string>
+    <string name="address1">Address line 1</string>
+    <string name="address2">Address line 2</string>
+    <string name="strIAccTermsAndCond">I accept the terms and conditions</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
-        <item>CLASS CALENDER</item>
+        <item>CLASS CALENDAR</item>
         <item>ADD CLASS</item>
         <item>PAYMENT REPORT</item>
         <item>STUDENT ATTENDANCE</item>
@@ -176,7 +182,7 @@
     <string name="strSuccess">Success  </string>
     <string name="strYourTranSucc">Your Transaction was successful</string>
     <string name="strValue">Value</string>
-    <string name="strEntMobNum">Enter mobile number   </string>
+    <string name="strEntMobNum">Enter mobile number</string>
     <string name="strStartDate">Start Date</string>
     <string name="strEndDate">End Date</string>
     <string name="strShow">Show</string>
@@ -190,40 +196,47 @@
     <string name="strCancel">CANCEL</string>
     <string name="strPinPwd">Pin/Password</string>
     <string name="strPinDoNotMatch">Pin do not match. Please try again</string>
-    <string name="strPinUpdated">Your New Pin has been updated successfully.</string>
+    <string name="strPinUpdated">Your New Pin has been updated successfully</string>
     <string name="strOtpNotMatch">Enter OTP does not match. Please try again</string>
     <string name="strPlEnterPin">Please enter Pin</string>
     <string name="strOtpMesgText">Code has been sent to your registered number. Enter the code to verify your account.</string>
 
     <!-- Session Page String-->
-    <string name="sessionName">Please enter class name.</string>
-    <string name="boardName">Please enter board.</string>
-    <string name="standardName">Please enter standard.</string>
-    <string name="streamName">Please enter stream name.</string>
-    <string name="lessonName">Please enter subject name.</string>
-    <string name="sessionTime">Please add class time.</string>
-    <string name="sessionAddress">Please enter class address.</string>
-    <string name="sessionArea">Please enter class area.</string>
-    <string name="sessionCity">Please enter class city.</string>
-    <string name="sessionState">Please enter class state.</string>
-    <string name="sessionZipcode">Please enter zipcode.</string>
-    <string name="sessionCapacity">Please enter class capacity.</string>
-    <string name="sessionAmount">Please enter class amount.</string>
-    <string name="Date">Please select class start date and end date should be same.</string>
+    <string name="sessionName">Please enter class name</string>
+    <string name="boardName">Please enter board</string>
+    <string name="standardName">Please enter standard</string>
+    <string name="streamName">Please enter stream name</string>
+    <string name="lessonName">Please enter subject name</string>
+    <string name="sessionTime">Please add class time</string>
+    <string name="sessionAddress">Please enter class address</string>
+    <string name="sessionArea">Please enter class area</string>
+    <string name="sessionCity">Please enter class city</string>
+    <string name="sessionState">Please enter class state</string>
+    <string name="sessionZipcode">Please enter zipcode</string>
+    <string name="sessionCapacity">Please enter class capacity</string>
+    <string name="sessionAmount">Please enter class price</string>
+    <string name="Date">Please select class start date and end date should be same</string>
 
     <!--Change Passsword String-->
     <string name="newPassword">Enter New Password</string>
-    <string name="changPassword">Your Password Changed Succesfully.</string>
-    <string name="confirmpassword">Enter Confirm Password</string>
+    <string name="changPassword">Your password changed succesfully</string>
+    <string name="confirmpassword">Confirm New Password</string>
     <string name="currentpassword">Enter Current Password</string>
 
 
     <!-- Class Detail String-->
-    <string name="blank_value">Please Select Activity / Subject.</string>
-    <string name="location_validation">Please Select Proper Location</string>
-    <string name="rating_header">Provide, Rate Class!</string>
+    <string name="blank_value">Please select activity / subject</string>
+    <string name="location_validation">Please select proper location</string>
+    <string name="rating_header">How was your experience?</string>
+    <!--Provide, Rate Class!-->
     <string name="rating_row">How much do you like this class?</string>
-    <string name="not_loging">you are not login.</string>
-    <string name="class_type">Please Select Class type.</string>
-    <string name="loginmsg">Please login to continue.</string>
+    <string name="not_loging">you are not login</string>
+    <string name="class_type">Please select class</string>
+    <string name="loginmsg">Please login to continue</string>
+
+    <!--Bank Detail-->
+    <string name="bank_name">Bank Name</string>
+    <string name="account_name">Name of Account</string>
+    <string name="account_number">Account Number</string>
+    <string name="code">IFSC Code</string>
 </resources>

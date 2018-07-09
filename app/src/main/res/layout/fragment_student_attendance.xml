@@ -44,7 +44,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_3sdp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/session_txt"
@@ -112,7 +113,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/_2sdp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/session_board_txt"
@@ -202,10 +204,10 @@
 
                         <TextView
                             android:id="@+id/time_txt_view"
-                            android:layout_width="@dimen/_52sdp"
+                            android:layout_width="@dimen/_45sdp"
                             android:layout_height="@dimen/_20sdp"
                             android:layout_marginLeft="@dimen/_2sdp"
-                            android:gravity="center_vertical"
+                            android:gravity="center_vertical|right"
                             android:text="@string/batch_time"
                             android:textColor="@color/dark_gray"
                             android:textSize="@dimen/_12sdp" />
@@ -269,12 +271,14 @@
                             android:gravity="center_vertical"
                             android:text="Class"
                             android:textColor="@color/dark_gray"
-                            android:textSize="@dimen/_12sdp" />
+                            android:textSize="@dimen/_12sdp"
+                            android:visibility="gone"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/_15sdp"
                             android:gravity="center"
-                            android:text=":" />
+                            android:text=":"
+                            android:visibility="gone"/>
                         <Spinner
                             android:id="@+id/class_spinner"
                             android:layout_width="@dimen/_95sdp"
@@ -290,7 +294,8 @@
                             android:paddingBottom="1dp"
                             android:paddingTop="@dimen/_3sdp"
                             android:textColor="@color/dark_gray"
-                            android:textSize="@dimen/_11sdp" />
+                            android:textSize="@dimen/_11sdp"
+                            android:visibility="gone"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -309,7 +314,7 @@
                 <LinearLayout
                     android:id="@+id/list_linear"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_230sdp"
+                    android:layout_height="@dimen/_250sdp"
                     android:background="@color/white"
                     android:orientation="vertical"
                     android:visibility="visible">

@@ -28,12 +28,12 @@
 
             <TextView
                 android:id="@+id/payment_txt"
-                android:layout_width="@dimen/_215sdp"
+                android:layout_width="@dimen/_238sdp"
                 android:layout_height="@dimen/_30sdp"
-                android:layout_marginLeft="@dimen/_25sdp"
+                android:layout_marginLeft="@dimen/_5sdp"
                 android:paddingLeft="@dimen/_35sdp"
                 android:gravity="start|center_vertical"
-                android:text="@string/my_session"
+                android:text="@string/my_enroll"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_15sdp"

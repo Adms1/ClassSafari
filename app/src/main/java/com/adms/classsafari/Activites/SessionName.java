@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -75,7 +76,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
     //Use for Menu Dialog
     String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr, SearchPlaystudy;
     Dialog menuDialog, changeDialog;
-    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily;
+    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily,btnMyenroll,btnMyprofile;
     TextView userNameTxt;
 
 
@@ -102,20 +103,20 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         RegionName = getIntent().getStringExtra("RegionName");
         SearchPlaystudy = getIntent().getStringExtra("SearchPlaystudy");
         TeacherName=getIntent().getStringExtra("TeacherName");
-        setTypeface();
+        //setTypeface();
         init();
         setListner();
     }
 
-    public void setTypeface() {
-        Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
-
-//        sessionNameBinding.sessionTxt.setTypeface(custom_font);
-        sessionNameBinding.rupesSymbol.setTypeface(custom_font);
-        sessionNameBinding.priceTxt.setTypeface(custom_font);
-        sessionNameBinding.bookSessionBtn.setTypeface(custom_font);
-
-    }
+//    public void setTypeface() {
+//        Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
+//
+////        sessionNameBinding.sessionTxt.setTypeface(custom_font);
+//        sessionNameBinding.rupesSymbol.setTypeface(custom_font);
+//        sessionNameBinding.priceTxt.setTypeface(custom_font);
+//        sessionNameBinding.bookSessionBtn.setTypeface(custom_font);
+//
+//    }
 
     public void init() {
         if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
@@ -478,13 +479,14 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
 
     public void addRating() {
         ArrayList<String> selectedId = new ArrayList<String>();
-        String sessionName = "";
+        String sessionName = "",teacherName="";
         selectedId = sessionDetailAdapter.getSessionDetail();
         Log.d("selectedId", "" + selectedId);
         for (int i = 0; i < selectedId.size(); i++) {
             String[] splitvalue = selectedId.get(i).split("\\|");
             sessionName = splitvalue[0];
             sessionId = splitvalue[1];
+            teacherName=splitvalue[2];
         }
 
         LayoutInflater inflater = getLayoutInflater();
@@ -495,7 +497,9 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         final TextView cancel_txt = alertLayout.findViewById(R.id.cancel_txt);
         final TextView confirm_txt = alertLayout.findViewById(R.id.confirm_txt);
         final EditText comment_edt = alertLayout.findViewById(R.id.comment_edt);
+        final TextView teacher_name_txt=alertLayout.findViewById(R.id.teacher_name_txt);
         sessionNametxt.setText(sessionName);
+        teacher_name_txt.setText(teacherName);
 
         if (!commentStr.equalsIgnoreCase("")) {
             comment_edt.setText(commentStr);
@@ -568,7 +572,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                                 callAddrating();
                                 mAlertDialog.dismiss();
                             } else {
-                                Utils.ping(mContext, "Please Select Rate.");
+                                Utils.ping(mContext, "Please select rate");
                             }
                         } else {
                             Utils.ping(mContext, getResources().getString(R.string.not_loging));
@@ -700,8 +704,8 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         wlp.gravity = Gravity.CENTER;
         window.setAttributes(wlp);
 
-        changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-
+       //changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        changeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         changeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         changeDialog.setCancelable(false);
         changeDialog.setContentView(changePasswordDialogBinding.getRoot());
@@ -760,7 +764,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                         return;
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("false")) {
-                        Utils.ping(mContext, "Please Enter Valid Password.");
+                        Utils.ping(mContext, "Please enter valid password.");
                         return;
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("True")) {
@@ -811,10 +815,20 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
-
+        btnMyenroll=(Button)menuDialog.findViewById(R.id.btnMyenroll);
+btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
-
+        btnMyprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent imyaccount = new Intent(mContext, AddStudentScreen.class);
+                imyaccount.putExtra("wheretocometype", "menu");
+                imyaccount.putExtra("myprofile","true");
+                imyaccount.putExtra("type", "myprofile");
+                startActivity(imyaccount);
+            }
+        });
         btnMyReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -823,13 +837,21 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                 startActivity(imyaccount);
             }
         });
-        btnMySession.setOnClickListener(new View.OnClickListener() {
+        btnMyenroll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent isession = new Intent(mContext, MySession.class);
                 isession.putExtra("wheretocometype", "session");
                 startActivity(isession);
                 menuDialog.dismiss();
+            }
+        });
+        btnMySession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, UpcomingActivity.class);
+                intent.putExtra("wheretocometype", "session");
+                startActivity(intent);
             }
         });
         btnChangePassword.setOnClickListener(new View.OnClickListener() {

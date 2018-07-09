@@ -30,6 +30,9 @@ public class AppConfiguration {
     public static String RegionName;
     public static String SessionRating;
     public static String SessionUserRating;
+    public static String TeacherSessionIdStr;
+    public static String TeacherSessionContactIdStr;
+    public static String TeacherBookTypeStr;
 
 
     //ClassSafari String

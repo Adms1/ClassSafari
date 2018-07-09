@@ -24,7 +24,7 @@ public class sessionDataModel {
             mondayHoursStr = "", tuesdayHoursStr = "", weddayHoursStr = "", thursdayHoursStr = "", fridayHoursStr = "", satdayHoursStr = "", sundayHoursStr = "";
     int SessionHour = 0;
     Integer SessionMinit = 0;
-    String SessionDurationminit="",SessionDurationHours="";
+    String SessionDurationminit = "", SessionDurationHours = "";
     private int count = 1;
 
     @SerializedName("Board_ID")
@@ -894,53 +894,53 @@ public class sessionDataModel {
             List<String> list = new ArrayList<String>(Arrays.asList(data.split("\\|")));
             for (String item : list) {
                 if (item.contains("mon")) {
-                    String []split =item.substring(4).split("\\-");
-                    mondayTimeStr= split[0];
-                    String []split1=split[1].split("\\,");
+                    String[] split = item.substring(4).split("\\-");
+                    mondayTimeStr = split[0];
+                    String[] split1 = split[1].split("\\,");
                     calculateHours(split[0], split1[0]);
-                    mondayHoursStr=SessionDurationHours;
+                    mondayHoursStr = SessionDurationHours;
                 }
                 if (item.contains("tue")) {
-                    String []split =item.substring(4).split("\\-");
-                    tuesdayTimeStr =  split[0];
-                    String []split1=split[1].split("\\,");
+                    String[] split = item.substring(4).split("\\-");
+                    tuesdayTimeStr = split[0];
+                    String[] split1 = split[1].split("\\,");
                     calculateHours(split[0], split1[0]);
-                    tuesdayHoursStr=SessionDurationHours;
+                    tuesdayHoursStr = SessionDurationHours;
                 }
                 if (item.contains("wed")) {
-                    String []split =item.substring(4).split("\\-");
-                    weddayTimeStr =  split[0];
-                    String []split1=split[1].split("\\,");
+                    String[] split = item.substring(4).split("\\-");
+                    weddayTimeStr = split[0];
+                    String[] split1 = split[1].split("\\,");
                     calculateHours(split[0], split1[0]);
-                    weddayHoursStr=SessionDurationHours;
+                    weddayHoursStr = SessionDurationHours;
                 }
                 if (item.contains("thu")) {
-                    String []split =item.substring(4).split("\\-");
-                    thursdayTimeStr =  split[0];
-                    String []split1=split[1].split("\\,");
+                    String[] split = item.substring(4).split("\\-");
+                    thursdayTimeStr = split[0];
+                    String[] split1 = split[1].split("\\,");
                     calculateHours(split[0], split1[0]);
-                    thursdayHoursStr=SessionDurationHours;
+                    thursdayHoursStr = SessionDurationHours;
                 }
                 if (item.contains("fri")) {
-                    String []split =item.substring(4).split("\\-");
-                    fridayTimeStr =  split[0];
-                    String []split1=split[1].split("\\,");
+                    String[] split = item.substring(4).split("\\-");
+                    fridayTimeStr = split[0];
+                    String[] split1 = split[1].split("\\,");
                     calculateHours(split[0], split1[0]);
-                    fridayHoursStr=SessionDurationHours;
+                    fridayHoursStr = SessionDurationHours;
                 }
                 if (item.contains("sat")) {
-                    String []split =item.substring(4).split("\\-");
-                    satdayTimeStr =  split[0];
-                    String []split1=split[1].split("\\,");
+                    String[] split = item.substring(4).split("\\-");
+                    satdayTimeStr = split[0];
+                    String[] split1 = split[1].split("\\,");
                     calculateHours(split[0], split1[0]);
-                    satdayHoursStr=SessionDurationHours;
+                    satdayHoursStr = SessionDurationHours;
                 }
                 if (item.contains("sun")) {
-                    String []split =item.substring(4).split("\\-");
-                    sundayTimeStr =  split[0];
-                    String []split1=split[1].split("\\,");
+                    String[] split = item.substring(4).split("\\-");
+                    sundayTimeStr = split[0];
+                    String[] split1 = split[1].split("\\,");
                     calculateHours(split[0], split1[0]);
-                    sundayHoursStr=SessionDurationHours;
+                    sundayHoursStr = SessionDurationHours;
                 }
             }
         }
@@ -966,12 +966,12 @@ public class sessionDataModel {
             Log.i("======= Hours", " :: " + hours + ":" + min);
             if (SessionMinit > 0) {
                 if (SessionMinit < 10) {
-                       SessionDurationHours=SessionHour+": "+"0"+SessionMinit+" hrs";
-                }else{
-                    SessionDurationHours=SessionHour+": "+SessionMinit+" hrs";
+                    SessionDurationHours = SessionHour + ":" + "0" + SessionMinit + " hrs";
+                } else {
+                    SessionDurationHours = SessionHour + ":" + SessionMinit + " hrs";
                 }
-            }else{
-                SessionDurationHours=SessionHour +" hrs";
+            } else {
+                SessionDurationHours = SessionHour + ":" + "00" + " hrs";
             }
 
 
@@ -1122,5 +1122,95 @@ public class sessionDataModel {
 
     public void setSundayHoursStr(String sundayHoursStr) {
         this.sundayHoursStr = sundayHoursStr;
+    }
+
+
+    //Upcoming classes
+    @SerializedName("StudentName")
+    @Expose
+    private String studentName;
+    @SerializedName("Date")
+    @Expose
+    private String date;
+    @SerializedName("Time")
+    @Expose
+    private String time;
+    @SerializedName("TeacherName")
+    @Expose
+    private String teacherName;
+    @SerializedName("Subject")
+    @Expose
+    private String subject;
+    @SerializedName("ClassName")
+    @Expose
+    private String className;
+    @SerializedName("Mobile")
+    @Expose
+    private String mobile;
+    @SerializedName("EmailID")
+    @Expose
+    private String emailID;
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getTeacherName() {
+        return teacherName;
+    }
+
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getEmailID() {
+        return emailID;
+    }
+
+    public void setEmailID(String emailID) {
+        this.emailID = emailID;
     }
 }

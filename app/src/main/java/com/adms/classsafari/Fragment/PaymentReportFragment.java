@@ -58,7 +58,7 @@ public class PaymentReportFragment extends Fragment implements DatePickerDialog.
         paymentReportBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_payment_report, container, false);
 
         rootView = paymentReportBinding.getRoot();
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         mContext = getActivity();
 
         ((DashBoardActivity) getActivity()).setActionBar(2, "true");
@@ -123,7 +123,7 @@ public class PaymentReportFragment extends Fragment implements DatePickerDialog.
                 if (!startDateStr.equalsIgnoreCase("dd/MM/yyyy") && !endDateStr.equalsIgnoreCase("dd/MM/yyyy")) {
                     callPaymentReportApi();
                 } else {
-                    Utils.ping(mContext, "Please Select StartDate and EndDate.");
+                    Utils.ping(mContext, "Please select startdate and enddate");
                 }
             }
         });

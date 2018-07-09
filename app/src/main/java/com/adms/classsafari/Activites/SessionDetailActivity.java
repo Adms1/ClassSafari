@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -64,7 +65,7 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
     //Use for Menu Dialog
     String passWordStr, confirmpassWordStr, currentpasswordStr;
     Dialog menuDialog, changeDialog;
-    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily;
+    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily,btnMyenroll,btnMyprofile;
     TextView userNameTxt;
 
     @Override
@@ -340,7 +341,7 @@ setTypeface();
                                 callAddrating();
                                 mAlertDialog.dismiss();
                             } else {
-                                Utils.ping(mContext, "Please Select Rate.");
+                                Utils.ping(mContext, "Please select rate");
                             }
                         } else {
                             Utils.ping(mContext, getResources().getString(R.string.not_loging));
@@ -422,9 +423,20 @@ setTypeface();
         btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
-
+        btnMyenroll=(Button)menuDialog.findViewById(R.id.btnMyenroll);
+btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
+        btnMyprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent imyaccount = new Intent(mContext, AddStudentScreen.class);
+                imyaccount.putExtra("wheretocometype", "menu");
+                imyaccount.putExtra("myprofile","true");
+                imyaccount.putExtra("type", "myprofile");
+                startActivity(imyaccount);
+            }
+        });
         btnMyReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -433,13 +445,21 @@ setTypeface();
                 startActivity(imyaccount);
             }
         });
-        btnMySession.setOnClickListener(new View.OnClickListener() {
+        btnMyenroll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent isession = new Intent(mContext, MySession.class);
                 isession.putExtra("wheretocometype", "menu");
                 startActivity(isession);
                 menuDialog.dismiss();
+            }
+        });
+        btnMySession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, UpcomingActivity.class);
+                intent.putExtra("wheretocometype", "menu");
+                startActivity(intent);
             }
         });
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
@@ -597,8 +617,8 @@ setTypeface();
         wlp.gravity = Gravity.CENTER;
         window.setAttributes(wlp);
 
-        changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-
+       // changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        changeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         changeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         changeDialog.setCancelable(false);
         changeDialog.setContentView(changePasswordDialogBinding.getRoot());
@@ -657,7 +677,7 @@ setTypeface();
                         return;
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("false")) {
-                        Utils.ping(mContext, "Please Enter Valid Password.");
+                        Utils.ping(mContext, "Please enter valid password");
                         return;
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("True")) {

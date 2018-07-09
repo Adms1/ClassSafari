@@ -46,6 +46,8 @@ public class UserSessionListAdapter1 extends RecyclerView.Adapter<UserSessionLis
         this.onViewClick = onViewClick;
     }
 
+
+
     @Override
     public UserSessionListAdapter1.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -183,7 +185,7 @@ public class UserSessionListAdapter1 extends RecyclerView.Adapter<UserSessionLis
             holder.sun_hours_txt.setText(arrayList.get(position).getSundayHoursStr());
         }
         final String paidStr = arrayList.get(position).getIsActive();
-        if (paidStr.equalsIgnoreCase("False")) {
+        if (paidStr.equalsIgnoreCase("0")) {
           holder.book_session_btn.setVisibility(View.VISIBLE);
             holder.book_session_btn.setOnClickListener(new View.OnClickListener() {
                 @Override

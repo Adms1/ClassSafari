@@ -53,7 +53,7 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
     int mYear, mMonth, mDay;
     StudentAttendanceAdapter studentAttendanceAdapter;
     ArrayList<String> arrayList;
-    String sessionIDStr, attendanceIDStr, ContactEnrollmentIDStr = "", noteStr, classTypeIDStr = "", totalstudetnStr, priceStr;//, SesionDetailIDStr, sessionDateStr, sessionTimeStr;
+    String sessionIDStr, attendanceIDStr, ContactEnrollmentIDStr = "", noteStr, classTypeIDStr = "1", totalstudetnStr, priceStr;//, SesionDetailIDStr, sessionDateStr, sessionTimeStr;
     SessionDetailModel dataResponse;
     TeacherInfoModel classListInfo;
     List<sessionDataModel> studentList;
@@ -85,7 +85,7 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
         studentAttendanceBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_student_attendance, container, false);
 
         rootView = studentAttendanceBinding.getRoot();
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mContext = getActivity();
         ((DashBoardActivity) getActivity()).setActionBar(3, "true");
         setTypeface();
@@ -117,11 +117,11 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
     }
 
     public void initViews() {
-        if (!Utils.getPref(mContext, "coachTypeID").equalsIgnoreCase("1")) {
-            studentAttendanceBinding.firstRowLinear.setVisibility(View.GONE);
-        } else {
-            studentAttendanceBinding.firstRowLinear.setVisibility(View.VISIBLE);
-        }
+//        if (!Utils.getPref(mContext, "coachTypeID").equalsIgnoreCase("1")) {
+//            studentAttendanceBinding.firstRowLinear.setVisibility(View.GONE);
+//        } else {
+//            studentAttendanceBinding.firstRowLinear.setVisibility(View.VISIBLE);
+//        }
         callSessionDetailApi();
         callClassAttendanceDetailApi();
 
@@ -145,10 +145,10 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
             @Override
             public void onClick(View view) {
                 InsertAttendanceDetail();
-                if (!ContactEnrollmentIDStr.equalsIgnoreCase("") && !classTypeIDStr.equalsIgnoreCase("")) {
+                if (!ContactEnrollmentIDStr.equalsIgnoreCase("")){// && !classTypeIDStr.equalsIgnoreCase("")) {
                     callGetSessionStudentAttendanceApi();
                 } else {
-                    Utils.ping(mContext, "Select Attendnance.");
+                    Utils.ping(mContext, "Select attendnance");
                 }
 
             }
@@ -306,9 +306,9 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
                     if (attendanceInfo.getSuccess().equalsIgnoreCase("True")) {
                         Utils.dismissDialog();
                         if (classType.equalsIgnoreCase("")) {
-                            Utils.ping(mContext, "Attendance Added Successfully.");
+                            Utils.ping(mContext, "Attendance added successfully");
                         } else {
-                            Utils.ping(mContext, "Attendance Updated Successfully.");
+                            Utils.ping(mContext, "Attendance updated successfully");
                         }
                         studentAttendanceBinding.submitBtn.setText("Update");
                         //callGetSessionStudentAttendanceApi();

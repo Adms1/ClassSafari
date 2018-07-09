@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
@@ -65,7 +66,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
     String passWordStr, confirmpassWordStr, currentpasswordStr, cityName = "";
     Dialog menuDialog, changeDialog;
     //Use for Menu Dialog
-    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily;
+    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily,btnMyenroll,btnMyprofile;
     TextView userNameTxt;
     String SearchPlaystudy;
     boolean flag = true;
@@ -102,10 +103,17 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
             searchByUserBinding.regiTxt.setTextColor(getResources().getColor(R.color.blue));
             searchByUserBinding.loginTxt.setText(Html.fromHtml("<b>" +" Hi"+ "</b>"));
             searchByUserBinding.regiTxt.setText(Html.fromHtml("<b>" + "" + userName[0] + "</b>"));
-            searchByUserBinding.regiTxt.setPadding(5, 0, 0, 0);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(510, 0, 0,0);
-            searchByUserBinding.loginTxt.setLayoutParams(lp);
+//            searchByUserBinding.regiTxt.setPadding(5, 0, 0, 0);
+//            searchByUserBinding.regiTxt.setGravity(Gravity.END);
+//            searchByUserBinding.loginTxt.setGravity(Gravity.END);
+//            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,65);
+//            lp.setMargins(500,0,0,0);
+//            searchByUserBinding.loginTxt.setLayoutParams(lp);
+//            LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,65);
+//            lp.setMargins(700,0,0,0);
+//            searchByUserBinding.regiTxt.setLayoutParams(lp1);
+//            searchByUserBinding.orTxt.setLayoutParams(lp);
+//            searchByUserBinding.orTxt.setLayoutParams(lp);
 //            searchByUserBinding.regiTxt.setEnabled(false);
             searchByUserBinding.loginTxt.setBackgroundResource(0);
             searchByUserBinding.regiTxt.setBackground(getResources().getDrawable(R.drawable.orange_line));
@@ -369,8 +377,8 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
         wlp.gravity = Gravity.CENTER;
         window.setAttributes(wlp);
 
-        changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-
+       // changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        changeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         changeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         changeDialog.setCancelable(false);
         changeDialog.setContentView(changePasswordDialogBinding.getRoot());
@@ -428,7 +436,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
                         return;
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("false")) {
-                        Utils.ping(mContext, "Please Enter Valid Password.");
+                        Utils.ping(mContext, "Please enter valid password");
                         return;
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("True")) {
@@ -479,9 +487,20 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
         btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
-
+        btnMyenroll=(Button)menuDialog.findViewById(R.id.btnMyenroll) ;
+        btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
+        btnMyprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent imyaccount = new Intent(mContext, AddStudentScreen.class);
+                imyaccount.putExtra("wheretocometype", "menu");
+                imyaccount.putExtra("myprofile","true");
+                imyaccount.putExtra("type", "myprofile");
+                startActivity(imyaccount);
+            }
+        });
         btnMyReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -490,13 +509,21 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
                 startActivity(imyaccount);
             }
         });
-        btnMySession.setOnClickListener(new View.OnClickListener() {
+        btnMyenroll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent isession = new Intent(mContext, MySession.class);
                 isession.putExtra("wheretocometype", "menu");
                 startActivity(isession);
                 menuDialog.dismiss();
+            }
+        });
+        btnMySession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, UpcomingActivity.class);
+                intent.putExtra("wheretocometype", "menu");
+                startActivity(intent);
             }
         });
         btnChangePassword.setOnClickListener(new View.OnClickListener() {

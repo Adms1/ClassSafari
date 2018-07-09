@@ -31,8 +31,7 @@
                 android:layout_width="@dimen/_215sdp"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_marginLeft="@dimen/_20sdp"
-                android:gravity="start|center_vertical"
-                android:paddingLeft="@dimen/_70sdp"
+                android:gravity="center|center_vertical"
                 android:text="@string/add_Student"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
@@ -56,6 +55,7 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/family_name_linear"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_marginTop="@dimen/_10sdp"
@@ -114,7 +114,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_weight="0.8"
+                    android:layout_weight="0.6"
                     android:button="@drawable/absent_radio_type"
                     android:checked="true"
                     android:paddingLeft="@dimen/_3sdp"
@@ -225,7 +225,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_weight="0.8"
+                    android:layout_weight="0.6"
                     android:button="@drawable/absent_radio_type"
                     android:checked="true"
                     android:paddingLeft="@dimen/_3sdp"
@@ -253,38 +253,38 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_below="@+id/linear"
-            android:weightSum="2">
+            android:layout_marginTop="@dimen/_30sdp"
+            android:layout_below="@+id/linear">
 
             <Button
                 android:id="@+id/register_btn"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/_150sdp"
                 android:layout_height="@dimen/_35sdp"
-                android:layout_marginLeft="@dimen/_20sdp"
                 android:layout_marginRight="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_20sdp"
-                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/_85sdp"
                 android:background="@drawable/register_btn"
                 android:text="ADD"
-                android:textAllCaps="false"
+                android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12sdp"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/cancel_btn"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_35sdp"
-                android:layout_marginLeft="@dimen/_5sdp"
-                android:layout_marginRight="@dimen/_15sdp"
-                android:layout_marginTop="@dimen/_20sdp"
-                android:layout_weight="1"
-                android:background="@drawable/register_btn"
-                android:text="CANCEL"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp"
-                android:textStyle="bold" />
+            <!--<Button-->
+                <!--android:id="@+id/cancel_btn"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="@dimen/_35sdp"-->
+                <!--android:layout_marginLeft="@dimen/_5sdp"-->
+                <!--android:layout_marginRight="@dimen/_15sdp"-->
+                <!--android:layout_marginTop="@dimen/_20sdp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="@drawable/register_btn"-->
+                <!--android:text="CANCEL"-->
+                <!--android:textAllCaps="false"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:textSize="@dimen/_12sdp"-->
+                <!--android:textStyle="bold"-->
+                <!--android:visibility="gone"/>-->
         </LinearLayout>
     </RelativeLayout>
 </layout>

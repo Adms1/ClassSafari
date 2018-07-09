@@ -13,6 +13,17 @@
         android:weightSum="3">
         <!--android:background="@drawable/list_line"-->
         <TextView
+            android:id="@+id/no_txt"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_weight="0.2"
+            android:paddingLeft="@dimen/_5sdp"
+            android:gravity="center_vertical"
+            android:text="1"
+            android:textColor="@color/text_color"
+            android:textSize="@dimen/_10sdp" />
+
+        <TextView
             android:id="@+id/name_txt"
             android:layout_width="0dp"
             android:layout_height="@dimen/_30sdp"
@@ -28,7 +39,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="0.80"
+            android:layout_weight="0.60"
             android:orientation="horizontal">
 
             <RadioButton
@@ -60,7 +71,8 @@
                 android:button="@drawable/leave_radio_type"
                 android:tag="-1"
                 android:textAlignment="center"
-                android:textSize="@dimen/_9sdp" />
+                android:textSize="@dimen/_9sdp"
+                android:visibility="gone"/>
         </RadioGroup>
 
         <EditText
@@ -71,7 +83,7 @@
             android:layout_marginRight="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_1sdp"
             android:layout_marginBottom="@dimen/_2sdp"
-            android:layout_weight="0.93"
+            android:layout_weight="0.97"
             android:background="@drawable/remarks_text"
             android:hint="Remark"
             android:paddingLeft="@dimen/_3sdp"

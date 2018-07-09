@@ -113,7 +113,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
     //Use for Menu Dialog
     String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr;
     Dialog menuDialog, changeDialog;
-    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily;
+    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily,btnMyenroll,btnMyprofile;
     TextView userNameTxt;
     ChangePasswordDialogBinding changePasswordDialogBinding;
 
@@ -158,6 +158,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         }
         if (!RegionName.equalsIgnoreCase("")) {
             binding.header1Linear.setVisibility(View.VISIBLE);
+            dialogselectareaStr=RegionName;
             binding.header1Linear.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, .4f));
             binding.headerLinear.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 0.7f));
             binding.recViewLinear.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, 0, 3.9f));
@@ -192,8 +193,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                         FilterDialog();
                         break;
                 }
-
-
                 return true;
             }
         });
@@ -318,6 +317,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                 insession.putExtra("firsttimesearch", firsttimesearch);
                 insession.putExtra("RegionName", RegionName);
                 insession.putExtra("SearchPlaystudy", SearchPlaystudy);
+                insession.putExtra("TeacherName", TeacherName);
                 startActivity(insession);
                 break;
             case R.id.multiautocompe:
@@ -424,19 +424,32 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         priceBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.dialog_price, (ViewGroup) binding.getRoot(), false);
 
-        priceDialog = new Dialog(mContext, R.style.PauseDialog);
+        priceDialog = new Dialog(mContext);//, R.style.PauseDialog
         Window window = priceDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         priceDialog.getWindow().getAttributes().verticalMargin = 0.10F;
         wlp.gravity = Gravity.BOTTOM;
         window.setAttributes(wlp);
 
-        priceDialog.getWindow().setBackgroundDrawableResource(R.drawable.price_p3);
+        priceDialog.getWindow().setBackgroundDrawableResource(R.drawable.box);
 
         priceDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         priceDialog.setCancelable(true);
         priceDialog.setContentView(priceBinding.getRoot());
-
+        dialogselectareaStr = "";
+        if (dialogselectareaStr.equalsIgnoreCase("")) {
+            binding.headerLinear.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 0.7f));
+            binding.recViewLinear.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 4.3f));
+            binding.bottomNavigationView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            binding.header1Linear.setVisibility(View.GONE);
+            binding.multiautocompe.setHint(getResources().getString(R.string.location_add));
+            binding.multiautocompe.setText("");
+            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+            for (sessionDataModel arrayObj : dataResponse.getData()) {
+                filterFinalArray.add(arrayObj);
+            }
+            fillData(filterFinalArray);
+        }
         priceBinding.resultTxt.setText(String.valueOf(result));
         List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
         List<Float> priceList = new ArrayList<>();
@@ -542,21 +555,34 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 
         sortBinding.resultTxt.setText(String.valueOf(result));
 
-        if (!rangestatusStr.equalsIgnoreCase("")) {
-            if (rangestatusStr.equalsIgnoreCase("low")) {
-                sortBinding.lowHighRb.setChecked(true);
-            } else {
-                sortBinding.highLowRb.setChecked(true);
+//        if (!rangestatusStr.equalsIgnoreCase("")) {
+//            if (rangestatusStr.equalsIgnoreCase("low")) {
+//                sortBinding.lowHighRb.setChecked(true);
+//            } else {
+//                sortBinding.highLowRb.setChecked(true);
+//            }
+//        }
+//        if (!ratingStr.equalsIgnoreCase("")) {
+//            if (ratingStr.equalsIgnoreCase("low")) {
+//                sortBinding.lowestFirstUserRb.setChecked(true);
+//            } else {
+//                sortBinding.highestFirstUserRb.setChecked(true);
+//            }
+//        }
+        dialogselectareaStr = "";
+        if (dialogselectareaStr.equalsIgnoreCase("")) {
+            binding.headerLinear.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 0.7f));
+            binding.recViewLinear.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 4.3f));
+            binding.bottomNavigationView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            binding.header1Linear.setVisibility(View.GONE);
+            binding.multiautocompe.setHint(getResources().getString(R.string.location_add));
+            binding.multiautocompe.setText("");
+            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
+            for (sessionDataModel arrayObj : dataResponse.getData()) {
+                filterFinalArray.add(arrayObj);
             }
+            fillData(filterFinalArray);
         }
-        if (!ratingStr.equalsIgnoreCase("")) {
-            if (ratingStr.equalsIgnoreCase("low")) {
-                sortBinding.lowestFirstUserRb.setChecked(true);
-            } else {
-                sortBinding.highestFirstUserRb.setChecked(true);
-            }
-        }
-
         sortBinding.doneTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -853,26 +879,27 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
             for (int j = 0; j < dataResponse.getData().size(); j++) {
                 dataResponse.getData().get(j).setCheckStatus("0");
             }
-        } else {
-            String[] split = dialogselectareaStr.split("\\,");
-            for (int i = 0; i < split.length; i++) {
-                for (int j = 0; j < dataResponse.getData().size(); j++) {
-                    if (dataResponse.getData().get(j).getRegionName().equalsIgnoreCase(split[i])) {
-                        dataResponse.getData().get(j).setCheckStatus("1");
-                    } else {
-                        dataResponse.getData().get(j).setCheckStatus("0");
-                    }
-                }
-            }
         }
+// else {
+//            String[] split = dialogselectareaStr.split("\\,");
+//            for (int i = 0; i < split.length; i++) {
+//                for (int j = 0; j < dataResponse.getData().size(); j++) {
+//                    if (dataResponse.getData().get(j).getRegionName().equalsIgnoreCase(split[i])) {
+//                        dataResponse.getData().get(j).setCheckStatus("1");
+//                    } else {
+//                        dataResponse.getData().get(j).setCheckStatus("0");
+//                    }
+//                }
+//            }
+//        }
 
-
-        searchAreaAdapter = new SearchAreaAdapter(mContext, dataResponse, dialogselectareaStr);
+        if (searchAreaAdapter == null) {
+            searchAreaAdapter = new SearchAreaAdapter(mContext, dataResponse, dialogselectareaStr);
 //        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
 //        filterBinding.displayAreaList.setLayoutManager(mLayoutManager);
 //        filterBinding.displayAreaList.setItemAnimator(new DefaultItemAnimator());
+        }
         filterBinding.displayAreaList.setAdapter(searchAreaAdapter);
-
         filterDialog.show();
     }
 
@@ -894,7 +921,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                         return;
                     }
                     if (sessionInfo.getSuccess().equalsIgnoreCase("false")) {
-                        Utils.ping(mContext, "Class not found.");
+                        Utils.ping(mContext, "Class not found");
                         dataResponse = sessionInfo;
 
                         return;
@@ -1114,8 +1141,9 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         final TextView cancel_txt = alertLayout.findViewById(R.id.cancel_txt);
         final TextView confirm_txt = alertLayout.findViewById(R.id.confirm_txt);
         final EditText comment_edt = alertLayout.findViewById(R.id.comment_edt);
+        final TextView teacher_name_txt = alertLayout.findViewById(R.id.teacher_name_txt);
         sessionNametxt.setText(sessionName);
-
+        teacher_name_txt.setText(splitvalue[2]);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
@@ -1173,7 +1201,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                                 callAddrating();
                                 mAlertDialog.dismiss();
                             } else {
-                                Utils.ping(mContext, "Please Select Rate.");
+                                Utils.ping(mContext, "Please select rate");
                             }
                         } else {
                             Utils.ping(mContext, getResources().getString(R.string.not_loging));
@@ -1525,10 +1553,21 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
+        btnMyenroll=(Button)menuDialog.findViewById(R.id.btnMyenroll);
+        btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
 
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
-
+        btnMyprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent imyaccount = new Intent(mContext, AddStudentScreen.class);
+                imyaccount.putExtra("wheretocometype", "session");
+                imyaccount.putExtra("myprofile","true");
+                imyaccount.putExtra("type", "myprofile");
+                startActivity(imyaccount);
+            }
+        });
         btnMyReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1537,13 +1576,21 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                 startActivity(imyaccount);
             }
         });
-        btnMySession.setOnClickListener(new View.OnClickListener() {
+        btnMyenroll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent isession = new Intent(mContext, MySession.class);
                 isession.putExtra("wheretocometype", "session");
                 startActivity(isession);
                 menuDialog.dismiss();
+            }
+        });
+        btnMySession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, UpcomingActivity.class);
+                intent.putExtra("wheretocometype", "session");
+                startActivity(intent);
             }
         });
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
@@ -1614,8 +1661,8 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         wlp.gravity = Gravity.CENTER;
         window.setAttributes(wlp);
 
-        changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-
+        //changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        changeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         changeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         changeDialog.setCancelable(false);
         changeDialog.setContentView(changePasswordDialogBinding.getRoot());
@@ -1674,7 +1721,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                         return;
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("false")) {
-                        Utils.ping(mContext, "Please Enter Valid Password.");
+                        Utils.ping(mContext, "Please enter valid password");
                         return;
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("True")) {

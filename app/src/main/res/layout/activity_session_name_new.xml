@@ -111,7 +111,8 @@
                     android:layout_marginLeft="@dimen/_35sdp"
                     android:background="@drawable/button_shape"
                     android:text="@string/book_session"
-                    android:textColor="@color/text_color" />
+                    android:textColor="@color/text_color"
+                    android:textStyle="bold"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

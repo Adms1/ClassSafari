@@ -6,7 +6,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_registration"
+        android:background="@drawable/family_register1_bg"
         tools:context="com.adms.classsafari.Activites.RegistrationScreen">
 
 
@@ -40,10 +40,10 @@
                     android:paddingLeft="@dimen/_60sdp"
                     android:paddingTop="@dimen/_2sdp"
                     android:text="@string/family_register1"
+                    android:textAllCaps="true"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_15sdp"
-                    android:textAllCaps="true"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
             </LinearLayout>
 
 
@@ -99,7 +99,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/type_of_regi"
@@ -110,6 +111,7 @@
                         android:text="If you are a Teacher / Instructor"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_12sdp" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -119,19 +121,19 @@
                             android:id="@+id/click_here"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/_20sdp"
+                            android:background="@drawable/orange_line"
                             android:paddingLeft="@dimen/_5sdp"
                             android:tag="teacher"
                             android:text="@string/click_here"
-                            android:background="@drawable/orange_line"
                             android:textColor="@color/blue"
                             android:textSize="@dimen/_12sdp" />
 
                         <!--<View-->
-                            <!--android:layout_width="@dimen/_55sdp"-->
-                            <!--android:layout_height="2dp"-->
-                            <!--android:layout_marginRight="@dimen/_58sdp"-->
-                            <!--android:layout_gravity="right"-->
-                            <!--android:background="@drawable/orange_line" />-->
+                        <!--android:layout_width="@dimen/_55sdp"-->
+                        <!--android:layout_height="2dp"-->
+                        <!--android:layout_marginRight="@dimen/_58sdp"-->
+                        <!--android:layout_gravity="right"-->
+                        <!--android:background="@drawable/orange_line" />-->
                     </LinearLayout>
 
                 </LinearLayout>
@@ -193,6 +195,7 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:drawableRight="@drawable/user_white"
                     android:hint="@string/last_name" />
+
                 <EditText
                     android:id="@+id/class_name_edt"
                     style="@style/RegiAutoComplete"
@@ -201,7 +204,8 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:drawableRight="@drawable/user_white"
                     android:hint="Class Name"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
+
                 <EditText
                     android:id="@+id/email_edt"
                     style="@style/RegiAutoComplete"
@@ -316,23 +320,24 @@
 
                         <TextView
                             android:id="@+id/view_txt"
-                            android:layout_width="@dimen/_80sdp"
+                            android:layout_width="wrap_content"
                             android:layout_height="@dimen/_20sdp"
+                            android:layout_marginLeft="@dimen/_5sdp"
                             android:layout_marginTop="@dimen/_8sdp"
+                            android:background="@drawable/orange_line"
                             android:gravity="center_vertical|start"
-                            android:paddingLeft="@dimen/_5sdp"
                             android:text="@string/view_term"
                             android:textColor="@color/blue"
                             android:textSize="@dimen/_13sdp"
                             android:textStyle="bold" />
 
-                        <View
-                            android:layout_width="@dimen/_35sdp"
-                            android:layout_height="2dp"
-                            android:layout_marginRight="@dimen/_50sdp"
-                            android:layout_marginTop="@dimen/_1sdp"
-                            android:layout_gravity="right"
-                            android:background="@drawable/orange_line" />
+                        <!--<View-->
+                        <!--android:layout_width="@dimen/_35sdp"-->
+                        <!--android:layout_height="2dp"-->
+                        <!--android:layout_marginRight="@dimen/_50sdp"-->
+                        <!--android:layout_marginTop="@dimen/_1sdp"-->
+                        <!--android:layout_gravity="right"-->
+                        <!--android:background="@drawable/orange_line" />-->
                     </LinearLayout>
                 </LinearLayout>
 

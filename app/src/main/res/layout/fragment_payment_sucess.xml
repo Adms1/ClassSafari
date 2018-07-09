@@ -36,14 +36,14 @@
                     android:paddingTop="20dp"
                     android:text="RAM LAL PAROTHA HOUSE"
                     android:textAllCaps="true"
-                    android:textColor="@color/blue"
+                    android:textColor="@color/text_color"
                     android:textSize="22sp"
                     android:textStyle="bold" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingTop="20dp">
+                    android:paddingTop="5dp">
 
                     <RelativeLayout
                         android:id="@+id/rlInnerBox"
@@ -95,43 +95,283 @@
                         android:layout_height="match_parent"
                         android:layout_below="@+id/rlInnerBox"
                         android:gravity="center"
-                        android:orientation="vertical"
-                        android:paddingLeft="30dp"
-                        android:paddingRight="30dp">
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/txtTransactionID"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/_30sdp"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/edit_text_line"
-                            android:hint="Txn ID"
-                            android:inputType="numberDecimal"
-                            android:maxLines="1"
-                            android:padding="10dp"
-                            android:singleLine="true" />
-
-                        <TextView
-                            android:id="@+id/txtValue"
+                        <LinearLayout
+                            android:id="@+id/subject_linear"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/txtNarration"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/edit_text_line"
-                            android:hint="@string/strValue"
-                            android:maxLines="5"
-                            android:padding="10dp" />
+                            android:orientation="horizontal"
+                            android:visibility="visible">
+
+                            <TextView
+                                android:id="@+id/txtsubjectname_view"
+                                android:layout_width="@dimen/_90sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginLeft="@dimen/_65sdp"
+                                android:hint="Subject Name"
+                                android:maxLines="1"
+                                android:padding="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/text_color" />
+
+                            <TextView
+                                android:layout_width="@dimen/_15sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:gravity="center"
+                                android:hint=":"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textColor="@color/text_color" />
+
+                            <TextView
+                                android:id="@+id/txtsubjectname"
+                                android:layout_width="@dimen/_130sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:hint="Subject Name"
+                                android:maxLines="1"
+                                android:padding="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/text_color" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/teacher_name_linear"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+
+                            <TextView
+                                android:layout_width="@dimen/_90sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="5dp"
+                                android:hint="Teacher Name"
+                                android:inputType="numberDecimal"
+                                android:layout_marginLeft="@dimen/_65sdp"
+                                android:maxLines="1"
+                                android:padding="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/text_color" />
+
+                            <TextView
+                                android:layout_width="@dimen/_15sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:gravity="center"
+                                android:hint=":"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textColor="@color/text_color" />
+
+                            <TextView
+                                android:id="@+id/txtteachername"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="5dp"
+                                android:hint="Teacher Name"
+                                android:inputType="numberDecimal"
+                                android:maxLines="1"
+                                android:padding="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/text_color" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/date_linear"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="@dimen/_90sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginLeft="@dimen/_65sdp"
+                                android:layout_marginTop="5dp"
+                                android:hint="Start Date"
+                                android:maxLines="1"
+                                android:padding="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/text_color" />
+
+                            <TextView
+                                android:layout_width="@dimen/_15sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:gravity="center"
+                                android:hint=":"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textColor="@color/text_color" />
+
+                            <TextView
+                                android:id="@+id/txtdate"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:hint="Date"
+                                android:maxLines="1"
+                                android:padding="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/text_color" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/time_linear"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="@dimen/_90sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginLeft="@dimen/_65sdp"
+                                android:layout_marginTop="5dp"
+                                android:hint="Start Time"
+                                android:inputType="numberDecimal"
+                                android:maxLines="1"
+                                android:padding="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/text_color" />
+
+                            <TextView
+                                android:layout_width="@dimen/_15sdp"
+                                android:layout_height="wrap_content"
+
+                                android:layout_marginTop="5dp"
+                                android:gravity="center"
+                                android:hint=":"
+                                android:maxLines="1"
+
+                                android:singleLine="true"
+                                android:textColor="@color/text_color" />
+
+                            <TextView
+                                android:id="@+id/txttime"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/_30sdp"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="5dp"
+                                android:hint="Time"
+                                android:inputType="numberDecimal"
+                                android:maxLines="1"
+                                android:padding="10dp"
+                                android:singleLine="true"
+                                android:textColor="@color/text_color" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/transcation_linear"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="@dimen/_90sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginLeft="@dimen/_65sdp"
+                                android:layout_marginTop="5dp"
+                                android:hint="Transcation Id"
+                                android:inputType="numberDecimal"
+                                android:maxLines="1"
+                                android:padding="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/text_color" />
+
+                            <TextView
+                                android:layout_width="@dimen/_15sdp"
+                                android:layout_height="wrap_content"
+
+                                android:layout_marginTop="5dp"
+                                android:gravity="center"
+                                android:hint=":"
+                                android:maxLines="1"
+
+                                android:singleLine="true"
+                                android:textColor="@color/text_color" />
+
+                            <TextView
+                                android:id="@+id/txtTransactionID"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="5dp"
+                                android:hint="Txn ID"
+                                android:inputType="numberDecimal"
+                                android:maxLines="1"
+                                android:padding="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/text_color" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/amount_linear"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="@dimen/_90sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginLeft="@dimen/_65sdp"
+                                android:layout_marginTop="5dp"
+                                android:hint="Amount"
+                                android:inputType="numberDecimal"
+                                android:maxLines="1"
+                                android:padding="5dp"
+                                android:singleLine="true"
+                                android:textColor="@color/text_color" />
+
+                            <TextView
+                                android:layout_width="@dimen/_15sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:gravity="center"
+                                android:hint=":"
+
+                                android:maxLines="1"
+                                android:singleLine="true"
+
+                                android:textColor="@color/text_color" />
+
+                            <TextView
+                                android:id="@+id/txtValue"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/txtNarration"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="5dp"
+                                android:hint="@string/strValue"
+                                android:maxLines="5"
+                                android:padding="5dp"
+                                android:textColor="@color/text_color" />
+                        </LinearLayout>
 
                         <Button
                             android:id="@+id/btnNewCharge"
-                            android:layout_width="match_parent"
+                            android:layout_width="@dimen/_120sdp"
                             android:layout_height="@dimen/_35sdp"
                             android:layout_below="@+id/btnCharge"
                             android:layout_marginBottom="20dp"
-                            android:layout_marginTop="20dp"
-                            android:background="@color/search_boder"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/blue_btn"
                             android:text="Done"
                             android:textAllCaps="true"
                             android:textColor="@color/white"

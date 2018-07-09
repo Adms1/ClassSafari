@@ -289,6 +289,7 @@ public class PaymentActivity extends AppCompatActivity {
                 intent.putExtra("amount", resposeData.getString("amount"));
                 intent.putExtra("description", resposeData.getString("description"));
                 intent.putExtra("order_id", resposeData.getString("order_id"));
+                intent.putExtra("sessionId",sessionIDStr);
                 startActivity(intent);
 
 

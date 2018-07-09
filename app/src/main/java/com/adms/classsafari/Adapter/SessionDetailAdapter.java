@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -117,7 +118,7 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
                 sessionCardLayout1Binding.linearStream.setVisibility(View.GONE);
                 sessionCardLayout1Binding.sessionTypeTxt.setText("Sports");
             }
-            address = arrayList.get(position).getAddressLine1() +
+            address = arrayList.get(position).getAddressLine1()+
                     "," + arrayList.get(position).getAddressLine2() +
                     "," + arrayList.get(position).getRegionName() +
                     "," + arrayList.get(position).getAddressCity() +
@@ -128,7 +129,17 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
             sessionCardLayout1Binding.sessionStandardTxt.setText(arrayList.get(position).getStandard());
             sessionCardLayout1Binding.sessionStreamTxt.setText(arrayList.get(position).getStream());
             sessionCardLayout1Binding.sessionTotalStudentTxt.setText(arrayList.get(position).getSessionCapacity());
-            sessionCardLayout1Binding.addressTxt.setText(address);
+            if (arrayList.get(position).getAddressLine2().equalsIgnoreCase("")){
+                sessionCardLayout1Binding.addressTxt.setText(Html.fromHtml(arrayList.get(position).getAddressLine1()
+                        + "<br>" + arrayList.get(position).getRegionName() +
+                        ", " + arrayList.get(position).getAddressCity() + "<br>" +
+                        arrayList.get(position).getAddressState() + " " + arrayList.get(position).getAddressZipCode()));
+            }else {
+                sessionCardLayout1Binding.addressTxt.setText(Html.fromHtml(arrayList.get(position).getAddressLine1() + "<br>" +
+                        arrayList.get(position).getAddressLine2() + "<br>" + arrayList.get(position).getRegionName() +
+                        ", " + arrayList.get(position).getAddressCity() + "<br>" +
+                        arrayList.get(position).getAddressState() + " " + arrayList.get(position).getAddressZipCode()));
+            }
             sessionCardLayout1Binding.emailTxt.setText(arrayList.get(position).getEmailAddress());
             sessionCardLayout1Binding.phoneTxt.setText(arrayList.get(position).getContactPhoneNumber());
             sessionCardLayout1Binding.teacherNameTxt.setText(arrayList.get(position).getName());
@@ -206,7 +217,7 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
                 public boolean onTouch(View view, MotionEvent motionEvent) {
                     SessionDetail = new ArrayList<>();
                     if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                        SessionDetail.add(arrayList.get(position).getSessionName() + "|" + arrayList.get(position).getSessionID());
+                        SessionDetail.add(arrayList.get(position).getSessionName() + "|" + arrayList.get(position).getSessionID()+"|"+arrayList.get(position).getName());
                         onViewClick.getViewClick();
                     }
                     return true;
@@ -234,12 +245,12 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
         if (holder instanceof ReviewCard) {
             final ReviewCard rowHolder = (ReviewCard) holder;
             reviewCardLayout1Binding.sessionReviewsRatingBar.setRating(Float.parseFloat
-                    (String.valueOf(sessionRatingList.get(position - arrayList.size() - descriptionviewarray.size() - reviewarray.size()).getRatingValue())));
-            reviewCardLayout1Binding.reviewDateTxt.setText(sessionRatingList.get(position - arrayList.size() - descriptionviewarray.size() - reviewarray.size()).getCreateDate());
-            reviewCardLayout1Binding.userNameTxt.setText(sessionRatingList.get(position - arrayList.size() - descriptionviewarray.size() - reviewarray.size()).getFirstName()
-                    + " " + sessionRatingList.get(position - arrayList.size() - descriptionviewarray.size() - reviewarray.size()).getLastName());
-            reviewCardLayout1Binding.commentTxt.setText(sessionRatingList.get(position - arrayList.size() - descriptionviewarray.size() - reviewarray.size()).getComment());
-            reviewCardLayout1Binding.ratingTxt.setText(String.valueOf("(" + sessionRatingList.get(position - arrayList.size() - descriptionviewarray.size() - reviewarray.size()).getRatingValue() + ")"));
+                    (String.valueOf(sessionRatingList.get(position - arrayList.size() - reviewarray.size()).getRatingValue())));
+            reviewCardLayout1Binding.reviewDateTxt.setText(sessionRatingList.get(position - arrayList.size()  - reviewarray.size()).getCreateDate());
+            reviewCardLayout1Binding.userNameTxt.setText(sessionRatingList.get(position - arrayList.size()- reviewarray.size()).getFirstName()
+                    + " " + sessionRatingList.get(position - arrayList.size()  - reviewarray.size()).getLastName());
+            reviewCardLayout1Binding.commentTxt.setText(sessionRatingList.get(position - arrayList.size() - reviewarray.size()).getComment());// - descriptionviewarray.size()
+            reviewCardLayout1Binding.ratingTxt.setText(String.valueOf("(" + sessionRatingList.get(position - arrayList.size() - reviewarray.size()).getRatingValue() + ")"));
         }
     }
 
@@ -255,7 +266,7 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
         if (position - arrayList.size() < reviewarray.size()) {//- descriptionviewarray.size()
             return ROW_VIEW;
         }
-        if (position - arrayList.size() - descriptionviewarray.size() - reviewarray.size() < sessionRatingList.size()) {
+        if (position - arrayList.size()  - reviewarray.size() < sessionRatingList.size()) {//- descriptionviewarray.size()
             return CONTENT_VIEW;
         }
         return -1;

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_37sdp"
+        android:descendantFocusability="blocksDescendants"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/llHeader"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_36sdp"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal"
+            android:background="@color/blue"
+            android:paddingBottom="@dimen/_2sdp"
+            android:visibility="visible">
+
+           <TextView
+                    android:id="@+id/familyname_rb"
+                    android:layout_width="@dimen/_130sdp"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|start"
+                    android:paddingLeft="@dimen/_3sdp"
+                    android:tag="1"
+                    android:text="@string/academic"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_10sdp" />
+            <TextView
+                android:id="@+id/no_txt"
+                android:layout_width="@dimen/_75sdp"
+                android:layout_height="@dimen/_33sdp"
+                android:gravity="center|center_vertical"
+                android:paddingLeft="@dimen/_2sdp"
+                android:text="7843568412"
+                android:drawableLeft="@drawable/mobile"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_10sdp" />
+
+           <ImageView
+               android:id="@+id/edit_img"
+               android:layout_width="@dimen/_20sdp"
+               android:layout_height="@dimen/_20sdp"
+               android:src="@drawable/edit_g"
+               android:layout_marginLeft="@dimen/_13sdp"
+               android:layout_gravity="center_vertical"/>
+
+            <ImageView
+                android:id="@+id/delete_img"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/delete_o" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>

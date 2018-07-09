@@ -11,8 +11,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <supports-screens
         android:anyDensity="true"
@@ -83,8 +83,7 @@
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:label="@string/title_activity_dash_board"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustPan"
-       />
+            android:windowSoftInputMode="adjustPan" />
 
         <!-- <meta-data -->
         <!-- android:name="com.facebook.sdk.ApplicationId" -->
@@ -119,7 +118,8 @@
             android:name=".Activites.MySession"
             android:screenOrientation="portrait" />
         <activity android:name=".Activites.FamilyListActivity" />
-        <activity android:name=".Activites.SessionDetailActivity"></activity>
+        <activity android:name=".Activites.SessionDetailActivity" />
+        <activity android:name=".Activites.UpcomingActivity"></activity>
     </application>
 
 </manifest>

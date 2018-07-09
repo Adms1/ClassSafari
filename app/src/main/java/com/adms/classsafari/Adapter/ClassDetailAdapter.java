@@ -39,7 +39,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
 
     String searchByStr, locationStr, classNameStr,
             address, boardStr, streamStr, standardStr,
-            searchTypeStr, wheretoComeStr, searchfront,
+            searchTypeStr, wheretoComeStr, searchfront, searchPlaystudy,RegionName,
             sessionType, firsttimesearch, TeacherName;
     onViewClick onViewClick;
     bookClick bookClick;
@@ -49,9 +49,34 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     private ArrayList<String> SessionDetail;
     private ArrayList<String> SessionBookDetail;
 
-    public ClassDetailAdapter(Context mContext, List<sessionDataModel> arrayList, String searchByStr, String locationStr,
-                              String classNameStr, String boardStr, String streamStr, String standardStr, String searchTypeStr,
-                              String wheretoComeStr, String searchfront, String teacherName, bookClick bookClick, onViewClick onViewClick) {
+//    public ClassDetailAdapter(Context mContext, List<sessionDataModel> arrayList, String searchByStr, String locationStr,
+//                              String classNameStr, String boardStr, String streamStr, String standardStr,
+//                              String searchfront, String teacherName, bookClick bookClick, onViewClick onViewClick) {
+//        this.mContext = mContext;
+//        this.arrayList = arrayList;
+//        this.searchByStr = searchByStr;
+//        this.locationStr = locationStr;
+//        this.classNameStr = classNameStr;
+//        this.boardStr = boardStr;
+//        this.streamStr = streamStr;
+//        this.standardStr = standardStr;
+//        this.searchTypeStr = searchTypeStr;
+//        this.wheretoComeStr = wheretoComeStr;
+//        this.searchfront = searchfront;
+//        this.onViewClick = onViewClick;
+//        this.sessionType = sessionType;
+//        this.firsttimesearch = firsttimesearch;
+//        this.bookClick = bookClick;
+//        this.TeacherName = TeacherName;
+//    }
+
+    public ClassDetailAdapter(Context mContext, List<sessionDataModel> arrayList, String locationStr,
+                              String classNameStr, String boardStr, String streamStr,
+                              String standardStr, String searchPlaystudy,
+                              String searchfront, String firsttimesearch,
+                              String regionName, String teacherName,
+                              bookClick bookClick, onViewClick onViewClick) {
+
         this.mContext = mContext;
         this.arrayList = arrayList;
         this.searchByStr = searchByStr;
@@ -60,14 +85,13 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
         this.boardStr = boardStr;
         this.streamStr = streamStr;
         this.standardStr = standardStr;
-        this.searchTypeStr = searchTypeStr;
-        this.wheretoComeStr = wheretoComeStr;
+        this.searchPlaystudy = searchPlaystudy;
         this.searchfront = searchfront;
         this.onViewClick = onViewClick;
-        this.sessionType = sessionType;
         this.firsttimesearch = firsttimesearch;
         this.bookClick = bookClick;
-        this.TeacherName = TeacherName;
+        this.TeacherName = teacherName;
+        this.RegionName=regionName;
     }
 
     @Override
@@ -77,39 +101,9 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                 .inflate(R.layout.card_layout, parent, false);
 
 //        cardLayoutBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.card_layout, parent, false);
-//
 //        View itemView = cardLayoutBinding.getRoot();
-//
-//
-//        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
-//        cardLayoutBinding.sessionNameTxt.setTypeface(custom_font);
-//        cardLayoutBinding.ratingUserTxt.setTypeface(custom_font);
-//        cardLayoutBinding.tutorNameTxt.setTypeface(custom_font);
-//        cardLayoutBinding.locationTxt.setTypeface(custom_font);
-//        cardLayoutBinding.startDateTxt.setTypeface(custom_font);
-//        cardLayoutBinding.endDateTxt.setTypeface(custom_font);
-//        cardLayoutBinding.priceTxt.setTypeface(custom_font);
-//        cardLayoutBinding.monTimeTxt.setTypeface(custom_font);
-//        cardLayoutBinding.tuesTimeTxt.setTypeface(custom_font);
-//        cardLayoutBinding.wedTimeTxt.setTypeface(custom_font);
-//        cardLayoutBinding.thurTimeTxt.setTypeface(custom_font);
-//        cardLayoutBinding.friTimeTxt.setTypeface(custom_font);
-//        cardLayoutBinding.satTimeTxt.setTypeface(custom_font);
-//        cardLayoutBinding.sunTimeTxt.setTypeface(custom_font);
-//        cardLayoutBinding.monHoursTxt.setTypeface(custom_font);
-//        cardLayoutBinding.tuesHoursTxt.setTypeface(custom_font);
-//        cardLayoutBinding.wedHoursTxt.setTypeface(custom_font);
-//        cardLayoutBinding.thurHoursTxt.setTypeface(custom_font);
-//        cardLayoutBinding.friHoursTxt.setTypeface(custom_font);
-//        cardLayoutBinding.satHoursTxt.setTypeface(custom_font);
-//        cardLayoutBinding.sunHoursTxt.setTypeface(custom_font);
-//        cardLayoutBinding.mondayBtn.setTypeface(custom_font);
-//        cardLayoutBinding.tuesdayBtn.setTypeface(custom_font);
-//        cardLayoutBinding.wednesdayBtn.setTypeface(custom_font);
-//        cardLayoutBinding.thursdayBtn.setTypeface(custom_font);
-//        cardLayoutBinding.fridayBtn.setTypeface(custom_font);
-//        cardLayoutBinding.saturdayBtn.setTypeface(custom_font);
-//        cardLayoutBinding.sundayBtn.setTypeface(custom_font);
+
+
 
         return new MyViewHolder(itemView);
     }
@@ -117,38 +111,38 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
-        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
-        holder.session_name_txt.setTypeface(custom_font);
-        holder.price_txt.setTypeface(custom_font);
-        holder.start_date_txt.setTypeface(custom_font);
-        holder.end_date_txt.setTypeface(custom_font);
-        holder.mon_time_txt.setTypeface(custom_font);
-        holder.tues_time_txt.setTypeface(custom_font);
-        holder.wed_time_txt.setTypeface(custom_font);
-        holder.thur_time_txt.setTypeface(custom_font);
-        holder.fri_time_txt.setTypeface(custom_font);
-        holder.sat_time_txt.setTypeface(custom_font);
-        holder.sun_time_txt.setTypeface(custom_font);
-        holder.location_txt.setTypeface(custom_font);
-//        holder.duration_txt.setTypeface(custom_font);
-        holder.tutor_name_txt.setTypeface(custom_font);
-        holder.mon_hours_txt.setTypeface(custom_font);
-        holder.tues_hours_txt.setTypeface(custom_font);
-        holder.wed_hours_txt.setTypeface(custom_font);
-        holder.thur_hours_txt.setTypeface(custom_font);
-        holder.fri_hours_txt.setTypeface(custom_font);
-        holder.sat_hours_txt.setTypeface(custom_font);
-        holder.sun_hours_txt.setTypeface(custom_font);
-        holder.rating_user_txt.setTypeface(custom_font);
-        holder.view_more_session_btn.setTypeface(custom_font);
-        holder.monday_btn.setTypeface(custom_font);
-        holder.tuesday_btn.setTypeface(custom_font);
-        holder.wednesday_btn.setTypeface(custom_font);
-        holder.thursday_btn.setTypeface(custom_font);
-        holder.friday_btn.setTypeface(custom_font);
-        holder.saturday_btn.setTypeface(custom_font);
-        holder.sunday_btn.setTypeface(custom_font);
-        holder.book_session_btn.setTypeface(custom_font);
+//        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
+//        holder.session_name_txt.setTypeface(custom_font);
+//        holder.price_txt.setTypeface(custom_font);
+//        holder.start_date_txt.setTypeface(custom_font);
+//        holder.end_date_txt.setTypeface(custom_font);
+//        holder.mon_time_txt.setTypeface(custom_font);
+//        holder.tues_time_txt.setTypeface(custom_font);
+//        holder.wed_time_txt.setTypeface(custom_font);
+//        holder.thur_time_txt.setTypeface(custom_font);
+//        holder.fri_time_txt.setTypeface(custom_font);
+//        holder.sat_time_txt.setTypeface(custom_font);
+//        holder.sun_time_txt.setTypeface(custom_font);
+//        holder.location_txt.setTypeface(custom_font);
+////        holder.duration_txt.setTypeface(custom_font);
+//        holder.tutor_name_txt.setTypeface(custom_font);
+//        holder.mon_hours_txt.setTypeface(custom_font);
+//        holder.tues_hours_txt.setTypeface(custom_font);
+//        holder.wed_hours_txt.setTypeface(custom_font);
+//        holder.thur_hours_txt.setTypeface(custom_font);
+//        holder.fri_hours_txt.setTypeface(custom_font);
+//        holder.sat_hours_txt.setTypeface(custom_font);
+//        holder.sun_hours_txt.setTypeface(custom_font);
+//        holder.rating_user_txt.setTypeface(custom_font);
+//        holder.view_more_session_btn.setTypeface(custom_font);
+//        holder.monday_btn.setTypeface(custom_font);
+//        holder.tuesday_btn.setTypeface(custom_font);
+//        holder.wednesday_btn.setTypeface(custom_font);
+//        holder.thursday_btn.setTypeface(custom_font);
+//        holder.friday_btn.setTypeface(custom_font);
+//        holder.saturday_btn.setTypeface(custom_font);
+//        holder.sunday_btn.setTypeface(custom_font);
+//        holder.book_session_btn.setTypeface(custom_font);
 
         if (arrayList.get(position).getTotalRatingUser().equalsIgnoreCase("0")) {
             holder.rating_user_txt.setVisibility(View.GONE);
@@ -251,11 +245,11 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                     inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
                     inSession.putExtra("SearchBy", searchByStr);
                     inSession.putExtra("city", locationStr);
-                    inSession.putExtra("sessionName", classNameStr);
+                    inSession.putExtra("sessionName", "");//classNameStr
                     inSession.putExtra("board", boardStr);
                     inSession.putExtra("stream", streamStr);
                     inSession.putExtra("standard", standardStr);
-                    inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
+//                    inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
                     inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() + " To " + holder.end_date_txt.getText().toString());
 //                    inSession.putExtra("duration", cardLayoutBinding.durationTxt.getText().toString());
                     inSession.putExtra("gender", arrayList.get(position).getGenderID());
@@ -264,7 +258,9 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                     inSession.putExtra("searchfront", searchfront);
                     inSession.putExtra("sessionType", sessionType);
                     inSession.putExtra("firsttimesearch", firsttimesearch);
+                    inSession.putExtra("SearchPlaystudy",searchPlaystudy);
                     inSession.putExtra("TeacherName", TeacherName);
+                    inSession.putExtra("RegionName",RegionName);
                     mContext.startActivity(inSession);
                 }
                 return true;
@@ -277,18 +273,20 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                 inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
                 inSession.putExtra("SearchBy", searchByStr);
                 inSession.putExtra("city", locationStr);
-                inSession.putExtra("sessionName", classNameStr);
+                inSession.putExtra("sessionName", "");//classNameStr
                 inSession.putExtra("board", boardStr);
                 inSession.putExtra("stream", streamStr);
                 inSession.putExtra("standard", standardStr);
-                inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
+//                inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
                 inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() + " To " + holder.end_date_txt.getText().toString());
 //                inSession.putExtra("duration", cardLayoutBinding.durationTxt.getText().toString());
                 inSession.putExtra("gender", arrayList.get(position).getGenderID());
                 inSession.putExtra("searchType", searchTypeStr);
                 inSession.putExtra("withOR", wheretoComeStr);
                 inSession.putExtra("firsttimesearch", firsttimesearch);
+                inSession.putExtra("SearchPlaystudy",searchPlaystudy);
                 inSession.putExtra("TeacherName", TeacherName);
+                inSession.putExtra("RegionName",RegionName);
                 mContext.startActivity(inSession);
             }
         });
@@ -299,18 +297,20 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                 inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
                 inSession.putExtra("SearchBy", searchByStr);
                 inSession.putExtra("city", locationStr);
-                inSession.putExtra("sessionName", classNameStr);
+                inSession.putExtra("sessionName", "");//classNameStr
                 inSession.putExtra("board", boardStr);
                 inSession.putExtra("stream", streamStr);
                 inSession.putExtra("standard", standardStr);
-                inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
+//                inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
                 inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() + " To " + holder.end_date_txt.getText().toString());
 //                inSession.putExtra("duration", cardLayoutBinding.durationTxt.getText().toString());
                 inSession.putExtra("gender", arrayList.get(position).getGenderID());
                 inSession.putExtra("searchType", searchTypeStr);
                 inSession.putExtra("withOR", wheretoComeStr);
                 inSession.putExtra("firsttimesearch", firsttimesearch);
+                inSession.putExtra("SearchPlaystudy",searchPlaystudy);
                 inSession.putExtra("TeacherName", TeacherName);
+                inSession.putExtra("RegionName",RegionName);
                 mContext.startActivity(inSession);
             }
         });
@@ -319,7 +319,7 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 SessionDetail = new ArrayList<>();
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    SessionDetail.add(arrayList.get(position).getSessionName() + "|" + arrayList.get(position).getSessionID());
+                    SessionDetail.add(arrayList.get(position).getSessionName() + "|" + arrayList.get(position).getSessionID() + "|" + arrayList.get(position).getName());
                     onViewClick.getViewClick();
                 }
                 return true;

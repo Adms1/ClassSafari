@@ -61,7 +61,7 @@
                             android:layout_marginLeft="@dimen/_5sdp"
                             android:layout_weight="0.65"
                             android:button="@drawable/absent_radio_type"
-                            android:checked="true"
+                            android:checked="false"
                             android:paddingLeft="@dimen/_3sdp"
                             android:tag="Academic"
                             android:text="@string/academic"
@@ -278,6 +278,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_25sdp"
                         android:hint="@string/description"
+                      android:inputType="textMultiLine"
+                        android:lines="15"
+                        android:scrollbars="vertical"
+                        android:gravity="top"
                         android:imeOptions="actionNext" />
                 </LinearLayout>
 
@@ -318,9 +322,8 @@
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:layout_marginLeft="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:background="@drawable/round_btn"
+                        android:background="@drawable/plus_1"
                         android:gravity="center"
-                        android:text="+"
                         android:textStyle="bold"
                         android:textColor="@color/blue"
                         android:textSize="@dimen/_13sdp" />
@@ -747,7 +750,7 @@
                     android:layout_marginLeft="@dimen/_5sdp"
                     android:layout_marginRight="@dimen/_5sdp"
                     android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <ImageView
                         android:layout_width="@dimen/_15sdp"
@@ -764,10 +767,9 @@
                         android:layout_marginLeft="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:gravity="start|center_vertical"
-                        android:text="Select Address"
+                        android:text="Add Class Address"
                         android:textColor="@color/text_color"
                         android:textStyle="bold"/>
-
                     <Button
                         android:id="@+id/select_session_address_btn"
                         android:layout_width="@dimen/_25sdp"
@@ -776,12 +778,25 @@
                         android:layout_marginBottom="@dimen/_2sdp"
                         android:layout_marginLeft="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:background="@drawable/round_btn"
+                        android:background="@drawable/right_1"
                         android:gravity="center"
-                        android:text="+"
                         android:textColor="@color/blue"
                         android:textSize="@dimen/_13sdp"
                         android:textStyle="bold"/>
+                    <Button
+                        android:id="@+id/new_session_address_btn"
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="@dimen/_2sdp"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@drawable/plus_1"
+                        android:gravity="center"
+                        android:textColor="@color/blue"
+                        android:textSize="@dimen/_13sdp"
+                        android:textStyle="bold"/>
+
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/session_address_linear"
@@ -789,7 +804,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_5sdp"
                     android:layout_marginRight="@dimen/_5sdp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <ImageView
                         android:layout_width="@dimen/_15sdp"
@@ -797,15 +813,15 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_2sdp"
-                        android:src="@drawable/ad" />
+                        />
 
                     <AutoCompleteTextView
                         android:id="@+id/address_edt"
                         style="@style/addSessionEditText"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_25sdp"
-                        android:maxLength="20"
-                        android:hint="@string/address" />
+                        android:maxLength="30"
+                        android:hint="@string/address1" />
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/session_address_linear1"
@@ -813,7 +829,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_5sdp"
                     android:layout_marginRight="@dimen/_5sdp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <ImageView
                         android:layout_width="@dimen/_15sdp"
@@ -821,15 +838,15 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_2sdp"
-                        android:src="@drawable/ad" />
+                         />
 
                     <AutoCompleteTextView
                         android:id="@+id/address_edt1"
                         style="@style/addSessionEditText"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_25sdp"
-                        android:maxLength="20"
-                        android:hint="@string/address" />
+                        android:maxLength="30"
+                        android:hint="@string/address2" />
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/session_area_linear"
@@ -837,7 +854,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_5sdp"
                     android:layout_marginRight="@dimen/_5sdp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -867,11 +885,13 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/state_linear"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_5sdp"
                     android:layout_marginRight="@dimen/_5sdp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -934,7 +954,8 @@
                             android:button="@drawable/absent_radio_type"
                             android:checked="true"
                             android:paddingLeft="@dimen/_2sdp"
-                            android:text="@string/free_radio" />
+                            android:text="@string/free_radio"
+                            android:textStyle="bold"/>
 
                         <RadioButton
                             android:id="@+id/paid_rb"
@@ -943,7 +964,8 @@
                             android:layout_margin="@dimen/_1sdp"
                             android:button="@drawable/absent_radio_type"
                             android:paddingLeft="@dimen/_2sdp"
-                            android:text="@string/paid_radio" />
+                            android:text="@string/paid_radio"
+                            android:textStyle="bold"/>
                     </RadioGroup>
 
                     <EditText

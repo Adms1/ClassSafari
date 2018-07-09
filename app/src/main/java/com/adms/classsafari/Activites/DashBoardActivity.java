@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -68,7 +70,7 @@ public class DashBoardActivity extends AppCompatActivity {
     private DrawerLayout drawer;
     private View navHeader;
     private ImageView imgNavHeaderBg, imgProfile;
-    private TextView txtName, txtWebsite;
+    private TextView txtName, txtWebsite,title_txt;
     private Toolbar toolbar;
     private String[] activityTitles;
     private int drawerLayoutGravity = Gravity.LEFT;
@@ -90,12 +92,12 @@ public class DashBoardActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         session_cal = (ImageView) findViewById(R.id.session_cal);
-        setSupportActionBar(toolbar);
+//        setSupportActionBar(toolbar);
         mHandler = new Handler();
         mContex = DashBoardActivity.this;
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-
+        title_txt=(TextView)findViewById(R.id.title_txt) ;
 
         navHeader = navigationView.getHeaderView(0);
         txtName = (TextView) navHeader.findViewById(R.id.teacher_name_txt);
@@ -104,6 +106,7 @@ public class DashBoardActivity extends AppCompatActivity {
         imgProfile = (ImageView) navHeader.findViewById(R.id.profile_image);
         // load toolbar titles from string resources
         activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
+        //toolbar.setNavigationIcon(R.drawable.decri);
         if(getIntent().getStringExtra("position")!=null) {
                 navItemIndex = Integer.parseInt(position);
                 if (getIntent().getStringExtra("position").equalsIgnoreCase("0")) {
@@ -118,9 +121,9 @@ public class DashBoardActivity extends AppCompatActivity {
         } else {
             if(savedInstanceState==null){
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame, new SessionFragment()).addToBackStack(null).commit();
-                getSupportActionBar().setTitle(activityTitles[navItemIndex]);
+                title_txt.setText(activityTitles[navItemIndex]);//getSupportActionBar().setTitle(
             }else {
-                getSupportActionBar().setTitle(activityTitles[navItemIndex]);
+                title_txt.setText(activityTitles[navItemIndex]);//getSupportActionBar().setTitle(
             }
         }
         whereTocomestr = getIntent().getStringExtra("frontLogin");
@@ -202,7 +205,8 @@ public class DashBoardActivity extends AppCompatActivity {
     }
 
     private void setToolbarTitle() {
-        getSupportActionBar().setTitle(activityTitles[navItemIndex]);
+        //getSupportActionBar().setTitle(activityTitles[navItemIndex]);
+        title_txt.setText(activityTitles[navItemIndex]);
     }
 
     private void selectNavMenu() {
@@ -379,7 +383,7 @@ public class DashBoardActivity extends AppCompatActivity {
                 } else {
 
 //                loadHomeFragment();
-                Utils.ping(mContex, "Press again to exist.");
+                Utils.ping(mContex, "Press again to exist");
                     Intent intent = new Intent(Intent.ACTION_MAIN);
                     intent.addCategory(Intent.CATEGORY_HOME);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);//***Change Here***
@@ -398,32 +402,38 @@ public class DashBoardActivity extends AppCompatActivity {
 
     public void setActionBar(int session, String flag) {
         if (session == 1 && flag.equalsIgnoreCase("edit")) {
-            getSupportActionBar().setTitle("EDIT CLASS");
+            title_txt.setText("EDIT CLASS");
             session_cal.setVisibility(View.VISIBLE);
         } else if (session == 1 && flag.equalsIgnoreCase("add")) {
-            getSupportActionBar().setTitle("ADD CLASS");
+            title_txt.setText("ADD CLASS");
             session_cal.setVisibility(View.VISIBLE);
         } else if (session == 1 && flag.equalsIgnoreCase("view")) {
-            getSupportActionBar().setTitle("VIEW CLASS");
+            title_txt.setText("VIEW CLASS");
             session_cal.setVisibility(View.VISIBLE);
         } else if (session == 10 && flag.equalsIgnoreCase("false")) {
-            getSupportActionBar().setTitle("ADD FAMILY");
+            title_txt.setText("ADD FAMILY");
             session_cal.setVisibility(View.GONE);
         } else if (session == 11 && flag.equalsIgnoreCase("false")) {
-            getSupportActionBar().setTitle("ADD CONTACT");
+            title_txt.setText("ADD CONTACT");
             session_cal.setVisibility(View.GONE);
         } else if (session == 12 && flag.equalsIgnoreCase("false")) {
-            getSupportActionBar().setTitle("PAYMENT");
+            title_txt.setText("PAYMENT");
             session_cal.setVisibility(View.VISIBLE);
         } else if (session == 13 && flag.equalsIgnoreCase("false")) {
-            getSupportActionBar().setTitle("FAMILY LIST");
+            title_txt.setText("FAMILY LIST");
             session_cal.setVisibility(View.VISIBLE);
         } else if (session == 14 && flag.equalsIgnoreCase("false")) {
-            getSupportActionBar().setTitle("PAYMENT SUCESS");
+            title_txt.setText("ENROLLMENT FAILURE");//getSupportActionBar().setTitle(
             session_cal.setVisibility(View.GONE);
-        } else if (session == 3 && flag.equalsIgnoreCase("true")) {
-            getSupportActionBar().setTitle("STUDENT ATTENDANCE");
+           // toolbar.setNavigationIcon(null);
+        }else if (session == 14 && flag.equalsIgnoreCase("true")) {
+            title_txt.setText("ENROLLMENT SUCCESSFUL");
+            session_cal.setVisibility(View.GONE);
+         //  toolbar.setNavigationIcon(null);
+        }else if (session == 3 && flag.equalsIgnoreCase("true")) {
+            title_txt.setText("STUDENT ATTENDANCE");
             session_cal.setVisibility(View.VISIBLE);
+
         }
 //        else if (session == 15 && flag.equalsIgnoreCase("false")) {
 //            getSupportActionBar().setTitle("Payment Report");
@@ -432,7 +442,8 @@ public class DashBoardActivity extends AppCompatActivity {
             if (session == 0) {
                 session_cal.setVisibility(View.GONE);
             }
-            getSupportActionBar().setTitle(activityTitles[session]);
+//            getSupportActionBar().setTitle(activityTitles[session]);
+            title_txt.setText(activityTitles[session]);
         }
     }
 
@@ -444,8 +455,8 @@ public class DashBoardActivity extends AppCompatActivity {
         wlp.gravity = Gravity.CENTER;
         window.setAttributes(wlp);
 
-        changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-
+        //changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        changeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         changeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         changeDialog.setCancelable(false);
         changeDialog.setContentView(R.layout.change_password_dialog);
@@ -467,16 +478,16 @@ public class DashBoardActivity extends AppCompatActivity {
                         if (passWordStr.equalsIgnoreCase(confirmpassWordStr)) {
                             callChangePasswordApi();
                         } else {
-                            edtcurrentpassword.setError("Confirm Password does not match.");
+                            edtconfirmpassword.setError("Confirm password does not match");
                         }
                     } else {
 //                    Utils.ping(mContex, "Confirm Password does not match.");
-                        edtconfirmpassword.setError("Password must be 4-8 Characters.");
-                        edtconfirmpassword.setText("");
-                        edtconfirmpassword.setText("");
+                        edtnewpassword.setError("Password must be 4-8 characters");
+                        edtnewpassword.setText("");
+                        edtnewpassword.setText("");
                     }
                 } else {
-                    edtcurrentpassword.setError("Password does not match to current password.");
+                    edtcurrentpassword.setError("Password does not match to current password");
                 }
 
 
@@ -511,7 +522,7 @@ public class DashBoardActivity extends AppCompatActivity {
                         return;
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("false")) {
-                        Utils.ping(mContex, "Please Enter Valid Password.");
+                        Utils.ping(mContex, "Please enter valid password");
                         return;
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("True")) {

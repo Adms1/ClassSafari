@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_280sdp"
-        android:background="@drawable/session_confirm"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:layout_margin="@dimen/_5sdp"
         android:orientation="vertical"
         android:tag="cards main container">
 
@@ -14,6 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_5sdp"
+            android:background="@drawable/session_confirm"
             android:orientation="vertical">
 
                 <TextView
@@ -21,9 +23,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40sdp"
                     android:layout_weight="1"
-                    android:gravity="center_vertical|start"
-                    android:paddingLeft="@dimen/_15sdp"
-                    android:text="Select Address"
+                    android:gravity="center_vertical|center"
+                    android:text="SELECT ADDRESS"
                     android:textColor="@color/blue"
                     android:textSize="@dimen/_14sdp"
                     android:textStyle="bold" />
@@ -39,22 +40,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_130sdp"
                 android:layout_margin="@dimen/_5sdp"
-                android:scrollbars="none" />
-
-
-            <Button
-                android:id="@+id/cancel_btn"
-                android:layout_width="@dimen/_120sdp"
-                android:layout_height="@dimen/_30sdp"
-                android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/_5sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:background="@drawable/blue_btn"
-                android:gravity="center"
-                android:text="Cancel"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp"
-                android:textStyle="bold" />
+                android:scrollbars="none" />
         </LinearLayout>
-    </LinearLayout>
+        <Button
+            android:id="@+id/cancel_btn"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_alignRight="@+id/address_linear"
+            android:layout_marginRight="-6dp"
+            android:text="x"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_15sdp"
+            android:background="@drawable/blue_btn" />
+    </RelativeLayout>
 </layout>

@@ -16,7 +16,7 @@
             android:layout_height="@dimen/_40sdp"
             android:gravity="center|center_vertical"
             android:orientation="horizontal"
-            android:paddingLeft="@dimen/_15sdp"
+            android:paddingLeft="@dimen/_1sdp"
             android:paddingRight="@dimen/_2sdp"
             android:paddingTop="@dimen/_5sdp">
 

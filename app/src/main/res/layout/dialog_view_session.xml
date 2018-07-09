@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/_5sdp"
+    android:background="@android:color/transparent"
     android:elevation="@dimen/_3sdp"
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/main_linear"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_33sdp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_5sdp"
+        android:background="@drawable/session_confirm"
+        android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginRight="@dimen/_2sdp"
         android:layout_marginTop="@dimen/_3sdp"
@@ -15,18 +25,18 @@
 
         <TextView
             android:id="@+id/session_name_txt_view"
-            android:layout_width="@dimen/_90sdp"
-            android:layout_height="@dimen/_25sdp"
+            android:layout_width="@dimen/_75sdp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/_5sdp"
-            android:text="Class Name"
+            android:text="Subject"
             android:textColor="@color/text_color"
             android:textSize="@dimen/_12sdp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="@dimen/_5sdp"
-            android:layout_height="@dimen/_25sdp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/_2sdp"
             android:gravity="center_vertical"
             android:text=":"
@@ -36,16 +46,27 @@
 
         <TextView
             android:id="@+id/session_title_txt"
-            android:layout_width="@dimen/_210sdp"
-            android:layout_height="@dimen/_32sdp"
+            android:layout_width="@dimen/_130sdp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/_1sdp"
             android:gravity="start|center_vertical"
+            android:maxLines="5"
             android:paddingLeft="@dimen/_1sdp"
             android:paddingRight="@dimen/_6sdp"
-            android:layout_marginRight="@dimen/_10sdp"
             android:textColor="@color/text_color"
             android:textSize="@dimen/_12sdp"
-            android:maxLines="5"
             android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/edit_session_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/orange_line"
+            android:gravity="center_vertical|start"
+            android:text="Edit"
+            android:textColor="@color/gray1"
+            android:textSize="@dimen/_12sdp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
@@ -56,7 +77,7 @@
 
         <TextView
             android:id="@+id/date_txt_view"
-            android:layout_width="@dimen/_90sdp"
+            android:layout_width="@dimen/_75sdp"
             android:layout_height="@dimen/_25sdp"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/_5sdp"
@@ -94,7 +115,7 @@
 
         <TextView
             android:id="@+id/start_time_txt_view"
-            android:layout_width="@dimen/_90sdp"
+            android:layout_width="@dimen/_75sdp"
             android:layout_height="@dimen/_25sdp"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/_5sdp"
@@ -115,22 +136,21 @@
 
         <TextView
             android:id="@+id/start_time_txt"
-            android:layout_width="@dimen/_60sdp"
+            android:layout_width="@dimen/_55sdp"
             android:layout_height="@dimen/_25sdp"
-            android:gravity="start|center_vertical"
-            android:paddingLeft="@dimen/_1sdp"
-            android:text="10:00"
+            android:gravity="end|center_vertical"
+            android:paddingRight="@dimen/_1sdp"
+            android:text="10:00 PM"
             android:textColor="@color/text_color"
             android:textSize="@dimen/_12sdp"
             android:textStyle="normal" />
 
         <TextView
             android:id="@+id/end_time_txt_view"
-            android:layout_width="@dimen/_30sdp"
+            android:layout_width="@dimen/_15sdp"
             android:layout_height="@dimen/_25sdp"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/_5sdp"
-            android:text="To"
+            android:text=" to "
             android:textColor="@color/text_color"
             android:textSize="@dimen/_12sdp"
             android:textStyle="normal" />
@@ -138,7 +158,6 @@
         <TextView
             android:layout_width="@dimen/_5sdp"
             android:layout_height="@dimen/_25sdp"
-            android:layout_marginLeft="@dimen/_2sdp"
             android:gravity="center_vertical"
             android:text=":"
             android:textColor="@color/text_color"
@@ -157,6 +176,7 @@
             android:textSize="@dimen/_12sdp"
             android:textStyle="normal" />
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/_27sdp"
@@ -165,7 +185,7 @@
 
         <TextView
             android:id="@+id/total_spot_txt_view"
-            android:layout_width="@dimen/_90sdp"
+            android:layout_width="@dimen/_75sdp"
             android:layout_height="@dimen/_25sdp"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/_5sdp"
@@ -216,6 +236,7 @@
             android:textColor="@color/text_color"
             android:textSize="@dimen/_12sdp"
             android:textStyle="normal" />
+
         <TextView
             android:id="@+id/spot_left_txt"
             android:layout_width="@dimen/_60sdp"
@@ -227,21 +248,24 @@
             android:textSize="@dimen/_12sdp"
             android:textStyle="normal" />
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
         android:background="@color/dark_gray" />
+
     <TextView
         android:id="@+id/no_record_txt"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_150sdp"
         android:layout_margin="0.1dp"
         android:gravity="center"
-        android:text="no students found."
+        android:text="No students found"
         android:textColor="@color/search_boder"
         android:textSize="@dimen/_11sdp"
         android:textStyle="bold"
-        android:visibility="gone"/>
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/list_linear"
         android:layout_width="match_parent"
@@ -262,76 +286,73 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="@dimen/_5sdp"
-        android:layout_marginLeft="@dimen/_7sdp"
-        android:layout_marginRight="@dimen/_7sdp"
+        android:layout_marginLeft="@dimen/_5sdp"
+        android:layout_marginRight="@dimen/_5sdp"
         android:layout_marginTop="@dimen/_10sdp"
         android:orientation="horizontal"
-        android:weightSum="3">
+        android:weightSum="2">
 
-        <Button
-            android:id="@+id/edit_session_btn"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_30sdp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/_6sdp"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:layout_weight="1"
-            android:background="@drawable/session_view_btn"
-            android:gravity="center"
-            android:alpha="1"
-            android:text="Edit Class"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_11sdp" />
+        <!--<Button-->
+        <!--android:id="@+id/edit_session_btn"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="@dimen/_30sdp"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_marginBottom="@dimen/_6sdp"-->
+        <!--android:layout_marginTop="@dimen/_5sdp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@drawable/session_view_btn"-->
+        <!--android:gravity="center"-->
+        <!--android:alpha="1"-->
+        <!--android:text="Edit Class"-->
+        <!--android:textAllCaps="false"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textSize="@dimen/_11sdp" />-->
 
         <Button
             android:id="@+id/add_attendance_btn"
             android:layout_width="0dp"
-            android:layout_height="@dimen/_30sdp"
+            android:layout_height="@dimen/_35sdp"
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/_6sdp"
-            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginLeft="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_5sdp"
             android:layout_weight="1"
-            android:background="@drawable/session_view_btn"
-            android:gravity="center"
             android:alpha="1"
+            android:background="@drawable/gray1_btn"
+            android:gravity="center"
             android:text="Take Attendance"
-            android:textAllCaps="false"
+            android:textAllCaps="true"
+            android:textStyle="bold"
             android:textColor="@color/white"
-            android:textSize="@dimen/_10sdp"/>
+            android:textSize="@dimen/_10sdp" />
 
         <Button
             android:id="@+id/add_student_btn"
             android:layout_width="0dp"
-            android:layout_height="@dimen/_30sdp"
+            android:layout_height="@dimen/_35sdp"
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/_6sdp"
-            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_marginLeft="@dimen/_5sdp"
             android:layout_marginTop="@dimen/_5sdp"
             android:layout_weight="1"
-            android:background="@drawable/session_view_btn"
-            android:gravity="center"
             android:alpha="1"
+            android:background="@drawable/blue_btn"
+            android:gravity="center"
             android:text="Add Student"
-            android:textAllCaps="false"
+            android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="@dimen/_10sdp"/>
+            android:textStyle="bold"
+            android:textSize="@dimen/_10sdp" />
     </LinearLayout>
-
+    </LinearLayout>
     <Button
         android:id="@+id/cancel_btn"
-        android:layout_width="@dimen/_130sdp"
-        android:layout_height="@dimen/_35sdp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/_6sdp"
-        android:layout_marginLeft="@dimen/_5sdp"
-        android:layout_marginTop="@dimen/_5sdp"
-        android:background="@drawable/blue_btn"
-        android:gravity="center"
-        android:text="Cancel"
-        android:textAllCaps="false"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_alignRight="@+id/main_linear"
+        android:layout_marginRight="-6dp"
+        android:text="x"
+        android:textSize="@dimen/_15sdp"
         android:textColor="@color/white"
-        android:textSize="@dimen/_12sdp"
-        android:textStyle="bold" />
-</LinearLayout>
+        android:background="@drawable/blue_btn" />
+</RelativeLayout>

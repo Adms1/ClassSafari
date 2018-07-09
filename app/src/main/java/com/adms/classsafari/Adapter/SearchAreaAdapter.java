@@ -33,7 +33,7 @@ public class SearchAreaAdapter extends BaseAdapter {
                 boolean needToAdd = true;
                 for (sessionDataModel sessionDataModel : arrayList) {
                     if (sessionDataModel.getRegionName().equalsIgnoreCase(model.getRegionName())) {
-                        sessionDataModel.setCount(sessionDataModel.getCount() + 1);
+                            sessionDataModel.setCount(sessionDataModel.getCount() + 1);
                         needToAdd = false;
                     }
                 }

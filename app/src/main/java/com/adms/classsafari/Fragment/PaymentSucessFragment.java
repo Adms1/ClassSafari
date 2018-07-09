@@ -18,6 +18,7 @@ import com.adms.classsafari.Activites.DashBoardActivity;
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.AppConfiguration;
 import com.adms.classsafari.AppConstant.Utils;
+import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.FragmentPaymentSucessBinding;
@@ -34,7 +35,7 @@ import static android.view.View.GONE;
 public class PaymentSucessFragment extends Fragment {
 
     FragmentPaymentSucessBinding paymentSucessBinding;
-    String status;
+    String status,orderIDStr;
     private View rootView;
     private Context mContext;
 
@@ -47,9 +48,13 @@ public class PaymentSucessFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         paymentSucessBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_payment_sucess, container, false);
         rootView = paymentSucessBinding.getRoot();
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mContext = getActivity();
-        ((DashBoardActivity) getActivity()).setActionBar(14, "false");
+        if (getArguments().getString("responseCode").equalsIgnoreCase("0")) {
+            ((DashBoardActivity) getActivity()).setActionBar(14, "true");
+        } else {
+            ((DashBoardActivity) getActivity()).setActionBar(14, "false");
+        }
         setTypeface();
         init();
         setListner();
@@ -69,23 +74,22 @@ public class PaymentSucessFragment extends Fragment {
     }
 
     public void init() {
-        Log.d("userName", AppConfiguration.UserName);
+        Log.d("userName", AppConfiguration.UserName);//
         paymentSucessBinding.txtUserName.setText(AppConfiguration.UserName);
         if (getArguments().getString("responseCode").equalsIgnoreCase("0")) {
             status = "success";
             paymentSucessBinding.imvSuccessFail.setImageResource(R.drawable.circle_sucess);
             paymentSucessBinding.txtSucessFail.setText("Success");
-            paymentSucessBinding.txtSucessFailDesc.setText("Your transaction was successful");
-            paymentSucessBinding.txtTransactionID.setText(getArguments().getString("transactionId"));
-            paymentSucessBinding.txtValue.setText(getArguments().getString("amount"));
+            paymentSucessBinding.txtSucessFailDesc.setText("Your enrollment was successful");
             paymentSucessBinding.btnNewCharge.setText("Done");
+            callEditSessionApi();
         } else {
             paymentSucessBinding.imvSuccessFail.setImageResource(R.drawable.failer);
             status = "fail";
             paymentSucessBinding.txtSucessFail.setTextColor(getResources().getColor(R.color.absent));
             paymentSucessBinding.txtSucessFail.setText("Failure");
-            paymentSucessBinding.txtSucessFailDesc.setTextColor(getResources().getColor(R.color.text_color));
-            paymentSucessBinding.txtSucessFailDesc.setText("Your transaction was not successful\nPlease try again.");
+            paymentSucessBinding.txtSucessFailDesc.setTextColor(getResources().getColor(R.color.absent));
+            paymentSucessBinding.txtSucessFailDesc.setText("Your payment was not successful\nPlease try again.");
             paymentSucessBinding.txtTransactionID.setVisibility(GONE);
             paymentSucessBinding.txtValue.setVisibility(GONE);
             paymentSucessBinding.btnNewCharge.setText("Try Again");
@@ -96,12 +100,16 @@ public class PaymentSucessFragment extends Fragment {
         paymentSucessBinding.btnNewCharge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment fragment = new SessionFragment();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.frame, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                if(getArguments().getString("responseCode").equalsIgnoreCase("0")) {
+                    Fragment fragment = new SessionFragment();
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.frame, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }else{
+                    callpaymentRequestApi();
+                }
             }
         });
     }
@@ -152,6 +160,146 @@ public class PaymentSucessFragment extends Fragment {
         map.put("OrderID", getArguments().getString("order_id"));
         map.put("PaymentID", getArguments().getString("transactionId"));
         map.put("Status", status);
+        return map;
+    }
+
+    //Use for EditSession
+    public void callEditSessionApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+//            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_SessionDetailBySessionID(getEditSessionDeatil(), new retrofit.Callback<SessionDetailModel>() {
+                @Override
+                public void success(SessionDetailModel editsessionInfo, Response response) {
+                    Utils.dismissDialog();
+                    if (editsessionInfo == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (editsessionInfo.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (editsessionInfo.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.dismissDialog();
+                        Utils.ping(mContext, getString(R.string.false_msg));
+                        return;
+                    }
+                    if (editsessionInfo.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.dismissDialog();
+                        if (editsessionInfo.getData().size() > 0) {
+                            paymentSucessBinding.subjectLinear.setVisibility(View.VISIBLE);
+                            paymentSucessBinding.teacherNameLinear.setVisibility(View.VISIBLE);
+                            paymentSucessBinding.dateLinear.setVisibility(View.VISIBLE);
+                            paymentSucessBinding.timeLinear.setVisibility(View.VISIBLE);
+                            paymentSucessBinding.transcationLinear.setVisibility(View.VISIBLE);
+                            paymentSucessBinding.amountLinear.setVisibility(View.VISIBLE);
+
+                            paymentSucessBinding.txtsubjectname.setText(editsessionInfo.getData().get(0).getLessionTypeName());
+                            paymentSucessBinding.txtteachername.setText(Utils.getPref(mContext, "RegisterUserName"));
+                            paymentSucessBinding.txtdate.setText(editsessionInfo.getData().get(0).getStartDate());
+                            if (editsessionInfo.getData().get(0).getSchedule().contains("|")) {
+                                String[] splitvalue = editsessionInfo.getData().get(0).getSchedule().split("\\|");
+                                String[] time = splitvalue[1].split("\\,");
+                                String[] splitTime = time[1].split("\\-");
+                                paymentSucessBinding.txttime.setText(splitTime[0]);
+                            }else{
+                                String[]time=editsessionInfo.getData().get(0).getSchedule().split("\\,");
+                                String[]splitTime=time[1].split("\\-");
+                                paymentSucessBinding.txttime.setText(splitTime[0]);
+                            }
+                            paymentSucessBinding.txtTransactionID.setText(getArguments().getString("transactionId"));
+                            if (editsessionInfo.getData().get(0).getSessionAmount().equalsIgnoreCase("0.00")) {
+                                paymentSucessBinding.txtValue.setText("Free");
+                            }
+                            else {
+                                paymentSucessBinding.txtValue.setText(getArguments().getString("amount"));
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getEditSessionDeatil() {
+        Map<String, String> map = new HashMap<>();
+        map.put("CoachID", Utils.getPref(mContext, "coachID"));//coachIdStr
+        map.put("SessionID", getArguments().getString("sessionId"));
+        return map;
+    }
+
+
+    //Use for paymentRequest
+    public void callpaymentRequestApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_GeneratePaymentRequest(getpaymentRequestdetail(), new retrofit.Callback<TeacherInfoModel>() {
+                @Override
+                public void success(TeacherInfoModel paymentRequestModel, Response response) {
+                    Utils.dismissDialog();
+                    if (paymentRequestModel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (paymentRequestModel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (paymentRequestModel.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.ping(mContext, getString(R.string.false_msg));
+                        return;
+                    }
+                    if (paymentRequestModel.getSuccess().equalsIgnoreCase("True")) {
+                        orderIDStr = paymentRequestModel.getOrderID();
+                        Fragment fragment = new PaymentFragment();
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        Bundle args = new Bundle();
+                        args.putString("orderID", orderIDStr);
+                        args.putString("amount", AppConfiguration.SessionPrice);
+                        args.putString("mode", AppConfiguration.Mode);
+                        args.putString("username", AppConfiguration.UserName);
+                        args.putString("sessionID", AppConfiguration.TeacherSessionIdStr);
+                        args.putString("contactID", AppConfiguration.TeacherSessionContactIdStr);
+                        args.putString("type", AppConfiguration.TeacherBookTypeStr);
+                        fragment.setArguments(args);
+                        fragmentTransaction.replace(R.id.frame, fragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getpaymentRequestdetail() {
+        Map<String, String> map = new HashMap<>();
+        map.put("ContactID", AppConfiguration.TeacherSessionContactIdStr);
+        map.put("SessionID", AppConfiguration.TeacherSessionIdStr);
+        map.put("Amount", AppConfiguration.SessionPrice);
         return map;
     }
 }

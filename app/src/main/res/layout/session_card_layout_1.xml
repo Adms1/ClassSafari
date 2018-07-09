@@ -62,7 +62,7 @@
                                     android:text="@string/teacher_detail"
                                     android:textColor="@color/text_color"
                                     android:textSize="@dimen/_12sdp"
-                                    android:textStyle="bold" />
+                                    android:textStyle="normal" />
 
                                 <TextView
                                     android:id="@+id/teacher_name_txt"
@@ -128,7 +128,7 @@
                                 android:text="@string/session_detail"
                                 android:textColor="@color/text_color"
                                 android:textSize="@dimen/_12sdp"
-                                android:textStyle="bold" />
+                                android:textStyle="normal" />
 
                             <TextView
                                 android:id="@+id/session_name_txt"
@@ -188,7 +188,7 @@
                                 android:text="@string/session_board"
                                 android:textColor="@color/text_color"
                                 android:textSize="@dimen/_12sdp"
-                                android:textStyle="bold" />
+                                android:textStyle="normal" />
 
                             <TextView
                                 android:id="@+id/session_board_txt"
@@ -218,7 +218,7 @@
                                 android:text="@string/session_standard"
                                 android:textColor="@color/text_color"
                                 android:textSize="@dimen/_12sdp"
-                                android:textStyle="bold" />
+                                android:textStyle="normal" />
 
                             <TextView
                                 android:id="@+id/session_standard_txt"
@@ -248,7 +248,7 @@
                                 android:text="@string/session_stream"
                                 android:textColor="@color/text_color"
                                 android:textSize="@dimen/_12sdp"
-                                android:textStyle="bold" />
+                                android:textStyle="normal" />
 
                             <TextView
                                 android:id="@+id/session_stream_txt"
@@ -277,7 +277,7 @@
                                 android:text="@string/session_detail_name"
                                 android:textColor="@color/text_color"
                                 android:textSize="@dimen/_12sdp"
-                                android:textStyle="bold" />
+                                android:textStyle="normal" />
 
                             <TextView
                                 android:id="@+id/session_detail_name_txt"
@@ -338,7 +338,7 @@
                                 android:text="@string/description"
                                 android:textColor="@color/text_color"
                                 android:textSize="@dimen/_12sdp"
-                                android:textStyle="bold"/>
+                                android:textStyle="normal"/>
 
                             <TextView
                                 android:id="@+id/description_txt"
@@ -372,7 +372,7 @@
                                 android:text="@string/address"
                                 android:textColor="@color/text_color"
                                 android:textSize="@dimen/_12sdp"
-                                android:textStyle="bold"/>
+                                android:textStyle="normal"/>
 
                             <TextView
                                 android:id="@+id/address_txt"
@@ -411,7 +411,7 @@
                                 android:text="@string/email"
                                 android:textColor="@color/text_color"
                                 android:textSize="@dimen/_12sdp"
-                                android:textStyle="bold"/>
+                                android:textStyle="normal"/>
 
                             <TextView
                                 android:id="@+id/email_txt"
@@ -448,7 +448,7 @@
                                 android:text="@string/phone"
                                 android:textColor="@color/text_color"
                                 android:textSize="@dimen/_12sdp"
-                                android:textStyle="bold"/>
+                                android:textStyle="normal"/>
 
                             <TextView
                                 android:id="@+id/phone_txt"

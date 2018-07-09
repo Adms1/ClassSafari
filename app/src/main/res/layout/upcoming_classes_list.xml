@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:tag="cards main container">
+
+        <LinearLayout
+            android:id="@+id/card_view1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical">
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/card_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_2sdp"
+                card_view:cardBackgroundColor="@color/white"
+                card_view:cardCornerRadius="@dimen/_10sdp"
+                card_view:cardElevation="3dp"
+                card_view:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_5sdp"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/student_name_txt_view"
+                                android:layout_width="@dimen/_65sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:text="Student"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_12sdp"
+                                android:textStyle="normal" />
+
+                            <TextView
+                                android:id="@+id/student_name_txt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_2sdp"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@drawable/list_line"
+                                android:hint="@string/total_student"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_11sdp"
+                                android:textStyle="normal"/>
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/date_name_txt_view"
+                                android:layout_width="@dimen/_65sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:text="@string/date"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_12sdp"
+                                android:textStyle="normal" />
+
+                            <TextView
+                                android:id="@+id/date_name_txt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_2sdp"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@drawable/list_line"
+                                android:hint="@string/date"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_11sdp"
+                                android:textStyle="normal"/>
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/time_name_txt_view"
+                                android:layout_width="@dimen/_65sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:text="@string/time"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_12sdp"
+                                android:textStyle="normal" />
+
+                            <TextView
+                                android:id="@+id/time_name_txt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_2sdp"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@drawable/list_line"
+                                android:hint="@string/time"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_11sdp"
+                                android:textStyle="normal"/>
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/day_name_txt_view"
+                                android:layout_width="@dimen/_65sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:text="Day"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_12sdp"
+                                android:textStyle="normal" />
+
+                            <TextView
+                                android:id="@+id/day_name_txt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_2sdp"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@drawable/list_line"
+                                android:hint="Day"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_11sdp"
+                                android:textStyle="normal"/>
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/teacher_name_txt_view"
+                                android:layout_width="@dimen/_65sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:text="@string/teacher_detail"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_12sdp"
+                                android:textStyle="normal" />
+
+                            <TextView
+                                android:id="@+id/teacher_name_txt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_2sdp"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@drawable/list_line"
+                                android:hint="@string/teacher_detail"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_11sdp"
+                                android:textStyle="normal"/>
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/session_name_txt_view"
+                                android:layout_width="@dimen/_65sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:text="@string/session_detail"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_12sdp"
+                                android:textStyle="normal" />
+
+                            <TextView
+                                android:id="@+id/session_name_txt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@drawable/list_line"
+                                android:hint="@string/session_detail"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_11sdp" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_5sdp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/adress_txt_view"
+                                android:layout_width="@dimen/_65sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:text="@string/address"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_12sdp"
+                                android:textStyle="normal"/>
+
+                            <TextView
+                                android:id="@+id/address_txt"
+                                android:layout_width="@dimen/_170sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/_5sdp"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:background="@drawable/list_line"
+                                android:hint="Address"
+                                android:maxLines="10"
+                                android:text="604,Iscon Elegance,S.G highway,Opp.Karnavati club,Ahmedabad-380015"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_11sdp" />
+
+                            <ImageView
+                                android:id="@+id/address_loc"
+                                android:layout_width="@dimen/_10sdp"
+                                android:layout_height="@dimen/_15sdp"
+                                android:layout_marginTop="@dimen/_3sdp"
+                                android:src="@drawable/location_blue" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_5sdp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/email_txt_view"
+                                android:layout_width="@dimen/_65sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:text="@string/email"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_12sdp"
+                                android:textStyle="normal"/>
+
+                            <TextView
+                                android:id="@+id/email_txt"
+                                android:layout_width="@dimen/_170sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:background="@drawable/list_line"
+                                android:hint="Email Address"
+                                android:paddingLeft="@dimen/_1sdp"
+                                android:text="info@admsyetms.net"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_11sdp" />
+
+                            <ImageView
+                                android:id="@+id/email_img"
+                                android:layout_width="@dimen/_10sdp"
+                                android:layout_height="@dimen/_15sdp"
+                                android:src="@drawable/email" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_5sdp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/phone_txt_view"
+                                android:layout_width="@dimen/_65sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:text="@string/phone"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_12sdp"
+                                android:textStyle="normal"/>
+
+                            <TextView
+                                android:id="@+id/phone_txt"
+                                android:layout_width="@dimen/_170sdp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/_5sdp"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:background="@drawable/list_line"
+                                android:hint="Mobile No"
+                                android:paddingLeft="@dimen/_5sdp"
+                                android:text="079 66168834"
+                                android:textColor="@color/text_color"
+                                android:textSize="@dimen/_11sdp" />
+
+                            <ImageView
+                                android:id="@+id/phone"
+                                android:layout_width="@dimen/_10sdp"
+                                android:layout_height="@dimen/_15sdp"
+                                android:layout_marginTop="@dimen/_3sdp"
+                                android:src="@drawable/ph" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

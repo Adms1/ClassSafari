@@ -37,17 +37,42 @@
                 <!--android:textSize="@dimen/_11sdp"-->
                 <!--android:textStyle="bold"/>-->
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/search_linear"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_below="@+id/class_linear"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/search_edt"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp"
+                android:background="@drawable/calendar_line"
+                android:layout_margin="@dimen/_5sdp"
+                android:layout_marginLeft="@dimen/_20sdp"
+                android:layout_marginRight="@dimen/_20sdp"
+                android:gravity="left|center"
+                android:maxLines="1"
+                android:inputType="text"
+                android:paddingLeft="@dimen/_7sdp"
+                android:textSize="@dimen/_10sdp"
+                android:drawableRight="@drawable/search_icon"
+                android:paddingRight="@dimen/_13sdp"
+                android:imeOptions="actionDone"/>
+        </LinearLayout>
         <TextView
             android:id="@+id/text"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_45sdp"
+            android:layout_height="wrap_content"
             android:text="@string/selection_info"
             android:paddingTop="@dimen/_5sdp"
             android:paddingLeft="@dimen/_5sdp"
             android:paddingBottom="@dimen/_5sdp"
             android:layout_marginLeft="@dimen/_5sdp"
             android:layout_marginRight="@dimen/_5sdp"
-            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:paddingRight="@dimen/_5sdp"
             android:textColor="@color/remarks"
             android:textSize="@dimen/_12sdp"/>
@@ -68,7 +93,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/header"
                 android:layout_margin="@dimen/_1sdp"
-                android:childDivider="@color/light_yello"
+                android:childDivider="@color/blue_light"
                 android:divider="@android:color/transparent"
                 android:dividerHeight="5dp"
                 android:focusable="false"
@@ -96,10 +121,9 @@
             android:layout_height="@dimen/_40sdp"
             android:layout_gravity="end"
             android:layout_marginRight="@dimen/_20sdp"
-            android:layout_marginTop="-90dp"
             android:src="@drawable/plus_outline"
             app:backgroundTint="@color/blue"
-            android:layout_below="@+id/toolbar"/>
+            android:layout_below="@+id/list_linear"/>
 
     </LinearLayout>
 </layout>

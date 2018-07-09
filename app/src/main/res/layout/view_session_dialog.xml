@@ -1,776 +1,798 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/_5sdp"
+        android:background="@android:color/transparent"
         android:elevation="@dimen/_3sdp"
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/main_linear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_3sdp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/confirm_title_txt"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_35sdp"
-                android:layout_weight="1"
-                android:gravity="start|center_vertical"
-                android:paddingLeft="@dimen/_15sdp"
-                android:text="ADD CLASS TIME"
-                android:textColor="@color/blue"
-                android:textSize="@dimen/_14sdp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/dark_gray" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_25sdp"
-            android:layout_gravity="center|center_horizontal"
-            android:layout_marginBottom="@dimen/_3sdp"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginRight="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_10sdp"
-            android:orientation="horizontal"
-            android:weightSum="6">
-
-            <TextView
-                android:id="@+id/start_date_txt_view"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_20sdp"
-
-                android:layout_weight="1.3"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/_3sdp"
-                android:text="@string/start_date"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/_10sdp" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_weight="0.1"
-                android:gravity="center"
-                android:text=":"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/_9sdp" />
-
-            <TextView
-                android:id="@+id/start_date_txt"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_weight="1.5"
-                android:background="@drawable/linear_shape"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/_3sdp"
-                android:text="15/03/2018"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/_10sdp" />
-
-            <TextView
-                android:id="@+id/end_date_txt_view"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_marginLeft="@dimen/_10sdp"
-                android:layout_weight="1.2"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/_3sdp"
-                android:text="@string/end_date"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/_10sdp" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_weight="0.1"
-                android:gravity="center"
-                android:text=":"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/_9sdp" />
-
-            <TextView
-                android:id="@+id/end_date_txt"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/_20sdp"
-                android:layout_weight="1.5"
-                android:background="@drawable/linear_shape"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/_3sdp"
-                android:text="15/03/2018"
-                android:textColor="@color/text_color"
-                android:textSize="@dimen/_10sdp" />
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/dark_gray" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_30sdp"
-            android:layout_marginBottom="@dimen/_5sdp"
-            android:layout_marginTop="@dimen/_5sdp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="@dimen/_70sdp"
-                android:layout_height="@dimen/_30sdp"
-                android:layout_marginLeft="@dimen/_85sdp"
-                android:background="@color/blue"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/_5sdp"
-                android:text="Start Time"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp" />
-
-            <TextView
-                android:layout_width="@dimen/_70sdp"
-                android:layout_height="@dimen/_30sdp"
-                android:layout_marginLeft="@dimen/_40sdp"
-                android:background="@color/blue"
-                android:gravity="center_vertical"
-                android:paddingLeft="@dimen/_5sdp"
-                android:text="End Time"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_270sdp"
             android:orientation="vertical"
-            android:visibility="gone">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/day_name_rcView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/_1sdp"
-                android:scrollbars="none" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_250sdp"
-            android:layout_marginRight="@dimen/_1sdp"
-            android:orientation="vertical"
-            android:visibility="visible">
+            android:layout_margin="@dimen/_5sdp"
+            android:background="@drawable/session_confirm">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_3sdp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/sun_btn"
-                    style="@style/Add_Session_Time_Button"
-                    android:layout_width="@dimen/_66sdp"
-                    android:layout_height="@dimen/_25sdp"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_marginRight="@dimen/_5sdp"
-                    android:text="Sunday" />
-
-                <LinearLayout
-                    android:id="@+id/sun_start_linear"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:layout_marginBottom="@dimen/_1sdp"
-                    android:alpha="0.2"
-                    android:background="@drawable/linear_shape"
-                    android:orientation="horizontal"
-                    android:saveEnabled="false"
-                    android:tag="0">
-
-                    <TextView
-                        android:id="@+id/sun_start_time_txt"
-                        style="@style/Add_Session_Time_Textview"
-                        android:layout_width="@dimen/_70sdp"
-                        android:layout_height="match_parent"
-                        android:tag="Sun"
-                        android:text="Add" />
-
-                    <Button
-                        android:id="@+id/sun_start_add_session_btn"
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:background="@drawable/round_btn"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:tag="0"
-                        android:text="+"
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/_13sdp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/sun_end_linear"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:layout_marginBottom="@dimen/_1sdp"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:alpha="0.2"
-                    android:background="@drawable/linear_shape"
-                    android:orientation="horizontal"
-                    android:saveEnabled="false"
-                    android:tag="1">
-
-                    <TextView
-                        android:id="@+id/sun_end_time_txt"
-                        style="@style/Add_Session_Time_Textview"
-                        android:layout_width="@dimen/_70sdp"
-                        android:layout_height="match_parent"
-                        android:text="Add" />
-
-                    <Button
-                        android:id="@+id/sun_end_add_session_btn"
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:background="@drawable/round_btn"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:tag="1"
-                        android:text="+"
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/_13sdp" />
-                </LinearLayout>
+                    android:id="@+id/confirm_title_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_35sdp"
+                    android:layout_weight="1"
+                    android:gravity="center|center_vertical"
+                    android:text="ADD CLASS TIME"
+                    android:textColor="@color/blue"
+                    android:textSize="@dimen/_14sdp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
-            <LinearLayout
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/dark_gray" />
+            <RadioGroup
+                android:id="@+id/rg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/mon_btn"
-                    style="@style/Add_Session_Time_Button"
-                    android:layout_width="@dimen/_66sdp"
-                    android:layout_height="@dimen/_25sdp"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_marginRight="@dimen/_5sdp"
-                    android:text="Monday" />
-
-                <LinearLayout
-                    android:id="@+id/mon_start_linear"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:layout_marginBottom="@dimen/_1sdp"
-                    android:alpha="0.2"
-                    android:background="@drawable/linear_shape"
-                    android:orientation="horizontal"
-                    android:saveEnabled="false"
-                    android:tag="2">
-
-                    <TextView
-                        android:id="@+id/mon_start_time_txt"
-                        style="@style/Add_Session_Time_Textview"
-                        android:layout_width="@dimen/_70sdp"
-                        android:layout_height="match_parent"
-                        android:tag="Mon"
-                        android:text="Add" />
-
-                    <Button
-                        android:id="@+id/mon_start_add_session_btn"
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:background="@drawable/round_btn"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:tag="2"
-                        android:text="+"
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/_13sdp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/mon_end_linear"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:layout_marginBottom="@dimen/_1sdp"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:alpha="0.2"
-                    android:background="@drawable/linear_shape"
-                    android:orientation="horizontal"
-                    android:saveEnabled="false"
-                    android:tag="3">
-
-                    <TextView
-                        android:id="@+id/mon_end_time_txt"
-                        style="@style/Add_Session_Time_Textview"
-                        android:layout_width="@dimen/_70sdp"
-                        android:layout_height="match_parent"
-                        android:text="Add" />
-
-                    <Button
-                        android:id="@+id/mon_end_add_session_btn"
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:background="@drawable/round_btn"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:tag="3"
-                        android:text="+"
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/_13sdp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tue_btn"
-                    style="@style/Add_Session_Time_Button"
-                    android:layout_width="@dimen/_66sdp"
-                    android:layout_height="@dimen/_25sdp"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_marginRight="@dimen/_5sdp"
-                    android:text="Tuesday" />
-
-                <LinearLayout
-                    android:id="@+id/tue_start_linear"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:layout_marginBottom="@dimen/_1sdp"
-                    android:alpha="0.2"
-                    android:background="@drawable/linear_shape"
-                    android:orientation="horizontal"
-                    android:saveEnabled="false"
-                    android:tag="4">
-
-                    <TextView
-                        android:id="@+id/tue_start_time_txt"
-                        style="@style/Add_Session_Time_Textview"
-                        android:layout_width="@dimen/_70sdp"
-                        android:layout_height="match_parent"
-                        android:tag="Tue"
-                        android:text="Add" />
-
-                    <Button
-                        android:id="@+id/tue_start_add_session_btn"
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:background="@drawable/round_btn"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:tag="4"
-                        android:text="+"
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/_13sdp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/tue_end_linear"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:layout_marginBottom="@dimen/_1sdp"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:alpha="0.2"
-                    android:background="@drawable/linear_shape"
-                    android:orientation="horizontal"
-                    android:saveEnabled="false"
-                    android:tag="5">
-
-                    <TextView
-                        android:id="@+id/tue_end_time_txt"
-                        style="@style/Add_Session_Time_Textview"
-                        android:layout_width="@dimen/_70sdp"
-                        android:layout_height="match_parent"
-                        android:text="Add" />
-
-                    <Button
-                        android:id="@+id/tue_end_add_session_btn"
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:background="@drawable/round_btn"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:tag="5"
-                        android:text="+"
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/_13sdp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/wed_btn"
-                    style="@style/Add_Session_Time_Button"
-                    android:layout_width="@dimen/_66sdp"
-                    android:layout_height="@dimen/_25sdp"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_marginRight="@dimen/_5sdp"
-                    android:text="Wednesday" />
-
-                <LinearLayout
-                    android:id="@+id/wed_start_linear"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:layout_marginBottom="@dimen/_1sdp"
-                    android:alpha="0.2"
-                    android:background="@drawable/linear_shape"
-                    android:orientation="horizontal"
-                    android:saveEnabled="false"
-                    android:tag="6">
-
-                    <TextView
-                        android:id="@+id/wed_start_time_txt"
-                        style="@style/Add_Session_Time_Textview"
-                        android:layout_width="@dimen/_70sdp"
-                        android:layout_height="match_parent"
-                        android:tag="Wed"
-                        android:text="Add" />
-
-                    <Button
-                        android:id="@+id/wed_start_add_session_btn"
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:background="@drawable/round_btn"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:tag="6"
-                        android:text="+"
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/_13sdp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/wed_end_linear"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:layout_marginBottom="@dimen/_1sdp"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:alpha="0.2"
-                    android:background="@drawable/linear_shape"
-                    android:orientation="horizontal"
-                    android:saveEnabled="false"
-                    android:tag="7">
-
-                    <TextView
-                        android:id="@+id/wed_end_time_txt"
-                        style="@style/Add_Session_Time_Textview"
-                        android:layout_width="@dimen/_70sdp"
-                        android:layout_height="match_parent"
-                        android:text="Add" />
-
-                    <Button
-                        android:id="@+id/wed_end_add_session_btn"
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:background="@drawable/round_btn"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:tag="7"
-                        android:text="+"
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/_13sdp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/thu_btn"
-                    style="@style/Add_Session_Time_Button"
-                    android:layout_width="@dimen/_66sdp"
-                    android:layout_height="@dimen/_25sdp"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_marginRight="@dimen/_5sdp"
-                    android:text="Thursday" />
-
-                <LinearLayout
-                    android:id="@+id/thu_start_linear"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:layout_marginBottom="@dimen/_1sdp"
-                    android:alpha="0.2"
-                    android:background="@drawable/linear_shape"
-                    android:orientation="horizontal"
-                    android:saveEnabled="false"
-                    android:tag="8">
-
-                    <TextView
-                        android:id="@+id/thu_start_time_txt"
-                        style="@style/Add_Session_Time_Textview"
-                        android:layout_width="@dimen/_70sdp"
-                        android:layout_height="match_parent"
-                        android:tag="Thu"
-                        android:text="Add" />
-
-                    <Button
-                        android:id="@+id/thu_start_add_session_btn"
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:background="@drawable/round_btn"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:tag="8"
-                        android:text="+"
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/_13sdp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/thu_end_linear"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:layout_marginBottom="@dimen/_1sdp"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:alpha="0.2"
-                    android:background="@drawable/linear_shape"
-                    android:orientation="horizontal"
-                    android:saveEnabled="false"
-                    android:tag="9">
-
-                    <TextView
-                        android:id="@+id/thu_end_time_txt"
-                        style="@style/Add_Session_Time_Textview"
-                        android:layout_width="@dimen/_70sdp"
-                        android:layout_height="match_parent"
-                        android:text="Add" />
-
-                    <Button
-                        android:id="@+id/thu_end_add_session_btn"
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:background="@drawable/round_btn"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:tag="9"
-                        android:text="+"
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/_13sdp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/fri_btn"
-                    style="@style/Add_Session_Time_Button"
-                    android:layout_width="@dimen/_66sdp"
-                    android:layout_height="@dimen/_25sdp"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_marginRight="@dimen/_5sdp"
-                    android:text="Friday" />
-
-                <LinearLayout
-                    android:id="@+id/fri_start_linear"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:layout_marginBottom="@dimen/_1sdp"
-                    android:alpha="0.2"
-                    android:background="@drawable/linear_shape"
-                    android:orientation="horizontal"
-                    android:saveEnabled="false"
-                    android:tag="10">
-
-                    <TextView
-                        android:id="@+id/fri_start_time_txt"
-                        style="@style/Add_Session_Time_Textview"
-                        android:layout_width="@dimen/_70sdp"
-                        android:layout_height="match_parent"
-                        android:tag="Fri"
-                        android:text="Add" />
-
-                    <Button
-                        android:id="@+id/fri_start_add_session_btn"
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:background="@drawable/round_btn"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:tag="10"
-                        android:text="+"
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/_13sdp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/fri_end_linear"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:layout_marginBottom="@dimen/_1sdp"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:alpha="0.2"
-                    android:background="@drawable/linear_shape"
-                    android:orientation="horizontal"
-                    android:saveEnabled="false"
-                    android:tag="11">
-
-                    <TextView
-                        android:id="@+id/fri_end_time_txt"
-                        style="@style/Add_Session_Time_Textview"
-                        android:layout_width="@dimen/_70sdp"
-                        android:layout_height="match_parent"
-                        android:text="Add" />
-
-                    <Button
-                        android:id="@+id/fri_end_add_session_btn"
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:background="@drawable/round_btn"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:tag="11"
-                        android:text="+"
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/_13sdp" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/sat_btn"
-                    style="@style/Add_Session_Time_Button"
-                    android:layout_width="@dimen/_66sdp"
-                    android:layout_height="@dimen/_25sdp"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:layout_marginRight="@dimen/_5sdp"
-                    android:text="Saturday" />
-
-                <LinearLayout
-                    android:id="@+id/sat_start_linear"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:layout_marginBottom="@dimen/_1sdp"
-                    android:alpha="0.2"
-                    android:background="@drawable/linear_shape"
-                    android:orientation="horizontal"
-                    android:saveEnabled="false"
-                    android:tag="12">
-
-                    <TextView
-                        android:id="@+id/sat_start_time_txt"
-                        style="@style/Add_Session_Time_Textview"
-                        android:layout_width="@dimen/_70sdp"
-                        android:layout_height="match_parent"
-                        android:tag="Sat"
-                        android:text="Add" />
-
-                    <Button
-                        android:id="@+id/sat_start_add_session_btn"
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:background="@drawable/round_btn"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:tag="12"
-                        android:text="+"
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/_13sdp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/sat_end_linear"
-                    android:layout_width="@dimen/_100sdp"
-                    android:layout_height="@dimen/_30sdp"
-                    android:layout_marginBottom="@dimen/_1sdp"
-                    android:layout_marginLeft="@dimen/_5sdp"
-                    android:alpha="0.2"
-                    android:background="@drawable/linear_shape"
-                    android:orientation="horizontal"
-                    android:saveEnabled="false"
-                    android:tag="13">
-
-                    <TextView
-                        android:id="@+id/sat_end_time_txt"
-                        style="@style/Add_Session_Time_Textview"
-                        android:layout_width="@dimen/_70sdp"
-                        android:layout_height="match_parent"
-                        android:text="Add" />
-
-                    <Button
-                        android:id="@+id/sat_end_add_session_btn"
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/_5sdp"
-                        android:background="@drawable/round_btn"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:tag="13"
-                        android:text="+"
-                        android:textColor="@color/blue"
-                        android:textSize="@dimen/_13sdp" />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/cancel_btn"
-                android:layout_width="@dimen/_120sdp"
-                android:layout_height="@dimen/_30sdp"
-                android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/_6sdp"
-                android:layout_marginLeft="@dimen/_100sdp"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:background="@drawable/submit_shape"
-                android:gravity="center"
-                android:text="Cancel"
-                android:textColor="@color/blue"
-                android:textSize="@dimen/_12sdp"
-                android:textStyle="bold" />
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:orientation="horizontal">
 
+                <RadioButton
+                    android:id="@+id/recurring_rb"
+                    android:layout_width="@dimen/_110sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:button="@drawable/absent_radio_type"
+                    android:paddingLeft="@dimen/_3sdp"
+                    android:textSize="@dimen/_12sdp"
+                    android:textColor="@color/text_color"
+                    android:text="@string/recurring" />
+
+                <RadioButton
+                    android:id="@+id/single_rb"
+                    android:layout_width="@dimen/_120sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:button="@drawable/absent_radio_type"
+                    android:textSize="@dimen/_12sdp"
+                    android:textColor="@color/text_color"
+                    android:paddingLeft="@dimen/_3sdp"
+                    android:text="@string/single" />
+            </RadioGroup>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_gravity="center|center_horizontal"
+                android:layout_marginBottom="@dimen/_3sdp"
+                android:layout_marginLeft="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:orientation="horizontal"
+                android:weightSum="6">
+
+                <TextView
+                    android:id="@+id/start_date_txt_view"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_20sdp"
+
+                    android:layout_weight="1.3"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/_3sdp"
+                    android:text="@string/start_date"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_10sdp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_weight="0.1"
+                    android:gravity="center"
+                    android:text=":"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_9sdp" />
+
+                <TextView
+                    android:id="@+id/start_date_txt"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_weight="1.5"
+                    android:background="@drawable/linear_shape"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/_3sdp"
+                    android:text="15/03/2018"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_10sdp" />
+
+                <TextView
+                    android:id="@+id/end_date_txt_view"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    android:layout_weight="1.2"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/_3sdp"
+                    android:text="@string/end_date"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_10sdp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_weight="0.1"
+                    android:gravity="center"
+                    android:text=":"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_9sdp" />
+
+                <TextView
+                    android:id="@+id/end_date_txt"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_weight="1.5"
+                    android:background="@drawable/linear_shape"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/_3sdp"
+                    android:text="15/03/2018"
+                    android:textColor="@color/text_color"
+                    android:textSize="@dimen/_10sdp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/dark_gray" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_27sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="@dimen/_88sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_marginLeft="@dimen/_73sdp"
+                    android:background="@color/blue"
+                    android:gravity="center_vertical|center"
+                    android:text="Start Time"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_11sdp" />
+
+                <TextView
+                    android:layout_width="@dimen/_88sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_marginLeft="@dimen/_7sdp"
+                    android:background="@color/blue"
+                    android:gravity="center_vertical|center"
+                    android:text="End Time"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_11sdp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_270sdp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/day_name_rcView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/_1sdp"
+                    android:scrollbars="none" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/time_linear"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_250sdp"
+                android:layout_marginRight="@dimen/_1sdp"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/sun_btn"
+                        style="@style/Add_Session_Time_Button"
+                        android:layout_width="@dimen/_64sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:text="Sunday" />
+
+                    <LinearLayout
+                        android:id="@+id/sun_start_linear"
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_marginBottom="@dimen/_1sdp"
+                        android:alpha="0.2"
+                        android:background="@drawable/linear_shape"
+                        android:orientation="horizontal"
+                        android:saveEnabled="false"
+                        android:tag="0">
+
+                        <TextView
+                            android:id="@+id/sun_start_time_txt"
+                            style="@style/Add_Session_Time_Textview"
+                            android:layout_width="@dimen/_60sdp"
+                            android:layout_height="match_parent"
+                            android:tag="Sun"
+                            android:text="Add" />
+
+                        <Button
+                            android:id="@+id/sun_start_add_session_btn"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:background="@drawable/round_btn"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:tag="0"
+                            android:text="+"
+                            android:textColor="@color/blue"
+                            android:textSize="@dimen/_13sdp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/sun_end_linear"
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_marginBottom="@dimen/_1sdp"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:alpha="0.2"
+                        android:background="@drawable/linear_shape"
+                        android:orientation="horizontal"
+                        android:saveEnabled="false"
+                        android:tag="1">
+
+                        <TextView
+                            android:id="@+id/sun_end_time_txt"
+                            style="@style/Add_Session_Time_Textview"
+                            android:layout_width="@dimen/_60sdp"
+                            android:layout_height="match_parent"
+                            android:text="Add" />
+
+                        <Button
+                            android:id="@+id/sun_end_add_session_btn"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:background="@drawable/round_btn"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:tag="1"
+                            android:text="+"
+                            android:textColor="@color/blue"
+                            android:textSize="@dimen/_13sdp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/mon_btn"
+                        style="@style/Add_Session_Time_Button"
+                        android:layout_width="@dimen/_64sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:text="Monday" />
+
+                    <LinearLayout
+                        android:id="@+id/mon_start_linear"
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_marginBottom="@dimen/_1sdp"
+                        android:alpha="0.2"
+                        android:background="@drawable/linear_shape"
+                        android:orientation="horizontal"
+                        android:saveEnabled="false"
+                        android:tag="2">
+
+                        <TextView
+                            android:id="@+id/mon_start_time_txt"
+                            style="@style/Add_Session_Time_Textview"
+                            android:layout_width="@dimen/_60sdp"
+                            android:layout_height="match_parent"
+                            android:tag="Mon"
+                            android:text="Add" />
+
+                        <Button
+                            android:id="@+id/mon_start_add_session_btn"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:background="@drawable/round_btn"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:tag="2"
+                            android:text="+"
+                            android:textColor="@color/blue"
+                            android:textSize="@dimen/_13sdp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/mon_end_linear"
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_marginBottom="@dimen/_1sdp"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:alpha="0.2"
+                        android:background="@drawable/linear_shape"
+                        android:orientation="horizontal"
+                        android:saveEnabled="false"
+                        android:tag="3">
+
+                        <TextView
+                            android:id="@+id/mon_end_time_txt"
+                            style="@style/Add_Session_Time_Textview"
+                            android:layout_width="@dimen/_60sdp"
+                            android:layout_height="match_parent"
+                            android:text="Add" />
+
+                        <Button
+                            android:id="@+id/mon_end_add_session_btn"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:background="@drawable/round_btn"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:tag="3"
+                            android:text="+"
+                            android:textColor="@color/blue"
+                            android:textSize="@dimen/_13sdp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tue_btn"
+                        style="@style/Add_Session_Time_Button"
+                        android:layout_width="@dimen/_64sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:text="Tuesday" />
+
+                    <LinearLayout
+                        android:id="@+id/tue_start_linear"
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_marginBottom="@dimen/_1sdp"
+                        android:alpha="0.2"
+                        android:background="@drawable/linear_shape"
+                        android:orientation="horizontal"
+                        android:saveEnabled="false"
+                        android:tag="4">
+
+                        <TextView
+                            android:id="@+id/tue_start_time_txt"
+                            style="@style/Add_Session_Time_Textview"
+                            android:layout_width="@dimen/_60sdp"
+                            android:layout_height="match_parent"
+                            android:tag="Tue"
+                            android:text="Add" />
+
+                        <Button
+                            android:id="@+id/tue_start_add_session_btn"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:background="@drawable/round_btn"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:tag="4"
+                            android:text="+"
+                            android:textColor="@color/blue"
+                            android:textSize="@dimen/_13sdp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/tue_end_linear"
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_marginBottom="@dimen/_1sdp"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:alpha="0.2"
+                        android:background="@drawable/linear_shape"
+                        android:orientation="horizontal"
+                        android:saveEnabled="false"
+                        android:tag="5">
+
+                        <TextView
+                            android:id="@+id/tue_end_time_txt"
+                            style="@style/Add_Session_Time_Textview"
+                            android:layout_width="@dimen/_60sdp"
+                            android:layout_height="match_parent"
+                            android:text="Add" />
+
+                        <Button
+                            android:id="@+id/tue_end_add_session_btn"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:background="@drawable/round_btn"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:tag="5"
+                            android:text="+"
+                            android:textColor="@color/blue"
+                            android:textSize="@dimen/_13sdp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/wed_btn"
+                        style="@style/Add_Session_Time_Button"
+                        android:layout_width="@dimen/_64sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:text="Wednesday" />
+
+                    <LinearLayout
+                        android:id="@+id/wed_start_linear"
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_marginBottom="@dimen/_1sdp"
+                        android:alpha="0.2"
+                        android:background="@drawable/linear_shape"
+                        android:orientation="horizontal"
+                        android:saveEnabled="false"
+                        android:tag="6">
+
+                        <TextView
+                            android:id="@+id/wed_start_time_txt"
+                            style="@style/Add_Session_Time_Textview"
+                            android:layout_width="@dimen/_60sdp"
+                            android:layout_height="match_parent"
+                            android:tag="Wed"
+                            android:text="Add" />
+
+                        <Button
+                            android:id="@+id/wed_start_add_session_btn"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:background="@drawable/round_btn"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:tag="6"
+                            android:text="+"
+                            android:textColor="@color/blue"
+                            android:textSize="@dimen/_13sdp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/wed_end_linear"
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_marginBottom="@dimen/_1sdp"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:alpha="0.2"
+                        android:background="@drawable/linear_shape"
+                        android:orientation="horizontal"
+                        android:saveEnabled="false"
+                        android:tag="7">
+
+                        <TextView
+                            android:id="@+id/wed_end_time_txt"
+                            style="@style/Add_Session_Time_Textview"
+                            android:layout_width="@dimen/_60sdp"
+                            android:layout_height="match_parent"
+                            android:text="Add" />
+
+                        <Button
+                            android:id="@+id/wed_end_add_session_btn"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:background="@drawable/round_btn"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:tag="7"
+                            android:text="+"
+                            android:textColor="@color/blue"
+                            android:textSize="@dimen/_13sdp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/thu_btn"
+                        style="@style/Add_Session_Time_Button"
+                        android:layout_width="@dimen/_64sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:text="Thursday" />
+
+                    <LinearLayout
+                        android:id="@+id/thu_start_linear"
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_marginBottom="@dimen/_1sdp"
+                        android:alpha="0.2"
+                        android:background="@drawable/linear_shape"
+                        android:orientation="horizontal"
+                        android:saveEnabled="false"
+                        android:tag="8">
+
+                        <TextView
+                            android:id="@+id/thu_start_time_txt"
+                            style="@style/Add_Session_Time_Textview"
+                            android:layout_width="@dimen/_60sdp"
+                            android:layout_height="match_parent"
+                            android:tag="Thu"
+                            android:text="Add" />
+
+                        <Button
+                            android:id="@+id/thu_start_add_session_btn"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:background="@drawable/round_btn"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:tag="8"
+                            android:text="+"
+                            android:textColor="@color/blue"
+                            android:textSize="@dimen/_13sdp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/thu_end_linear"
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_marginBottom="@dimen/_1sdp"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:alpha="0.2"
+                        android:background="@drawable/linear_shape"
+                        android:orientation="horizontal"
+                        android:saveEnabled="false"
+                        android:tag="9">
+
+                        <TextView
+                            android:id="@+id/thu_end_time_txt"
+                            style="@style/Add_Session_Time_Textview"
+                            android:layout_width="@dimen/_60sdp"
+                            android:layout_height="match_parent"
+                            android:text="Add" />
+
+                        <Button
+                            android:id="@+id/thu_end_add_session_btn"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:background="@drawable/round_btn"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:tag="9"
+                            android:text="+"
+                            android:textColor="@color/blue"
+                            android:textSize="@dimen/_13sdp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/fri_btn"
+                        style="@style/Add_Session_Time_Button"
+                        android:layout_width="@dimen/_64sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:text="Friday" />
+
+                    <LinearLayout
+                        android:id="@+id/fri_start_linear"
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_marginBottom="@dimen/_1sdp"
+                        android:alpha="0.2"
+                        android:background="@drawable/linear_shape"
+                        android:orientation="horizontal"
+                        android:saveEnabled="false"
+                        android:tag="10">
+
+                        <TextView
+                            android:id="@+id/fri_start_time_txt"
+                            style="@style/Add_Session_Time_Textview"
+                            android:layout_width="@dimen/_60sdp"
+                            android:layout_height="match_parent"
+                            android:tag="Fri"
+                            android:text="Add" />
+
+                        <Button
+                            android:id="@+id/fri_start_add_session_btn"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:background="@drawable/round_btn"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:tag="10"
+                            android:text="+"
+                            android:textColor="@color/blue"
+                            android:textSize="@dimen/_13sdp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/fri_end_linear"
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_marginBottom="@dimen/_1sdp"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:alpha="0.2"
+                        android:background="@drawable/linear_shape"
+                        android:orientation="horizontal"
+                        android:saveEnabled="false"
+                        android:tag="11">
+
+                        <TextView
+                            android:id="@+id/fri_end_time_txt"
+                            style="@style/Add_Session_Time_Textview"
+                            android:layout_width="@dimen/_60sdp"
+                            android:layout_height="match_parent"
+                            android:text="Add" />
+
+                        <Button
+                            android:id="@+id/fri_end_add_session_btn"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:background="@drawable/round_btn"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:tag="11"
+                            android:text="+"
+                            android:textColor="@color/blue"
+                            android:textSize="@dimen/_13sdp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/sat_btn"
+                        style="@style/Add_Session_Time_Button"
+                        android:layout_width="@dimen/_64sdp"
+                        android:layout_height="@dimen/_25sdp"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:text="Saturday" />
+
+                    <LinearLayout
+                        android:id="@+id/sat_start_linear"
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_marginBottom="@dimen/_1sdp"
+                        android:alpha="0.2"
+                        android:background="@drawable/linear_shape"
+                        android:orientation="horizontal"
+                        android:saveEnabled="false"
+                        android:tag="12">
+
+                        <TextView
+                            android:id="@+id/sat_start_time_txt"
+                            style="@style/Add_Session_Time_Textview"
+                            android:layout_width="@dimen/_60sdp"
+                            android:layout_height="match_parent"
+                            android:tag="Sat"
+                            android:text="Add" />
+
+                        <Button
+                            android:id="@+id/sat_start_add_session_btn"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:background="@drawable/round_btn"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:tag="12"
+                            android:text="+"
+                            android:textColor="@color/blue"
+                            android:textSize="@dimen/_13sdp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/sat_end_linear"
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:layout_marginBottom="@dimen/_1sdp"
+                        android:layout_marginLeft="@dimen/_5sdp"
+                        android:alpha="0.2"
+                        android:background="@drawable/linear_shape"
+                        android:orientation="horizontal"
+                        android:saveEnabled="false"
+                        android:tag="13">
+
+                        <TextView
+                            android:id="@+id/sat_end_time_txt"
+                            style="@style/Add_Session_Time_Textview"
+                            android:layout_width="@dimen/_60sdp"
+                            android:layout_height="match_parent"
+                            android:text="Add" />
+
+                        <Button
+                            android:id="@+id/sat_end_add_session_btn"
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:background="@drawable/round_btn"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:tag="13"
+                            android:text="+"
+                            android:textColor="@color/blue"
+                            android:textSize="@dimen/_13sdp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+        <Button
+            android:id="@+id/cancel_btn"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_alignRight="@+id/main_linear"
+            android:layout_marginRight="-6dp"
+            android:text="x"
+            android:textColor="@color/white"
+            android:background="@drawable/blue_btn" />
+    </RelativeLayout>
 </layout>

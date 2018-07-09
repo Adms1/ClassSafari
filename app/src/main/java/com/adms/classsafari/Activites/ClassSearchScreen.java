@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.adms.classsafari.AppConstant.ApiHandler;
@@ -57,9 +59,9 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
             classNameStr, firsttimesearch, boardStr, standardStr, streamStr, lessionNameStr, SearchPlaystudy;
 
     //Use for Menu Dialog
-    String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr;
+    String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr,TeacherName;
     Dialog menuDialog, changeDialog;
-    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily;
+    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily,btnMyenroll,btnMyprofile;
     TextView userNameTxt;
     ChangePasswordDialogBinding changePasswordDialogBinding;
     @Override
@@ -79,6 +81,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         RegionName = getIntent().getStringExtra("RegionName");
         SearchPlaystudy = getIntent().getStringExtra("SearchPlaystudy");
         lessionNameStr = getIntent().getStringExtra("lessionName");
+        TeacherName=getIntent().getStringExtra("TeacherName");
         setTypeface();
         init();
         setListner();
@@ -141,6 +144,9 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
             }
             if (!RegionName.equalsIgnoreCase("")) {
                 classSearchScreenBinding.regionNameTxt.setText(RegionName);
+            }
+            if (!TeacherName.equalsIgnoreCase("")){
+                classSearchScreenBinding.teacherAutoTxt.setText(TeacherName);
             }
         }
         callSessionListApi();
@@ -316,6 +322,15 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    validationSearch();
+                }
+                return false;
+            }
+        });
+        classSearchScreenBinding.teacherAutoTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId== EditorInfo.IME_ACTION_SEARCH){
                     validationSearch();
                 }
                 return false;
@@ -712,7 +727,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
             inSearchUser.putExtra("teacherName",classSearchScreenBinding.teacherAutoTxt.getText().toString());
             startActivity(inSearchUser);
         } else {
-            classSearchScreenBinding.sessionAutoTxt.setError("Please Enter Subject.");
+            classSearchScreenBinding.searchAutoTxt.setError("Please enter city name");
         }
     }
 
@@ -736,10 +751,20 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
-
+        btnMyenroll=(Button)menuDialog.findViewById(R.id.btnMyenroll);
+btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
-
+        btnMyprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent imyaccount = new Intent(mContext, AddStudentScreen.class);
+                imyaccount.putExtra("wheretocometype", "menu");
+                imyaccount.putExtra("myprofile","true");
+                imyaccount.putExtra("type", "myprofile");
+                startActivity(imyaccount);
+            }
+        });
         btnMyReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -748,13 +773,21 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
                 startActivity(imyaccount);
             }
         });
-        btnMySession.setOnClickListener(new View.OnClickListener() {
+        btnMyenroll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent isession = new Intent(mContext, MySession.class);
                 isession.putExtra("wheretocometype", "session");
                 startActivity(isession);
                 menuDialog.dismiss();
+            }
+        });
+        btnMySession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, UpcomingActivity.class);
+                intent.putExtra("wheretocometype", "session");
+                startActivity(intent);
             }
         });
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
@@ -825,8 +858,8 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         wlp.gravity = Gravity.CENTER;
         window.setAttributes(wlp);
 
-        changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-
+        //changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        changeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         changeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         changeDialog.setCancelable(false);
         changeDialog.setContentView(changePasswordDialogBinding.getRoot());
@@ -885,7 +918,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
                         return;
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("false")) {
-                        Utils.ping(mContext, "Please Enter Valid Password.");
+                        Utils.ping(mContext, "Please enter valid password");
                         return;
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("True")) {

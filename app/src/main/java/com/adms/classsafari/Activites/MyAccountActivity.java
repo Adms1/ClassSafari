@@ -65,7 +65,7 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
     //Use for menu
     String passWordStr, confirmpassWordStr, currentpasswordStr;
     Dialog menuDialog, changeDialog;
-    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily;
+    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily,btnMyenroll,btnMyprofile;
     TextView userNameTxt;
     //
     Calendar[] daysArray;
@@ -179,7 +179,7 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
                 if (!startDateStr.equalsIgnoreCase("dd/MM/yyyy") && !endDateStr.equalsIgnoreCase("dd/MM/yyyy")) {
                     callPaymentReportApi();
                 } else {
-                    Utils.ping(mContext, "Please Select StartDate and EndDate.");
+                    Utils.ping(mContext, "Please select startdate and enddate");
                 }
                 break;
             case R.id.back:
@@ -208,7 +208,7 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
         if (Utils.isNetworkConnected(mContext)) {
 
             Utils.showDialog(mContext);
-            ApiHandler.getApiService().get_Payment_ByContactID(getReportDetail(), new retrofit.Callback<TeacherInfoModel>() {
+            ApiHandler.getApiService().get_Payment_ByFamilyID(getReportDetail(), new retrofit.Callback<TeacherInfoModel>() {
                 @Override
                 public void success(TeacherInfoModel paymentInfoModel, Response response) {
                     Utils.dismissDialog();
@@ -265,7 +265,7 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
         startDateStr = myAccountBinding.txtStartDate.getText().toString();
         endDateStr = myAccountBinding.txtEndDate.getText().toString();
         Map<String, String> map = new HashMap<>();
-        map.put("ContactID", Utils.getPref(mContext, "coachID"));
+        map.put("FamilyID", Utils.getPref(mContext, "coachTypeID"));
         map.put("StartDate", startDateStr);
         map.put("EndDate", endDateStr);
 
@@ -284,8 +284,8 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
         wlp.gravity = Gravity.CENTER;
         window.setAttributes(wlp);
 
-        changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-
+        //changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        changeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         changeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         changeDialog.setCancelable(false);
         changeDialog.setContentView(changePasswordDialogBinding.getRoot());
@@ -344,7 +344,7 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
                         return;
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("false")) {
-                        Utils.ping(mContext, "Please Enter Valid Password.");
+                        Utils.ping(mContext, "Please enter valid password");
                         return;
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("True")) {
@@ -395,11 +395,22 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
         btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
-
+        btnMyenroll=(Button)menuDialog.findViewById(R.id.btnMyenroll);
+btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
 
         btnMyReport.setVisibility(View.GONE);
+        btnMyprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent imyaccount = new Intent(mContext, AddStudentScreen.class);
+                imyaccount.putExtra("wheretocometype", "menu");
+                imyaccount.putExtra("myprofile","true");
+                imyaccount.putExtra("type", "myprofile");
+                startActivity(imyaccount);
+            }
+        });
         btnMyReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -408,13 +419,21 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
                 startActivity(imyaccount);
             }
         });
-        btnMySession.setOnClickListener(new View.OnClickListener() {
+        btnMyenroll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent isession = new Intent(mContext, MySession.class);
                 isession.putExtra("wheretocometype", "menu");
                 startActivity(isession);
                 menuDialog.dismiss();
+            }
+        });
+        btnMySession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, UpcomingActivity.class);
+                intent.putExtra("wheretocometype", "menu");
+                startActivity(intent);
             }
         });
         btnChangePassword.setOnClickListener(new View.OnClickListener() {

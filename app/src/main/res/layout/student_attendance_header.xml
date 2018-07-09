@@ -10,7 +10,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="5">
-
+        <TextView
+            android:id="@+id/no_txt"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_weight="0.4"
+            android:background="@color/gray1"
+            android:gravity="start|center_vertical"
+            android:paddingLeft="@dimen/_5sdp"
+            android:text="No"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_11sdp" />
         <TextView
             android:id="@+id/name_txt"
             android:layout_width="0dp"
@@ -55,13 +65,14 @@
             android:paddingLeft="@dimen/_5sdp"
             android:text="@string/leave"
             android:textColor="@color/white"
-            android:textSize="@dimen/_11sdp" />
+            android:textSize="@dimen/_11sdp"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/remarks_txt"
             android:layout_width="0dp"
             android:layout_height="@dimen/_30sdp"
-            android:layout_weight="1.57"
+            android:layout_weight="1.7"
             android:background="@color/remarks"
             android:gravity="start|center_vertical"
             android:paddingLeft="@dimen/_5sdp"

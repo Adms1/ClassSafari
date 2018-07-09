@@ -33,6 +33,7 @@ import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivityRegistrationBinding;
 import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
 import com.adms.classsafari.databinding.OptionDialogBinding;
+import com.adms.classsafari.databinding.RegisterOptionDialogBinding;
 import com.adms.classsafari.databinding.SessiondetailConfirmationDialogBinding;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
@@ -55,6 +56,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     ActivityRegistrationBinding registrationBinding;
     ConfirmSessionDialogBinding confirmSessionDialogBinding;
     OptionDialogBinding optionDialogBinding;
+    RegisterOptionDialogBinding registerOptionDialogBinding;
     SessiondetailConfirmationDialogBinding sessiondetailConfirmationDialogBinding;
     Context mContext;
     String finalDate;
@@ -62,11 +64,11 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     Calendar calendar;
     int mYear, mMonth, mDay;
     String firstNameStr, lastNameStr, emailStr, passwordStr, phonenoStr, gendarIdStr = "1", dateofbirthStr, coachTypeIDStr = "1",oraganisationStr="",
-            registerTypeStr = "family", contatIDstr, type, sessionIDStr, paymentStatusstr, orderIDStr, frontloginStr,
-            boardStr, standardStr, streamStr, locationStr, classNameStr, sessionType, durationStr, sessionDateStr,
+            registerTypeStr = "", contatIDstr, type, sessionIDStr, paymentStatusstr, orderIDStr, frontloginStr,
+            boardStr, standardStr, streamStr, locationStr, classNameStr, sessionType, durationStr, sessionDateStr,registerOptionStr="",
             subjectStr, genderStr, ratingLoginStr, searchfront, firsttimesearch, backStr,TeacherName, SearchPlaystudy, termscondition = "", frontRegister = "";
     //Use for Confirmation Dialog
-    Dialog confimDialog, optionDialog;
+    Dialog confimDialog, optionDialog,registerDialog;
     boolean firsttime = false;
 
     SessionDetailModel dataResponse;
@@ -104,36 +106,36 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         SearchPlaystudy = getIntent().getStringExtra("SearchPlaystudy");
         frontRegister = getIntent().getStringExtra("frontRegister");
         TeacherName=getIntent().getStringExtra("TeacherName");
-        setTypeface();
+//        setTypeface();
 
         init();
         setListner();
     }
 
-    public void setTypeface() {
-        Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
-
-        registrationBinding.activityName.setTypeface(custom_font);
-        registrationBinding.typeOfRegi.setTypeface(custom_font);
-        registrationBinding.clickHere.setTypeface(custom_font);
-        registrationBinding.firstNameEdt.setTypeface(custom_font);
-        registrationBinding.lastNameEdt.setTypeface(custom_font);
-        registrationBinding.emailEdt.setTypeface(custom_font);
-        registrationBinding.passwordEdt.setTypeface(custom_font);
-        registrationBinding.phoneNoEdt.setTypeface(custom_font);
-        registrationBinding.dateOfBirthEdt.setTypeface(custom_font);
-        registrationBinding.maleChk.setTypeface(custom_font);
-        registrationBinding.femaleChk.setTypeface(custom_font);
-        registrationBinding.chkTermsAndCondi.setTypeface(custom_font);
-        registrationBinding.registerBtn.setTypeface(custom_font);
-        registrationBinding.viewTxt.setTypeface(custom_font);
-
-
-    }
+//    public void setTypeface() {
+//        Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
+//
+//        registrationBinding.activityName.setTypeface(custom_font);
+//        registrationBinding.typeOfRegi.setTypeface(custom_font);
+//        registrationBinding.clickHere.setTypeface(custom_font);
+//        registrationBinding.firstNameEdt.setTypeface(custom_font);
+//        registrationBinding.lastNameEdt.setTypeface(custom_font);
+//        registrationBinding.emailEdt.setTypeface(custom_font);
+//        registrationBinding.passwordEdt.setTypeface(custom_font);
+//        registrationBinding.phoneNoEdt.setTypeface(custom_font);
+//        registrationBinding.dateOfBirthEdt.setTypeface(custom_font);
+//        registrationBinding.maleChk.setTypeface(custom_font);
+//        registrationBinding.femaleChk.setTypeface(custom_font);
+//        registrationBinding.chkTermsAndCondi.setTypeface(custom_font);
+//        registrationBinding.registerBtn.setTypeface(custom_font);
+//        registrationBinding.viewTxt.setTypeface(custom_font);
+//
+//
+//    }
 
     public void init() {
-        if (Utils.checkAndRequestPermissions(mContext)) {
-        }
+        selectRegisterOptionDialog();
+
         calendar = Calendar.getInstance();
         Year = calendar.get(Calendar.YEAR);
         Month = calendar.get(Calendar.MONTH);
@@ -228,28 +230,28 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                                                 callservice = true;
                                                 callCheckEmailIdApi();
                                             } else {
-                                                Utils.ping(mContext, "Please Accept the Terms of Service before proceeding");
+                                                Utils.ping(mContext, "Please accept the terms of service before proceeding");
                                             }
                                         } else {
-                                            registrationBinding.dateOfBirthEdt.setError("Please Select Your Birth Date.");
+                                            registrationBinding.dateOfBirthEdt.setError("Please select your birthdate");
                                         }
                                     } else {
-                                        registrationBinding.femaleChk.setError("Select Gender.");
+                                        registrationBinding.femaleChk.setError("Select gender");
                                     }
                                 } else {
-                                    registrationBinding.phoneNoEdt.setError("Enter 10 digit Phone Number.");
+                                    registrationBinding.phoneNoEdt.setError("Enter 10 digit phone number");
                                 }
                             } else {
-                                registrationBinding.passwordEdt.setError("Password must be 4-8 Characters.");
+                                registrationBinding.passwordEdt.setError("Password must be 4-8 characters");
                             }
                         } else {
-                            registrationBinding.emailEdt.setError("Please Enter Email Address.");
+                            registrationBinding.emailEdt.setError("Please enter email address");
                         }
                     } else {
-                        registrationBinding.lastNameEdt.setError("Please Enter LastName.");
+                        registrationBinding.lastNameEdt.setError("Please enter last name");
                     }
                 } else {
-                    registrationBinding.firstNameEdt.setError("Please Enter FirstName.");
+                    registrationBinding.firstNameEdt.setError("Please enter first name");
                 }
                 break;
             case R.id.back:
@@ -474,7 +476,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                     if (teacherInfoModel.getSuccess().equalsIgnoreCase("True")) {
 //                        Intent inLogin = new Intent(mContext, LoginActivity.class);
 //                        startActivity(inLogin);
-                        Utils.ping(mContext, "Thank you for registration.");
+                        Utils.ping(mContext, "Thank you for registration");
                         callTeacherLoginApi();
                     }
                 }
@@ -583,7 +585,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                         return;
                     }
                     if (teacherInfoModel.getSuccess().equalsIgnoreCase("false")) {
-                        Utils.ping(mContext, "Invalid Email Address or Password.");
+                        Utils.ping(mContext, "Invalid email address or password");
                         return;
                     }
                     if (teacherInfoModel.getSuccess().equalsIgnoreCase("True")) {
@@ -771,7 +773,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                         return;
                     }
                     if (sessionconfirmationInfoModel.getSuccess().equalsIgnoreCase("True")) {
-                        Utils.ping(mContext, "Login Succesfully");
+                        Utils.ping(mContext, "Login succesfully");
                         confimDialog.dismiss();
                         Intent isearchBYuser = new Intent(mContext, SearchByUser.class);
                         startActivity(isearchBYuser);
@@ -1074,8 +1076,6 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
 
 
     }
-
-
     public void selectOptionDialog() {
         optionDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.option_dialog, (ViewGroup) registrationBinding.getRoot(), false);
@@ -1094,7 +1094,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         optionDialog.setContentView(optionDialogBinding.getRoot());
         String[] userName = Utils.getPref(mContext, "RegisterUserName").split("\\s+");
 
-        optionDialogBinding.titleTxt.setText(Html.fromHtml("Hi " + "<u><b>" + userName[0] + "</u></b>"));
+        optionDialogBinding.titleTxt.setText(Html.fromHtml("Welcome " + "<u><b>" + userName[0] + "</u></b>"));
         optionDialogBinding.addClassBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1115,20 +1115,62 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                 optionDialog.dismiss();
             }
         });
-        optionDialogBinding.cancelBtn.setOnClickListener(new View.OnClickListener() {
+//        optionDialogBinding.cancelBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                registrationBinding.emailEdt.setText("");
+//                registrationBinding.passwordEdt.setText("");
+//                Utils.setPref(mContext, "coachID", "");
+//                Utils.setPref(mContext, "coachTypeID", "");
+//                Utils.setPref(mContext, "RegisterUserName", "");
+//                Utils.setPref(mContext, "RegisterEmail", "");
+//                Utils.setPref(mContext, "LoginType", "");
+//                optionDialog.dismiss();
+//            }
+//        });
+        optionDialog.show();
+
+    }
+
+    public void selectRegisterOptionDialog() {
+        registerOptionDialogBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContext), R.layout.register_option_dialog, (ViewGroup) registrationBinding.getRoot(), false);
+
+        registerDialog = new Dialog(mContext, R.style.Theme_Dialog);
+        Window window = registerDialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        registerDialog.getWindow().getAttributes().verticalMargin = 0.0f;
+        wlp.gravity = Gravity.CENTER;
+        window.setAttributes(wlp);
+
+        registerDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+
+        registerDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        registerDialog.setCancelable(false);
+        registerDialog.setContentView(registerOptionDialogBinding.getRoot());
+
+
+        registerOptionDialogBinding.addStudentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                registrationBinding.emailEdt.setText("");
-                registrationBinding.passwordEdt.setText("");
-                Utils.setPref(mContext, "coachID", "");
-                Utils.setPref(mContext, "coachTypeID", "");
-                Utils.setPref(mContext, "RegisterUserName", "");
-                Utils.setPref(mContext, "RegisterEmail", "");
-                Utils.setPref(mContext, "LoginType", "");
-                optionDialog.dismiss();
+                registerOptionStr="student";
+                registerTypeStr = "family";
+                registrationBinding.classNameEdt.setVisibility(View.GONE);
+                registerDialog.dismiss();
             }
         });
-        optionDialog.show();
+        registerOptionDialogBinding.teacherBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                registerOptionStr="teacher";
+                registerTypeStr = "teacher";
+                registrationBinding.classNameEdt.setVisibility(View.VISIBLE);
+                registerDialog.dismiss();
+            }
+        });
+
+
+        registerDialog.show();
 
     }
 }

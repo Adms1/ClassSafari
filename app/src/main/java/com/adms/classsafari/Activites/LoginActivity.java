@@ -4,7 +4,9 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
@@ -149,7 +151,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     checkStr = "login";
                     callTeacherLoginApi();
                 } else {
-                    Utils.ping(mContext, "Invalid Email Address or Password");
+                    Utils.ping(mContext, "Invalid email address or password");
                 }
                 break;
             case R.id.facebook_img:
@@ -171,7 +173,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         checkStr = "login";
                         callTeacherLoginApi();
                     } else {
-                        Utils.ping(mContext, "Invalid Email Address or Password.");
+                        Utils.ping(mContext, "Invalid email address or password");
                     }
                 }
                 break;
@@ -232,7 +234,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         return;
                     }
                     if (teacherInfoModel.getSuccess().equalsIgnoreCase("false")) {
-                        Utils.ping(mContext, "Invalid Email Address or Password.");
+                        Utils.ping(mContext, "Invalid email address or password.");
                         return;
                     }
                     if (teacherInfoModel.getSuccess().equalsIgnoreCase("True")) {
@@ -378,8 +380,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         wlp.gravity = Gravity.CENTER;
         window.setAttributes(wlp);
 
-        forgotDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-
+        //forgotDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        forgotDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         forgotDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         forgotDialog.setCancelable(false);
         forgotDialog.setContentView(forgotPasswordDialogBinding.getRoot());
@@ -392,7 +394,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if (!EmailIdStr.equalsIgnoreCase("") && Utils.isValidEmaillId(EmailIdStr)) {
                     callCheckEmailIdApi();
                 } else {
-                    Utils.ping(mContext, "Invalid Email Address.");
+                    Utils.ping(mContext, "Invalid email address");
                 }
 
 
@@ -427,7 +429,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                     if (teacherInfoModel.getSuccess().equalsIgnoreCase("false")) {
                         if (!checkStr.equalsIgnoreCase("login")) {
-                            Utils.ping(mContext, "Please Enter Register Email Address.");
+                            Utils.ping(mContext, "Please enter register email address");
                         } else {
 
                         }
@@ -479,7 +481,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         return;
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("false")) {
-                        Utils.ping(mContext, "Please Enter Register Email Address.");
+                        Utils.ping(mContext, "Please enter register email address");
                         return;
                     }
                     if (forgotInfoModel.getSuccess().equalsIgnoreCase("True")) {
@@ -527,7 +529,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         optionDialog.setContentView(optionDialogBinding.getRoot());
         String[] userName = Utils.getPref(mContext, "RegisterUserName").split("\\s+");
 
-        optionDialogBinding.titleTxt.setText(Html.fromHtml("Hi " + "<u><b>" + userName[0] + "</u></b>"));
+        optionDialogBinding.titleTxt.setText(Html.fromHtml("Welcome " + "<u><b>" + userName[0] + "</u></b>"));
         optionDialogBinding.addClassBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -548,19 +550,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 optionDialog.dismiss();
             }
         });
-        optionDialogBinding.cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loginScreenBinding.emailEdt.setText("");
-                loginScreenBinding.passwordEdt.setText("");
-                Utils.setPref(mContext, "coachID", "");
-                Utils.setPref(mContext, "coachTypeID","");
-                Utils.setPref(mContext, "RegisterUserName","");
-                Utils.setPref(mContext, "RegisterEmail","");
-                Utils.setPref(mContext, "LoginType","");
-                optionDialog.dismiss();
-            }
-        });
+//        optionDialogBinding.cancelBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                loginScreenBinding.emailEdt.setText("");
+//                loginScreenBinding.passwordEdt.setText("");
+//                Utils.setPref(mContext, "coachID", "");
+//                Utils.setPref(mContext, "coachTypeID","");
+//                Utils.setPref(mContext, "RegisterUserName","");
+//                Utils.setPref(mContext, "RegisterEmail","");
+//                Utils.setPref(mContext, "LoginType","");
+//                optionDialog.dismiss();
+//            }
+//        });
         optionDialog.show();
 
     }

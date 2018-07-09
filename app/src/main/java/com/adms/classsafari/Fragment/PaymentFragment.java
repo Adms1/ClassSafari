@@ -54,7 +54,7 @@ public class PaymentFragment extends Fragment {
         paymentBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_payment, container, false);
 
         rootView = paymentBinding.getRoot();
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         mContext = getActivity();
         ((DashBoardActivity) getActivity()).setActionBar(12, "false");
@@ -305,6 +305,7 @@ public class PaymentFragment extends Fragment {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Bundle args = new Bundle();
+                args.putString("sessionId",sessionIDStr);
                 args.putString("transactionId", resposeData.getString("transaction_id"));
                 args.putString("responseCode", resposeData.getString("response_code"));
                 args.putString("amount", resposeData.getString("amount"));
@@ -344,9 +345,9 @@ public class PaymentFragment extends Fragment {
                     }
                     if (sessionconfirmationInfoModel.getSuccess().equalsIgnoreCase("True")) {
                         if (type.equalsIgnoreCase("Child")) {
-                            Utils.ping(mContext, "Child Confirmation Successfully.");
+                            Utils.ping(mContext, "Child confirmation successfully");
                         } else {
-                            Utils.ping(mContext, "Family Confirmation Successfully.");
+                            Utils.ping(mContext, "Family confirmation successfully");
                         }
 
 

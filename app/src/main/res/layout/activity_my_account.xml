@@ -52,7 +52,7 @@
             android:layout_height="@dimen/_40sdp"
             android:gravity="start|center_vertical"
             android:orientation="horizontal"
-            android:paddingLeft="@dimen/_15sdp"
+            android:paddingLeft="@dimen/_3sdp"
             android:paddingRight="@dimen/_2sdp"
             android:paddingTop="@dimen/_5sdp">
 
