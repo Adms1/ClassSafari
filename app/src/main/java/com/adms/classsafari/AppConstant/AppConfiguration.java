@@ -45,6 +45,12 @@ public class AppConfiguration {
     public static String famliyName;
     public static String name;
 
+    public static String bookingsubjectName;
+    public static String bookingteacherName;
+    public static String bookingdate;
+    public static String bookingtime;
+    public static String bookingamount;
+
 
     //Validation String
     public static final String EMAIL_REGEX = "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]{1}|[\\w-]{2,}))@"

@@ -3,7 +3,7 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_250sdp"
+        android:layout_height="@dimen/_280sdp"
         android:layout_gravity="bottom"
         android:orientation="vertical"
         android:weightSum="3">
@@ -25,7 +25,7 @@
                 <TextView
                     android:id="@+id/title_txt"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/_33sdp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="start|center_vertical"
                     android:paddingLeft="@dimen/_10sdp"
@@ -37,7 +37,7 @@
                 <TextView
                     android:id="@+id/done_txt"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/_33sdp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="end|center_vertical"
                     android:paddingRight="@dimen/_10sdp"
@@ -60,11 +60,11 @@
                     android:layout_marginTop="@dimen/_5sdp"
                     android:orientation="vertical">
 
-                   <ListView
-                       android:id="@+id/displayArea_list"
-                       android:layout_width="match_parent"
-                       android:layout_height="match_parent"
-                       android:scrollbars="none"/>
+                    <ListView
+                        android:id="@+id/displayArea_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scrollbars="none"/>
                 </LinearLayout>
 
 

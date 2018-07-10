@@ -2,6 +2,7 @@ package com.adms.classsafari.Fragment;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
@@ -12,7 +13,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -545,7 +548,7 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
 
     public void SessionConfirmationDialog() {
         sessiondetailConfirmationDialogBinding = DataBindingUtil.
-                inflate(LayoutInflater.from(mContext), R.layout.sessiondetail_confirmation_dialog, (ViewGroup) addFamilyBinding.getRoot(), false);
+                inflate(LayoutInflater.from(mContext), R.layout.sessiondetail_confirmation_dialog_student, (ViewGroup) addFamilyBinding.getRoot(), false);
         confimDialog = new Dialog(mContext, R.style.Theme_Dialog);
         Window window = confimDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -566,21 +569,24 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         sessiondetailConfirmationDialogBinding.durationTxt.setText(AppConfiguration.SessionDuration);
 //        sessiondetailConfirmationDialogBinding.startDateTxt.setText(AppConfiguration.SessionDate);
 //        sessiondetailConfirmationDialogBinding.endDateTxt.setText(AppConfiguration.SessionDate);
-        sessiondetailConfirmationDialogBinding.priceTxt.setText("₹"+AppConfiguration.SessionPrice);
+        if (AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
+            sessiondetailConfirmationDialogBinding.priceTxt.setText("Free");
+        } else {
+            sessiondetailConfirmationDialogBinding.priceTxt.setText("₹" + AppConfiguration.SessionPrice);
+        }
+        if (!AppConfiguration.SessionUserRating.equalsIgnoreCase("( 0 )")) {
+            sessiondetailConfirmationDialogBinding.ratingUserTxt.setText(AppConfiguration.SessionUserRating);
+        } else {
+            sessiondetailConfirmationDialogBinding.ratingUserTxt.setText("");
+        }
         sessiondetailConfirmationDialogBinding.ratingBar.setRating(Float.parseFloat(AppConfiguration.SessionRating));
-        sessiondetailConfirmationDialogBinding.ratingUserTxt.setText(AppConfiguration.SessionUserRating);
         String[] spiltTime = AppConfiguration.SessionTime.split("\\-");
         AppConfiguration.UserName = familyNameStr;
 
         sessiondetailConfirmationDialogBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
-                    callpaymentRequestApi();
-                } else {
-                    paymentStatusstr = "1";
-                    callSessionConfirmationApi();
-                }
+               callSessioncapacityApi();
                 confimDialog.dismiss();
 
             }
@@ -588,6 +594,68 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         confimDialog.show();
 
     }
+    //Use for GetSession Report
+    public void callSessioncapacityApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_Check_SpotAvailability_By_SessionID(getSessioncapacityDetail(), new retrofit.Callback<TeacherInfoModel>() {
+                @Override
+                public void success(TeacherInfoModel sessionModel, Response response) {
+                    Utils.dismissDialog();
+                    if (sessionModel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionModel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionModel.getSuccess().equalsIgnoreCase("false")) {
+                        new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                                .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+                                .setMessage(getResources().getString(R.string.fail_msg))
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                })
+                                .setIcon(R.drawable.safari)
+                                .show();
+                        return;
+                    }
+                    if (sessionModel.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.dismissDialog();
+                        AppConfiguration.TeacherSessionIdStr = sessionIDStr;
+                        AppConfiguration.TeacherSessionContactIdStr = contatIDstr;
+                        if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
+                            callpaymentRequestApi();
+                        } else {
+                            paymentStatusstr = "1";
+                            callSessionConfirmationApi();
+                        }
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getSessioncapacityDetail() {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("SessionID", sessionIDStr);//contatIDstr  //Utils.getPref(mContext, "coachID")
+        return map;
+    }
+
     //Use for EditSession
     public void callEditSessionApi() {
         if (Utils.isNetworkConnected(mContext)) {
@@ -747,13 +815,12 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
 
             if (SessionMinit > 0) {
                 if (SessionMinit < 10) {
-                    SessionDuration= String.valueOf(SessionHour) + ":" + String.valueOf("0" + SessionMinit + " hrs");
+                    SessionDuration = SessionHour + ":" + "0" + SessionMinit + " hrs";
                 } else {
-                    SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf(SessionMinit + " hrs");
-
+                    SessionDuration = SessionHour + ":" + SessionMinit + " hrs";
                 }
             } else {
-                SessionDuration = String.valueOf(SessionHour) + " hrs";
+                SessionDuration = SessionHour + ":" + "00" + " hrs";
             }
 
         } catch (ParseException e) {

@@ -683,6 +683,65 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         return map;
     }
 
+    //Use for GetSession Report
+    public void callSessioncapacityApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_Check_SpotAvailability_By_SessionID(getSessioncapacityDetail(), new retrofit.Callback<TeacherInfoModel>() {
+                @Override
+                public void success(TeacherInfoModel sessionModel, Response response) {
+                    Utils.dismissDialog();
+                    if (sessionModel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionModel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionModel.getSuccess().equalsIgnoreCase("false")) {
+                        new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                                .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+                                .setMessage(getResources().getString(R.string.fail_msg))
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                })
+                                .setIcon(R.drawable.safari)
+                                .show();
+                        return;
+                    }
+                    if (sessionModel.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.dismissDialog();
+                        if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
+                            callpaymentRequestApi();
+                        } else {
+                            paymentStatusstr = "1";
+                            callSessionConfirmationApi();
+                        }
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getSessioncapacityDetail() {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("SessionID", sessionIDStr);//contatIDstr  //Utils.getPref(mContext, "coachID")
+        return map;
+    }
 
     public void changePasswordDialog() {
         changePasswordDialogBinding = DataBindingUtil.
@@ -931,12 +990,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
             public void onClick(View view) {
                 AppConfiguration.TeacherSessionIdStr = sessionIDStr;
                 AppConfiguration.TeacherSessionContactIdStr = contatIDstr;
-                if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
-                    callpaymentRequestApi();
-                } else {
-                    paymentStatusstr = "1";
-                    callSessionConfirmationApi();
-                }
+                callSessioncapacityApi();
                 confimDialog.dismiss();
             }
         });
@@ -970,13 +1024,23 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                         if (sessionDetailInfo.getData().size() > 0) {
                             dataResponse = sessionDetailInfo;
                             for (int j = 0; j < dataResponse.getData().size(); j++) {
+                                AppConfiguration.bookingsubjectName=dataResponse.getData().get(j).getSessionName();
+                                AppConfiguration.bookingteacherName=dataResponse.getData().get(j).getName();
+                                AppConfiguration.bookingdate=dataResponse.getData().get(j).getStartDate();
+                                AppConfiguration.bookingtime=dataResponse.getData().get(j).getSchedule();
+                                AppConfiguration.bookingamount=dataResponse.getData().get(j).getSessionAmount();
+
                                 sessiondetailConfirmationDialogBinding.sessionNameTxt.setText(dataResponse.getData().get(j).getSessionName());
                                 sessiondetailConfirmationDialogBinding.ratingBar.setRating(Float.parseFloat(dataResponse.getData().get(j).getRating()));
                                 sessiondetailConfirmationDialogBinding.tutorNameTxt.setText(dataResponse.getData().get(j).getName());
                                 sessiondetailConfirmationDialogBinding.locationTxt.setText(dataResponse.getData().get(j).getRegionName());
                                 sessiondetailConfirmationDialogBinding.startDateTxt.setText(dataResponse.getData().get(j).getStartDate());
                                 sessiondetailConfirmationDialogBinding.endDateTxt.setText(dataResponse.getData().get(j).getEndDate());
-                                sessiondetailConfirmationDialogBinding.priceTxt.setText("₹" + dataResponse.getData().get(j).getSessionAmount());
+                                if (dataResponse.getData().get(j).getSessionAmount().equalsIgnoreCase("0.00")){
+                                    sessiondetailConfirmationDialogBinding.priceTxt.setText("Free");
+                                }else {
+                                    sessiondetailConfirmationDialogBinding.priceTxt.setText("₹" + dataResponse.getData().get(j).getSessionAmount());
+                                }
                                 if (!dataResponse.getData().get(j).getTotalRatingUser().equalsIgnoreCase("0")) {
                                     sessiondetailConfirmationDialogBinding.ratingUserTxt.setText("( " + dataResponse.getData().get(j).getTotalRatingUser() + " )");
                                 }
@@ -994,21 +1058,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                                     dataResponse.getData().get(j).setDateTime(spiltDash[0]);
                                     Log.d("DateTime", spiltDash[0]);
 
-//                                    if (SessionHour < 10) {
-//                                        hours= "0"+SessionHour;
-//                                    }else{
-//                                        hours= String.valueOf(SessionHour);
-//                                    }
-//                                    if(SessionMinit<10){
-//                                        minit="0"+SessionMinit;
-//                                    }else{
-//                                        minit=String.valueOf(SessionMinit);
-//                                    }
-//                                    if(minit.equalsIgnoreCase(("00"))) {
-//                                        sessiondetailConfirmationDialogBinding.durationTxt.setText(hours + " hr ");
-//                                    }else{
-//                                        sessiondetailConfirmationDialogBinding.durationTxt.setText(hours + " hr " + minit + " min");//+ " min"
-//                                    }
+//
 
                                     switch (spiltComma[0]) {
                                         case "sun":
@@ -1166,15 +1216,13 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
 
             if (SessionMinit > 0) {
                 if (SessionMinit < 10) {
-                    SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf("0" + SessionMinit + " hrs");
+                    SessionDuration = SessionHour + ":" + "0" + SessionMinit + " hrs";
                 } else {
-                    SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf(SessionMinit + " hrs");
-
+                    SessionDuration = SessionHour + ":" + SessionMinit + " hrs";
                 }
             } else {
-                SessionDuration = String.valueOf(SessionHour) + " hrs";
+                SessionDuration = SessionHour + ":" + "00" + " hrs";
             }
-
         } catch (ParseException e) {
             e.printStackTrace();
         }

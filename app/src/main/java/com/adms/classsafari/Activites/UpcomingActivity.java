@@ -152,7 +152,7 @@ public class UpcomingActivity extends AppCompatActivity implements View.OnClickL
     private Map<String, String> getSessionUpcomingReportDetail() {
 
         Map<String, String> map = new HashMap<>();
-        map.put("FamilyID", Utils.getPref(mContext, "coachID"));
+        map.put("FamilyID", Utils.getPref(mContext, "coachTypeID"));
         return map;
     }
 

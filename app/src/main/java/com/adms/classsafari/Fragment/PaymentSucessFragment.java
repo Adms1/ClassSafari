@@ -1,6 +1,7 @@
 package com.adms.classsafari.Fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
 import android.graphics.Typeface;
@@ -9,7 +10,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,7 +77,7 @@ public class PaymentSucessFragment extends Fragment {
     }
 
     public void init() {
-        Log.d("userName", AppConfiguration.UserName);//
+//        Log.d("userName", AppConfiguration.UserName);//
         paymentSucessBinding.txtUserName.setText(AppConfiguration.UserName);
         if (getArguments().getString("responseCode").equalsIgnoreCase("0")) {
             status = "success";
@@ -108,7 +111,7 @@ public class PaymentSucessFragment extends Fragment {
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 }else{
-                    callpaymentRequestApi();
+                    callSessioncapacityApi();
                 }
             }
         });
@@ -239,7 +242,66 @@ public class PaymentSucessFragment extends Fragment {
         return map;
     }
 
+    //Use for GetSession Report
+    public void callSessioncapacityApi() {
+        if (Utils.isNetworkConnected(mContext)) {
 
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_Check_SpotAvailability_By_SessionID(getSessioncapacityDetail(), new retrofit.Callback<TeacherInfoModel>() {
+                @Override
+                public void success(TeacherInfoModel sessionModel, Response response) {
+                    Utils.dismissDialog();
+                    if (sessionModel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionModel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionModel.getSuccess().equalsIgnoreCase("false")) {
+                        new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                                .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+                                .setMessage(getResources().getString(R.string.fail_msg))
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Fragment fragment = new SessionFragment();
+                                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                        fragmentTransaction.replace(R.id.frame, fragment);
+                                        fragmentTransaction.addToBackStack(null);
+                                        fragmentTransaction.commit();
+                                    }
+                                })
+                                .setIcon(R.drawable.safari)
+                                .show();
+                        return;
+                    }
+                    if (sessionModel.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.dismissDialog();
+                        callpaymentRequestApi();
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getSessioncapacityDetail() {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("SessionID", AppConfiguration.TeacherSessionIdStr);//contatIDstr  //Utils.getPref(mContext, "coachID")
+        return map;
+    }
     //Use for paymentRequest
     public void callpaymentRequestApi() {
         if (Utils.isNetworkConnected(mContext)) {
@@ -273,7 +335,7 @@ public class PaymentSucessFragment extends Fragment {
                         args.putString("username", AppConfiguration.UserName);
                         args.putString("sessionID", AppConfiguration.TeacherSessionIdStr);
                         args.putString("contactID", AppConfiguration.TeacherSessionContactIdStr);
-                        args.putString("type", AppConfiguration.TeacherBookTypeStr);
+                        args.putString("type", getArguments().getString("type"));
                         fragment.setArguments(args);
                         fragmentTransaction.replace(R.id.frame, fragment);
                         fragmentTransaction.addToBackStack(null);

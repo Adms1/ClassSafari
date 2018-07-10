@@ -2,6 +2,7 @@ package com.adms.classsafari.Fragment;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
@@ -12,10 +13,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -587,7 +590,66 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
 
     private Map<String, String> getsessionStudentDetail() {
         Map<String, String> map = new HashMap<>();
-        map.put("SessionDetailID", sessionDetailIDStr);
+        map.put("SessionID", sessionIDStr);
+        return map;
+    }
+
+    //Use for GetSession Report
+    public void callSessioncapacityApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_Check_SpotAvailability_By_SessionID(getSessioncapacityDetail(), new retrofit.Callback<TeacherInfoModel>() {
+                @Override
+                public void success(TeacherInfoModel sessionModel, Response response) {
+                    Utils.dismissDialog();
+                    if (sessionModel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionModel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionModel.getSuccess().equalsIgnoreCase("false")) {
+                        new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                                .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+                                .setMessage(getResources().getString(R.string.fail_msg))
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                })
+                                .setIcon(R.drawable.safari)
+                                .show();
+                        return;
+                    }
+                    if (sessionModel.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.dismissDialog();
+                        AppConfiguration.TeacherSessionIdStr = sessionIDStr;
+                        AppConfiguration.TeacherSessionContactIdStr = contatIDstr;
+                        if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("")) {
+                            callpaymentRequestApi();
+                        }
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getSessioncapacityDetail() {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("SessionID", sessionIDStr);//contatIDstr  //Utils.getPref(mContext, "coachID")
         return map;
     }
 
@@ -614,13 +676,12 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
 
             if (SessionMinit > 0) {
                 if (SessionMinit < 10) {
-                    SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf("0" + SessionMinit + " hrs");
+                    SessionDuration = SessionHour + ":" + "0" + SessionMinit + " hrs";
                 } else {
-                    SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf(SessionMinit + " hrs");
-
+                    SessionDuration = SessionHour + ":" + SessionMinit + " hrs";
                 }
             } else {
-                SessionDuration = String.valueOf(SessionHour) + " hrs";
+                SessionDuration = SessionHour + ":" + "00" + " hrs";
             }
 
         } catch (ParseException e) {
@@ -667,7 +728,11 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
         sessiondetailConfirmationDialogBinding.locationTxt.setText(AppConfiguration.RegionName);
         sessiondetailConfirmationDialogBinding.durationTxt.setText(AppConfiguration.SessionDuration);
 
-        sessiondetailConfirmationDialogBinding.priceTxt.setText("₹" + AppConfiguration.SessionPrice);
+        if (AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
+            sessiondetailConfirmationDialogBinding.priceTxt.setText("Free");
+        } else {
+            sessiondetailConfirmationDialogBinding.priceTxt.setText("₹" + AppConfiguration.SessionPrice);
+        }
         sessiondetailConfirmationDialogBinding.ratingBar.setRating(Float.parseFloat(AppConfiguration.SessionRating));
         if (AppConfiguration.SessionUserRating.equalsIgnoreCase("( 0 )")) {
             sessiondetailConfirmationDialogBinding.ratingUserTxt.setText("");
@@ -687,11 +752,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
         sessiondetailConfirmationDialogBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppConfiguration.TeacherSessionIdStr = sessionIDStr;
-                AppConfiguration.TeacherSessionContactIdStr = contatIDstr;
-                if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("")) {
-                    callpaymentRequestApi();
-                }
+                callSessioncapacityApi();
                 confimDialog.dismiss();
                 sessionDialog.dismiss();
 

@@ -482,10 +482,14 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                             if (sessionTypeStr.equalsIgnoreCase("Academic")) {
                                 if (addSessionBinding.recurringRb.isChecked()) {
                                     sessionTypeValueStr = "1";
+                                }else{
+                                    sessionTypeValueStr = "";
                                 }
                             } else {
                                 if (addSessionBinding.recurringRb.isChecked()) {
                                     sessionTypeValueStr = "3";
+                                }else{
+                                    sessionTypeValueStr = "";
                                 }
 
                             }
@@ -495,10 +499,14 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                                 if (sessionTypeStr.equalsIgnoreCase("Academic")) {
                                     if (addSessionBinding.singleRb.isChecked()) {
                                         sessionTypeValueStr = "2";
+                                    }else{
+                                        sessionTypeValueStr = "";
                                     }
                                 } else {
                                     if (addSessionBinding.singleRb.isChecked()) {
                                         sessionTypeValueStr = "4";
+                                    }else{
+                                        sessionTypeValueStr = "";
                                     }
                                 }
                             break;
@@ -2758,7 +2766,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                                                                                     }
                                                                                 }
                                                                             } else {
-                                                                                Utils.ping(mContext, getString(R.string.sessionAmount));
+                                                                                addSessionBinding.sessionPriceEdt.setError(getString(R.string.sessionAmount));
                                                                             }
                                                                         } else {
                                                                             addSessionBinding.sportsEdt.setError(getString(R.string.sessionCapacity));

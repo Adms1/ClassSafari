@@ -102,7 +102,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:visibility="visible">
+                            android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/txtsubjectname_view"
@@ -111,7 +111,7 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginTop="5dp"
                                 android:layout_marginLeft="@dimen/_65sdp"
-                                android:hint="Subject Name"
+                                android:text="Subject Name"
                                 android:maxLines="1"
                                 android:padding="5dp"
                                 android:singleLine="true"
@@ -122,7 +122,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:gravity="center"
-                                android:hint=":"
+                                android:text=":"
                                 android:maxLines="1"
                                 android:singleLine="true"
                                 android:textColor="@color/text_color" />
@@ -135,9 +135,7 @@
                                 android:layout_marginTop="5dp"
                                 android:layout_marginRight="@dimen/_5sdp"
                                 android:hint="Subject Name"
-                                android:maxLines="1"
                                 android:padding="5dp"
-                                android:singleLine="true"
                                 android:textColor="@color/text_color" />
                         </LinearLayout>
 
@@ -154,7 +152,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginTop="5dp"
-                                android:hint="Teacher Name"
+                                android:text="Teacher Name"
                                 android:inputType="numberDecimal"
                                 android:layout_marginLeft="@dimen/_65sdp"
                                 android:maxLines="1"
@@ -167,7 +165,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:gravity="center"
-                                android:hint=":"
+                                android:text=":"
                                 android:maxLines="1"
                                 android:singleLine="true"
                                 android:textColor="@color/text_color" />
@@ -180,9 +178,7 @@
                                 android:layout_marginTop="5dp"
                                 android:hint="Teacher Name"
                                 android:inputType="numberDecimal"
-                                android:maxLines="1"
                                 android:padding="5dp"
-                                android:singleLine="true"
                                 android:textColor="@color/text_color" />
                         </LinearLayout>
 
@@ -199,7 +195,7 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginLeft="@dimen/_65sdp"
                                 android:layout_marginTop="5dp"
-                                android:hint="Start Date"
+                                android:text="Start Date"
                                 android:maxLines="1"
                                 android:padding="5dp"
                                 android:singleLine="true"
@@ -210,7 +206,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:gravity="center"
-                                android:hint=":"
+                                android:text=":"
                                 android:maxLines="1"
                                 android:singleLine="true"
                                 android:textColor="@color/text_color" />
@@ -221,9 +217,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:hint="Date"
-                                android:maxLines="1"
                                 android:padding="5dp"
-                                android:singleLine="true"
                                 android:textColor="@color/text_color" />
                         </LinearLayout>
 
@@ -240,7 +234,7 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginLeft="@dimen/_65sdp"
                                 android:layout_marginTop="5dp"
-                                android:hint="Start Time"
+                                android:text="Start Time"
                                 android:inputType="numberDecimal"
                                 android:maxLines="1"
                                 android:padding="5dp"
@@ -253,7 +247,7 @@
 
                                 android:layout_marginTop="5dp"
                                 android:gravity="center"
-                                android:hint=":"
+                                android:text=":"
                                 android:maxLines="1"
 
                                 android:singleLine="true"
@@ -267,9 +261,7 @@
                                 android:layout_marginTop="5dp"
                                 android:hint="Time"
                                 android:inputType="numberDecimal"
-                                android:maxLines="1"
                                 android:padding="10dp"
-                                android:singleLine="true"
                                 android:textColor="@color/text_color" />
                         </LinearLayout>
 
@@ -286,7 +278,7 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginLeft="@dimen/_65sdp"
                                 android:layout_marginTop="5dp"
-                                android:hint="Transcation Id"
+                                android:text="Transcation Id"
                                 android:inputType="numberDecimal"
                                 android:maxLines="1"
                                 android:padding="5dp"
@@ -299,7 +291,7 @@
 
                                 android:layout_marginTop="5dp"
                                 android:gravity="center"
-                                android:hint=":"
+                                android:text=":"
                                 android:maxLines="1"
 
                                 android:singleLine="true"
@@ -313,9 +305,7 @@
                                 android:layout_marginTop="5dp"
                                 android:hint="Txn ID"
                                 android:inputType="numberDecimal"
-                                android:maxLines="1"
                                 android:padding="5dp"
-                                android:singleLine="true"
                                 android:textColor="@color/text_color" />
                         </LinearLayout>
 
@@ -332,7 +322,7 @@
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginLeft="@dimen/_65sdp"
                                 android:layout_marginTop="5dp"
-                                android:hint="Amount"
+                                android:text="Amount"
                                 android:inputType="numberDecimal"
                                 android:maxLines="1"
                                 android:padding="5dp"
@@ -344,7 +334,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:gravity="center"
-                                android:hint=":"
+                                android:text=":"
 
                                 android:maxLines="1"
                                 android:singleLine="true"
@@ -381,44 +371,5 @@
                 </RelativeLayout>
             </LinearLayout>
         </ScrollView>
-
-        <LinearLayout
-            android:id="@+id/bottom_linear"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_below="@id/middle_linear"
-            android:layout_weight="0.2"
-            android:background="@color/search_boder"
-            android:gravity="bottom|start"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <ImageView
-                android:id="@+id/session_email"
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/_35sdp"
-                android:src="@drawable/s_e"
-                android:visibility="visible" />
-
-            <ImageView
-                android:id="@+id/session_search"
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/_85sdp"
-                android:src="@drawable/s_ser"
-                android:visibility="gone" />
-
-            <ImageView
-                android:id="@+id/session_cal"
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/_195sdp"
-                android:src="@drawable/s_cal" />
-        </LinearLayout>
-
     </LinearLayout>
 </layout>

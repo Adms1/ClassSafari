@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.adms.classsafari.Activites.SessionName;
 import com.adms.classsafari.Interface.bookClick;
+import com.adms.classsafari.Interface.onChlidClick;
 import com.adms.classsafari.Interface.onViewClick;
 import com.adms.classsafari.Model.Session.sessionDataModel;
 import com.adms.classsafari.R;
@@ -34,16 +35,17 @@ public class UserSessionListAdapter1 extends RecyclerView.Adapter<UserSessionLis
             searchTypeStr, wheretoComeStr, searchfront,
             sessionType, firsttimesearch, TeacherName;
     onViewClick onViewClick;
-
+onChlidClick onChlidClick;
 
     private Context mContext;
     private ArrayList<String> SessionDetail;
     private ArrayList<String> SessionBookDetail;
     private ArrayList<String> familyIdCheck;
-    public UserSessionListAdapter1(Context mContext, List<sessionDataModel> arrayList, onViewClick onViewClick) {
+    public UserSessionListAdapter1(Context mContext, List<sessionDataModel> arrayList, onViewClick onViewClick, onChlidClick onChlidClick) {
         this.mContext = mContext;
         this.arrayList = arrayList;
         this.onViewClick = onViewClick;
+        this.onChlidClick=onChlidClick;
     }
 
 
@@ -199,6 +201,17 @@ public class UserSessionListAdapter1 extends RecyclerView.Adapter<UserSessionLis
            holder.book_session_btn.setVisibility(View.GONE);
         }
 
+        holder.rating_bar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                SessionDetail = new ArrayList<>();
+                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                    SessionDetail.add(arrayList.get(position).getSessionName() + "|" + arrayList.get(position).getSessionID() + "|" + arrayList.get(position).getName());
+                    onChlidClick.getChilClick();
+                }
+                return true;
+            }
+        });
 
         holder.view_more_session_btn.setOnClickListener(new View.OnClickListener() {
             @Override

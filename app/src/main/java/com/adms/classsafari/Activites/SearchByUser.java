@@ -179,6 +179,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.search_txt:
                 flag = false;
+                SearchPlaystudy = "3";
                 validation();
                 break;
             case R.id.lets_play_txt:

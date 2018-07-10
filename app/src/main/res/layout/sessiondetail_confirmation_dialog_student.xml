@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@drawable/session_confirm"
+        android:layout_margin="@dimen/_5sdp"
+        android:background="@android:color/transparent"
         android:tag="cards main container">
 
         <LinearLayout
@@ -13,6 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_5sdp"
+            android:background="@drawable/session_confirm"
             android:orientation="vertical">
 
             <LinearLayout
@@ -25,8 +27,9 @@
                     android:layout_height="@dimen/_35sdp"
                     android:text="Please Confirm Your Enrollment"
                     android:textColor="@color/blue"
-                    android:textSize="@dimen/_14sdp"
-                    android:gravity="center_vertical"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/_13sdp"
+                    android:gravity="center_vertical|center"
                     android:textStyle="bold"/>
             </LinearLayout>
             <View
@@ -55,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/_15sdp"
                     android:layout_gravity="center_vertical|top"
-                    android:layout_marginLeft="@dimen/_40sdp"
+                    android:layout_marginLeft="@dimen/_25sdp"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:theme="@style/RatingBar1" />
 
@@ -67,7 +70,7 @@
                     android:layout_marginTop="@dimen/_5sdp"
                     android:text=""
                     android:textColor="@color/text_color"
-                    android:textSize="@dimen/_13sdp" />
+                    android:textSize="@dimen/_10sdp" />
             </LinearLayout>
 
             <LinearLayout
@@ -87,20 +90,21 @@
 
                 <TextView
                     android:id="@+id/location_txt"
-                    android:layout_width="@dimen/_120sdp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/_2sdp"
-                    android:layout_marginLeft="@dimen/_35sdp"
                     android:drawableLeft="@drawable/location_blue"
+                    android:layout_marginLeft="@dimen/_27sdp"
                     android:drawablePadding="@dimen/_2sdp"
+                    android:gravity="right"
                     android:paddingBottom="@dimen/_2sdp"
-                    android:paddingLeft="@dimen/_5sdp"
                     android:paddingTop="@dimen/_2sdp"
                     android:text="@string/location"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_10sdp" />
             </LinearLayout>
-
+            <!---->
+            <!---->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
@@ -114,7 +118,7 @@
 
                 <TextView
                     android:id="@+id/start_date_txt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/_60sdp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_7sdp"
                     android:text="@string/start_date"
@@ -123,7 +127,7 @@
 
                 <TextView
                     android:id="@+id/end_date_txt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/_60sdp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_32sdp"
                     android:text="@string/end_date"
@@ -132,10 +136,12 @@
 
                 <TextView
                     android:id="@+id/price_txt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/_100sdp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_45sdp"
-                    android:text=""
+                    android:layout_marginLeft="@dimen/_11sdp"
+                    android:text="Free"
+                    android:paddingRight="@dimen/_10sdp"
+                    android:gravity="right"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
@@ -270,7 +276,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_5sdp"
                     android:alpha="0.2"
-                    android:text="00:00 AM"
+                    android:text=""
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_8sdp" />
 
@@ -280,7 +286,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_3sdp"
                     android:alpha="0.2"
-                    android:text="00:00 AM"
+                    android:text=""
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_8sdp" />
 
@@ -290,7 +296,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_3sdp"
                     android:alpha="0.2"
-                    android:text="00:00 AM"
+                    android:text=""
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_8sdp" />
 
@@ -300,7 +306,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_3sdp"
                     android:alpha="0.2"
-                    android:text="00:00 AM"
+                    android:text=""
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_8sdp" />
 
@@ -310,7 +316,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_3sdp"
                     android:alpha="0.2"
-                    android:text="00:00 AM"
+                    android:text=""
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_8sdp" />
 
@@ -320,7 +326,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_1sdp"
                     android:alpha="0.2"
-                    android:text="00:00 AM"
+                    android:text=""
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_8sdp" />
 
@@ -330,7 +336,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/_1sdp"
                     android:alpha="0.2"
-                    android:text="00:00 AM"
+                    android:text=""
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/_8sdp" />
             </LinearLayout>
@@ -453,42 +459,26 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/_5sdp"
                 android:layout_marginBottom="@dimen/_4sdp"
-                android:background="@color/white"
+                android:layout_marginTop="@dimen/_3sdp"
                 android:orientation="horizontal">
-
-                <!--<TextView-->
-                    <!--android:id="@+id/cancel_txt"-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="@dimen/_35sdp"-->
-                    <!--android:layout_marginRight="@dimen/_1sdp"-->
-                    <!--android:layout_weight="0.9"-->
-                    <!--android:background="@drawable/submit_shape"-->
-                    <!--android:layout_marginLeft="@dimen/_15sdp"-->
-                    <!--android:gravity="center_vertical|center"-->
-                    <!--android:text="Cancel"-->
-                    <!--android:textColor="@color/blue"-->
-                    <!--android:textSize="@dimen/_12sdp"-->
-                    <!--android:textAllCaps="true"-->
-                    <!--android:textStyle="bold"/>-->
 
                 <TextView
                     android:id="@+id/confirm_txt"
                     android:layout_width="@dimen/_120sdp"
                     android:layout_height="@dimen/_35sdp"
-                    android:background="@drawable/submit_shape"
+                    android:background="@drawable/blue_btn"
+                    android:layout_margin="@dimen/_5sdp"
                     android:gravity="center_vertical|center"
-                    android:layout_marginLeft="@dimen/_85sdp"
                     android:text="Confirm"
-                    android:textColor="@color/blue"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/_12sdp"
                     android:textAllCaps="true"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 </layout>

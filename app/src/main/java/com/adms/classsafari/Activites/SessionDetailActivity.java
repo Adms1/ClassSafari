@@ -324,6 +324,7 @@ setTypeface();
             public void onShow(DialogInterface dialog) {
 
                 Button b = mAlertDialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE);
+                Button b1 = mAlertDialog.getButton(android.app.AlertDialog.BUTTON_NEGATIVE);
                 b.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -348,6 +349,8 @@ setTypeface();
                         }
                     }
                 });
+                b.setTextColor(getResources().getColor(R.color.blue));
+                b1.setTextColor(getResources().getColor(R.color.gray1));
             }
         });
         mAlertDialog.show();

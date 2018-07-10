@@ -192,6 +192,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                     case R.id.action_filter:
                         FilterDialog();
                         break;
+                        default:
                 }
                 return true;
             }
@@ -424,7 +425,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         priceBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.dialog_price, (ViewGroup) binding.getRoot(), false);
 
-        priceDialog = new Dialog(mContext);//, R.style.PauseDialog
+        priceDialog = new Dialog(mContext);//, R.style.PauseDialog);//
         Window window = priceDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         priceDialog.getWindow().getAttributes().verticalMargin = 0.10F;
@@ -450,7 +451,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
             }
             fillData(filterFinalArray);
         }
-        priceBinding.resultTxt.setText(String.valueOf(result));
+       // priceBinding.resultTxt.setText(String.valueOf(result));
         List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
         List<Float> priceList = new ArrayList<>();
 
@@ -515,7 +516,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                                     Float.parseFloat(arrayObj.getSessionAmount()) <= Integer.parseInt(String.valueOf(maxValue))) {
                                 filterFinalArray.add(arrayObj);
                                 afterfilterresult = String.valueOf(filterFinalArray.size());
-                                priceBinding.result1Txt.setText(afterfilterresult);
+                                //priceBinding.result1Txt.setText(afterfilterresult);
                             }
                         }
                     }
@@ -540,14 +541,14 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         sortBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.dialog_sort, (ViewGroup) binding.getRoot(), false);
 
-        sortDialog = new Dialog(mContext, R.style.PauseDialog);
+        sortDialog = new Dialog(mContext);//, R.style.PauseDialog);
         Window window = sortDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         sortDialog.getWindow().getAttributes().verticalMargin = 0.10F;
         wlp.gravity = Gravity.BOTTOM;
         window.setAttributes(wlp);
 
-        sortDialog.getWindow().setBackgroundDrawableResource(R.drawable.filter1);
+        sortDialog.getWindow().setBackgroundDrawableResource(R.drawable.filter1_1);
 
         sortDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         sortDialog.setCancelable(true);
@@ -801,7 +802,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         filterBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.dialog_filter, (ViewGroup) binding.getRoot(), false);
 
-        filterDialog = new Dialog(mContext, R.style.PauseDialog);
+        filterDialog = new Dialog(mContext);//, R.style.PauseDialog);
         Window window = filterDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         filterDialog.getWindow().getAttributes().verticalMargin = 0.10F;

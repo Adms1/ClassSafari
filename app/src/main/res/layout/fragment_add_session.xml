@@ -112,8 +112,8 @@
                             android:id="@+id/recurring_rb"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/_30sdp"
-                            android:layout_weight="0.65"
                             android:layout_marginLeft="@dimen/_5sdp"
+                            android:layout_weight="0.65"
                             android:button="@drawable/absent_radio_type"
                             android:checked="false"
                             android:paddingLeft="@dimen/_2sdp"
@@ -123,8 +123,8 @@
                             android:id="@+id/single_rb"
                             android:layout_width="0dp"
                             android:layout_height="@dimen/_35sdp"
+                            android:layout_marginLeft="@dimen/_5sdp"
                             android:layout_weight="0.8"
-                      android:layout_marginLeft="@dimen/_5sdp"
                             android:button="@drawable/absent_radio_type"
                             android:paddingLeft="@dimen/_2sdp"
                             android:text="@string/single" />
@@ -155,6 +155,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_25sdp"
                         android:hint="@string/session_name"
+                        android:maxLength="40"
                         android:imeOptions="actionNext"
                         android:maxLines="1" />
                 </LinearLayout>
@@ -179,6 +180,7 @@
                         style="@style/addSessionEditText"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_25sdp"
+                        android:maxLength="40"
                         android:hint="@string/session_board"
                         android:maxLines="1" />
                 </LinearLayout>
@@ -203,6 +205,7 @@
                         style="@style/addSessionEditText"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_25sdp"
+                        android:maxLength="40"
                         android:hint="@string/search_standard"
                         android:maxLines="1" />
                 </LinearLayout>
@@ -226,6 +229,7 @@
                         android:id="@+id/stream_edt"
                         style="@style/addSessionEditText"
                         android:layout_width="match_parent"
+                        android:maxLength="40"
                         android:layout_height="@dimen/_25sdp"
 
                         android:hint="@string/add_stream"
@@ -253,6 +257,7 @@
                         style="@style/addSessionEditText"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_25sdp"
+                        android:maxLength="40"
                         android:hint="Subject"
                         android:maxLines="1" />
                 </LinearLayout>
@@ -277,12 +282,13 @@
                         style="@style/addSessionEditText"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_25sdp"
-                        android:hint="@string/description"
-                      android:inputType="textMultiLine"
-                        android:lines="15"
-                        android:scrollbars="vertical"
                         android:gravity="top"
-                        android:imeOptions="actionNext" />
+                        android:hint="@string/description"
+                        android:imeOptions="actionNext"
+                        android:inputType="textMultiLine"
+                        android:lines="15"
+                        android:maxLength="400"
+                        android:scrollbars="vertical" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -312,7 +318,7 @@
                         android:gravity="start|center_vertical"
                         android:text="@string/session_time"
                         android:textColor="@color/text_color"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <Button
                         android:id="@+id/add_session_btn"
@@ -324,9 +330,9 @@
                         android:layout_marginTop="@dimen/_5sdp"
                         android:background="@drawable/plus_1"
                         android:gravity="center"
-                        android:textStyle="bold"
                         android:textColor="@color/blue"
-                        android:textSize="@dimen/_13sdp" />
+                        android:textSize="@dimen/_13sdp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -571,8 +577,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_3sdp"
-                        android:layout_marginBottom="@dimen/_3sdp">
+                        android:layout_marginBottom="@dimen/_3sdp"
+                        android:layout_marginTop="@dimen/_3sdp">
 
                         <TextView
                             android:id="@+id/mon_hours_txt"
@@ -743,6 +749,7 @@
 
                     </LinearLayout>
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/session_select_address_linear"
                     android:layout_width="match_parent"
@@ -759,6 +766,7 @@
                         android:layout_marginLeft="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:src="@drawable/ad" />
+
                     <TextView
                         android:id="@+id/session_select_address_txt"
                         android:layout_width="@dimen/_100sdp"
@@ -769,7 +777,8 @@
                         android:gravity="start|center_vertical"
                         android:text="Add Class Address"
                         android:textColor="@color/text_color"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
+
                     <Button
                         android:id="@+id/select_session_address_btn"
                         android:layout_width="@dimen/_25sdp"
@@ -782,7 +791,8 @@
                         android:gravity="center"
                         android:textColor="@color/blue"
                         android:textSize="@dimen/_13sdp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
+
                     <Button
                         android:id="@+id/new_session_address_btn"
                         android:layout_width="@dimen/_25sdp"
@@ -795,9 +805,10 @@
                         android:gravity="center"
                         android:textColor="@color/blue"
                         android:textSize="@dimen/_13sdp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/session_address_linear"
                     android:layout_width="match_parent"
@@ -812,17 +823,17 @@
                         android:layout_height="@dimen/_15sdp"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/_5sdp"
-                        android:layout_marginTop="@dimen/_2sdp"
-                        />
+                        android:layout_marginTop="@dimen/_2sdp" />
 
                     <AutoCompleteTextView
                         android:id="@+id/address_edt"
                         style="@style/addSessionEditText"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_25sdp"
-                        android:maxLength="30"
-                        android:hint="@string/address1" />
+                        android:hint="@string/address1"
+                        android:maxLength="30" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/session_address_linear1"
                     android:layout_width="match_parent"
@@ -837,17 +848,17 @@
                         android:layout_height="@dimen/_15sdp"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/_5sdp"
-                        android:layout_marginTop="@dimen/_2sdp"
-                         />
+                        android:layout_marginTop="@dimen/_2sdp" />
 
                     <AutoCompleteTextView
                         android:id="@+id/address_edt1"
                         style="@style/addSessionEditText"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_25sdp"
-                        android:maxLength="30"
-                        android:hint="@string/address2" />
+                        android:hint="@string/address2"
+                        android:maxLength="30" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/session_area_linear"
                     android:layout_width="match_parent"
@@ -955,7 +966,7 @@
                             android:checked="true"
                             android:paddingLeft="@dimen/_2sdp"
                             android:text="@string/free_radio"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
                         <RadioButton
                             android:id="@+id/paid_rb"
@@ -965,7 +976,7 @@
                             android:button="@drawable/absent_radio_type"
                             android:paddingLeft="@dimen/_2sdp"
                             android:text="@string/paid_radio"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
                     </RadioGroup>
 
                     <EditText

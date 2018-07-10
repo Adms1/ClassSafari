@@ -2,15 +2,18 @@ package com.adms.classsafari.Activites;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -828,17 +831,73 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         sessiondetailConfirmationDialogBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
-                    callpaymentRequestApi();
-                } else {
-                    paymentStatusstr = "1";
-                    callSessionConfirmationApi();
-                }
+                AppConfiguration.TeacherSessionIdStr = sessionIDStr;
+                AppConfiguration.TeacherSessionContactIdStr = contatIDstr;
+                callSessioncapacityApi();
                 confimDialog.dismiss();
             }
         });
         confimDialog.show();
 
+    }
+    //Use for GetSession Report
+    public void callSessioncapacityApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_Check_SpotAvailability_By_SessionID(getSessioncapacityDetail(), new retrofit.Callback<TeacherInfoModel>() {
+                @Override
+                public void success(TeacherInfoModel sessionModel, Response response) {
+                    Utils.dismissDialog();
+                    if (sessionModel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionModel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionModel.getSuccess().equalsIgnoreCase("false")) {
+                        new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                                .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+                                .setMessage(getResources().getString(R.string.fail_msg))
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                })
+                                .setIcon(R.drawable.safari)
+                                .show();
+                        return;
+                    }
+                    if (sessionModel.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.dismissDialog();
+                        if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
+                            callpaymentRequestApi();
+                        } else {
+                            paymentStatusstr = "1";
+                            callSessionConfirmationApi();
+                        }
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getSessioncapacityDetail() {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("SessionID", sessionIDStr);//contatIDstr  //Utils.getPref(mContext, "coachID")
+        return map;
     }
 
     //Use for SessionList
@@ -867,13 +926,22 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                         if (sessionDetailInfo.getData().size() > 0) {
                             dataResponse = sessionDetailInfo;
                             for (int j = 0; j < dataResponse.getData().size(); j++) {
+                                AppConfiguration.bookingsubjectName=dataResponse.getData().get(j).getSessionName();
+                                AppConfiguration.bookingteacherName=dataResponse.getData().get(j).getName();
+                                AppConfiguration.bookingdate=dataResponse.getData().get(j).getStartDate();
+                                AppConfiguration.bookingtime=dataResponse.getData().get(j).getSchedule();
+                                AppConfiguration.bookingamount=dataResponse.getData().get(j).getSessionAmount();
                                 sessiondetailConfirmationDialogBinding.sessionNameTxt.setText(dataResponse.getData().get(j).getSessionName());
                                 sessiondetailConfirmationDialogBinding.ratingBar.setRating(Float.parseFloat(dataResponse.getData().get(j).getRating()));
                                 sessiondetailConfirmationDialogBinding.tutorNameTxt.setText(dataResponse.getData().get(j).getName());
                                 sessiondetailConfirmationDialogBinding.locationTxt.setText(dataResponse.getData().get(j).getRegionName());
                                 sessiondetailConfirmationDialogBinding.startDateTxt.setText(dataResponse.getData().get(j).getStartDate());
                                 sessiondetailConfirmationDialogBinding.endDateTxt.setText(dataResponse.getData().get(j).getEndDate());
-                                sessiondetailConfirmationDialogBinding.priceTxt.setText("₹" + dataResponse.getData().get(j).getSessionAmount());
+                                if (dataResponse.getData().get(j).getSessionAmount().equalsIgnoreCase("0.00")){
+                                    sessiondetailConfirmationDialogBinding.priceTxt.setText("Free");
+                                }else {
+                                    sessiondetailConfirmationDialogBinding.priceTxt.setText("₹" + dataResponse.getData().get(j).getSessionAmount());
+                                }
                                 if (!dataResponse.getData().get(j).getTotalRatingUser().equalsIgnoreCase("0")) {
                                     sessiondetailConfirmationDialogBinding.ratingUserTxt.setText("( " + dataResponse.getData().get(j).getTotalRatingUser() + " )");
                                 }

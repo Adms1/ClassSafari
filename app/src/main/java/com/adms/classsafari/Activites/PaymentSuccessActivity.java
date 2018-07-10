@@ -1,6 +1,7 @@
 package com.adms.classsafari.Activites;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Typeface;
@@ -8,8 +9,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 
 import com.adms.classsafari.AppConstant.ApiHandler;
@@ -69,15 +72,48 @@ public class PaymentSuccessActivity extends AppCompatActivity {
         paymentSuccessBinding.txtUserName.setText(Utils.getPref(mContext,"RegisterUserName"));
         if (getIntent().getStringExtra("responseCode").equalsIgnoreCase("0")) {
             status = "success";
-            callSessionListApi();
+         //   callSessionListApi();
+            paymentSuccessBinding.subjectLinear.setVisibility(View.VISIBLE);
+            paymentSuccessBinding.teacherNameLinear.setVisibility(View.VISIBLE);
+            paymentSuccessBinding.dateLinear.setVisibility(View.VISIBLE);
+            paymentSuccessBinding.timeLinear.setVisibility(View.VISIBLE);
+            paymentSuccessBinding.transcationLinear.setVisibility(View.VISIBLE);
+            paymentSuccessBinding.amountLinear.setVisibility(View.VISIBLE);
 
+            paymentSuccessBinding.txtsubjectname.setText(AppConfiguration.bookingsubjectName);
+            paymentSuccessBinding.txtteachername.setText(Utils.getPref(mContext, "RegisterUserName"));
+            paymentSuccessBinding.txtdate.setText(AppConfiguration.bookingdate);
+            if (AppConfiguration.bookingtime.contains("|")) {
+                String[] splitvalue =AppConfiguration.bookingtime.split("\\|");
+                String[]time=splitvalue[1].split("\\,");
+                String[]splitTime=time[1].split("\\-");
+                paymentSuccessBinding.txttime.setText(splitTime[0]);
+            }else{
+                String[]time=AppConfiguration.bookingtime.split("\\,");
+                String[]splitTime=time[1].split("\\-");
+                paymentSuccessBinding.txttime.setText(splitTime[0]);
+            }
+
+            paymentSuccessBinding.txtTransactionID.setText(getIntent().getStringExtra("transactionId"));
+            if (AppConfiguration.bookingamount.equalsIgnoreCase("0.00")) {
+                paymentSuccessBinding.txtValue.setText("Free");
+            }
+            else {
+                paymentSuccessBinding.txtValue.setText("₹"+AppConfiguration.bookingamount);
+            }
+
+            paymentSuccessBinding.imvSuccessFail.setImageResource(R.drawable.circle_sucess);
+            paymentSuccessBinding.txtSucessFail.setText("Success");
+            paymentSuccessBinding.txtSucessFailDesc.setText("Your enrollment was successful");
+            paymentSuccessBinding.btnNewCharge.setText("Done");
+            paymentSuccessBinding.sessionTxt.setText("ENROLLMENT SUCCESFUL");
 
         } else {
             paymentSuccessBinding.imvSuccessFail.setImageResource(R.drawable.failer);
             status = "fail";
             paymentSuccessBinding.txtSucessFail.setTextColor(getResources().getColor(R.color.absent));
             paymentSuccessBinding.txtSucessFail.setText("Failure");
-            paymentSuccessBinding.txtSucessFailDesc.setTextColor(getResources().getColor(R.color.text_color));
+            paymentSuccessBinding.txtSucessFailDesc.setTextColor(getResources().getColor(R.color.absent));
             paymentSuccessBinding.txtSucessFailDesc.setText("Your payment was not successful\nPlease try again.");
             paymentSuccessBinding.txtTransactionID.setVisibility(GONE);
             paymentSuccessBinding.txtValue.setVisibility(GONE);
@@ -97,11 +133,69 @@ public class PaymentSuccessActivity extends AppCompatActivity {
                     Intent isearchByuser = new Intent(mContext, MySession.class);
                     startActivity(isearchByuser);
                 }else{
-                    callpaymentRequestApi();
+                    callSessioncapacityApi();
                 }
                         // Stuff that updates the UI
             }
         });
+    }
+    //Use for GetSession Report
+    public void callSessioncapacityApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_Check_SpotAvailability_By_SessionID(getSessioncapacityDetail(), new retrofit.Callback<TeacherInfoModel>() {
+                @Override
+                public void success(TeacherInfoModel sessionModel, Response response) {
+                    Utils.dismissDialog();
+                    if (sessionModel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionModel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionModel.getSuccess().equalsIgnoreCase("false")) {
+                        new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                                .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+                                .setMessage(getResources().getString(R.string.fail_msg))
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent isearch=new Intent(mContext,SearchByUser.class);
+                                        startActivity(isearch);
+                                    }
+                                })
+                                .setIcon(R.drawable.safari)
+                                .show();
+                        return;
+                    }
+                    if (sessionModel.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.dismissDialog();
+                        AppConfiguration.TeacherSessionIdStr = Utils.getPref(mContext,"sessionId");
+                        AppConfiguration.TeacherSessionContactIdStr = Utils.getPref(mContext, "coachID");
+                        callpaymentRequestApi();
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getSessioncapacityDetail() {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("SessionID", Utils.getPref(mContext,"sessionId"));//contatIDstr  //Utils.getPref(mContext, "coachID")
+        return map;
     }
 
     //Use for Family and Child Session Add PAyment
@@ -206,7 +300,7 @@ public class PaymentSuccessActivity extends AppCompatActivity {
                                     paymentSuccessBinding.txtValue.setText("Free");
                                 }
                                 else {
-                                    paymentSuccessBinding.txtValue.setText("₹"+getIntent().getStringExtra("amount"));
+                                    paymentSuccessBinding.txtValue.setText("₹"+dataResponse.getData().get(j).getSessionAmount());
                                 }
 
                                 paymentSuccessBinding.imvSuccessFail.setImageResource(R.drawable.circle_sucess);

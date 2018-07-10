@@ -116,13 +116,19 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
             classSearchScreenBinding.streamAutoTxt.setVisibility(View.GONE);
             classSearchScreenBinding.sessionAutoTxt.setHint("Activity");
             classSearchScreenBinding.activityName.setText("SEARCH AN ACTIVITY");
-        } else {
+            classSearchScreenBinding.teacherAutoTxt.setHint("Instructor");
+        } else if (SearchPlaystudy.equalsIgnoreCase("1")){
             classSearchScreenBinding.linearBg.setBackgroundResource(R.drawable.study_bg);
             classSearchScreenBinding.boardAutoTxt.setVisibility(View.VISIBLE);
             classSearchScreenBinding.standardAutoTxt.setVisibility(View.VISIBLE);
             classSearchScreenBinding.streamAutoTxt.setVisibility(View.VISIBLE);
             classSearchScreenBinding.sessionAutoTxt.setHint("Subject");
             classSearchScreenBinding.activityName.setText("SEARCH A CLASS");
+            classSearchScreenBinding.teacherAutoTxt.setHint("Teacher");
+        }else if (SearchPlaystudy.equalsIgnoreCase("3")){
+            classSearchScreenBinding.activityName.setText("SEARCH A CLASS/AN ACTIVITY");
+            classSearchScreenBinding.sessionAutoTxt.setHint("Subject/Activity");
+            classSearchScreenBinding.teacherAutoTxt.setHint("Teacher/Instructor");
         }
         if (!firsttimesearch.equalsIgnoreCase("true")) {
             genderStr = getIntent().getStringExtra("gender");

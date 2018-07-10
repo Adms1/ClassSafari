@@ -311,6 +311,7 @@ public class PaymentFragment extends Fragment {
                 args.putString("amount", resposeData.getString("amount"));
                 args.putString("description", resposeData.getString("description"));
                 args.putString("order_id", resposeData.getString("order_id"));
+                args.putString("type",type);
                 fragment.setArguments(args);
                 fragmentTransaction.replace(R.id.frame, fragment);
                 fragmentTransaction.addToBackStack(null);

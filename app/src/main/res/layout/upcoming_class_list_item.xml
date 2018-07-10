@@ -423,7 +423,7 @@
                         android:id="@+id/book_session_btn"
                         android:layout_width="@dimen/_100sdp"
                         android:layout_height="@dimen/_30sdp"
-                        android:layout_marginLeft="@dimen/_165sdp"
+                        android:layout_marginLeft="@dimen/_65sdp"
                         android:background="@drawable/round_yello"
                         android:text="Unpaid"
                         android:textColor="@color/search_boder"

@@ -89,6 +89,10 @@ public interface WebServices {
     public void get_Session_ContactEnrollment(@FieldMap Map<String, String> map, Callback<TeacherInfoModel> callback);
 
     @FormUrlEncoded
+    @POST("/Check_SpotAvailability_By_SessionID")
+    public void get_Check_SpotAvailability_By_SessionID(@FieldMap Map<String, String> map, Callback<TeacherInfoModel> callback);
+
+    @FormUrlEncoded
     @POST("/Session_StudentDetail")
     public void get_Session_StudentDetail(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
 

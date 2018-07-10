@@ -97,7 +97,15 @@
 
         <!--<item name="@android:textColor">@android:color/primary_text_light</item>-->
     </style>
-
+    <style name="PauseDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowMinWidthMajor">95%</item>
+        <item name="android:windowMinWidthMinor">95%</item>
+        <item name="android:windowAnimationStyle">@style/DialogAnimation_2</item>
+    </style>
+    <style name="DialogAnimation_2">
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_bottom</item>
+    </style>
     <style name="Theme_Dialog1" parent="@android:style/Theme.Dialog">
         <item name="android:windowMinWidthMajor">70%</item>
         <item name="android:windowMinWidthMinor">70%</item>

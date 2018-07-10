@@ -24,6 +24,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.adms.classsafari.Adapter.UserSessionListAdapter;
@@ -31,6 +33,7 @@ import com.adms.classsafari.Adapter.UserSessionListAdapter1;
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.AppConfiguration;
 import com.adms.classsafari.AppConstant.Utils;
+import com.adms.classsafari.Interface.onChlidClick;
 import com.adms.classsafari.Interface.onViewClick;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.Session.sessionDataModel;
@@ -75,12 +78,12 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
     SessionDetailModel dataResponse;
     int SessionHour = 0;
     Integer SessionMinit = 0;
-    String SessionDuration ;
-    String hours,minit;
+    String SessionDuration;
+    String hours, minit;
     //Use for Menu Dialog
-    String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr;
+    String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr, sessionId, commentStr, ratingValueStr;
     Dialog menuDialog;
-    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily,btnMyenroll,btnMyprofile;
+    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
     TextView userNameTxt;
     ArrayList<Integer> totalHours;
     ArrayList<Integer> totalMinit;
@@ -101,6 +104,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
     public void getIntenttValue() {
         wheretocometypeStr = getIntent().getStringExtra("wheretocometype");
     }
+
     public void setTypeface() {
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
 
@@ -149,7 +153,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                         return;
                     }
                     if (sessionModel.getSuccess().equalsIgnoreCase("False")) {
-                        Utils.ping(mContext,"Classes not found");
+                        Utils.ping(mContext, "Classes not found");
                         mySessionBinding.noRecordTxt.setVisibility(View.VISIBLE);
                         return;
                     }
@@ -214,11 +218,160 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                     SessionConfirmationDialog();
                 }
             }
+        }, new onChlidClick() {
+            @Override
+            public void getChilClick() {
+                addRating();
+            }
         });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         mySessionBinding.sessionRcList.setLayoutManager(mLayoutManager);
         mySessionBinding.sessionRcList.setItemAnimator(new DefaultItemAnimator());
         mySessionBinding.sessionRcList.setAdapter(userSessionListAdapter);
+    }
+
+    public void addRating() {
+        ArrayList<String> selectedId = new ArrayList<String>();
+        String sessionName = "";
+        String[] splitvalue = new String[0];
+        selectedId = userSessionListAdapter.getSessionDetail();
+        Log.d("selectedId", "" + selectedId);
+        for (int i = 0; i < selectedId.size(); i++) {
+            splitvalue = selectedId.get(i).split("\\|");
+            sessionName = splitvalue[0];
+            sessionId = splitvalue[1];
+        }
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.rating_dialog_layout, null);
+        final RatingBar ratingBar = alertLayout.findViewById(R.id.rating_bar);
+        final TextView sessionNametxt = alertLayout.findViewById(R.id.session_name_txt);
+        final TextView session_rating_view_txt = alertLayout.findViewById(R.id.session_rating_view_txt);
+        final TextView cancel_txt = alertLayout.findViewById(R.id.cancel_txt);
+        final TextView confirm_txt = alertLayout.findViewById(R.id.confirm_txt);
+        final EditText comment_edt = alertLayout.findViewById(R.id.comment_edt);
+        final TextView teacher_name_txt = alertLayout.findViewById(R.id.teacher_name_txt);
+        sessionNametxt.setText(sessionName);
+        teacher_name_txt.setText(splitvalue[2]);
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                if (b) {
+                    int rating = (int) ratingBar.getRating();
+                    if (rating == 1) {
+                        session_rating_view_txt.setText("Very poor");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.remarks));
+                    } else if (rating == 2) {
+                        session_rating_view_txt.setText("Poor");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.remarks));
+                    } else if (rating == 3) {
+                        session_rating_view_txt.setText("Average");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.rating_bar));
+                    } else if (rating == 4) {
+                        session_rating_view_txt.setText("Good");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.present));
+                    } else if (rating == 5) {
+                        session_rating_view_txt.setText("Excellent");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.present));
+                    }
+                }
+            }
+        });
+
+        android.app.AlertDialog.Builder sayWindows = new android.app.AlertDialog.Builder(
+                mContext);
+
+        sayWindows.setPositiveButton("Rate", null);
+        sayWindows.setNegativeButton("Not Now", null);
+        sayWindows.setView(alertLayout);
+
+        final android.app.AlertDialog mAlertDialog = sayWindows.create();
+        mAlertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialog) {
+
+                Button b = mAlertDialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE);
+                Button b1 = mAlertDialog.getButton(android.app.AlertDialog.BUTTON_NEGATIVE);
+                b.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        // TODO Do something
+                        String rating = String.valueOf(ratingBar.getRating());
+//                Toast.makeText(getApplicationContext(), rating, Toast.LENGTH_LONG).show();
+                        commentStr = comment_edt.getText().toString();
+                        if (commentStr.equalsIgnoreCase("")) {
+                            commentStr = session_rating_view_txt.getText().toString();
+                        }
+                        ratingValueStr = String.valueOf(ratingBar.getRating());
+                        if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
+                            if (!ratingValueStr.equalsIgnoreCase("0.0")) {
+                                callAddrating();
+                                mAlertDialog.dismiss();
+                            } else {
+                                Utils.ping(mContext, "Please select rate");
+                            }
+                        } else {
+                            Utils.ping(mContext, getResources().getString(R.string.not_loging));
+                        }
+                    }
+                });
+                b.setTextColor(getResources().getColor(R.color.blue));
+                b1.setTextColor(getResources().getColor(R.color.gray1));
+            }
+        });
+        mAlertDialog.show();
+    }
+
+    //Use for AddRating
+    public void callAddrating() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().Add_Session_Rating(getratingDetail(), new retrofit.Callback<SessionDetailModel>() {
+                @Override
+                public void success(SessionDetailModel addratingmodel, Response response) {
+                    Utils.dismissDialog();
+                    if (addratingmodel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (addratingmodel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (addratingmodel.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.ping(mContext, getString(R.string.false_msg));
+                        return;
+                    }
+                    if (addratingmodel.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.dismissDialog();
+                        callSessionListApi();
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getratingDetail() {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("SessionID", sessionId);
+        map.put("ContactID", Utils.getPref(mContext, "coachID"));
+        map.put("Comment", commentStr);
+        map.put("RatingValue", ratingValueStr);
+
+        return map;
     }
 
     //Use for paymentRequest
@@ -330,6 +483,70 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         return map;
     }
 
+    //Use for GetSession Report
+    public void callSessioncapacityApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_Check_SpotAvailability_By_SessionID(getSessioncapacityDetail(), new retrofit.Callback<TeacherInfoModel>() {
+                @Override
+                public void success(TeacherInfoModel sessionModel, Response response) {
+                    Utils.dismissDialog();
+                    if (sessionModel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionModel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionModel.getSuccess().equalsIgnoreCase("false")) {
+                        new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
+                                .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
+                                .setMessage(getResources().getString(R.string.fail_msg))
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    }
+                                })
+                                .setIcon(R.drawable.safari)
+                                .show();
+                        return;
+                    }
+                    if (sessionModel.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.dismissDialog();
+                        AppConfiguration.TeacherSessionIdStr = selectedsessionIDStr;
+                        AppConfiguration.TeacherSessionContactIdStr = Utils.getPref(mContext, "coachID");
+                        if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("") &&
+                                !selectedsessionIDStr.equalsIgnoreCase("") &&
+                                !sessionPriceStr.equalsIgnoreCase("0.00")) {
+                            callpaymentRequestApi();
+                        } else {
+                            paymentStatusstr = "1";
+                            callSessionConfirmationApi();
+                        }
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getSessioncapacityDetail() {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("SessionID", sessionIDStr);//contatIDstr  //Utils.getPref(mContext, "coachID")
+        return map;
+    }
+
     //Use for SessionList
     public void callSessionListApi() {
         if (Utils.checkNetwork(mContext)) {
@@ -356,6 +573,12 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                         if (sessionDetailInfo.getData().size() > 0) {
                             dataResponse = sessionDetailInfo;
                             for (int j = 0; j < dataResponse.getData().size(); j++) {
+                                AppConfiguration.bookingsubjectName = dataResponse.getData().get(j).getSessionName();
+                                AppConfiguration.bookingteacherName = dataResponse.getData().get(j).getName();
+                                AppConfiguration.bookingdate = dataResponse.getData().get(j).getStartDate();
+                                AppConfiguration.bookingtime = dataResponse.getData().get(j).getSchedule();
+                                AppConfiguration.bookingamount = dataResponse.getData().get(j).getSessionAmount();
+
                                 sessiondetailConfirmationDialogBinding.sessionNameTxt.setText(dataResponse.getData().get(j).getSessionName());
                                 sessiondetailConfirmationDialogBinding.ratingBar.setRating(Float.parseFloat(dataResponse.getData().get(j).getRating()));
 //                                sessiondetailConfirmationDialogBinding.ratingUserTxt.setText();
@@ -363,12 +586,16 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                                 sessiondetailConfirmationDialogBinding.locationTxt.setText(dataResponse.getData().get(j).getRegionName());
                                 sessiondetailConfirmationDialogBinding.startDateTxt.setText(dataResponse.getData().get(j).getStartDate());
                                 sessiondetailConfirmationDialogBinding.endDateTxt.setText(dataResponse.getData().get(j).getEndDate());
-                                sessiondetailConfirmationDialogBinding.priceTxt.setText("₹"+dataResponse.getData().get(j).getSessionAmount());
-                                if(!dataResponse.getData().get(j).getTotalRatingUser().equalsIgnoreCase("0")) {
-                                    sessiondetailConfirmationDialogBinding.ratingUserTxt.setText("( "+dataResponse.getData().get(j).getTotalRatingUser()+" )");
+                                if (dataResponse.getData().get(j).getSessionAmount().equalsIgnoreCase("0.00")) {
+                                    sessiondetailConfirmationDialogBinding.priceTxt.setText("Free");
+                                } else {
+                                    sessiondetailConfirmationDialogBinding.priceTxt.setText("₹" + dataResponse.getData().get(j).getSessionAmount());
+                                }
+                                if (!dataResponse.getData().get(j).getTotalRatingUser().equalsIgnoreCase("0")) {
+                                    sessiondetailConfirmationDialogBinding.ratingUserTxt.setText("( " + dataResponse.getData().get(j).getTotalRatingUser() + " )");
                                 }
 
-                                sessionPriceStr=dataResponse.getData().get(j).getSessionAmount();
+                                sessionPriceStr = dataResponse.getData().get(j).getSessionAmount();
                                 AppConfiguration.classsessionPrice = dataResponse.getData().get(j).getSessionAmount();
                                 totalHours = new ArrayList<>();
                                 totalMinit = new ArrayList<>();
@@ -382,21 +609,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                                     calculateHours(spiltDash[0], spiltDash[1]);
                                     dataResponse.getData().get(j).setDateTime(spiltDash[0]);
                                     Log.d("DateTime", spiltDash[0]);
-//                                    if (SessionHour < 10) {
-//                                        hours= "0"+SessionHour;
-//                                    }else{
-//                                        hours= String.valueOf(SessionHour);
-//                                    }
-//                                    if(SessionMinit<10){
-//                                        minit="0"+SessionMinit;
-//                                    }else{
-//                                        minit=String.valueOf(SessionMinit);
-//                                    }
-//                                    if(minit.equalsIgnoreCase(("00"))) {
-//                                        sessiondetailConfirmationDialogBinding.durationTxt.setText(hours + " hr ");
-//                                    }else{
-//                                        sessiondetailConfirmationDialogBinding.durationTxt.setText(hours + " hr " + minit + " min");//+ " min"
-//                                    }
+
                                     switch (spiltComma[0]) {
                                         case "sun":
                                             sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
@@ -503,8 +716,9 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         map.put("SessionID", sessionIDStr);
         return map;
     }
+
     public void averageHours(List<Integer> list) {
-        if(list!=null) {
+        if (list != null) {
             int sum = 0;
             int n = list.size();
             for (int i = 0; i < n; i++)
@@ -514,8 +728,9 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
             Log.d("value", "" + avgHoursvalue);
         }
     }
+
     public void averageMinit(List<Integer> list) {
-        if(list!=null) {
+        if (list != null) {
             int sum = 0;
             int n = list.size();
             for (int i = 0; i < n; i++)
@@ -524,6 +739,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
             Log.d("value", "" + avgMinitvalue);
         }
     }
+
     public void calculateHours(String time1, String time2) {
         Date date1, date2;
         int days, hours, min;
@@ -541,21 +757,15 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
             SessionHour = hours;
             SessionMinit = min;
             Log.i("======= Hours", " :: " + hours + ":" + min);
-//            if(SessionHour>0) {
-////                totalHours.add(SessionHour);
-////            }
-//////            if(SessionMinit>0) {
-////            totalMinit.add(SessionMinit);
-//////            }
 
-            if(SessionMinit>0){
-                if(SessionMinit<10) {
-                    SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf("0" + SessionMinit + " hrs");
-                }else{SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf(SessionMinit + " hrs");
-
+            if (SessionMinit > 0) {
+                if (SessionMinit < 10) {
+                    SessionDuration = SessionHour + ":" + "0" + SessionMinit + " hrs";
+                } else {
+                    SessionDuration = SessionHour + ":" + SessionMinit + " hrs";
                 }
-            }else{
-                SessionDuration=String.valueOf(SessionHour)+" hrs";
+            } else {
+                SessionDuration = SessionHour + ":" + "00" + " hrs";
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -569,7 +779,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         changePasswordDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.change_password_dialog, (ViewGroup) mySessionBinding.getRoot(), false);
 
-        changeDialog = new Dialog(mContext,R.style.Theme_Dialog);//, R.style.Theme_Dialog
+        changeDialog = new Dialog(mContext, R.style.Theme_Dialog);//, R.style.Theme_Dialog
         Window window = changeDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         changeDialog.getWindow().getAttributes().verticalMargin = 0.0f;
@@ -681,30 +891,30 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
 //        menuDialog.setContentView(menuBinding.getRoot());
         menuDialog.setContentView(R.layout.layout_menu);
 
-        btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
+        btnMyprofile = (Button) menuDialog.findViewById(R.id.btnMyprofile);
         btnMyReport = (Button) menuDialog.findViewById(R.id.btnMyReport);
         btnMySession = (Button) menuDialog.findViewById(R.id.btnMySession);
         btnChangePassword = (Button) menuDialog.findViewById(R.id.btnChangePassword);
         btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
-        btnMyenroll=(Button)menuDialog.findViewById(R.id.btnMyenroll);
+        btnMyenroll = (Button) menuDialog.findViewById(R.id.btnMyenroll);
 
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
         btnMyenroll.setVisibility(View.GONE);
 
 
-       btnMyprofile.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
-               Intent imyaccount = new Intent(mContext, AddStudentScreen.class);
-               imyaccount.putExtra("wheretocometype", "menu");
-               imyaccount.putExtra("myprofile","true");
-               imyaccount.putExtra("type", "myprofile");
-               startActivity(imyaccount);
-           }
-       });
+        btnMyprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent imyaccount = new Intent(mContext, AddStudentScreen.class);
+                imyaccount.putExtra("wheretocometype", "menu");
+                imyaccount.putExtra("myprofile", "true");
+                imyaccount.putExtra("type", "myprofile");
+                startActivity(imyaccount);
+            }
+        });
         btnMyReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -797,7 +1007,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         wlp.gravity = Gravity.TOP;
         window.setAttributes(wlp);
 
-       // confimDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        // confimDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
         confimDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         confimDialog.setCancelable(false);
@@ -814,16 +1024,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         sessiondetailConfirmationDialogBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppConfiguration.TeacherSessionIdStr = selectedsessionIDStr;
-                AppConfiguration.TeacherSessionContactIdStr = Utils.getPref(mContext, "coachID");
-                if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("") &&
-                        !selectedsessionIDStr.equalsIgnoreCase("") &&
-                        !sessionPriceStr.equalsIgnoreCase("0.00")) {
-                    callpaymentRequestApi();
-                } else {
-                    paymentStatusstr = "1";
-                    callSessionConfirmationApi();
-                }
+                callSessioncapacityApi();
                 confimDialog.dismiss();
             }
         });

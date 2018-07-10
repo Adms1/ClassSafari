@@ -464,7 +464,6 @@
                     android:layout_gravity="center"
                     android:layout_marginBottom="@dimen/_4sdp"
                     android:layout_marginTop="@dimen/_3sdp"
-                    android:background="@color/white"
                     android:orientation="horizontal">
 
                     <TextView
@@ -472,6 +471,7 @@
                         android:layout_width="@dimen/_120sdp"
                         android:layout_height="@dimen/_35sdp"
                         android:background="@drawable/blue_btn"
+                        android:layout_margin="@dimen/_5sdp"
                         android:gravity="center_vertical|center"
                         android:text="Confirm"
                         android:textColor="@color/white"

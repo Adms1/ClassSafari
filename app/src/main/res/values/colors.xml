@@ -11,7 +11,7 @@
         <color name="text_color">#000000</color>
         <color name="gray">#CC323131</color>
         <color name="white">#ffffff</color>
-        <color name="trasparent">#00000000</color>
+        <color name="trasparent">#E6ffffff</color>
         <color name="gray1">#6c6c6d</color>
         <!--<color name="blue">#1d91f5</color>-->
         <color name="blue">#0094da</color>
@@ -24,7 +24,7 @@
         <color name="absent">#d15151</color>
         <color name="leave">#dccc43</color>
         <color name="remarks">#f2552c</color>
-        <color name="transparent">#80ffffff</color>
+        <color name="transparent">#F2ffffff</color>
         <color name="yellow_dark">#ffd990</color>
         <color name="yellow_light">#f9f2e5</color>
         <color name="blue_dark">#8cc0f0</color>
