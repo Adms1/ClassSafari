@@ -58,7 +58,7 @@ public class UpcomingClassAdapter extends RecyclerView.Adapter<UpcomingClassAdap
         upcomingClassesListBinding.studentNameTxt.setText(arrayList.getData().get(position).getStudentName());
         upcomingClassesListBinding.dateNameTxt.setText(arrayList.getData().get(position).getDate());
         upcomingClassesListBinding.teacherNameTxt.setText(arrayList.getData().get(position).getTeacherName());
-        upcomingClassesListBinding.sessionNameTxt.setText(arrayList.getData().get(position).getClassName());
+        upcomingClassesListBinding.sessionNameTxt.setText(arrayList.getData().get(position).getSubject());
         upcomingClassesListBinding.emailTxt.setText(arrayList.getData().get(position).getEmailID());
         upcomingClassesListBinding.phoneTxt.setText(arrayList.getData().get(position).getMobile());
 
@@ -123,6 +123,35 @@ public class UpcomingClassAdapter extends RecyclerView.Adapter<UpcomingClassAdap
             }
         });
         upcomingClassesListBinding.phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.fromParts("tel", upcomingClassesListBinding.phoneTxt.getText().toString(), null));
+                mContext.startActivity(intent);
+            }
+        });
+
+        upcomingClassesListBinding.addressTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri mapUri = Uri.parse("geo:0,0?q=" + Uri.encode(address));
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                mContext.startActivity(mapIntent);
+            }
+        });
+        upcomingClassesListBinding.emailTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                String[] recipients = {arrayList.getData().get(position).getEmailID()};
+                intent.putExtra(Intent.EXTRA_EMAIL, recipients);
+                intent.setType("text/html");
+                intent.setPackage("com.google.android.gm");
+                mContext.startActivity(Intent.createChooser(intent, "Send mail"));
+            }
+        });
+        upcomingClassesListBinding.phoneTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_DIAL);

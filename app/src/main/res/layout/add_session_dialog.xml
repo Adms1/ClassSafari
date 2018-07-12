@@ -779,7 +779,7 @@
                             android:layout_marginLeft="@dimen/_5sdp"
                             android:background="@drawable/round_btn"
                             android:enabled="false"
-                            android:gravity="center"
+                            android:gravity="center_vertical|center"
                             android:tag="13"
                             android:text="+"
                             android:textColor="@color/blue"

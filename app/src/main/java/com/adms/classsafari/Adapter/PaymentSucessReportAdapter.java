@@ -54,6 +54,7 @@ public class PaymentSucessReportAdapter extends RecyclerView.Adapter<PaymentSuce
         } else {
             holder.amount_txt.setText("₹" + arrayList.get(position).getPaymentAmount());
         }
+
         if (flag.equalsIgnoreCase("1")) {
             holder.family_name_txt.setText(arrayList.get(position).getName());
             holder.transactionID_txt.setText(arrayList.get(position).getTrackAndPayPaymentID());

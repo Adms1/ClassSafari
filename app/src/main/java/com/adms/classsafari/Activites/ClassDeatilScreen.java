@@ -94,7 +94,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
     SearchAreaAdapter searchAreaAdapter;
     ArrayList<String> dialogselectarea;
 
-    String subjectStr, boardStr = "", standardStr = "", streamStr = "",
+    String subjectStr, boardStr = "", standardStr = "", streamStr = "",sessionName = "",
             locationStr, classNameStr, genderStr = "", sessionId, commentStr, ratingValueStr, popularsessionID = "", TeacherName = "",
             populardurationStr = "", populargenderStr = "", popluarsessiondateStr = "", firsttimesearch, RegionName = "", SearchPlaystudy, dialogselectareaStr = "";
     SessionDetailModel dataResponse, populardataresponse, areadataResponse;
@@ -113,7 +113,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
     //Use for Menu Dialog
     String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr;
     Dialog menuDialog, changeDialog;
-    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily,btnMyenroll,btnMyprofile;
+    Button btnHome,btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily,btnMyenroll,btnMyprofile;
     TextView userNameTxt;
     ChangePasswordDialogBinding changePasswordDialogBinding;
 
@@ -127,7 +127,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_class_deatil_screen);
         mContext = ClassDeatilScreen.this;
-        setTypeface();
+       // setTypeface();
         init();
         setListner();
     }
@@ -337,7 +337,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
         Intent inback = new Intent(mContext, SearchByUser.class);
         inback.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(inback);
@@ -425,7 +424,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         priceBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.dialog_price, (ViewGroup) binding.getRoot(), false);
 
-        priceDialog = new Dialog(mContext);//, R.style.PauseDialog);//
+        priceDialog = new Dialog(mContext);//,R.style.PauseDialog);//, R.style.PauseDialog);//
         Window window = priceDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         priceDialog.getWindow().getAttributes().verticalMargin = 0.10F;
@@ -541,7 +540,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         sortBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.dialog_sort, (ViewGroup) binding.getRoot(), false);
 
-        sortDialog = new Dialog(mContext);//, R.style.PauseDialog);
+        sortDialog = new Dialog(mContext);//,R.style.PauseDialog);//, R.style.PauseDialog);
         Window window = sortDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         sortDialog.getWindow().getAttributes().verticalMargin = 0.10F;
@@ -802,7 +801,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         filterBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.dialog_filter, (ViewGroup) binding.getRoot(), false);
 
-        filterDialog = new Dialog(mContext);//, R.style.PauseDialog);
+        filterDialog = new Dialog(mContext);//,R.style.PauseDialog);//, R.style.PauseDialog);
         Window window = filterDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         filterDialog.getWindow().getAttributes().verticalMargin = 0.10F;
@@ -965,9 +964,9 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 
     private Map<String, String> getSessionListDetail() {
         Map<String, String> map = new HashMap<>();
-        map.put("SessionName", classNameStr);
+        map.put("SessionName",classNameStr);
         map.put("AddressCity", locationStr);
-        map.put("LessonTypeName", subjectStr);
+        map.put("LessonTypeName",subjectStr );
         map.put("BoardName", boardStr);
         map.put("StandardName", standardStr);
         map.put("StreamName", streamStr);
@@ -1058,6 +1057,16 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         }, new onViewClick() {
             @Override
             public void getViewClick() {
+                ArrayList<String> selectedId = new ArrayList<String>();
+                String[] splitvalue = new String[0];
+                selectedId = classDetailAdapter.getSessionDetail();
+                Log.d("selectedId", "" + selectedId);
+                for (int i = 0; i < selectedId.size(); i++) {
+                    splitvalue = selectedId.get(i).split("\\|");
+                    classNameStr = splitvalue[0];
+                    sessionId = splitvalue[1];
+                    TeacherName=splitvalue[2];
+                }
                 if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
                     addRating();
                 } else {
@@ -1124,16 +1133,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
     }
 
     public void addRating() {
-        ArrayList<String> selectedId = new ArrayList<String>();
-        String sessionName = "";
-        String[] splitvalue = new String[0];
-        selectedId = classDetailAdapter.getSessionDetail();
-        Log.d("selectedId", "" + selectedId);
-        for (int i = 0; i < selectedId.size(); i++) {
-            splitvalue = selectedId.get(i).split("\\|");
-            sessionName = splitvalue[0];
-            sessionId = splitvalue[1];
-        }
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.rating_dialog_layout, null);
         final RatingBar ratingBar = alertLayout.findViewById(R.id.rating_bar);
@@ -1143,8 +1142,8 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         final TextView confirm_txt = alertLayout.findViewById(R.id.confirm_txt);
         final EditText comment_edt = alertLayout.findViewById(R.id.comment_edt);
         final TextView teacher_name_txt = alertLayout.findViewById(R.id.teacher_name_txt);
-        sessionNametxt.setText(sessionName);
-        teacher_name_txt.setText(splitvalue[2]);
+        sessionNametxt.setText(classNameStr);
+        teacher_name_txt.setText(TeacherName);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
@@ -1535,11 +1534,12 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
     }
 
     public void menuDialog() {
-        menuDialog = new Dialog(mContext, R.style.Theme_Dialog);
+        menuDialog = new Dialog(mContext);//, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.x = 10;
         menuDialog.getWindow().getAttributes().verticalMargin = 0.07F;
-        wlp.gravity = Gravity.TOP;
+        wlp.gravity = Gravity.TOP|Gravity.RIGHT;
         window.setAttributes(wlp);
 
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -1548,10 +1548,11 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 //        menuDialog.setContentView(menuBinding.getRoot());
         menuDialog.setContentView(R.layout.layout_menu);
 
+        btnHome=(Button)menuDialog.findViewById(R.id.btnHome);
         btnMyReport = (Button) menuDialog.findViewById(R.id.btnMyReport);
         btnMySession = (Button) menuDialog.findViewById(R.id.btnMySession);
         btnChangePassword = (Button) menuDialog.findViewById(R.id.btnChangePassword);
-        btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
+//        btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
         btnMyenroll=(Button)menuDialog.findViewById(R.id.btnMyenroll);
@@ -1559,6 +1560,14 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
+
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(mContext,SearchByUser.class);
+                startActivity(i);
+            }
+        });
         btnMyprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

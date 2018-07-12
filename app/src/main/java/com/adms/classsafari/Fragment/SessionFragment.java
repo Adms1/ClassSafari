@@ -482,10 +482,11 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                 }
 
                 Address = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getAddressLine1()
+                        + finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getAddressLine2()
                         + ", " + finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getRegionName()
                         + ", " + finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getAddressCity()
                         + ", " + finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getAddressState()
-                        + "- " + finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getAddressZipCode();
+                        + " " + finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getAddressZipCode();
                 DrawableCalendarEvent event = new DrawableCalendarEvent(Integer.parseInt(finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionDetailID()),
                         colorList.get(k), finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionName(),
                         finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionName(),
@@ -938,6 +939,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                     if (paymentRequestModel.getSuccess().equalsIgnoreCase("True")) {
 
                         orderIDStr = paymentRequestModel.getOrderID();
+
                         Fragment fragment = new PaymentFragment();
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

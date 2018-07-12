@@ -102,7 +102,7 @@
         <LinearLayout
             android:id="@+id/list_linear"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_180sdp"
+            android:layout_height="match_parent"
             android:layout_below="@+id/select_linear"
             android:layout_marginBottom="@dimen/_5sdp"
             android:orientation="vertical"
@@ -124,7 +124,8 @@
             android:layout_weight="2.41"
             android:background="@color/white"
             android:gravity="center"
-            android:text="No Transaction Available..."
+            android:paddingBottom="@dimen/_20sdp"
+            android:text="No transactions available"
             android:textColor="@color/search_boder"
             android:textSize="@dimen/_11sdp"
             android:textStyle="bold"

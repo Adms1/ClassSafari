@@ -14,10 +14,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.Session.sessionDataModel;
 import com.adms.classsafari.R;
-
-import java.util.List;
 
 /**
  * Created by admsandroid on 3/12/2018.
@@ -25,9 +24,9 @@ import java.util.List;
 
 public class StudentAttendanceAdapter extends BaseAdapter {
     private Context mContext;
-    private List<sessionDataModel> studentList;
-
-    public StudentAttendanceAdapter(Context mContext, List<sessionDataModel> studentList) {
+//    private List<sessionDataModel> studentList;
+    private SessionDetailModel studentList;
+    public StudentAttendanceAdapter(Context mContext, SessionDetailModel studentList) {
         this.mContext = mContext;
         this.studentList = studentList;
     }
@@ -42,12 +41,12 @@ public class StudentAttendanceAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return studentList.size();
+        return studentList.getData().size();
     }
 
     @Override
     public sessionDataModel getItem(int position) {
-        return studentList.get(position);
+        return studentList.getData().get(position);
     }
 
     @Override
@@ -82,7 +81,7 @@ public class StudentAttendanceAdapter extends BaseAdapter {
             String sr = String.valueOf(position + 1);
             viewHolder.no_txt.setText(sr);
 
-            final sessionDataModel session = studentList.get(position);
+            final sessionDataModel session = studentList.getData().get(position);
             viewHolder.name_txt.setText(session.getFirstName() + " " + session.getLastName());
             viewHolder.remark_txt.setText(session.getReason());
             viewHolder.remark_txt.addTextChangedListener(new TextWatcher() {

@@ -46,6 +46,7 @@
     <string name="my_session">Upcoming Classes</string>
     <string name="my_enroll">My Enrollment</string>
     <string name="my_profile">My Profile</string>
+
     <string name="my_change_pass">Change Password</string>
     <string name="reviews">Reviews</string>
     <string name="logout">Logout</string>
@@ -118,7 +119,7 @@
     <string name="single">Single</string>
     <string name="academic">Academic</string>
     <string name="play">Activity</string>
-    <string name="saving">Saving</string>
+    <string name="saving">Savings</string>
     <string name="current">Current</string>
     <string name="family_regi">Family</string>
     <string name="teacher_regi">Teacher</string>
@@ -161,6 +162,8 @@
     <string-array name="nav_item_activity_titles">
         <item>CLASS CALENDAR</item>
         <item>ADD CLASS</item>
+        <item>BANK DETAILS</item>
+        <item>MY PROFILE</item>
         <item>PAYMENT REPORT</item>
         <item>STUDENT ATTENDANCE</item>
         <!--<item>Change Password</item>-->
@@ -219,10 +222,11 @@
     <string name="Date">Please select class start date and end date should be same</string>
 
     <!--Change Passsword String-->
-    <string name="newPassword">Enter New Password</string>
+    <string name="newPassword">Enter new password</string>
     <string name="changPassword">Your password changed succesfully</string>
-    <string name="confirmpassword">Confirm New Password</string>
-    <string name="currentpassword">Enter Current Password</string>
+    <string name="confirmpassword">Confirm new password</string>
+    <string name="currentpassword">Enter current password</string>
+    <string name="updateteacher">Update profile successfully</string>
 
 
     <!-- Class Detail String-->
@@ -237,9 +241,11 @@
 
     <!--Bank Detail-->
     <string name="bank_name">Bank Name</string>
-    <string name="account_name">Name of Account</string>
+    <string name="account_name">Name on Account</string>
     <string name="account_number">Account Number</string>
     <string name="code">IFSC Code</string>
     <string name="kyc">Please send KYC document to</string>
     <string name="kyc_mail">kyc@searchclasses.in</string>
+    <string name="bank_sucees">Bank details added successfully</string>
+    <string name="bank_usucees">Bank details updated successfully</string>
 </resources>

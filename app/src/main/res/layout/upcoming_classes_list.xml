@@ -195,7 +195,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/_5sdp"
                                 android:layout_marginTop="@dimen/_5sdp"
-                                android:text="@string/session_detail"
+                                android:text="@string/session_detail_name"
                                 android:textColor="@color/text_color"
                                 android:textSize="@dimen/_12sdp"
                                 android:textStyle="normal" />

@@ -96,9 +96,7 @@
                                         android:id="@+id/rating_txt"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginLeft="@dimen/_2sdp"
                                         android:layout_marginTop="@dimen/_5sdp"
-                                        android:paddingLeft="@dimen/_5sdp"
                                         android:textColor="@color/text_color"
                                         android:textSize="@dimen/_10sdp"
                                         android:visibility="visible"
@@ -459,7 +457,7 @@
                                 android:layout_marginRight="@dimen/_5sdp"
                                 android:background="@drawable/list_line"
                                 android:hint="Mobile No"
-                                android:paddingLeft="@dimen/_5sdp"
+                                android:paddingLeft="@dimen/_1sdp"
                                 android:text="079 66168834"
                                 android:textColor="@color/text_color"
                                 android:textSize="@dimen/_11sdp" />

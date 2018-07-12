@@ -58,7 +58,7 @@ public class PaymentSucessFragment extends Fragment {
         } else {
             ((DashBoardActivity) getActivity()).setActionBar(14, "false");
         }
-        setTypeface();
+        //setTypeface();
         init();
         setListner();
         callSessionPaymentApi();

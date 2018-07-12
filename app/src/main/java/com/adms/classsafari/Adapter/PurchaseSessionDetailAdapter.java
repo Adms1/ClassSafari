@@ -254,7 +254,7 @@ public class PurchaseSessionDetailAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return arrayList.size() + descriptionviewarray.size() + reviewarray.size() + sessionRatingList.size();
+        return arrayList.size() + reviewarray.size() + sessionRatingList.size();//+ descriptionviewarray.size()
     }
 
     public ArrayList<String> getSessionDetail() {

@@ -237,35 +237,35 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
         }
 
 
-        holder.linear_click.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    Intent inSession = new Intent(mContext, SessionName.class);
-                    inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
-                    inSession.putExtra("SearchBy", searchByStr);
-                    inSession.putExtra("city", locationStr);
-                    inSession.putExtra("sessionName", "");//classNameStr
-                    inSession.putExtra("board", boardStr);
-                    inSession.putExtra("stream", streamStr);
-                    inSession.putExtra("standard", standardStr);
-//                    inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
-                    inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() + " To " + holder.end_date_txt.getText().toString());
-//                    inSession.putExtra("duration", cardLayoutBinding.durationTxt.getText().toString());
-                    inSession.putExtra("gender", arrayList.get(position).getGenderID());
-                    inSession.putExtra("searchType", searchTypeStr);
-                    inSession.putExtra("withOR", wheretoComeStr);
-                    inSession.putExtra("searchfront", searchfront);
-                    inSession.putExtra("sessionType", sessionType);
-                    inSession.putExtra("firsttimesearch", firsttimesearch);
-                    inSession.putExtra("SearchPlaystudy",searchPlaystudy);
-                    inSession.putExtra("TeacherName", TeacherName);
-                    inSession.putExtra("RegionName",RegionName);
-                    mContext.startActivity(inSession);
-                }
-                return true;
-            }
-        });
+//        holder.linear_click.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+//                    Intent inSession = new Intent(mContext, SessionName.class);
+//                    inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
+//                    inSession.putExtra("SearchBy", searchByStr);
+//                    inSession.putExtra("city", locationStr);
+//                    inSession.putExtra("sessionName", "");//classNameStr
+//                    inSession.putExtra("board", boardStr);
+//                    inSession.putExtra("stream", streamStr);
+//                    inSession.putExtra("standard", standardStr);
+////                    inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
+//                    inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() + " To " + holder.end_date_txt.getText().toString());
+////                    inSession.putExtra("duration", cardLayoutBinding.durationTxt.getText().toString());
+//                    inSession.putExtra("gender", arrayList.get(position).getGenderID());
+//                    inSession.putExtra("searchType", searchTypeStr);
+//                    inSession.putExtra("withOR", wheretoComeStr);
+//                    inSession.putExtra("searchfront", searchfront);
+//                    inSession.putExtra("sessionType", sessionType);
+//                    inSession.putExtra("firsttimesearch", firsttimesearch);
+//                    inSession.putExtra("SearchPlaystudy",searchPlaystudy);
+//                    inSession.putExtra("TeacherName", TeacherName);
+//                    inSession.putExtra("RegionName",RegionName);
+//                    mContext.startActivity(inSession);
+//                }
+//                return true;
+//            }
+//        });
         holder.view_more_session_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -290,30 +290,30 @@ public class ClassDetailAdapter extends RecyclerView.Adapter<ClassDetailAdapter.
                 mContext.startActivity(inSession);
             }
         });
-        holder.session_name_txt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent inSession = new Intent(mContext, SessionName.class);
-                inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
-                inSession.putExtra("SearchBy", searchByStr);
-                inSession.putExtra("city", locationStr);
-                inSession.putExtra("sessionName", "");//classNameStr
-                inSession.putExtra("board", boardStr);
-                inSession.putExtra("stream", streamStr);
-                inSession.putExtra("standard", standardStr);
-//                inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
-                inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() + " To " + holder.end_date_txt.getText().toString());
-//                inSession.putExtra("duration", cardLayoutBinding.durationTxt.getText().toString());
-                inSession.putExtra("gender", arrayList.get(position).getGenderID());
-                inSession.putExtra("searchType", searchTypeStr);
-                inSession.putExtra("withOR", wheretoComeStr);
-                inSession.putExtra("firsttimesearch", firsttimesearch);
-                inSession.putExtra("SearchPlaystudy",searchPlaystudy);
-                inSession.putExtra("TeacherName", TeacherName);
-                inSession.putExtra("RegionName",RegionName);
-                mContext.startActivity(inSession);
-            }
-        });
+//        holder.session_name_txt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent inSession = new Intent(mContext, SessionName.class);
+//                inSession.putExtra("sessionID", arrayList.get(position).getSessionID());
+//                inSession.putExtra("SearchBy", searchByStr);
+//                inSession.putExtra("city", locationStr);
+//                inSession.putExtra("sessionName", "");//classNameStr
+//                inSession.putExtra("board", boardStr);
+//                inSession.putExtra("stream", streamStr);
+//                inSession.putExtra("standard", standardStr);
+////                inSession.putExtra("lessionName", arrayList.get(position).getLessionTypeName());
+//                inSession.putExtra("sessiondate", holder.start_date_txt.getText().toString() + " To " + holder.end_date_txt.getText().toString());
+////                inSession.putExtra("duration", cardLayoutBinding.durationTxt.getText().toString());
+//                inSession.putExtra("gender", arrayList.get(position).getGenderID());
+//                inSession.putExtra("searchType", searchTypeStr);
+//                inSession.putExtra("withOR", wheretoComeStr);
+//                inSession.putExtra("firsttimesearch", firsttimesearch);
+//                inSession.putExtra("SearchPlaystudy",searchPlaystudy);
+//                inSession.putExtra("TeacherName", TeacherName);
+//                inSession.putExtra("RegionName",RegionName);
+//                mContext.startActivity(inSession);
+//            }
+//        });
         holder.rating_bar.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {

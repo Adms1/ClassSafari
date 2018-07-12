@@ -323,12 +323,13 @@ public class OldFamilyListFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
+                if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("")) {// && !AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
                     callpaymentRequestApi();
-                } else {
-                    paymentStatusstr = "1";
-                    callSessionConfirmationApi();
                 }
+//                else {
+//                    paymentStatusstr = "1";
+//                    callSessionConfirmationApi();
+//                }
                 confimDialog.dismiss();
             }
         });
@@ -394,6 +395,7 @@ public class OldFamilyListFragment extends Fragment {
         confimDialog.show();
 
     }
+
     //Use for GetSession Report
     public void callSessioncapacityApi() {
         if (Utils.isNetworkConnected(mContext)) {
@@ -455,6 +457,7 @@ public class OldFamilyListFragment extends Fragment {
         map.put("SessionID", sessionIDStr);//contatIDstr  //Utils.getPref(mContext, "coachID")
         return map;
     }
+
     //Use for EditSession
     public void callEditSessionApi() {
         if (Utils.isNetworkConnected(mContext)) {
@@ -669,6 +672,7 @@ public class OldFamilyListFragment extends Fragment {
 
 
                             } else {
+                                oldFamilyListBinding.searchLinear.setVisibility(View.GONE);
                                 oldFamilyListBinding.text.setVisibility(View.GONE);
                                 oldFamilyListBinding.listLinear.setVisibility(View.GONE);
                                 oldFamilyListBinding.noRecordTxt.setVisibility(View.VISIBLE);
@@ -902,8 +906,6 @@ public class OldFamilyListFragment extends Fragment {
                     }
                     if (sessionconfirmationInfoModel.getSuccess().equalsIgnoreCase("True")) {
                         Utils.ping(mContext, "Confirmation successfully");
-
-
                         Fragment fragment = new PaymentSucessFragment();
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -911,13 +913,12 @@ public class OldFamilyListFragment extends Fragment {
                         args.putString("order_id", orderIDStr);
                         args.putString("sessionId", sessionIDStr);
                         args.putString("responseCode", "0");
-                        args.putString("transactionId", "1234");
+                        args.putString("transactionId", orderIDStr);
                         args.putString("username", AppConfiguration.UserName);
                         fragment.setArguments(args);
                         fragmentTransaction.replace(R.id.frame, fragment);
                         fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
-
                     }
                 }
 
@@ -965,21 +966,26 @@ public class OldFamilyListFragment extends Fragment {
                     }
                     if (paymentRequestModel.getSuccess().equalsIgnoreCase("True")) {
                         orderIDStr = paymentRequestModel.getOrderID();
-                        Fragment fragment = new PaymentFragment();
-                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        Bundle args = new Bundle();
-                        args.putString("orderID", orderIDStr);
-                        args.putString("amount", AppConfiguration.SessionPrice);
-                        args.putString("mode", AppConfiguration.Mode);
-                        args.putString("username", AppConfiguration.UserName);
-                        args.putString("sessionID", sessionIDStr);
-                        args.putString("contactID", contatIDstr);
-                        args.putString("type", type);
-                        fragment.setArguments(args);
-                        fragmentTransaction.replace(R.id.frame, fragment);
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();
+                        if (!AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
+                            Fragment fragment = new PaymentFragment();
+                            FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            Bundle args = new Bundle();
+                            args.putString("orderID", orderIDStr);
+                            args.putString("amount", AppConfiguration.SessionPrice);
+                            args.putString("mode", AppConfiguration.Mode);
+                            args.putString("username", AppConfiguration.UserName);
+                            args.putString("sessionID", sessionIDStr);
+                            args.putString("contactID", contatIDstr);
+                            args.putString("type", type);
+                            fragment.setArguments(args);
+                            fragmentTransaction.replace(R.id.frame, fragment);
+                            fragmentTransaction.addToBackStack(null);
+                            fragmentTransaction.commit();
+                        } else {
+                            paymentStatusstr = "1";
+                            callSessionConfirmationApi();
+                        }
 
                     }
                 }

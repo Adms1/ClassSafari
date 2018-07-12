@@ -66,7 +66,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
     String passWordStr, confirmpassWordStr, currentpasswordStr, cityName = "";
     Dialog menuDialog, changeDialog;
     //Use for Menu Dialog
-    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily,btnMyenroll,btnMyprofile;
+    Button btnHome, btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
     TextView userNameTxt;
     String SearchPlaystudy;
     boolean flag = true;
@@ -101,7 +101,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
             String[] userName = Utils.getPref(mContext, "RegisterUserName").split("\\s+");
             searchByUserBinding.loginTxt.setTextColor(getResources().getColor(R.color.blue));
             searchByUserBinding.regiTxt.setTextColor(getResources().getColor(R.color.blue));
-            searchByUserBinding.loginTxt.setText(Html.fromHtml("<b>" +" Hi"+ "</b>"));
+            searchByUserBinding.loginTxt.setText(Html.fromHtml("<b>" + " Hi" + "</b>"));
             searchByUserBinding.regiTxt.setText(Html.fromHtml("<b>" + "" + userName[0] + "</b>"));
 //            searchByUserBinding.regiTxt.setPadding(5, 0, 0, 0);
 //            searchByUserBinding.regiTxt.setGravity(Gravity.END);
@@ -378,7 +378,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
         wlp.gravity = Gravity.CENTER;
         window.setAttributes(wlp);
 
-       // changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        // changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
         changeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         changeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         changeDialog.setCancelable(false);
@@ -469,37 +469,46 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
     }
 
     public void menuDialog() {
-
-        menuDialog = new Dialog(mContext, R.style.Theme_Dialog);
+        menuDialog = new Dialog(mContext);//, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.x = 10; // right margin
         menuDialog.getWindow().getAttributes().verticalMargin = 0.09F;
-        wlp.gravity = Gravity.TOP;
+        wlp.gravity = Gravity.TOP | Gravity.RIGHT;
         window.setAttributes(wlp);
 
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         menuDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         menuDialog.setCanceledOnTouchOutside(true);
         menuDialog.setContentView(R.layout.layout_menu);
-
+        btnHome = (Button) menuDialog.findViewById(R.id.btnHome);
         btnMyReport = (Button) menuDialog.findViewById(R.id.btnMyReport);
         btnMySession = (Button) menuDialog.findViewById(R.id.btnMySession);
         btnChangePassword = (Button) menuDialog.findViewById(R.id.btnChangePassword);
-        btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
+//        btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
-        btnMyenroll=(Button)menuDialog.findViewById(R.id.btnMyenroll) ;
-        btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
+        btnMyenroll = (Button) menuDialog.findViewById(R.id.btnMyenroll);
+        btnMyprofile = (Button) menuDialog.findViewById(R.id.btnMyprofile);
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
+        btnHome.setVisibility(View.GONE);
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(mContext, SearchByUser.class);
+                startActivity(i);
+            }
+        });
         btnMyprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent imyaccount = new Intent(mContext, AddStudentScreen.class);
                 imyaccount.putExtra("wheretocometype", "menu");
-                imyaccount.putExtra("myprofile","true");
+                imyaccount.putExtra("myprofile", "true");
                 imyaccount.putExtra("type", "myprofile");
                 startActivity(imyaccount);
+                menuDialog.dismiss();
             }
         });
         btnMyReport.setOnClickListener(new View.OnClickListener() {
@@ -508,6 +517,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
                 Intent imyaccount = new Intent(mContext, MyAccountActivity.class);
                 imyaccount.putExtra("wheretocometype", "menu");
                 startActivity(imyaccount);
+                menuDialog.dismiss();
             }
         });
         btnMyenroll.setOnClickListener(new View.OnClickListener() {
@@ -525,6 +535,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(mContext, UpcomingActivity.class);
                 intent.putExtra("wheretocometype", "menu");
                 startActivity(intent);
+                menuDialog.dismiss();
             }
         });
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
@@ -543,6 +554,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
                 intent.putExtra("familyNameStr", Utils.getPref(mContext, "RegisterUserName"));
                 intent.putExtra("familyID", Utils.getPref(mContext, "coachTypeID"));
                 startActivity(intent);
+                menuDialog.dismiss();
             }
         });
         btnLogout.setOnClickListener(new View.OnClickListener() {

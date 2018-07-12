@@ -194,20 +194,27 @@
 
                         <TextView
                             android:id="@+id/date_txt"
-                            android:layout_width="@dimen/_70sdp"
+                            android:layout_width="match_parent"
                             android:layout_height="@dimen/_20sdp"
                             android:layout_marginLeft="@dimen/_3sdp"
+                            android:layout_marginRight="@dimen/_3sdp"
                             android:paddingLeft="@dimen/_1sdp"
                             android:text=""
                             android:textColor="@color/dark_gray"
                             android:textSize="@dimen/_11sdp" />
+                    </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:orientation="horizontal">
                         <TextView
                             android:id="@+id/time_txt_view"
-                            android:layout_width="@dimen/_45sdp"
+                            android:layout_width="@dimen/_50sdp"
                             android:layout_height="@dimen/_20sdp"
-                            android:layout_marginLeft="@dimen/_2sdp"
-                            android:gravity="center_vertical|right"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:gravity="center_vertical"
                             android:text="@string/batch_time"
                             android:textColor="@color/dark_gray"
                             android:textSize="@dimen/_12sdp" />
@@ -220,16 +227,15 @@
 
                         <TextView
                             android:id="@+id/time_txt"
-                            android:layout_width="@dimen/_125sdp"
+                            android:layout_width="match_parent"
                             android:layout_height="@dimen/_20sdp"
+                            android:layout_marginRight="@dimen/_3sdp"
                             android:layout_marginLeft="@dimen/_3sdp"
                             android:paddingLeft="@dimen/_1sdp"
                             android:text=""
                             android:textColor="@color/dark_gray"
                             android:textSize="@dimen/_11sdp" />
-
                     </LinearLayout>
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -365,6 +371,7 @@
                         android:background="@drawable/blue_btn"
                         android:gravity="center"
                         android:text="@string/submit"
+                        android:textAllCaps="true"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_12sdp"
                         android:textStyle="bold"

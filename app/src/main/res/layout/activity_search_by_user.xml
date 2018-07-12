@@ -240,7 +240,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_marginTop="@dimen/_5sdp"
-            android:text="Ver. 06072018.2"
+            android:text="Ver. 12072018.3"
             android:textColor="@color/gray1"
             android:textSize="@dimen/_12sdp"
             android:textStyle="normal" />

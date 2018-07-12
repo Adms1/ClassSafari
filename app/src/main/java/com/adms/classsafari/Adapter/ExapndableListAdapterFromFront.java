@@ -32,7 +32,7 @@ public class ExapndableListAdapterFromFront extends BaseExpandableListAdapter {
 
     String FamilyID;
     ArrayList<String> value;
-    String froncontanctStr, arraowStr,phoneStr;
+    String froncontanctStr, arraowStr, phoneStr;
     onViewClick onViewClick;
     onChlidClick onChlidClick;
     private Context mContext;
@@ -40,13 +40,13 @@ public class ExapndableListAdapterFromFront extends BaseExpandableListAdapter {
     private HashMap<String, List<ChildDetailModel>> _listDataChild;
     private ArrayList<String> familyIdCheck;
     private ArrayList<String> sesionDeatil;
-
+    String[] spiltValue;
     public ExapndableListAdapterFromFront(Context mContext, List<String> listDataHeader, HashMap<String, List<ChildDetailModel>> listDataChild, onViewClick onViewClick, onChlidClick onChlidClick) {
         this.mContext = mContext;
         this._listDataChild = listDataChild;
         this._listDataHeader = listDataHeader;
         this.onViewClick = onViewClick;
-        this.onChlidClick=onChlidClick;
+        this.onChlidClick = onChlidClick;
     }
 
 
@@ -80,12 +80,12 @@ public class ExapndableListAdapterFromFront extends BaseExpandableListAdapter {
 
                 }
             });
-familyListFromfrontBinding.editImg.setOnClickListener(new View.OnClickListener() {
+            familyListFromfrontBinding.editImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     familyIdCheck = new ArrayList<String>();
-                    familyIdCheck.add(childDetail.getContactID()+"|"+childDetail.getFirstName()+"|"+childDetail.getLastName()+"|"+childDetail.getContactTypeName()+"|"+childDetail.getGenderID()+"|"+childDetail.getDateofBirth()+"|"+"Contact"+"|"+phoneStr);
-                onChlidClick.getChilClick();
+                    familyIdCheck.add(childDetail.getContactID() + "|" + childDetail.getFirstName() + "|" + childDetail.getLastName() + "|" + childDetail.getContactTypeName() + "|" + childDetail.getGenderID() + "|" + childDetail.getDateofBirth() + "|" + "Contact" + "|" + phoneStr+"|"+spiltValue[0] + "|" + spiltValue[1]);
+                    onChlidClick.getChilClick();
                 }
             });
         } else {
@@ -156,7 +156,7 @@ familyListFromfrontBinding.editImg.setOnClickListener(new View.OnClickListener()
         FamilyGrouplistFromfrontBinding grouplistFromfrontBinding;
 
         String headerTitle = (String) getGroup(groupPosition);
-        final String[] spiltValue = headerTitle.split("\\|");
+        spiltValue = headerTitle.split("\\|");
         if (convertView == null) {
 
         }
@@ -169,13 +169,13 @@ familyListFromfrontBinding.editImg.setOnClickListener(new View.OnClickListener()
         grouplistFromfrontBinding.familynameRb.setText(spiltValue[0] + " " + spiltValue[1]);
         grouplistFromfrontBinding.noTxt.setText(spiltValue[2]);
         FamilyID = spiltValue[3];
-        phoneStr=spiltValue[2];
+        phoneStr = spiltValue[2];
         grouplistFromfrontBinding.editImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //
                 familyIdCheck = new ArrayList<String>();
-                familyIdCheck.add(spiltValue[0] + "|" + spiltValue[1]+"|"+spiltValue[2]+"|"+spiltValue[4]+"|"+spiltValue[5]+"|"+spiltValue[6]+"|"+spiltValue[7]+"|"+"Family");
+                familyIdCheck.add(spiltValue[0] + "|" + spiltValue[1] + "|" + spiltValue[2] + "|" + spiltValue[4] + "|" + spiltValue[5] + "|" + spiltValue[6] + "|" + spiltValue[7] + "|" + "Family");
                 onViewClick.getViewClick();
             }
         });

@@ -61,7 +61,7 @@ public class PaymentReportFragment extends Fragment implements DatePickerDialog.
 //        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         mContext = getActivity();
 
-        ((DashBoardActivity) getActivity()).setActionBar(2, "true");
+        ((DashBoardActivity) getActivity()).setActionBar(4, "true");
         setTypeface();
         initViews();
         setListners();
@@ -175,6 +175,9 @@ public class PaymentReportFragment extends Fragment implements DatePickerDialog.
                     }
                     if (paymentInfoModel.getSuccess().equalsIgnoreCase("false")) {
                         Utils.ping(mContext, getString(R.string.false_msg));
+                        paymentReportBinding.noRecordTxt.setVisibility(View.VISIBLE);
+                        paymentReportBinding.listLinear.setVisibility(View.GONE);
+                        paymentReportBinding.headerLinear.setVisibility(View.GONE);
                         return;
                     }
                     if (paymentInfoModel.getSuccess().equalsIgnoreCase("True")) {

@@ -324,5 +324,130 @@ public class FamilyDetailModel {
         this.createDate = createDate;
     }
 
+    //===============TeacherDetail===========
+    @SerializedName("Mobile")
+    @Expose
+    private String mobile;
+    @SerializedName("DOB")
+    @Expose
+    private String dOB;
+    @SerializedName("EmailID")
+    @Expose
+    private String emailID;
+    @SerializedName("ClassName")
+    @Expose
+    private String className;
+    @SerializedName("Gender")
+    @Expose
+    private Integer gender;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getDOB() {
+        return dOB;
+    }
+
+    public void setDOB(String dOB) {
+        this.dOB = dOB;
+    }
+
+    public String getEmailID() {
+        return emailID;
+    }
+
+    public void setEmailID(String emailID) {
+        this.emailID = emailID;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+//    ===============Bank Detail=========
+
+    @SerializedName("Coach_ID")
+    @Expose
+    private Integer coachID;
+    @SerializedName("BankName")
+    @Expose
+    private String bankName;
+    @SerializedName("NameonAccount")
+    @Expose
+    private String nameonAccount;
+    @SerializedName("TypeofAccount")
+    @Expose
+    private Integer typeofAccount;
+    @SerializedName("AccountNumber")
+    @Expose
+    private String accountNumber;
+    @SerializedName("IFCCode")
+    @Expose
+    private String iFCCode;
+
+    public Integer getCoachID() {
+        return coachID;
+    }
+
+    public void setCoachID(Integer coachID) {
+        this.coachID = coachID;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public String getNameonAccount() {
+        return nameonAccount;
+    }
+
+    public void setNameonAccount(String nameonAccount) {
+        this.nameonAccount = nameonAccount;
+    }
+
+    public Integer getTypeofAccount() {
+        return typeofAccount;
+    }
+
+    public void setTypeofAccount(Integer typeofAccount) {
+        this.typeofAccount = typeofAccount;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public String getIFCCode() {
+        return iFCCode;
+    }
+
+    public void setIFCCode(String iFCCode) {
+        this.iFCCode = iFCCode;
+    }
 
 }

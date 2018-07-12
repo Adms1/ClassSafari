@@ -134,7 +134,7 @@
 
                             <TextView
                                 android:id="@+id/txtsubjectname_view"
-                                android:layout_width="@dimen/_90sdp"
+                                android:layout_width="@dimen/_80sdp"
                                 android:layout_height="wrap_content"
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginTop="5dp"
@@ -175,13 +175,12 @@
 
 
                             <TextView
-                                android:layout_width="@dimen/_90sdp"
+                                android:layout_width="@dimen/_80sdp"
                                 android:layout_height="wrap_content"
                                 android:layout_centerHorizontal="true"
-                                android:layout_marginLeft="@dimen/_65sdp"
                                 android:layout_marginTop="5dp"
+                                android:layout_marginLeft="@dimen/_65sdp"
                                 android:text="Teacher Name"
-                                android:inputType="numberDecimal"
                                 android:maxLines="1"
                                 android:padding="5dp"
                                 android:singleLine="true"
@@ -220,7 +219,7 @@
                             android:visibility="gone">
 
                             <TextView
-                                android:layout_width="@dimen/_90sdp"
+                                android:layout_width="@dimen/_80sdp"
                                 android:layout_height="wrap_content"
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginLeft="@dimen/_65sdp"
@@ -261,7 +260,7 @@
                             android:visibility="gone">
 
                             <TextView
-                                android:layout_width="@dimen/_90sdp"
+                                android:layout_width="@dimen/_80sdp"
                                 android:layout_height="wrap_content"
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginTop="5dp"
@@ -288,15 +287,13 @@
                             <TextView
                                 android:id="@+id/txttime"
                                 android:layout_width="match_parent"
-                                android:layout_height="@dimen/_30sdp"
-                                android:layout_centerHorizontal="true"
+                                android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:hint="Time"
-                                android:inputType="numberDecimal"
                                 android:maxLines="1"
-                                android:padding="10dp"
+                                android:padding="5dp"
                                 android:singleLine="true"
-                                android:textColor="@color/text_color" />
+                                android:textColor="@color/text_color"  />
                         </LinearLayout>
 
                         <LinearLayout
@@ -307,7 +304,7 @@
                             android:visibility="gone">
 
                             <TextView
-                                android:layout_width="@dimen/_90sdp"
+                                android:layout_width="@dimen/_80sdp"
                                 android:layout_height="wrap_content"
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginLeft="@dimen/_65sdp"
@@ -353,7 +350,7 @@
                             android:visibility="gone">
 
                             <TextView
-                                android:layout_width="@dimen/_90sdp"
+                                android:layout_width="@dimen/_80sdp"
                                 android:layout_height="wrap_content"
                                 android:layout_centerHorizontal="true"
                                 android:layout_marginLeft="@dimen/_65sdp"

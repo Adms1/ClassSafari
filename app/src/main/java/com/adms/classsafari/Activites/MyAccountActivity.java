@@ -65,7 +65,7 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
     //Use for menu
     String passWordStr, confirmpassWordStr, currentpasswordStr;
     Dialog menuDialog, changeDialog;
-    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily,btnMyenroll,btnMyprofile;
+    Button btnHome,btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily,btnMyenroll,btnMyprofile;
     TextView userNameTxt;
     //
     Calendar[] daysArray;
@@ -80,7 +80,7 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
         mContext = this;
 
         getIntenttValue();
-        setTypeface();
+        //setTypeface();
         init();
         setListner();
     }
@@ -192,6 +192,10 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
                     intent.putExtra("wheretocometype", wheretocometypeStr);
                     startActivity(intent);
                 } else if (wheretocometypeStr.equalsIgnoreCase("menu")) {
+                    Intent intent = new Intent(mContext, SearchByUser.class);
+                    intent.putExtra("wheretocometype", wheretocometypeStr);
+                    startActivity(intent);
+                }else {
                     Intent intent = new Intent(mContext, SearchByUser.class);
                     intent.putExtra("wheretocometype", wheretocometypeStr);
                     startActivity(intent);
@@ -376,11 +380,12 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
     }
 
     public void menuDialog() {
-        menuDialog = new Dialog(mContext, R.style.Theme_Dialog);
+        menuDialog = new Dialog(mContext);//, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.x = 10;
         menuDialog.getWindow().getAttributes().verticalMargin = 0.07F;
-        wlp.gravity = Gravity.TOP;
+        wlp.gravity = Gravity.TOP|Gravity.RIGHT;
         window.setAttributes(wlp);
 
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -389,10 +394,11 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
 //        menuDialog.setContentView(menuBinding.getRoot());
         menuDialog.setContentView(R.layout.layout_menu);
 
+        btnHome=(Button)menuDialog.findViewById(R.id.btnHome);
         btnMyReport = (Button) menuDialog.findViewById(R.id.btnMyReport);
         btnMySession = (Button) menuDialog.findViewById(R.id.btnMySession);
         btnChangePassword = (Button) menuDialog.findViewById(R.id.btnChangePassword);
-        btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
+//        btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
         btnMyenroll=(Button)menuDialog.findViewById(R.id.btnMyenroll);
@@ -401,6 +407,13 @@ btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
 
         btnMyReport.setVisibility(View.GONE);
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(mContext,SearchByUser.class);
+                startActivity(i);
+            }
+        });
         btnMyprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -409,6 +422,7 @@ btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
                 imyaccount.putExtra("myprofile","true");
                 imyaccount.putExtra("type", "myprofile");
                 startActivity(imyaccount);
+                menuDialog.dismiss();
             }
         });
         btnMyReport.setOnClickListener(new View.OnClickListener() {
@@ -417,6 +431,7 @@ btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
                 Intent imyaccount = new Intent(mContext, MyAccountActivity.class);
                 imyaccount.putExtra("wheretocometype", "menu");
                 startActivity(imyaccount);
+                menuDialog.dismiss();
             }
         });
         btnMyenroll.setOnClickListener(new View.OnClickListener() {
@@ -434,6 +449,7 @@ btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
                 Intent intent = new Intent(mContext, UpcomingActivity.class);
                 intent.putExtra("wheretocometype", "menu");
                 startActivity(intent);
+                menuDialog.dismiss();
             }
         });
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
@@ -452,6 +468,7 @@ btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
                 intent.putExtra("familyNameStr", Utils.getPref(mContext, "RegisterUserName"));
                 intent.putExtra("familyID", Utils.getPref(mContext, "coachTypeID"));
                 startActivity(intent);
+                menuDialog.dismiss();
             }
         });
         btnLogout.setOnClickListener(new View.OnClickListener() {

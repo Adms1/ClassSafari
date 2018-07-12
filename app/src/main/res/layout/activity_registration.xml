@@ -310,7 +310,7 @@
                         android:tag="click"
                         android:text="@string/strIAccTermsAndCond"
                         android:textColor="@color/white"
-                        android:textStyle="bold"
+                        android:textStyle="normal"
                         android:theme="@style/MyCheckBox" />
 
                     <LinearLayout

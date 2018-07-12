@@ -12,24 +12,24 @@
 
         <TextView
             android:id="@+id/home_txt"
-            android:layout_width="@dimen/_55sdp"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/_20sdp"
             android:layout_gravity="right"
             android:layout_marginRight="@dimen/_15sdp"
             android:layout_marginTop="@dimen/_10sdp"
-            android:paddingLeft="@dimen/_5sdp"
             android:text="@string/home"
             android:textColor="@color/blue"
             android:textSize="@dimen/_14sdp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:background="@drawable/orange_line"/>
 
-        <View
-            android:layout_width="@dimen/_44sdp"
-            android:layout_height="2dp"
-            android:layout_gravity="right"
-            android:layout_marginRight="@dimen/_22sdp"
-            android:layout_marginTop="@dimen/_1sdp"
-            android:background="@drawable/orange_line" />
+        <!--<View-->
+            <!--android:layout_width="@dimen/_44sdp"-->
+            <!--android:layout_height="2dp"-->
+            <!--android:layout_gravity="right"-->
+            <!--android:layout_marginRight="@dimen/_22sdp"-->
+            <!--android:layout_marginTop="@dimen/_1sdp"-->
+            <!--android:background="@drawable/orange_line" />-->
 
         <ImageView
             android:id="@+id/app_logo"

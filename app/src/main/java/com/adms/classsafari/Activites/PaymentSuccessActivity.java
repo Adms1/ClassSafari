@@ -51,7 +51,7 @@ public class PaymentSuccessActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         paymentSuccessBinding= DataBindingUtil.setContentView(this,R.layout.activity_payment_success);
         mContext = this;
-        setTypeface();
+        //setTypeface();
         init();
         setListner();
     }
@@ -81,7 +81,7 @@ public class PaymentSuccessActivity extends AppCompatActivity {
             paymentSuccessBinding.amountLinear.setVisibility(View.VISIBLE);
 
             paymentSuccessBinding.txtsubjectname.setText(AppConfiguration.bookingsubjectName);
-            paymentSuccessBinding.txtteachername.setText(Utils.getPref(mContext, "RegisterUserName"));
+                paymentSuccessBinding.txtteachername.setText(AppConfiguration.bookingteacherName);
             paymentSuccessBinding.txtdate.setText(AppConfiguration.bookingdate);
             if (AppConfiguration.bookingtime.contains("|")) {
                 String[] splitvalue =AppConfiguration.bookingtime.split("\\|");
@@ -106,7 +106,7 @@ public class PaymentSuccessActivity extends AppCompatActivity {
             paymentSuccessBinding.txtSucessFail.setText("Success");
             paymentSuccessBinding.txtSucessFailDesc.setText("Your enrollment was successful");
             paymentSuccessBinding.btnNewCharge.setText("Done");
-            paymentSuccessBinding.sessionTxt.setText("ENROLLMENT SUCCESFUL");
+            paymentSuccessBinding.sessionTxt.setText("ENROLLMENT SUCCESSFUL");
 
         } else {
             paymentSuccessBinding.imvSuccessFail.setImageResource(R.drawable.failer);
@@ -194,7 +194,7 @@ public class PaymentSuccessActivity extends AppCompatActivity {
     private Map<String, String> getSessioncapacityDetail() {
 
         Map<String, String> map = new HashMap<>();
-        map.put("SessionID", Utils.getPref(mContext,"sessionId"));//contatIDstr  //Utils.getPref(mContext, "coachID")
+        map.put("SessionID",getIntent().getStringExtra("sessionId"));//contatIDstr  //Utils.getPref(mContext, "coachID")
         return map;
     }
 
@@ -498,7 +498,7 @@ public class PaymentSuccessActivity extends AppCompatActivity {
                         ipayment.putExtra("amount", AppConfiguration.classsessionPrice);
                         ipayment.putExtra("mode", AppConfiguration.Mode);
                         ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
-                        ipayment.putExtra("sessionID", AppConfiguration.TeacherSessionIdStr);
+                        ipayment.putExtra("sessionID", getIntent().getStringExtra("sessionId"));
                         ipayment.putExtra("contactID", AppConfiguration.TeacherSessionContactIdStr);//Utils.getPref(mContext, "coachID")
                         ipayment.putExtra("type", Utils.getPref(mContext, "LoginType"));
                         startActivity(ipayment);
@@ -522,7 +522,7 @@ public class PaymentSuccessActivity extends AppCompatActivity {
     private Map<String, String> getpaymentRequestdetail() {
         Map<String, String> map = new HashMap<>();
         map.put("ContactID",  AppConfiguration.TeacherSessionContactIdStr);
-        map.put("SessionID", AppConfiguration.TeacherSessionIdStr);
+        map.put("SessionID",getIntent().getStringExtra("sessionId"));
         map.put("Amount",  AppConfiguration.classsessionPrice);
         return map;
     }

@@ -76,7 +76,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
     //Use for Menu Dialog
     String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr, SearchPlaystudy;
     Dialog menuDialog, changeDialog;
-    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily,btnMyenroll,btnMyprofile;
+    Button btnHome,btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily,btnMyenroll,btnMyprofile;
     TextView userNameTxt;
 
 
@@ -428,6 +428,17 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         sessionDetailAdapter = new SessionDetailAdapter(mContext, arrayList, descriptionviewarray, reviewarray, sessionRatingList, ratinguserStr, new onViewClick() {
             @Override
             public void getViewClick() {
+
+                ArrayList<String> selectedId = new ArrayList<String>();
+               // String sessionName = "",teacherName="";
+                selectedId = sessionDetailAdapter.getSessionDetail();
+                Log.d("selectedId", "" + selectedId);
+                for (int i = 0; i < selectedId.size(); i++) {
+                    String[] splitvalue = selectedId.get(i).split("\\|");
+                    classNameStr = splitvalue[0];
+                    sessionIDStr = splitvalue[1];
+                    TeacherName=splitvalue[2];
+                }
                 if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
                     addRating();
                 } else {
@@ -478,16 +489,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
     }
 
     public void addRating() {
-        ArrayList<String> selectedId = new ArrayList<String>();
-        String sessionName = "",teacherName="";
-        selectedId = sessionDetailAdapter.getSessionDetail();
-        Log.d("selectedId", "" + selectedId);
-        for (int i = 0; i < selectedId.size(); i++) {
-            String[] splitvalue = selectedId.get(i).split("\\|");
-            sessionName = splitvalue[0];
-            sessionId = splitvalue[1];
-            teacherName=splitvalue[2];
-        }
+
 
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.rating_dialog_layout, null);
@@ -498,8 +500,8 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         final TextView confirm_txt = alertLayout.findViewById(R.id.confirm_txt);
         final EditText comment_edt = alertLayout.findViewById(R.id.comment_edt);
         final TextView teacher_name_txt=alertLayout.findViewById(R.id.teacher_name_txt);
-        sessionNametxt.setText(sessionName);
-        teacher_name_txt.setText(teacherName);
+        sessionNametxt.setText(classNameStr);
+        teacher_name_txt.setText(TeacherName);
 
         if (!commentStr.equalsIgnoreCase("")) {
             comment_edt.setText(commentStr);
@@ -796,11 +798,12 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
     }
 
     public void menuDialog() {
-        menuDialog = new Dialog(mContext, R.style.Theme_Dialog);
+        menuDialog = new Dialog(mContext);//, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.x = 10;
         menuDialog.getWindow().getAttributes().verticalMargin = 0.07F;
-        wlp.gravity = Gravity.TOP;
+        wlp.gravity = Gravity.TOP|Gravity.RIGHT;
         window.setAttributes(wlp);
 
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -809,16 +812,24 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
 //        menuDialog.setContentView(menuBinding.getRoot());
         menuDialog.setContentView(R.layout.layout_menu);
 
+        btnHome=(Button)menuDialog.findViewById(R.id.btnHome);
         btnMyReport = (Button) menuDialog.findViewById(R.id.btnMyReport);
         btnMySession = (Button) menuDialog.findViewById(R.id.btnMySession);
         btnChangePassword = (Button) menuDialog.findViewById(R.id.btnChangePassword);
-        btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
+//        btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
         btnMyenroll=(Button)menuDialog.findViewById(R.id.btnMyenroll);
 btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(mContext,SearchByUser.class);
+                startActivity(i);
+            }
+        });
         btnMyprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -827,6 +838,7 @@ btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
                 imyaccount.putExtra("myprofile","true");
                 imyaccount.putExtra("type", "myprofile");
                 startActivity(imyaccount);
+                menuDialog.dismiss();
             }
         });
         btnMyReport.setOnClickListener(new View.OnClickListener() {
@@ -835,6 +847,7 @@ btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
                 Intent imyaccount = new Intent(mContext, MyAccountActivity.class);
                 imyaccount.putExtra("wheretocometype", "session");
                 startActivity(imyaccount);
+                menuDialog.dismiss();
             }
         });
         btnMyenroll.setOnClickListener(new View.OnClickListener() {
@@ -852,6 +865,7 @@ btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
                 Intent intent = new Intent(mContext, UpcomingActivity.class);
                 intent.putExtra("wheretocometype", "session");
                 startActivity(intent);
+                menuDialog.dismiss();
             }
         });
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
@@ -870,6 +884,7 @@ btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
                 intent.putExtra("familyNameStr", Utils.getPref(mContext, "RegisterUserName"));
                 intent.putExtra("familyID", Utils.getPref(mContext, "coachTypeID"));
                 startActivity(intent);
+                menuDialog.dismiss();
             }
         });
         btnLogout.setOnClickListener(new View.OnClickListener() {

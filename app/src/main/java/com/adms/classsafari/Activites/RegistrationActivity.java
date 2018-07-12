@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -23,8 +24,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.adms.classsafari.AppConstant.ApiHandler;
@@ -67,7 +71,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     Calendar calendar;
     int mYear, mMonth, mDay;
     String firstNameStr, lastNameStr, emailStr, passwordStr, phonenoStr, gendarIdStr = "1", dateofbirthStr, coachTypeIDStr = "1",oraganisationStr="",
-            registerTypeStr = "", contatIDstr, type, sessionIDStr, paymentStatusstr, orderIDStr, frontloginStr,
+            registerTypeStr = "", contatIDstr, type, sessionIDStr,commentStr, ratingValueStr, paymentStatusstr, orderIDStr, frontloginStr,
             boardStr, standardStr, streamStr, locationStr, classNameStr, sessionType, durationStr, sessionDateStr,registerOptionStr="",
             subjectStr, genderStr, ratingLoginStr, searchfront, firsttimesearch, backStr,TeacherName, SearchPlaystudy, termscondition = "", frontRegister = "";
     //Use for Confirmation Dialog
@@ -242,7 +246,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                                         registrationBinding.femaleChk.setError("Select gender");
                                     }
                                 } else {
-                                    registrationBinding.phoneNoEdt.setError("Enter 10 digit phone number");
+                                    registrationBinding.phoneNoEdt.setError("Enter 10 digits phone number");
                                 }
                             } else {
                                 registrationBinding.passwordEdt.setError("Password must be 4-8 characters");
@@ -607,8 +611,15 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                             if (frontloginStr.equalsIgnoreCase("beforeLogin")) {
                                 Intent iSearchByUser = new Intent(mContext, SearchByUser.class);
                                 startActivity(iSearchByUser);
+                                finish();
                             } else {
-                                SessionConfirmationDialog();
+                                if (ratingLoginStr.equalsIgnoreCase("ratingLoginclass")) {
+                                addRating();
+                                }else if(ratingLoginStr.equalsIgnoreCase("ratingLoginSession")){
+                                    addRating();
+                                }else {
+                                    SessionConfirmationDialog();
+                                }
                             }
 
                         } else {
@@ -717,15 +728,21 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                     }
                     if (paymentRequestModel.getSuccess().equalsIgnoreCase("True")) {
                         orderIDStr = paymentRequestModel.getOrderID();
-                        Intent ipayment = new Intent(mContext, PaymentActivity.class);
-                        ipayment.putExtra("orderID", orderIDStr);
-                        ipayment.putExtra("amount", AppConfiguration.classsessionPrice);
-                        ipayment.putExtra("mode", AppConfiguration.Mode);
-                        ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
-                        ipayment.putExtra("sessionID", sessionIDStr);
-                        ipayment.putExtra("contactID", Utils.getPref(mContext, "coachID"));
-                        ipayment.putExtra("type", Utils.getPref(mContext, "LoginType"));
-                        startActivity(ipayment);
+                        if (!AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
+                            Intent ipayment = new Intent(mContext, PaymentActivity.class);
+                            ipayment.putExtra("orderID", orderIDStr);
+                            ipayment.putExtra("amount", AppConfiguration.classsessionPrice);
+                            ipayment.putExtra("mode", AppConfiguration.Mode);
+                            ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
+                            ipayment.putExtra("sessionID", sessionIDStr);
+                            ipayment.putExtra("contactID", Utils.getPref(mContext, "coachID"));
+                            ipayment.putExtra("type", Utils.getPref(mContext, "LoginType"));
+                            startActivity(ipayment);
+                            finish();
+                        } else {
+                            paymentStatusstr = "1";
+                            callSessionConfirmationApi();
+                        }
 
                     }
                 }
@@ -778,9 +795,11 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                     if (sessionconfirmationInfoModel.getSuccess().equalsIgnoreCase("True")) {
                         Utils.ping(mContext, "Login succesfully");
                         confimDialog.dismiss();
-                        Intent isearchBYuser = new Intent(mContext, SearchByUser.class);
+                        Intent isearchBYuser = new Intent(mContext, PaymentSuccessActivity.class);
+                        isearchBYuser.putExtra("transactionId", orderIDStr);
+                        isearchBYuser.putExtra("responseCode", "0");
+                        isearchBYuser.putExtra("order_id",orderIDStr);
                         startActivity(isearchBYuser);
-
                     }
                 }
 
@@ -815,8 +834,8 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         wlp.gravity = Gravity.TOP;
         window.setAttributes(wlp);
 
-        confimDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-
+       // confimDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        confimDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         confimDialog.setCancelable(false);
 //        confimDialog.setContentView(R.layout.confirm_session_dialog);
@@ -871,12 +890,13 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                     }
                     if (sessionModel.getSuccess().equalsIgnoreCase("True")) {
                         Utils.dismissDialog();
-                        if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
+                        if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("")){// && !AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
                             callpaymentRequestApi();
-                        } else {
-                            paymentStatusstr = "1";
-                            callSessionConfirmationApi();
                         }
+//                        else {
+//                            paymentStatusstr = "1";
+//                            callSessionConfirmationApi();
+//                        }
                     }
                 }
 
@@ -987,8 +1007,8 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                                             sessiondetailConfirmationDialogBinding.sunHoursTxt.setText(SessionDuration);
                                             break;
                                         case "mon":
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.monHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.monHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.monTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.mondayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.monTimeTxt.setAlpha(1);
@@ -997,8 +1017,8 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                                             sessiondetailConfirmationDialogBinding.monHoursTxt.setText(SessionDuration);
                                             break;
                                         case "tue":
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.tuesHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.tuesHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.tuesTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.tuesdayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.tuesTimeTxt.setAlpha(1);
@@ -1007,8 +1027,8 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                                             sessiondetailConfirmationDialogBinding.tuesHoursTxt.setText(SessionDuration);
                                             break;
                                         case "wed":
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.wedHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.wedHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.wedTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.wednesdayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.wedTimeTxt.setAlpha(1);
@@ -1017,8 +1037,8 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                                             sessiondetailConfirmationDialogBinding.wedHoursTxt.setText(SessionDuration);
                                             break;
                                         case "thu":
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.thurHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.thurHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.thurTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.thursdayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.thurTimeTxt.setAlpha(1);
@@ -1027,8 +1047,8 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                                             sessiondetailConfirmationDialogBinding.thurHoursTxt.setText(SessionDuration);
                                             break;
                                         case "fri":
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.friHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.friHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.friTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.fridayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.friTimeTxt.setAlpha(1);
@@ -1037,8 +1057,8 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                                             sessiondetailConfirmationDialogBinding.friHoursTxt.setText(SessionDuration);
                                             break;
                                         case "sat":
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.satHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.satHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.satTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.saturdayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.satTimeTxt.setAlpha(1);
@@ -1136,7 +1156,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
 
                 }
             } else {
-                SessionDuration = String.valueOf(SessionHour) + " hrs";
+                SessionDuration = String.valueOf(SessionHour) +":" + "00" +" hrs";
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -1162,7 +1182,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         optionDialog.setContentView(optionDialogBinding.getRoot());
         String[] userName = Utils.getPref(mContext, "RegisterUserName").split("\\s+");
 
-        optionDialogBinding.titleTxt.setText(Html.fromHtml("Welcome " + "<u><b>" + userName[0] + "</u></b>"));
+        optionDialogBinding.titleTxt.setText(Html.fromHtml("Welcome " + "<b>" + userName[0] + "</b>"));
         optionDialogBinding.addClassBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1207,7 +1227,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         registerDialog = new Dialog(mContext, R.style.Theme_Dialog);
         Window window = registerDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
-        registerDialog.getWindow().getAttributes().verticalMargin = 0.0f;
+//        registerDialog.getWindow().getAttributes().verticalMargin = 0.0f;
         wlp.gravity = Gravity.CENTER;
         window.setAttributes(wlp);
 
@@ -1240,5 +1260,140 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
 
         registerDialog.show();
 
+    }
+
+    public void addRating() {
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.rating_dialog_layout, null);
+        final RatingBar ratingBar = alertLayout.findViewById(R.id.rating_bar);
+        final TextView sessionNametxt = alertLayout.findViewById(R.id.session_name_txt);
+        final TextView session_rating_view_txt = alertLayout.findViewById(R.id.session_rating_view_txt);
+        final TextView cancel_txt = alertLayout.findViewById(R.id.cancel_txt);
+        final TextView confirm_txt = alertLayout.findViewById(R.id.confirm_txt);
+        final EditText comment_edt = alertLayout.findViewById(R.id.comment_edt);
+        final TextView teacher_name_txt = alertLayout.findViewById(R.id.teacher_name_txt);
+        sessionNametxt.setText(classNameStr);
+        teacher_name_txt.setText(TeacherName);
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                if (b) {
+                    int rating = (int) ratingBar.getRating();
+                    if (rating == 1) {
+                        session_rating_view_txt.setText("Very poor");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.remarks));
+                    } else if (rating == 2) {
+                        session_rating_view_txt.setText("Poor");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.remarks));
+                    } else if (rating == 3) {
+                        session_rating_view_txt.setText("Average");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.rating_bar));
+                    } else if (rating == 4) {
+                        session_rating_view_txt.setText("Good");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.present));
+                    } else if (rating == 5) {
+                        session_rating_view_txt.setText("Excellent");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.present));
+                    }
+                }
+            }
+        });
+
+        android.app.AlertDialog.Builder sayWindows = new android.app.AlertDialog.Builder(
+                mContext);
+
+        sayWindows.setPositiveButton("Rate", null);
+        sayWindows.setNegativeButton("Not Now", null);
+        sayWindows.setView(alertLayout);
+
+        final android.app.AlertDialog mAlertDialog = sayWindows.create();
+        mAlertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialog) {
+
+                Button b = mAlertDialog.getButton(android.app.AlertDialog.BUTTON_POSITIVE);
+                Button b1 = mAlertDialog.getButton(android.app.AlertDialog.BUTTON_NEGATIVE);
+                b.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        // TODO Do something
+                        String rating = String.valueOf(ratingBar.getRating());
+//                Toast.makeText(getApplicationContext(), rating, Toast.LENGTH_LONG).show();
+                        commentStr = comment_edt.getText().toString();
+                        if (commentStr.equalsIgnoreCase("")) {
+                            commentStr = session_rating_view_txt.getText().toString();
+                        }
+                        ratingValueStr = String.valueOf(ratingBar.getRating());
+                        if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
+                            if (!ratingValueStr.equalsIgnoreCase("0.0")) {
+                                callAddrating();
+                                mAlertDialog.dismiss();
+                            } else {
+                                Utils.ping(mContext, "Please select rate");
+                            }
+                        } else {
+                            Utils.ping(mContext, getResources().getString(R.string.not_loging));
+                        }
+                    }
+                });
+                b.setTextColor(getResources().getColor(R.color.blue));
+                b1.setTextColor(getResources().getColor(R.color.gray1));
+            }
+        });
+        mAlertDialog.show();
+    }
+
+    //Use for AddRating
+    public void callAddrating() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().Add_Session_Rating(getratingDetail(), new retrofit.Callback<SessionDetailModel>() {
+                @Override
+                public void success(SessionDetailModel addratingmodel, Response response) {
+                    Utils.dismissDialog();
+                    if (addratingmodel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (addratingmodel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (addratingmodel.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.ping(mContext, getString(R.string.false_msg));
+                        return;
+                    }
+                    if (addratingmodel.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.dismissDialog();
+                        Intent i=new Intent(mContext,SearchByUser.class);
+                        startActivity(i);
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getratingDetail() {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("SessionID", sessionIDStr);
+        map.put("ContactID", Utils.getPref(mContext, "coachID"));
+        map.put("Comment", commentStr);
+        map.put("RatingValue", ratingValueStr);
+
+        return map;
     }
 }

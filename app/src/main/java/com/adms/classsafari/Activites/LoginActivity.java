@@ -1,7 +1,9 @@
 package com.adms.classsafari.Activites;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
@@ -10,6 +12,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -18,12 +21,16 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.AppConfiguration;
 import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.AppConstant.Validation;
+import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivityLoginBinding;
@@ -31,6 +38,7 @@ import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
 import com.adms.classsafari.databinding.ForgotPasswordDialogBinding;
 import com.adms.classsafari.databinding.OptionDialogBinding;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,7 +57,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     OptionDialogBinding optionDialogBinding;
 
     Context mContext;
-    String usernameStr, passwordStr, sessionIDStr, contatIDstr,
+    String usernameStr, passwordStr, sessionIDStr, contatIDstr, commentStr, ratingValueStr,
             checkStr,
             boardStr, standardStr, streamStr, locationStr, classNameStr,
             subjectStr, genderStr, frontloginStr,
@@ -92,14 +100,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             checkUnmPwd();
         }
 
-        Typeface custom_font = Typeface.createFromAsset(getAssets(),  "font/TitilliumWeb-Regular.ttf");
-
-        loginScreenBinding.emailEdt.setTypeface(custom_font);
-        loginScreenBinding.passwordEdt.setTypeface(custom_font);
-        loginScreenBinding.loginBtn.setTypeface(custom_font);
-        loginScreenBinding.forgotPassTxt.setTypeface(custom_font);
-        loginScreenBinding.registerTxt.setTypeface(custom_font);
-        loginScreenBinding.txt.setTypeface(custom_font);
         setListner();
     }
 
@@ -259,46 +259,48 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                             } else {
                                 if (ratingLoginStr.equalsIgnoreCase("ratingLoginclass")) {
-                                    Intent iSearchByUser = new Intent(mContext, ClassDeatilScreen.class);
-                                    iSearchByUser.putExtra("frontLogin", "afterLogin");
-                                    iSearchByUser.putExtra("sessionID", sessionIDStr);
-//                                    iSearchByUser.putExtra("SearchBy", searchByStr);
-                                    iSearchByUser.putExtra("board", boardStr);
-                                    iSearchByUser.putExtra("stream", streamStr);
-                                    iSearchByUser.putExtra("standard", standardStr);
-                                    iSearchByUser.putExtra("city", locationStr);
-                                    iSearchByUser.putExtra("sessionName", classNameStr);
-
-                                    iSearchByUser.putExtra("lessionName", subjectStr);
-                                    iSearchByUser.putExtra("gender", genderStr);
-//                                    iSearchByUser.putExtra("withOR", whereTocomestr);
-                                    iSearchByUser.putExtra("searchfront", searchfront);
-                                    iSearchByUser.putExtra("sessionType", sessionType);
-                                    iSearchByUser.putExtra("firsttimesearch", firsttimesearch);
-                                    iSearchByUser.putExtra("RegionName", RegionName);
-                                    iSearchByUser.putExtra("TeacherName",TeacherName);
-                                    startActivity(iSearchByUser);
+//                                    Intent iSearchByUser = new Intent(mContext, ClassDeatilScreen.class);
+//                                    iSearchByUser.putExtra("frontLogin", "afterLogin");
+//                                    iSearchByUser.putExtra("sessionID", sessionIDStr);
+////                                    iSearchByUser.putExtra("SearchBy", searchByStr);
+//                                    iSearchByUser.putExtra("board", boardStr);
+//                                    iSearchByUser.putExtra("stream", streamStr);
+//                                    iSearchByUser.putExtra("standard", standardStr);
+//                                    iSearchByUser.putExtra("city", locationStr);
+//                                    iSearchByUser.putExtra("sessionName", classNameStr);
+//
+//                                    iSearchByUser.putExtra("lessionName", subjectStr);
+//                                    iSearchByUser.putExtra("gender", genderStr);
+////                                    iSearchByUser.putExtra("withOR", whereTocomestr);
+//                                    iSearchByUser.putExtra("searchfront", searchfront);
+//                                    iSearchByUser.putExtra("sessionType", sessionType);
+//                                    iSearchByUser.putExtra("firsttimesearch", firsttimesearch);
+//                                    iSearchByUser.putExtra("RegionName", RegionName);
+//                                    iSearchByUser.putExtra("TeacherName",TeacherName);
+//                                    startActivity(iSearchByUser);
+                                    addRating();
                                 } else if (ratingLoginStr.equalsIgnoreCase("ratingLoginSession")) {
-                                    Intent iSearchByUser = new Intent(mContext, SessionName.class);
-                                    iSearchByUser.putExtra("frontLogin", "afterLogin");
-                                    iSearchByUser.putExtra("sessionID", sessionIDStr);
-//                                    iSearchByUser.putExtra("SearchBy", searchByStr);
-                                    iSearchByUser.putExtra("board", boardStr);
-                                    iSearchByUser.putExtra("stream", streamStr);
-                                    iSearchByUser.putExtra("standard", standardStr);
-                                    iSearchByUser.putExtra("city", locationStr);
-                                    iSearchByUser.putExtra("sessionName", classNameStr);
-
-                                    iSearchByUser.putExtra("lessionName", subjectStr);
-                                    iSearchByUser.putExtra("gender", genderStr);
-//                                    iSearchByUser.putExtra("withOR", whereTocomestr);
-                                    iSearchByUser.putExtra("ratingLogin", "false");
-                                    iSearchByUser.putExtra("searchfront", searchfront);
-                                    iSearchByUser.putExtra("sessionType", sessionType);
-                                    iSearchByUser.putExtra("firsttimesearch", firsttimesearch);
-                                    iSearchByUser.putExtra("RegionName", RegionName);
-                                    iSearchByUser.putExtra("TeacherName",TeacherName);
-                                    startActivity(iSearchByUser);
+                                    addRating();
+//                                    Intent iSearchByUser = new Intent(mContext, SessionName.class);
+//                                    iSearchByUser.putExtra("frontLogin", "afterLogin");
+//                                    iSearchByUser.putExtra("sessionID", sessionIDStr);
+////                                    iSearchByUser.putExtra("SearchBy", searchByStr);
+//                                    iSearchByUser.putExtra("board", boardStr);
+//                                    iSearchByUser.putExtra("stream", streamStr);
+//                                    iSearchByUser.putExtra("standard", standardStr);
+//                                    iSearchByUser.putExtra("city", locationStr);
+//                                    iSearchByUser.putExtra("sessionName", classNameStr);
+//
+//                                    iSearchByUser.putExtra("lessionName", subjectStr);
+//                                    iSearchByUser.putExtra("gender", genderStr);
+////                                    iSearchByUser.putExtra("withOR", whereTocomestr);
+//                                    iSearchByUser.putExtra("ratingLogin", "false");
+//                                    iSearchByUser.putExtra("searchfront", searchfront);
+//                                    iSearchByUser.putExtra("sessionType", sessionType);
+//                                    iSearchByUser.putExtra("firsttimesearch", firsttimesearch);
+//                                    iSearchByUser.putExtra("RegionName", RegionName);
+//                                    iSearchByUser.putExtra("TeacherName",TeacherName);
+//                                    startActivity(iSearchByUser);
                                 } else {
                                     Intent iFamilyList = new Intent(mContext, FamilyListActivity.class);
                                     iFamilyList.putExtra("sessionfees", AppConfiguration.classsessionPrice);
@@ -518,7 +520,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         optionDialog = new Dialog(mContext, R.style.Theme_Dialog);
         Window window = optionDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
-        optionDialog.getWindow().getAttributes().verticalMargin = 0.0f;
+//        optionDialog.getWindow().getAttributes().verticalMargin = 0.0f;
         wlp.gravity = Gravity.CENTER;
         window.setAttributes(wlp);
 
@@ -529,7 +531,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         optionDialog.setContentView(optionDialogBinding.getRoot());
         String[] userName = Utils.getPref(mContext, "RegisterUserName").split("\\s+");
 
-        optionDialogBinding.titleTxt.setText(Html.fromHtml("Welcome " + "<u><b>" + userName[0] + "</u></b>"));
+        optionDialogBinding.titleTxt.setText(Html.fromHtml("Welcome " + "<b>" + userName[0] + "</b>"));
         optionDialogBinding.addClassBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -567,4 +569,139 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
+
+    public void addRating() {
+        LayoutInflater inflater = getLayoutInflater();
+        View alertLayout = inflater.inflate(R.layout.rating_dialog_layout, null);
+        final RatingBar ratingBar = alertLayout.findViewById(R.id.rating_bar);
+        final TextView sessionNametxt = alertLayout.findViewById(R.id.session_name_txt);
+        final TextView session_rating_view_txt = alertLayout.findViewById(R.id.session_rating_view_txt);
+        final TextView cancel_txt = alertLayout.findViewById(R.id.cancel_txt);
+        final TextView confirm_txt = alertLayout.findViewById(R.id.confirm_txt);
+        final EditText comment_edt = alertLayout.findViewById(R.id.comment_edt);
+        final TextView teacher_name_txt = alertLayout.findViewById(R.id.teacher_name_txt);
+        sessionNametxt.setText(classNameStr);
+        teacher_name_txt.setText(TeacherName);
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
+                if (b) {
+                    int rating = (int) ratingBar.getRating();
+                    if (rating == 1) {
+                        session_rating_view_txt.setText("Very poor");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.remarks));
+                    } else if (rating == 2) {
+                        session_rating_view_txt.setText("Poor");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.remarks));
+                    } else if (rating == 3) {
+                        session_rating_view_txt.setText("Average");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.rating_bar));
+                    } else if (rating == 4) {
+                        session_rating_view_txt.setText("Good");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.present));
+                    } else if (rating == 5) {
+                        session_rating_view_txt.setText("Excellent");
+                        session_rating_view_txt.setTextColor(getResources().getColor(R.color.present));
+                    }
+                }
+            }
+        });
+
+        AlertDialog.Builder sayWindows = new AlertDialog.Builder(
+                mContext);
+
+        sayWindows.setPositiveButton("Rate", null);
+        sayWindows.setNegativeButton("Not Now", null);
+        sayWindows.setView(alertLayout);
+
+        final AlertDialog mAlertDialog = sayWindows.create();
+        mAlertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialog) {
+
+                Button b = mAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                Button b1 = mAlertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+                b.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        // TODO Do something
+                        String rating = String.valueOf(ratingBar.getRating());
+//                Toast.makeText(getApplicationContext(), rating, Toast.LENGTH_LONG).show();
+                        commentStr = comment_edt.getText().toString();
+                        if (commentStr.equalsIgnoreCase("")) {
+                            commentStr = session_rating_view_txt.getText().toString();
+                        }
+                        ratingValueStr = String.valueOf(ratingBar.getRating());
+                        if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
+                            if (!ratingValueStr.equalsIgnoreCase("0.0")) {
+                                callAddrating();
+                                mAlertDialog.dismiss();
+                            } else {
+                                Utils.ping(mContext, "Please select rate");
+                            }
+                        } else {
+                            Utils.ping(mContext, getResources().getString(R.string.not_loging));
+                        }
+                    }
+                });
+                b.setTextColor(getResources().getColor(R.color.blue));
+                b1.setTextColor(getResources().getColor(R.color.gray1));
+            }
+        });
+        mAlertDialog.show();
+    }
+
+    //Use for AddRating
+    public void callAddrating() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+            Utils.showDialog(mContext);
+            ApiHandler.getApiService().Add_Session_Rating(getratingDetail(), new retrofit.Callback<SessionDetailModel>() {
+                @Override
+                public void success(SessionDetailModel addratingmodel, Response response) {
+                    Utils.dismissDialog();
+                    if (addratingmodel == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (addratingmodel.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (addratingmodel.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.ping(mContext, getString(R.string.false_msg));
+                        return;
+                    }
+                    if (addratingmodel.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.dismissDialog();
+                        Intent i=new Intent(mContext,SearchByUser.class);
+                        startActivity(i);
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getratingDetail() {
+
+        Map<String, String> map = new HashMap<>();
+        map.put("SessionID", sessionIDStr);
+        map.put("ContactID", Utils.getPref(mContext, "coachID"));
+        map.put("Comment", commentStr);
+        map.put("RatingValue", ratingValueStr);
+
+        return map;
+    }
 }

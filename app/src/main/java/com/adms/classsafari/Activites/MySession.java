@@ -83,7 +83,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
     //Use for Menu Dialog
     String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr, sessionId, commentStr, ratingValueStr;
     Dialog menuDialog;
-    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
+    Button btnHome,btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
     TextView userNameTxt;
     ArrayList<Integer> totalHours;
     ArrayList<Integer> totalMinit;
@@ -622,8 +622,8 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                                             sessiondetailConfirmationDialogBinding.sunHoursTxt.setText(SessionDuration);
                                             break;
                                         case "mon":
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.monHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.monHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.monTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.mondayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.monTimeTxt.setAlpha(1);
@@ -632,8 +632,8 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                                             sessiondetailConfirmationDialogBinding.monHoursTxt.setText(SessionDuration);
                                             break;
                                         case "tue":
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.tuesHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.tuesHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.tuesTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.tuesdayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.tuesTimeTxt.setAlpha(1);
@@ -642,8 +642,8 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                                             sessiondetailConfirmationDialogBinding.tuesHoursTxt.setText(SessionDuration);
                                             break;
                                         case "wed":
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.wedHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.wedHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.wedTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.wednesdayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.wedTimeTxt.setAlpha(1);
@@ -652,8 +652,8 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                                             sessiondetailConfirmationDialogBinding.wedHoursTxt.setText(SessionDuration);
                                             break;
                                         case "thu":
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.thurHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.thurHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.thurTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.thursdayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.thurTimeTxt.setAlpha(1);
@@ -662,8 +662,8 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                                             sessiondetailConfirmationDialogBinding.thurHoursTxt.setText(SessionDuration);
                                             break;
                                         case "fri":
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.friHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.friHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.friTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.fridayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.friTimeTxt.setAlpha(1);
@@ -672,8 +672,8 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                                             sessiondetailConfirmationDialogBinding.friHoursTxt.setText(SessionDuration);
                                             break;
                                         case "sat":
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
-                                            sessiondetailConfirmationDialogBinding.sunHoursTxt.setAlpha(1);
+                                            sessiondetailConfirmationDialogBinding.satHoursTxt.setEnabled(true);
+                                            sessiondetailConfirmationDialogBinding.satHoursTxt.setAlpha(1);
                                             sessiondetailConfirmationDialogBinding.satTimeTxt.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.saturdayBtn.setEnabled(true);
                                             sessiondetailConfirmationDialogBinding.satTimeTxt.setAlpha(1);
@@ -878,11 +878,12 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
     }
 
     public void menuDialog() {
-        menuDialog = new Dialog(mContext, R.style.Theme_Dialog);
+        menuDialog = new Dialog(mContext);//, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.x = 10;
         menuDialog.getWindow().getAttributes().verticalMargin = 0.07F;
-        wlp.gravity = Gravity.TOP;
+        wlp.gravity = Gravity.TOP|Gravity.RIGHT;
         window.setAttributes(wlp);
 
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -891,11 +892,12 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
 //        menuDialog.setContentView(menuBinding.getRoot());
         menuDialog.setContentView(R.layout.layout_menu);
 
+        btnHome=(Button)menuDialog.findViewById(R.id.btnHome);
         btnMyprofile = (Button) menuDialog.findViewById(R.id.btnMyprofile);
         btnMyReport = (Button) menuDialog.findViewById(R.id.btnMyReport);
         btnMySession = (Button) menuDialog.findViewById(R.id.btnMySession);
         btnChangePassword = (Button) menuDialog.findViewById(R.id.btnChangePassword);
-        btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
+//        btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
         btnMyenroll = (Button) menuDialog.findViewById(R.id.btnMyenroll);
@@ -904,7 +906,13 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
         btnMyenroll.setVisibility(View.GONE);
 
-
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(mContext,SearchByUser.class);
+                startActivity(i);
+            }
+        });
         btnMyprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -913,6 +921,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                 imyaccount.putExtra("myprofile", "true");
                 imyaccount.putExtra("type", "myprofile");
                 startActivity(imyaccount);
+                menuDialog.dismiss();
             }
         });
         btnMyReport.setOnClickListener(new View.OnClickListener() {
@@ -921,6 +930,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                 Intent imyaccount = new Intent(mContext, MyAccountActivity.class);
                 imyaccount.putExtra("wheretocometype", "menu");
                 startActivity(imyaccount);
+                menuDialog.dismiss();
             }
         });
         btnMyenroll.setOnClickListener(new View.OnClickListener() {
@@ -930,6 +940,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                 isession.putExtra("wheretocometype", "menu");
                 startActivity(isession);
                 menuDialog.dismiss();
+
             }
         });
         btnMySession.setOnClickListener(new View.OnClickListener() {
@@ -938,6 +949,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                 Intent intent = new Intent(mContext, UpcomingActivity.class);
                 intent.putExtra("wheretocometype", "menu");
                 startActivity(intent);
+                menuDialog.dismiss();
             }
         });
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
@@ -956,6 +968,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                 intent.putExtra("familyNameStr", Utils.getPref(mContext, "RegisterUserName"));
                 intent.putExtra("familyID", Utils.getPref(mContext, "coachTypeID"));
                 startActivity(intent);
+                menuDialog.dismiss();
             }
         });
         btnLogout.setOnClickListener(new View.OnClickListener() {

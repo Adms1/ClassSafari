@@ -13,6 +13,15 @@
             android:icon="@drawable/add_sesion"
             android:title="Add Class" />
         <item
+            android:id="@+id/add_bank_detail"
+            android:icon="@drawable/bank"
+            android:title="Bank Details"/>
+
+        <item
+            android:id="@+id/teacher_profile"
+            android:icon="@drawable/profile"
+            android:title="My Profile"/>
+        <item
             android:id="@+id/payment_report"
             android:icon="@drawable/payment_report"
             android:title="Payment Report"/>

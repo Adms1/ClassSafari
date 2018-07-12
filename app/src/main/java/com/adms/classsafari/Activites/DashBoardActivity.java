@@ -33,8 +33,10 @@ import android.widget.TextView;
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.Fragment.AddSessionFragment;
+import com.adms.classsafari.Fragment.BankDetailFragment;
 import com.adms.classsafari.Fragment.PaymentReportFragment;
 import com.adms.classsafari.Fragment.SessionFragment;
+import com.adms.classsafari.Fragment.TeacherProfileFragment;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 
@@ -47,6 +49,8 @@ import retrofit.client.Response;
 public class DashBoardActivity extends AppCompatActivity {
     private static final String TAG_Session = "Session";
     private static final String TAG_Add_Session = "Add Session";
+    private static final String TAG_Bank_Detail = "Bank Detail";
+    private static final String TAG_My_Profile = "My Profile";
     private static final String TAG_Payment_Report = "Payment Report";
     private static final String TAG_Logout = "Logout";
     private static final String TAG_CHANGE_PASSWORD = "Change Password";
@@ -159,7 +163,7 @@ public class DashBoardActivity extends AppCompatActivity {
     private void loadHomeFragment() {
         // selecting appropriate nav menu item
         selectNavMenu();
-        if (navItemIndex == 4 || navItemIndex == 3) {
+        if (navItemIndex == 5 || navItemIndex == 6) {
 
         } else {
             // set toolbar title
@@ -227,13 +231,21 @@ public class DashBoardActivity extends AppCompatActivity {
                 myid = fragment.getId();
                 break;
             case 2:
-                fragment = new PaymentReportFragment();
+                fragment = new BankDetailFragment();
                 myid = fragment.getId();
                 break;
             case 3:
-                changePasswordDialog();
+                fragment = new TeacherProfileFragment();
+                myid = fragment.getId();
                 break;
             case 4:
+                fragment = new PaymentReportFragment();
+                myid = fragment.getId();
+                break;
+            case 5:
+                changePasswordDialog();
+                break;
+            case 6:
                 new AlertDialog.Builder(new ContextThemeWrapper(mContex, R.style.AlertDialogTheme))
                         .setCancelable(false)
 //                        .setTitle("Logout")
@@ -298,7 +310,7 @@ public class DashBoardActivity extends AppCompatActivity {
             // This method will trigger on item Click of navigation menu
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
-
+                loadNavHeader();
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
@@ -310,16 +322,24 @@ public class DashBoardActivity extends AppCompatActivity {
                         navItemIndex = 1;
                         CURRENT_TAG = TAG_Add_Session;
                         break;
-                    case R.id.payment_report:
+                    case R.id.add_bank_detail:
                         navItemIndex = 2;
+                        CURRENT_TAG = TAG_Bank_Detail;
+                        break;
+                    case R.id.teacher_profile:
+                        navItemIndex = 3;
+                        CURRENT_TAG = TAG_My_Profile;
+                        break;
+                    case R.id.payment_report:
+                        navItemIndex = 4;
                         CURRENT_TAG = TAG_Payment_Report;
                         break;
                     case R.id.change_password:
-                        navItemIndex = 3;
+                        navItemIndex = 5;
                         CURRENT_TAG = TAG_CHANGE_PASSWORD;
                         break;
                     case R.id.logout:
-                        navItemIndex = 4;
+                        navItemIndex = 6;
                         CURRENT_TAG = TAG_Logout;
                         break;
                     default:
@@ -352,6 +372,7 @@ public class DashBoardActivity extends AppCompatActivity {
             public void onDrawerOpened(View drawerView) {
                 // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
                 super.onDrawerOpened(drawerView);
+                loadNavHeader();
             }
         };
 
@@ -430,8 +451,14 @@ public class DashBoardActivity extends AppCompatActivity {
             title_txt.setText("ENROLLMENT SUCCESSFUL");
             session_cal.setVisibility(View.GONE);
          //  toolbar.setNavigationIcon(null);
-        }else if (session == 3 && flag.equalsIgnoreCase("true")) {
+        }else if (session == 5 && flag.equalsIgnoreCase("true")) {
             title_txt.setText("STUDENT ATTENDANCE");
+            session_cal.setVisibility(View.VISIBLE);
+        }else if(session ==2 && flag.equalsIgnoreCase("true")){
+            title_txt.setText("BANK DETAILS");
+            session_cal.setVisibility(View.VISIBLE);
+        }else if(session ==3 && flag.equalsIgnoreCase("true")){
+            title_txt.setText("MY PROFILE");
             session_cal.setVisibility(View.VISIBLE);
 
         }

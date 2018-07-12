@@ -86,7 +86,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
     //Use for Menu Dialog
     String passWordStr, confirmpassWordStr, currentpasswordStr;
     Dialog menuDialog, changeDialog;
-    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
+    Button btnHome,btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
     TextView userNameTxt;
     SessionConfirmationDetailModel sessionConfirmationDetailModel;
     ArrayList<Integer> totalHours;
@@ -103,7 +103,6 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         arraowStr = "Activity";
         mContext = this;
         getIntenetValue();
-        setTypeface();
         init();
         setListner();
     }
@@ -138,13 +137,6 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         sessionConfirmationDetailModel = getIntent().getParcelableExtra("detail");
     }
 
-    public void setTypeface() {
-        Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
-
-        familyBinding.sessionTxt.setTypeface(custom_font);
-        familyBinding.text.setTypeface(custom_font);
-        familyBinding.noRecordTxt.setTypeface(custom_font);
-    }
 
     public void init() {
 
@@ -222,6 +214,10 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                         intent.putExtra("wheretocometype", wheretocometypeStr);
                         startActivity(intent);
                     } else if (wheretocometypeStr.equalsIgnoreCase("menu")) {
+                        Intent intent = new Intent(mContext, SearchByUser.class);
+                        intent.putExtra("wheretocometype", wheretocometypeStr);
+                        startActivity(intent);
+                    }else {
                         Intent intent = new Intent(mContext, SearchByUser.class);
                         intent.putExtra("wheretocometype", wheretocometypeStr);
                         startActivity(intent);
@@ -335,6 +331,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                                                 cnIdstr = "1";
                                                 updateTypestr = spilt[7];
 
+
                                             }
                                             Intent addchild = new Intent(mContext, AddStudentScreen.class);
                                             addchild.putExtra("familyNameStr", familyNameStr);
@@ -372,6 +369,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                                                 cnIdstr = spilt[3];
                                                 updateTypestr = spilt[6];
                                                 pNstr = spilt[7];
+                                                familyNameStr = spilt[8]+" "+ spilt[9];
 
                                             }
                                             Intent addchild = new Intent(mContext, AddStudentScreen.class);
@@ -453,7 +451,9 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                     + finalFamilyDetail.get(i).getEmailAddress() + "|"
                     + finalFamilyDetail.get(i).getGenderID() + "|"
                     + finalFamilyDetail.get(i).getDateofBirth());
-            pNstr=finalFamilyDetail.get(i).getContactPhoneNumber();
+            pNstr = finalFamilyDetail.get(i).getContactPhoneNumber();
+            familyNameStr=finalFamilyDetail.get(i).getFirstName() + ""
+                    + finalFamilyDetail.get(i).getLastName();
             Log.d("header", "" + listDataHeader);
             ArrayList<ChildDetailModel> row = new ArrayList<ChildDetailModel>();
             for (int j = 0; j < finalFamilyDetail.get(i).getFamilyContact().size(); j++) {
@@ -489,15 +489,21 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                     }
                     if (paymentRequestModel.getSuccess().equalsIgnoreCase("True")) {
                         orderIDStr = paymentRequestModel.getOrderID();
-                        Intent ipayment = new Intent(mContext, PaymentActivity.class);
-                        ipayment.putExtra("orderID", orderIDStr);
-                        ipayment.putExtra("amount", AppConfiguration.classsessionPrice);
-                        ipayment.putExtra("mode", AppConfiguration.Mode);
-                        ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
-                        ipayment.putExtra("sessionID", sessionIDStr);
-                        ipayment.putExtra("contactID", contatIDstr);//Utils.getPref(mContext, "coachID")
-                        ipayment.putExtra("type", Utils.getPref(mContext, "LoginType"));
-                        startActivity(ipayment);
+
+                        if (!AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
+                            Intent ipayment = new Intent(mContext, PaymentActivity.class);
+                            ipayment.putExtra("orderID", orderIDStr);
+                            ipayment.putExtra("amount", AppConfiguration.classsessionPrice);
+                            ipayment.putExtra("mode", AppConfiguration.Mode);
+                            ipayment.putExtra("username", Utils.getPref(mContext, "RegisterUserName"));
+                            ipayment.putExtra("sessionID", sessionIDStr);
+                            ipayment.putExtra("contactID", Utils.getPref(mContext, "coachID"));
+                            ipayment.putExtra("type", Utils.getPref(mContext, "LoginType"));
+                            startActivity(ipayment);
+                        } else {
+                            paymentStatusstr = "1";
+                            callSessionConfirmationApi();
+                        }
                     }
                 }
 
@@ -550,8 +556,9 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                         //Utils.ping(mContext, "Login succesfully");
                         confimDialog.dismiss();
                         Intent isearchBYuser = new Intent(mContext, PaymentSuccessActivity.class);
-                        isearchBYuser.putExtra("transactionId", "1234");
+                        isearchBYuser.putExtra("transactionId", orderIDStr);
                         isearchBYuser.putExtra("responseCode", "0");
+                        isearchBYuser.putExtra("order_id",orderIDStr);
                         startActivity(isearchBYuser);
 
                     }
@@ -647,7 +654,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                             if (!purchaseSessionIDStr.equalsIgnoreCase("")) {
                                 new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
                                         .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
-                                        .setMessage("You are already purchase.")
+                                        .setMessage("You have already purchased.")
                                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int which) {
                                             }
@@ -714,12 +721,13 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                     }
                     if (sessionModel.getSuccess().equalsIgnoreCase("True")) {
                         Utils.dismissDialog();
-                        if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
+                        if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("")){// && !AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
                             callpaymentRequestApi();
-                        } else {
-                            paymentStatusstr = "1";
-                            callSessionConfirmationApi();
                         }
+//                        else {
+//                            paymentStatusstr = "1";
+//                            callSessionConfirmationApi();
+//                        }
                     }
                 }
 
@@ -846,11 +854,12 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
     }
 
     public void menuDialog() {
-        menuDialog = new Dialog(mContext, R.style.Theme_Dialog);
+        menuDialog = new Dialog(mContext);//, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.x = 10;
         menuDialog.getWindow().getAttributes().verticalMargin = 0.07F;
-        wlp.gravity = Gravity.TOP;
+        wlp.gravity = Gravity.TOP|Gravity.RIGHT;
         window.setAttributes(wlp);
 
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -859,10 +868,11 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
 //        menuDialog.setContentView(menuBinding.getRoot());
         menuDialog.setContentView(R.layout.layout_menu);
 
+        btnHome=(Button)menuDialog.findViewById(R.id.btnHome);
         btnMyReport = (Button) menuDialog.findViewById(R.id.btnMyReport);
         btnMySession = (Button) menuDialog.findViewById(R.id.btnMySession);
         btnChangePassword = (Button) menuDialog.findViewById(R.id.btnChangePassword);
-        btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
+//        btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
         btnMyenroll = (Button) menuDialog.findViewById(R.id.btnMyenroll);
@@ -870,6 +880,14 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
         btnmyfamily.setVisibility(View.GONE);
+
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(mContext,SearchByUser.class);
+                startActivity(i);
+            }
+        });
         btnMyprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -878,6 +896,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                 imyaccount.putExtra("myprofile", "true");
                 imyaccount.putExtra("type", "myprofile");
                 startActivity(imyaccount);
+                menuDialog.dismiss();
             }
         });
         btnMyReport.setOnClickListener(new View.OnClickListener() {
@@ -886,6 +905,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                 Intent imyaccount = new Intent(mContext, MyAccountActivity.class);
                 imyaccount.putExtra("wheretocometype", "menu");
                 startActivity(imyaccount);
+                menuDialog.dismiss();
             }
         });
         btnMyenroll.setOnClickListener(new View.OnClickListener() {
@@ -903,6 +923,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                 Intent intent = new Intent(mContext, UpcomingActivity.class);
                 intent.putExtra("wheretocometype", "menu");
                 startActivity(intent);
+                menuDialog.dismiss();
             }
         });
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
@@ -921,6 +942,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                 intent.putExtra("familyNameStr", Utils.getPref(mContext, "RegisterUserName"));
                 intent.putExtra("familyID", Utils.getPref(mContext, "coachTypeID"));
                 startActivity(intent);
+                menuDialog.dismiss();
             }
         });
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -1024,11 +1046,11 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                         if (sessionDetailInfo.getData().size() > 0) {
                             dataResponse = sessionDetailInfo;
                             for (int j = 0; j < dataResponse.getData().size(); j++) {
-                                AppConfiguration.bookingsubjectName=dataResponse.getData().get(j).getSessionName();
-                                AppConfiguration.bookingteacherName=dataResponse.getData().get(j).getName();
-                                AppConfiguration.bookingdate=dataResponse.getData().get(j).getStartDate();
-                                AppConfiguration.bookingtime=dataResponse.getData().get(j).getSchedule();
-                                AppConfiguration.bookingamount=dataResponse.getData().get(j).getSessionAmount();
+                                AppConfiguration.bookingsubjectName = dataResponse.getData().get(j).getSessionName();
+                                AppConfiguration.bookingteacherName = dataResponse.getData().get(j).getName();
+                                AppConfiguration.bookingdate = dataResponse.getData().get(j).getStartDate();
+                                AppConfiguration.bookingtime = dataResponse.getData().get(j).getSchedule();
+                                AppConfiguration.bookingamount = dataResponse.getData().get(j).getSessionAmount();
 
                                 sessiondetailConfirmationDialogBinding.sessionNameTxt.setText(dataResponse.getData().get(j).getSessionName());
                                 sessiondetailConfirmationDialogBinding.ratingBar.setRating(Float.parseFloat(dataResponse.getData().get(j).getRating()));
@@ -1036,9 +1058,9 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                                 sessiondetailConfirmationDialogBinding.locationTxt.setText(dataResponse.getData().get(j).getRegionName());
                                 sessiondetailConfirmationDialogBinding.startDateTxt.setText(dataResponse.getData().get(j).getStartDate());
                                 sessiondetailConfirmationDialogBinding.endDateTxt.setText(dataResponse.getData().get(j).getEndDate());
-                                if (dataResponse.getData().get(j).getSessionAmount().equalsIgnoreCase("0.00")){
+                                if (dataResponse.getData().get(j).getSessionAmount().equalsIgnoreCase("0.00")) {
                                     sessiondetailConfirmationDialogBinding.priceTxt.setText("Free");
-                                }else {
+                                } else {
                                     sessiondetailConfirmationDialogBinding.priceTxt.setText("₹" + dataResponse.getData().get(j).getSessionAmount());
                                 }
                                 if (!dataResponse.getData().get(j).getTotalRatingUser().equalsIgnoreCase("0")) {

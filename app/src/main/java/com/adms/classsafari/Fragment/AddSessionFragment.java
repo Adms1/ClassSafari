@@ -63,6 +63,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import okhttp3.internal.Util;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -450,10 +451,10 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                         addSessionBinding.sessionBoardLinear.setVisibility(View.VISIBLE);
                         addSessionBinding.sessionStandardLinear.setVisibility(View.VISIBLE);
                         addSessionBinding.sessionStreamLinear.setVisibility(View.VISIBLE);
-                        if (flag.equalsIgnoreCase("edit")) {
+                        //if (flag.equalsIgnoreCase("edit")) {
                             addSessionBinding.recurringRb.setChecked(false);
                             addSessionBinding.singleRb.setChecked(false);
-                        }
+                       // }
 //                    addSessionBinding.singleRb.setChecked(false);
                         addSessionBinding.subjectEdt.setHint("Subject");
                         break;
@@ -463,10 +464,10 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                         addSessionBinding.sessionStandardLinear.setVisibility(View.GONE);
                         addSessionBinding.sessionStreamLinear.setVisibility(View.GONE);
                         addSessionBinding.subjectEdt.setHint("Activity");
-                        if (flag.equalsIgnoreCase("edit")) {
+                        //if (flag.equalsIgnoreCase("edit")) {
                             addSessionBinding.recurringRb.setChecked(false);
                             addSessionBinding.singleRb.setChecked(false);
-                        }
+                       // }
                         break;
 
                 }
@@ -475,42 +476,42 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         addSessionBinding.sessionTypeRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                    int radioButtonId = addSessionBinding.sessionTypeRg.getCheckedRadioButtonId();
-                    switch (radioButtonId) {
-                        case R.id.recurring_rb:
-                            sessiontypeStr = "1";
-                            if (sessionTypeStr.equalsIgnoreCase("Academic")) {
-                                if (addSessionBinding.recurringRb.isChecked()) {
-                                    sessionTypeValueStr = "1";
-                                }else{
-                                    sessionTypeValueStr = "";
-                                }
+                int radioButtonId = addSessionBinding.sessionTypeRg.getCheckedRadioButtonId();
+                switch (radioButtonId) {
+                    case R.id.recurring_rb:
+                        sessiontypeStr = "1";
+                        if (sessionTypeStr.equalsIgnoreCase("Academic")) {
+                            if (addSessionBinding.recurringRb.isChecked()) {
+                                sessionTypeValueStr = "1";
                             } else {
-                                if (addSessionBinding.recurringRb.isChecked()) {
-                                    sessionTypeValueStr = "3";
-                                }else{
-                                    sessionTypeValueStr = "";
-                                }
-
+                                sessionTypeValueStr = "";
                             }
-                            break;
-                        case R.id.single_rb:
-                                sessiontypeStr = "2";
-                                if (sessionTypeStr.equalsIgnoreCase("Academic")) {
-                                    if (addSessionBinding.singleRb.isChecked()) {
-                                        sessionTypeValueStr = "2";
-                                    }else{
-                                        sessionTypeValueStr = "";
-                                    }
-                                } else {
-                                    if (addSessionBinding.singleRb.isChecked()) {
-                                        sessionTypeValueStr = "4";
-                                    }else{
-                                        sessionTypeValueStr = "";
-                                    }
-                                }
-                            break;
-                        default:
+                        } else {
+                            if (addSessionBinding.recurringRb.isChecked()) {
+                                sessionTypeValueStr = "3";
+                            } else {
+                                sessionTypeValueStr = "";
+                            }
+
+                        }
+                        break;
+                    case R.id.single_rb:
+                        sessiontypeStr = "2";
+                        if (sessionTypeStr.equalsIgnoreCase("Academic")) {
+                            if (addSessionBinding.singleRb.isChecked()) {
+                                sessionTypeValueStr = "2";
+                            } else {
+                                sessionTypeValueStr = "";
+                            }
+                        } else {
+                            if (addSessionBinding.singleRb.isChecked()) {
+                                sessionTypeValueStr = "4";
+                            } else {
+                                sessionTypeValueStr = "";
+                            }
+                        }
+                        break;
+                    default:
                 }
             }
         });
@@ -1227,7 +1228,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
 //                }
 
                     } else {
-                        Utils.ping(mContext, "Please select propertime");
+                        Utils.ping(mContext, "Please select proper time");
 
                     }
                     fillTimeGrid();
@@ -2460,7 +2461,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                 addSessionBinding.cityEdt.setText(dataResponse.getData().get(i).getAddressCity());
                 addSessionBinding.stateEdt.setText(dataResponse.getData().get(i).getAddressState());
                 addSessionBinding.zipcodeEdt.setText(dataResponse.getData().get(i).getAddressZipCode());
-            }else{
+            } else {
                 addSessionBinding.sessionAddressLinear1.setVisibility(View.VISIBLE);
                 addSessionBinding.addressEdt.setText(dataResponse.getData().get(i).getAddressLine1());
                 addSessionBinding.addressEdt1.setText(dataResponse.getData().get(i).getAddressLine2());
@@ -2599,7 +2600,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                                     addSessionBinding.areaEdt.setError(getString(R.string.sessionArea));
                                 }
                             } else {
-                                addSessionBinding.addressEdt.setError(getString(R.string.sessionAddress));
+                                Utils.ping(mContext,getString(R.string.sessionAddress));
                             }
                         } else {
                             addSessionBinding.subjectEdt.setError(getString(R.string.lessonName));
@@ -2653,7 +2654,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                                                 addSessionBinding.areaEdt.setError(getString(R.string.sessionArea));
                                             }
                                         } else {
-                                            addSessionBinding.addressEdt.setError(getString(R.string.sessionAddress));
+                                            Utils.ping(mContext,getString(R.string.sessionAddress));
                                         }
                                     } else {
                                         Utils.ping(mContext, getString(R.string.sessionTime));
@@ -2718,7 +2719,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                                                 addSessionBinding.areaEdt.setError(getString(R.string.sessionArea));
                                             }
                                         } else {
-                                            addSessionBinding.addressEdt.setError(getString(R.string.sessionAddress));
+                                            Utils.ping(mContext,getString(R.string.sessionAddress));
                                         }
                                     } else {
                                         addSessionBinding.subjectEdt.setError(getString(R.string.lessonName));
@@ -2784,7 +2785,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                                                             addSessionBinding.areaEdt.setError(getString(R.string.sessionArea));
                                                         }
                                                     } else {
-                                                        addSessionBinding.addressEdt.setError(getString(R.string.sessionAddress));
+                                                        Utils.ping(mContext,getString(R.string.sessionAddress));
                                                     }
                                                 } else {
                                                     addSessionBinding.sessionTimeTxt.setError(getString(R.string.sessionTime));
@@ -3187,7 +3188,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
 
                 }
             } else {
-                SessionDuration = String.valueOf(SessionHour) + " hrs";
+                SessionDuration = String.valueOf(SessionHour) + ":" + "00" + " hrs";
             }
 
 
@@ -3258,13 +3259,30 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     sun_start_add_session_btn.setText("x");
                     sun_start_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
                     sun_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                    SimpleDateFormat sdf0 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                    try {
+                        Date inTime = sdf0.parse(sun_start_time_txt.getText().toString());
+                        Date outTime = sdf0.parse(sun_end_time_txt.getText().toString());
+                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                            sun_end_time_txt.setTextColor(getResources().getColor(R.color.search_boder));
+                            sun_end_linear.setBackgroundResource(R.drawable.red_linear);
+                            checkTime_sun = true;
+                        } else {
+                            checkTime_sun = false;
+                            sun_end_time_txt.setTextColor(getResources().getColor(R.color.text_color));
+                            sun_end_time_txt.setBackgroundResource(R.drawable.linear_shape);
+
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case "1":
                     sun_end_time_txt.setText(FinalTimeStr);
                     sun_end_add_session_btn.setText("x");
                     sun_end_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
                     sun_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
-                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
+                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa", Locale.US);
                     try {
                         Date inTime = sdf.parse(sun_start_time_txt.getText().toString());
                         Date outTime = sdf.parse(sun_end_time_txt.getText().toString());
@@ -3285,13 +3303,29 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     mon_start_add_session_btn.setText("x");
                     mon_start_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
                     mon_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                    SimpleDateFormat sdf21 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                    try {
+                        Date inTime = sdf21.parse(mon_start_time_txt.getText().toString());
+                        Date outTime = sdf21.parse(mon_end_time_txt.getText().toString());
+                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                            mon_end_time_txt.setTextColor(getResources().getColor(R.color.search_boder));
+                            mon_end_linear.setBackgroundResource(R.drawable.red_linear);
+                            checkTime_mon = true;
+                        } else {
+                            checkTime_mon = false;
+                            mon_end_time_txt.setTextColor(getResources().getColor(R.color.text_color));
+                            mon_end_linear.setBackgroundResource(R.drawable.linear_shape);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case "3":
                     mon_end_time_txt.setText(FinalTimeStr);
                     mon_end_add_session_btn.setText("x");
                     mon_end_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
                     mon_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
-                    SimpleDateFormat sdf1 = new SimpleDateFormat("hh:mm a");
+                    SimpleDateFormat sdf1 = new SimpleDateFormat("hh:mm aa", Locale.US);
                     try {
                         Date inTime = sdf1.parse(mon_start_time_txt.getText().toString());
                         Date outTime = sdf1.parse(mon_end_time_txt.getText().toString());
@@ -3313,13 +3347,29 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     tue_start_add_session_btn.setText("x");
                     tue_start_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
                     tue_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                    SimpleDateFormat sdf24 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                    try {
+                        Date inTime = sdf24.parse(tue_start_time_txt.getText().toString());
+                        Date outTime = sdf24.parse(tue_end_time_txt.getText().toString());
+                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                            tue_end_time_txt.setTextColor(getResources().getColor(R.color.search_boder));
+                            tue_end_linear.setBackgroundResource(R.drawable.red_linear);
+                            checkTime_tue = true;
+                        } else {
+                            checkTime_tue = false;
+                            tue_end_time_txt.setTextColor(getResources().getColor(R.color.text_color));
+                            tue_end_linear.setBackgroundResource(R.drawable.linear_shape);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case "5":
                     tue_end_time_txt.setText(FinalTimeStr);
                     tue_end_add_session_btn.setText("x");
                     tue_end_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
                     tue_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
-                    SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm a");
+                    SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm aa", Locale.US);
                     try {
                         Date inTime = sdf2.parse(tue_start_time_txt.getText().toString());
                         Date outTime = sdf2.parse(tue_end_time_txt.getText().toString());
@@ -3341,6 +3391,22 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     wed_start_add_session_btn.setText("x");
                     wed_start_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
                     wed_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                    SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                    try {
+                        Date inTime = sdf16.parse(wed_start_time_txt.getText().toString());
+                        Date outTime = sdf16.parse(wed_end_time_txt.getText().toString());
+                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                            wed_end_time_txt.setTextColor(getResources().getColor(R.color.search_boder));
+                            wed_end_linear.setBackgroundResource(R.drawable.red_linear);
+                            checkTime_wed = true;
+                        } else {
+                            checkTime_wed = false;
+                            wed_end_time_txt.setTextColor(getResources().getColor(R.color.text_color));
+                            wed_end_linear.setBackgroundResource(R.drawable.linear_shape);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case "7":
                     wed_end_time_txt.setText(FinalTimeStr);
@@ -3348,7 +3414,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     wed_end_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
                     wed_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
 
-                    SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm a");
+                    SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
                     try {
                         Date inTime = sdf3.parse(wed_start_time_txt.getText().toString());
                         Date outTime = sdf3.parse(wed_end_time_txt.getText().toString());
@@ -3370,6 +3436,22 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     thu_start_add_session_btn.setText("x");
                     thu_start_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
                     thu_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                    SimpleDateFormat sdf48 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                    try {
+                        Date inTime = sdf48.parse(thu_start_time_txt.getText().toString());
+                        Date outTime = sdf48.parse(thu_end_time_txt.getText().toString());
+                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                            thu_end_time_txt.setTextColor(getResources().getColor(R.color.search_boder));
+                            thu_end_linear.setBackgroundResource(R.drawable.red_linear);
+                            checkTime_thu = true;
+                        } else {
+                            checkTime_thu = false;
+                            thu_end_time_txt.setTextColor(getResources().getColor(R.color.text_color));
+                            thu_end_linear.setBackgroundResource(R.drawable.linear_shape);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case "9":
                     thu_end_time_txt.setText(FinalTimeStr);
@@ -3377,7 +3459,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     thu_end_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
                     thu_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
 
-                    SimpleDateFormat sdf4 = new SimpleDateFormat("hh:mm a");
+                    SimpleDateFormat sdf4 = new SimpleDateFormat("hh:mm aa", Locale.US);
                     try {
                         Date inTime = sdf4.parse(thu_start_time_txt.getText().toString());
                         Date outTime = sdf4.parse(thu_end_time_txt.getText().toString());
@@ -3399,6 +3481,22 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     fri_start_add_session_btn.setText("x");
                     fri_start_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
                     fri_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                    SimpleDateFormat sdf51 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                    try {
+                        Date inTime = sdf51.parse(fri_start_time_txt.getText().toString());
+                        Date outTime = sdf51.parse(fri_end_time_txt.getText().toString());
+                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                            fri_end_time_txt.setTextColor(getResources().getColor(R.color.search_boder));
+                            fri_end_linear.setBackgroundResource(R.drawable.red_linear);
+                            checkTime_fri = true;
+                        } else {
+                            checkTime_fri = false;
+                            fri_end_time_txt.setTextColor(getResources().getColor(R.color.text_color));
+                            fri_end_linear.setBackgroundResource(R.drawable.linear_shape);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case "11":
                     fri_end_time_txt.setText(FinalTimeStr);
@@ -3406,7 +3504,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     fri_end_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
                     fri_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
 
-                    SimpleDateFormat sdf5 = new SimpleDateFormat("hh:mm a");
+                    SimpleDateFormat sdf5 = new SimpleDateFormat("hh:mm aa", Locale.US);
                     try {
                         Date inTime = sdf5.parse(fri_start_time_txt.getText().toString());
                         Date outTime = sdf5.parse(fri_end_time_txt.getText().toString());
@@ -3428,6 +3526,22 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     sat_start_add_session_btn.setText("x");
                     sat_start_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
                     sat_start_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                    SimpleDateFormat sdf61 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                    try {
+                        Date inTime = sdf61.parse(sat_start_time_txt.getText().toString());
+                        Date outTime = sdf61.parse(sat_end_time_txt.getText().toString());
+                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                            sat_end_time_txt.setTextColor(getResources().getColor(R.color.search_boder));
+                            sat_end_linear.setBackgroundResource(R.drawable.red_linear);
+                            checkTime_sat = true;
+                        } else {
+                            checkTime_sat = false;
+                            sat_end_time_txt.setTextColor(getResources().getColor(R.color.text_color));
+                            sat_end_linear.setBackgroundResource(R.drawable.linear_shape);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case "13":
                     sat_end_time_txt.setText(FinalTimeStr);
@@ -3435,7 +3549,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                     sat_end_add_session_btn.setTextColor(getResources().getColor(R.color.search_boder));
                     sat_end_add_session_btn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
 
-                    SimpleDateFormat sdf6 = new SimpleDateFormat("hh:mm a");
+                    SimpleDateFormat sdf6 = new SimpleDateFormat("hh:mm aa", Locale.US);
                     try {
                         Date inTime = sdf6.parse(sat_start_time_txt.getText().toString());
                         Date outTime = sdf6.parse(sat_end_time_txt.getText().toString());

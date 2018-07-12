@@ -31,15 +31,19 @@ public interface WebServices {
     @FormUrlEncoded
     @POST("/Create_Session")
     public void getCreate_Session(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
+
     @FormUrlEncoded
     @POST("/Get_Family_RegisterStatus")
     public void getFamily_RegisterStatus(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
+
     @FormUrlEncoded
     @POST("/Get_Board")
     public void get_Board(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
+
     @FormUrlEncoded
     @POST("/Get_SessionAddressList_By_CoachID")
     public void get_SessionAddressList_By_CoachID(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
+
     @FormUrlEncoded
     @POST("/Get_Lesson")
     public void get_Lesson(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
@@ -63,6 +67,10 @@ public interface WebServices {
     @FormUrlEncoded
     @POST("/Get_SessionDetailByCoachIDAndSessionID")
     public void get_SessionDetailBySessionID(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
+
+    @FormUrlEncoded
+    @POST("/Session_StudentDetail_For_Attandance")
+    public void get_Session_StudentDetail_for_attendance(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
 
     @FormUrlEncoded
     @POST("/Update_Session")
@@ -105,7 +113,7 @@ public interface WebServices {
     public void get_ClassTypeList(@FieldMap Map<String, String> map, Callback<TeacherInfoModel> callback);
 
     @FormUrlEncoded
-    @POST("/Get_ClassAttendance")
+    @POST("/Get_ClassAttendance_New")
     public void get_ClassAttendance(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
 
     @FormUrlEncoded
@@ -123,6 +131,18 @@ public interface WebServices {
     @FormUrlEncoded
     @POST("/Add_BankDetail")
     public void get_Add_BankDetail(@FieldMap Map<String, String> map, Callback<TeacherInfoModel> callback);
+
+    @FormUrlEncoded
+    @POST("/Get_BankDetail_By_CoachID")
+    public void get_BankDetail_By_CoachID(@FieldMap Map<String, String> map, Callback<TeacherInfoModel> callback);
+
+    @FormUrlEncoded
+    @POST("/Update_Teacher")
+    public void get_Update_Teacher(@FieldMap Map<String, String> map, Callback<TeacherInfoModel> callback);
+
+    @FormUrlEncoded
+    @POST("/Get_TeacherContactDetail_Coach_ID")
+    public void get_TeacherContactDetail_Coach_ID(@FieldMap Map<String, String> map, Callback<TeacherInfoModel> callback);
 
     @FormUrlEncoded
     @POST("/Get_Payment_ByCoachID")

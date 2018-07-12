@@ -52,7 +52,7 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
     ActivitySessionDetailBinding sessionDetailBinding;
     ChangePasswordDialogBinding changePasswordDialogBinding;
     Context mContext;
-    String sessionIDStr, wheretocometypeStr, commentStr, ratingValueStr,ratinguserStr;
+    String sessionIDStr, wheretocometypeStr, commentStr, ratingValueStr, ratinguserStr;
     SessionDetailModel dataResponse, dataResponseRating;
     List<sessionDataModel> arrayList;
     List<sessionDataModel> sessionRatingList;
@@ -65,7 +65,7 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
     //Use for Menu Dialog
     String passWordStr, confirmpassWordStr, currentpasswordStr;
     Dialog menuDialog, changeDialog;
-    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily,btnMyenroll,btnMyprofile;
+    Button btnHome,btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
     TextView userNameTxt;
 
     @Override
@@ -73,17 +73,20 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         sessionDetailBinding = DataBindingUtil.setContentView(this, R.layout.activity_session_detail);
         mContext = this;
-setTypeface();
+       // setTypeface();
         init();
         setListner();
     }
+
     public void setTypeface() {
         Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
 
         sessionDetailBinding.sessionTxt.setTypeface(custom_font);
 
 
-    }    public void init() {
+    }
+
+    public void init() {
         wheretocometypeStr = getIntent().getStringExtra("wheretocometype");
         sessionIDStr = getIntent().getStringExtra("sessionID");
         callSessionListApi();
@@ -181,7 +184,7 @@ setTypeface();
             descriptionviewarray = new ArrayList<>();
         }
         //,descriptionarray
-        purchaseSessionDetailAdapter = new PurchaseSessionDetailAdapter(mContext, arrayList, descriptionviewarray, reviewarray,ratinguserStr, sessionRatingList, new onViewClick() {
+        purchaseSessionDetailAdapter = new PurchaseSessionDetailAdapter(mContext, arrayList, descriptionviewarray, reviewarray, ratinguserStr, sessionRatingList, new onViewClick() {
             @Override
             public void getViewClick() {
                 if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
@@ -224,7 +227,7 @@ setTypeface();
                             }
                         }
                         reviewarray = new ArrayList<>();
-                        ratinguserStr= String.valueOf(sessionRatingList.size());
+                        ratinguserStr = String.valueOf(sessionRatingList.size());
                         setData();
                         Utils.dismissDialog();
                         return;
@@ -237,7 +240,7 @@ setTypeface();
                             for (int i = 0; i < dataResponseRating.getData().size(); i++) {
                                 sessionRatingList.add(dataResponseRating.getData().get(i));
                             }
-                            ratinguserStr= String.valueOf(sessionRatingList.size());
+                            ratinguserStr = String.valueOf(sessionRatingList.size());
                             reviewarray = new ArrayList<>();
                             reviewarray.add("Reviews");
                             setData();
@@ -407,11 +410,12 @@ setTypeface();
     }
 
     public void menuDialog() {
-        menuDialog = new Dialog(mContext, R.style.Theme_Dialog);
+        menuDialog = new Dialog(mContext);//, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.x = 10;
         menuDialog.getWindow().getAttributes().verticalMargin = 0.07F;
-        wlp.gravity = Gravity.TOP;
+        wlp.gravity = Gravity.TOP|Gravity.RIGHT;
         window.setAttributes(wlp);
 
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -420,24 +424,34 @@ setTypeface();
 //        menuDialog.setContentView(menuBinding.getRoot());
         menuDialog.setContentView(R.layout.layout_menu);
 
+        btnHome=(Button)menuDialog.findViewById(R.id.btnHome);
         btnMyReport = (Button) menuDialog.findViewById(R.id.btnMyReport);
         btnMySession = (Button) menuDialog.findViewById(R.id.btnMySession);
         btnChangePassword = (Button) menuDialog.findViewById(R.id.btnChangePassword);
-        btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
+//        btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
-        btnMyenroll=(Button)menuDialog.findViewById(R.id.btnMyenroll);
-btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
+        btnMyenroll = (Button) menuDialog.findViewById(R.id.btnMyenroll);
+        btnMyprofile = (Button) menuDialog.findViewById(R.id.btnMyprofile);
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
+
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(mContext,SearchByUser.class);
+                startActivity(i);
+            }
+        });
         btnMyprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent imyaccount = new Intent(mContext, AddStudentScreen.class);
                 imyaccount.putExtra("wheretocometype", "menu");
-                imyaccount.putExtra("myprofile","true");
+                imyaccount.putExtra("myprofile", "true");
                 imyaccount.putExtra("type", "myprofile");
                 startActivity(imyaccount);
+                menuDialog.dismiss();
             }
         });
         btnMyReport.setOnClickListener(new View.OnClickListener() {
@@ -446,6 +460,7 @@ btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
                 Intent imyaccount = new Intent(mContext, MyAccountActivity.class);
                 imyaccount.putExtra("wheretocometype", "menu");
                 startActivity(imyaccount);
+                menuDialog.dismiss();
             }
         });
         btnMyenroll.setOnClickListener(new View.OnClickListener() {
@@ -463,6 +478,7 @@ btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
                 Intent intent = new Intent(mContext, UpcomingActivity.class);
                 intent.putExtra("wheretocometype", "menu");
                 startActivity(intent);
+                menuDialog.dismiss();
             }
         });
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
@@ -481,6 +497,7 @@ btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
                 intent.putExtra("familyNameStr", Utils.getPref(mContext, "RegisterUserName"));
                 intent.putExtra("familyID", Utils.getPref(mContext, "coachTypeID"));
                 startActivity(intent);
+                menuDialog.dismiss();
             }
         });
         btnLogout.setOnClickListener(new View.OnClickListener() {
@@ -620,7 +637,7 @@ btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
         wlp.gravity = Gravity.CENTER;
         window.setAttributes(wlp);
 
-       // changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        // changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
         changeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         changeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         changeDialog.setCancelable(false);

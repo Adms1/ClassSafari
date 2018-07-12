@@ -59,11 +59,12 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
             classNameStr, firsttimesearch, boardStr, standardStr, streamStr, lessionNameStr, SearchPlaystudy;
 
     //Use for Menu Dialog
-    String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr,TeacherName;
+    String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr, TeacherName;
     Dialog menuDialog, changeDialog;
-    Button btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily,btnMyenroll,btnMyprofile;
+    Button btnHome, btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
     TextView userNameTxt;
     ChangePasswordDialogBinding changePasswordDialogBinding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,25 +82,11 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         RegionName = getIntent().getStringExtra("RegionName");
         SearchPlaystudy = getIntent().getStringExtra("SearchPlaystudy");
         lessionNameStr = getIntent().getStringExtra("lessionName");
-        TeacherName=getIntent().getStringExtra("TeacherName");
-        setTypeface();
+        TeacherName = getIntent().getStringExtra("TeacherName");
         init();
         setListner();
     }
-    public void setTypeface() {
-        Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
 
-        classSearchScreenBinding.activityName.setTypeface(custom_font);
-        classSearchScreenBinding.searchTxt.setTypeface(custom_font);
-        classSearchScreenBinding.searchAutoTxt.setTypeface(custom_font);
-        classSearchScreenBinding.regionNameTxt.setTypeface(custom_font);
-        classSearchScreenBinding.classAutoTxt.setTypeface(custom_font);
-        classSearchScreenBinding.boardAutoTxt.setTypeface(custom_font);
-        classSearchScreenBinding.standardAutoTxt.setTypeface(custom_font);
-        classSearchScreenBinding.streamAutoTxt.setTypeface(custom_font);
-        classSearchScreenBinding.sessionAutoTxt.setTypeface(custom_font);
-        classSearchScreenBinding.searchBtn.setTypeface(custom_font);
-    }
 
     public void init() {
 
@@ -117,7 +104,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
             classSearchScreenBinding.sessionAutoTxt.setHint("Activity");
             classSearchScreenBinding.activityName.setText("SEARCH AN ACTIVITY");
             classSearchScreenBinding.teacherAutoTxt.setHint("Instructor");
-        } else if (SearchPlaystudy.equalsIgnoreCase("1")){
+        } else if (SearchPlaystudy.equalsIgnoreCase("1")) {
             classSearchScreenBinding.linearBg.setBackgroundResource(R.drawable.study_bg);
             classSearchScreenBinding.boardAutoTxt.setVisibility(View.VISIBLE);
             classSearchScreenBinding.standardAutoTxt.setVisibility(View.VISIBLE);
@@ -125,7 +112,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
             classSearchScreenBinding.sessionAutoTxt.setHint("Subject");
             classSearchScreenBinding.activityName.setText("SEARCH A CLASS");
             classSearchScreenBinding.teacherAutoTxt.setHint("Teacher");
-        }else if (SearchPlaystudy.equalsIgnoreCase("3")){
+        } else if (SearchPlaystudy.equalsIgnoreCase("3")) {
             classSearchScreenBinding.activityName.setText("SEARCH A CLASS/AN ACTIVITY");
             classSearchScreenBinding.sessionAutoTxt.setHint("Subject/Activity");
             classSearchScreenBinding.teacherAutoTxt.setHint("Teacher/Instructor");
@@ -151,7 +138,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
             if (!RegionName.equalsIgnoreCase("")) {
                 classSearchScreenBinding.regionNameTxt.setText(RegionName);
             }
-            if (!TeacherName.equalsIgnoreCase("")){
+            if (!TeacherName.equalsIgnoreCase("")) {
                 classSearchScreenBinding.teacherAutoTxt.setText(TeacherName);
             }
         }
@@ -205,7 +192,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
                 classSearchScreenBinding.boardAutoTxt.setText("");
                 classSearchScreenBinding.standardAutoTxt.setText("");
                 classSearchScreenBinding.streamAutoTxt.setText("");
-               // fillSession();
+                // fillSession();
             }
         });
         classSearchScreenBinding.regionNameTxt.addTextChangedListener(new TextWatcher() {
@@ -223,7 +210,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
                     classSearchScreenBinding.standardAutoTxt.setText("");
                     classSearchScreenBinding.streamAutoTxt.setText("");
                 } else {
-                     //fillSession();
+                    //fillSession();
                 }
             }
 
@@ -276,6 +263,16 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
             @Override
             public void afterTextChanged(Editable editable) {
 
+            }
+        });
+        classSearchScreenBinding.searchAutoTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    validationSearch();
+                }
+
+                return false;
             }
         });
         classSearchScreenBinding.streamAutoTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -336,7 +333,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         classSearchScreenBinding.teacherAutoTxt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                if (actionId== EditorInfo.IME_ACTION_SEARCH){
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     validationSearch();
                 }
                 return false;
@@ -594,17 +591,17 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
             } else {
                 if (flag.equalsIgnoreCase("1")) {
                     if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
-                            datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase("1")&&
+                            datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase("1") &&
                             datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim())) {
                         StreamName.add(datafilterResponse.get(j).getStream());
                     }
-                } else if(flag.equalsIgnoreCase("2")){
+                } else if (flag.equalsIgnoreCase("2")) {
                     if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
-                            datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase("2")&&
+                            datafilterResponse.get(j).getCoachTypeID().equalsIgnoreCase("2") &&
                             datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim())) {
                         StreamName.add(datafilterResponse.get(j).getStream());
                     }
-                }else {
+                } else {
                     if (datafilterResponse.get(j).getAddressCity().trim().equalsIgnoreCase(selectedSessionCityStr.trim()) &&
                             datafilterResponse.get(j).getSessionName().equalsIgnoreCase(selectedSessionStr.trim())) {
                         StreamName.add(datafilterResponse.get(j).getStream());
@@ -730,7 +727,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
             inSearchUser.putExtra("searchfront", searchfront);
             inSearchUser.putExtra("RegionName", classSearchScreenBinding.regionNameTxt.getText().toString());
             inSearchUser.putExtra("firsttimesearch", "false");
-            inSearchUser.putExtra("teacherName",classSearchScreenBinding.teacherAutoTxt.getText().toString());
+            inSearchUser.putExtra("teacherName", classSearchScreenBinding.teacherAutoTxt.getText().toString());
             startActivity(inSearchUser);
         } else {
             classSearchScreenBinding.searchAutoTxt.setError("Please enter city name");
@@ -738,11 +735,12 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
     }
 
     public void menuDialog() {
-        menuDialog = new Dialog(mContext, R.style.Theme_Dialog);
+        menuDialog = new Dialog(mContext);//, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
+        wlp.x = 10;
         menuDialog.getWindow().getAttributes().verticalMargin = 0.07F;
-        wlp.gravity = Gravity.TOP;
+        wlp.gravity = Gravity.TOP | Gravity.RIGHT;
         window.setAttributes(wlp);
 
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -750,25 +748,33 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         menuDialog.setCanceledOnTouchOutside(true);
 //        menuDialog.setContentView(menuBinding.getRoot());
         menuDialog.setContentView(R.layout.layout_menu);
-
+        btnHome = (Button) menuDialog.findViewById(R.id.btnHome);
         btnMyReport = (Button) menuDialog.findViewById(R.id.btnMyReport);
         btnMySession = (Button) menuDialog.findViewById(R.id.btnMySession);
         btnChangePassword = (Button) menuDialog.findViewById(R.id.btnChangePassword);
-        btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
+//        btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
-        btnMyenroll=(Button)menuDialog.findViewById(R.id.btnMyenroll);
-btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
+        btnMyenroll = (Button) menuDialog.findViewById(R.id.btnMyenroll);
+        btnMyprofile = (Button) menuDialog.findViewById(R.id.btnMyprofile);
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
+        btnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(mContext, SearchByUser.class);
+                startActivity(i);
+            }
+        });
         btnMyprofile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent imyaccount = new Intent(mContext, AddStudentScreen.class);
                 imyaccount.putExtra("wheretocometype", "menu");
-                imyaccount.putExtra("myprofile","true");
+                imyaccount.putExtra("myprofile", "true");
                 imyaccount.putExtra("type", "myprofile");
                 startActivity(imyaccount);
+                menuDialog.dismiss();
             }
         });
         btnMyReport.setOnClickListener(new View.OnClickListener() {
@@ -777,6 +783,7 @@ btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
                 Intent imyaccount = new Intent(mContext, MyAccountActivity.class);
                 imyaccount.putExtra("wheretocometype", "session");
                 startActivity(imyaccount);
+                menuDialog.dismiss();
             }
         });
         btnMyenroll.setOnClickListener(new View.OnClickListener() {
@@ -794,6 +801,7 @@ btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
                 Intent intent = new Intent(mContext, UpcomingActivity.class);
                 intent.putExtra("wheretocometype", "session");
                 startActivity(intent);
+                menuDialog.dismiss();
             }
         });
         btnChangePassword.setOnClickListener(new View.OnClickListener() {
@@ -812,6 +820,7 @@ btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
                 intent.putExtra("familyNameStr", Utils.getPref(mContext, "RegisterUserName"));
                 intent.putExtra("familyID", Utils.getPref(mContext, "coachTypeID"));
                 startActivity(intent);
+                menuDialog.dismiss();
             }
         });
         btnLogout.setOnClickListener(new View.OnClickListener() {

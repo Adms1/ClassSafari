@@ -115,7 +115,6 @@
                             android:layout_marginLeft="@dimen/_5sdp"
                             android:layout_weight="0.65"
                             android:button="@drawable/absent_radio_type"
-                            android:checked="false"
                             android:paddingLeft="@dimen/_2sdp"
                             android:text="@string/recurring" />
 
@@ -155,8 +154,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_25sdp"
                         android:hint="@string/session_name"
-                        android:maxLength="40"
                         android:imeOptions="actionNext"
+                        android:maxLength="40"
                         android:maxLines="1" />
                 </LinearLayout>
 
@@ -180,8 +179,8 @@
                         style="@style/addSessionEditText"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_25sdp"
-                        android:maxLength="40"
                         android:hint="@string/session_board"
+                        android:maxLength="40"
                         android:maxLines="1" />
                 </LinearLayout>
 
@@ -205,8 +204,8 @@
                         style="@style/addSessionEditText"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_25sdp"
-                        android:maxLength="40"
                         android:hint="@string/search_standard"
+                        android:maxLength="40"
                         android:maxLines="1" />
                 </LinearLayout>
 
@@ -229,10 +228,10 @@
                         android:id="@+id/stream_edt"
                         style="@style/addSessionEditText"
                         android:layout_width="match_parent"
-                        android:maxLength="40"
                         android:layout_height="@dimen/_25sdp"
-
                         android:hint="@string/add_stream"
+
+                        android:maxLength="40"
                         android:maxLines="1" />
                 </LinearLayout>
 
@@ -257,8 +256,8 @@
                         style="@style/addSessionEditText"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_25sdp"
-                        android:maxLength="40"
                         android:hint="Subject"
+                        android:maxLength="40"
                         android:maxLines="1" />
                 </LinearLayout>
 
@@ -281,14 +280,14 @@
                         android:id="@+id/description_edt"
                         style="@style/addSessionEditText"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_25sdp"
+                        android:layout_height="@dimen/_30sdp"
                         android:gravity="top"
                         android:hint="@string/description"
                         android:imeOptions="actionNext"
                         android:inputType="textMultiLine"
-                        android:lines="15"
                         android:maxLength="400"
-                        android:scrollbars="vertical" />
+                         />
+                    <!--android:scrollbars="vertical"-->
                 </LinearLayout>
 
                 <LinearLayout
@@ -1060,6 +1059,7 @@
                     android:background="@drawable/blue_btn"
                     android:gravity="center"
                     android:text="@string/submit"
+                    android:textAllCaps="true"
                     android:textColor="@color/white"
                     android:textSize="@dimen/_12sdp"
                     android:textStyle="bold" />
