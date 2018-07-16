@@ -86,7 +86,7 @@ public class PaymentFragment extends Fragment {
         String currency = "INR";
         String description = "";
         String name = getArguments().getString("username");//AppConfiguration.CustomerDetail.get("CustomerName")
-        String email = "saralpayonline@gmail.com";//saralpayonline@gmail.com
+        String email = "searchclasses@admsystems.net";//saralpayonline@gmail.com
         String phone = "7575809733";//7575809733
         String address_line_1 = "-";
         String address_line_2 = "-";
@@ -146,7 +146,7 @@ public class PaymentFragment extends Fragment {
         mapHashData.put("address_line_1", address_line_1);
         mapHashData.put("address_line_2", address_line_2);
         mapHashData.put("amount", amount);
-        mapHashData.put("api_key", "535ee616-a161-4e16-88ed-a338582e841a");//AppConfiguration.api_key
+        mapHashData.put("api_key", "5455f363-4300-45b4-8d29-3949eb498efb");//AppConfiguration.api_key//
         mapHashData.put("city", city);
         mapHashData.put("country", country);
         mapHashData.put("currency", currency);
@@ -170,7 +170,7 @@ public class PaymentFragment extends Fragment {
         mapPostData.put("address_line_1", address_line_1);
         mapPostData.put("address_line_2", address_line_2);
         mapPostData.put("amount", amount);
-        mapPostData.put("api_key", "535ee616-a161-4e16-88ed-a338582e841a");//AppConfiguration.api_key
+        mapPostData.put("api_key", "5455f363-4300-45b4-8d29-3949eb498efb");//AppConfiguration.api_key
 
 //        if(extras.containsKey("CardDetails")) {
 //            mapPostData.put("card_exp_month", card_exp_month);
@@ -198,7 +198,7 @@ public class PaymentFragment extends Fragment {
         mapPostData.put("zip_code", zip_code);
         mapPostData.put("show_saved_cards", show_saved_cards);
 
-        String hashData = "531553f8d6b906aa3342948a3c535ca301de9d5d";//AppConfiguration.secret_key;
+        String hashData = "bc6c6fd8f0a98048c316b17de63a540bb32f88b5";//AppConfiguration.secret_key; 531553f8d6b906aa3342948a3c535ca301de9d5d
         String postData = "";
 
         for (String key : new TreeSet<String>(mapHashData.keySet())) {
@@ -345,11 +345,11 @@ public class PaymentFragment extends Fragment {
                         return;
                     }
                     if (sessionconfirmationInfoModel.getSuccess().equalsIgnoreCase("True")) {
-                        if (type.equalsIgnoreCase("Child")) {
-                            Utils.ping(mContext, "Child confirmation successfully");
-                        } else {
-                            Utils.ping(mContext, "Family confirmation successfully");
-                        }
+//                        if (type.equalsIgnoreCase("Child")) {
+//                            Utils.ping(mContext, "Child confirmation successfully");
+//                        } else {
+//                            Utils.ping(mContext, "Family confirmation successfully");
+//                        }
 
 
                     }

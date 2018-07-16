@@ -429,12 +429,13 @@ public class OldFamilyListFragment extends Fragment {
                         Utils.dismissDialog();
                         AppConfiguration.TeacherSessionIdStr = sessionIDStr;
                         AppConfiguration.TeacherSessionContactIdStr = contatIDstr;
-                        if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") && !AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
+                        if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") ){//&& !AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
                             callpaymentRequestApi();
-                        } else {
-                            paymentStatusstr = "1";
-                            callSessionConfirmationApi();
                         }
+//                        else {
+//                            paymentStatusstr = "1";
+//                            callSessionConfirmationApi();
+//                        }
                     }
                 }
 

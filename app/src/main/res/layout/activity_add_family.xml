@@ -103,7 +103,7 @@
                 android:layout_margin="@dimen/_1sdp"
                 android:childDivider="@color/blue_light"
                 android:divider="@android:color/transparent"
-                android:dividerHeight="3dp"
+                android:dividerHeight="1dp"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:groupIndicator="@null"

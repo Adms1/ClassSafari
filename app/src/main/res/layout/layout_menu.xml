@@ -49,7 +49,6 @@
         android:id="@+id/view_home"
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
-
         android:background="@color/gray" />
     <Button
         android:id="@+id/btnMyprofile"
@@ -66,6 +65,7 @@
         android:visibility="visible" />
 
     <View
+        android:id="@+id/view_profile"
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
         android:background="@color/gray" />
@@ -84,6 +84,7 @@
         android:visibility="visible" />
 
     <View
+        android:id="@+id/view_myenroll"
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
         android:background="@color/gray" />
@@ -102,6 +103,7 @@
         android:visibility="visible" />
 
     <View
+        android:id="@+id/view_mysession"
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
         android:background="@color/gray" />
@@ -120,6 +122,7 @@
         android:textSize="@dimen/_10sdp"
         android:visibility="visible" />
     <View
+        android:id="@+id/view_myreport"
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
         android:background="@color/gray" />
@@ -138,6 +141,7 @@
         android:textSize="@dimen/_10sdp"
         android:visibility="visible" />
     <View
+        android:id="@+id/view_btnfamily"
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
         android:background="@color/gray" />
@@ -158,6 +162,7 @@
         android:visibility="visible" />
 
     <View
+        android:id="@+id/view_changepass"
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
         android:background="@color/gray" />

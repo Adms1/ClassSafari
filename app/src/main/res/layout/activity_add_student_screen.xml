@@ -267,7 +267,7 @@
                 android:layout_marginRight="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_20sdp"
                 android:layout_marginLeft="@dimen/_85sdp"
-                android:background="@drawable/register_btn"
+                android:background="@drawable/blue_btn"
                 android:text="ADD"
                 android:textAllCaps="true"
                 android:textColor="@color/white"

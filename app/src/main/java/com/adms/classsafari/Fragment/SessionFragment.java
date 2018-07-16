@@ -123,7 +123,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
         } else {
 
         }
-        setTypeface();
+    //    setTypeface();
         setListner();
         return rootView;
     }
@@ -491,7 +491,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                         colorList.get(k), finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionName(),
                         finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionName(),
                         finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime()
-                                + " " + "( " + SessionHour + " hr" + ", " + SessionMinit + " min )" + System.getProperty("line.separator")
+                                + " " + "( " + SessionDuration + " )" + System.getProperty("line.separator")
                                 + Address, startDate, endDate, 0, String.valueOf(SessionHour), R.drawable.email);
                 eventList.add(event);
 
@@ -525,9 +525,15 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                     if (sessionStudentInfo.getSuccess().equalsIgnoreCase("True")) {
                         Utils.dismissDialog();
                         arrayList = sessionStudentInfo.getData();
-
+                        int count = 0;
+                        for (int i = 0; i < arrayList.size(); i++) {
+                            if (arrayList.get(i).getIsActive().equalsIgnoreCase("1")) {
+                                count++;
+                            }
+                        }
+                        Log.d("count", "" + count);
                         arraySize = arrayList.size();
-                        studentAvailability = sessionCapacity - arraySize;
+                        studentAvailability = sessionCapacity - count;
                         Log.d("capacity", "" + sessionCapacity + "arraySize :" + arraySize + "studentAvailability :" + studentAvailability);
                         if (sessionStudentInfo.getData().size() > 0) {
                             list_linear.setVisibility(View.VISIBLE);

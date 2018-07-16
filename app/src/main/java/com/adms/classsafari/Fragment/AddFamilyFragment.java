@@ -585,7 +585,7 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         }
         sessiondetailConfirmationDialogBinding.ratingBar.setRating(Float.parseFloat(AppConfiguration.SessionRating));
         String[] spiltTime = AppConfiguration.SessionTime.split("\\-");
-        AppConfiguration.UserName = familyNameStr;
+       // AppConfiguration.UserName = familyNameStr;
 
         sessiondetailConfirmationDialogBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
             @Override

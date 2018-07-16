@@ -600,7 +600,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
 //            confirmSessionDialogBinding.sessionStudentTxt.setText(spilt[0] + " " + spilt[1]);
 //            confirmSessionDialogBinding.sessionStudentTxtView.setText(spilt[3]);
             type = spilt[4];
-
+            AppConfiguration.UserName=selectedfamilyNameStr;
             Utils.setPref(mContext, "Type", type);
             Log.d("selectedIdStr", contatIDstr);
         }
@@ -1051,6 +1051,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                                 AppConfiguration.bookingdate = dataResponse.getData().get(j).getStartDate();
                                 AppConfiguration.bookingtime = dataResponse.getData().get(j).getSchedule();
                                 AppConfiguration.bookingamount = dataResponse.getData().get(j).getSessionAmount();
+                                AppConfiguration.bookinhEnddate=dataResponse.getData().get(j).getEndDate();
 
                                 sessiondetailConfirmationDialogBinding.sessionNameTxt.setText(dataResponse.getData().get(j).getSessionName());
                                 sessiondetailConfirmationDialogBinding.ratingBar.setRating(Float.parseFloat(dataResponse.getData().get(j).getRating()));

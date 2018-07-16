@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -74,7 +75,7 @@ public class DashBoardActivity extends AppCompatActivity {
     private DrawerLayout drawer;
     private View navHeader;
     private ImageView imgNavHeaderBg, imgProfile;
-    private TextView txtName, txtWebsite,title_txt;
+    private TextView txtName, txtWebsite, title_txt;
     private Toolbar toolbar;
     private String[] activityTitles;
     private int drawerLayoutGravity = Gravity.LEFT;
@@ -87,11 +88,11 @@ public class DashBoardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
 
-        position=getIntent().getStringExtra("position");
-        if(getIntent().getStringExtra("position")!=null){
-            navItemIndex= Integer.parseInt(position);
-        }else{
-            navItemIndex=0;
+        position = getIntent().getStringExtra("position");
+        if (getIntent().getStringExtra("position") != null) {
+            navItemIndex = Integer.parseInt(position);
+        } else {
+            navItemIndex = 0;
         }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -101,7 +102,7 @@ public class DashBoardActivity extends AppCompatActivity {
         mContex = DashBoardActivity.this;
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-        title_txt=(TextView)findViewById(R.id.title_txt) ;
+        title_txt = (TextView) findViewById(R.id.title_txt);
 
         navHeader = navigationView.getHeaderView(0);
         txtName = (TextView) navHeader.findViewById(R.id.teacher_name_txt);
@@ -111,22 +112,22 @@ public class DashBoardActivity extends AppCompatActivity {
         // load toolbar titles from string resources
         activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
         //toolbar.setNavigationIcon(R.drawable.decri);
-        if(getIntent().getStringExtra("position")!=null) {
-                navItemIndex = Integer.parseInt(position);
-                if (getIntent().getStringExtra("position").equalsIgnoreCase("0")) {
+        if (getIntent().getStringExtra("position") != null) {
+            navItemIndex = Integer.parseInt(position);
+            if (getIntent().getStringExtra("position").equalsIgnoreCase("0")) {
 //                getSupportFragmentManager().beginTransaction().replace(R.id.frame, new SessionFragment()).addToBackStack(null).commit();
 //                getSupportActionBar().setTitle(activityTitles[navItemIndex]);
-                    displayView(navItemIndex);
-                } else {
-                    displayView(navItemIndex);
+                displayView(navItemIndex);
+            } else {
+                displayView(navItemIndex);
 //                getSupportFragmentManager().beginTransaction().replace(R.id.frame, new AddSessionFragment()).addToBackStack(null).commit();
 //                getSupportActionBar().setTitle(activityTitles[navItemIndex]);
-                }
+            }
         } else {
-            if(savedInstanceState==null){
+            if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame, new SessionFragment()).addToBackStack(null).commit();
                 title_txt.setText(activityTitles[navItemIndex]);//getSupportActionBar().setTitle(
-            }else {
+            } else {
                 title_txt.setText(activityTitles[navItemIndex]);//getSupportActionBar().setTitle(
             }
         }
@@ -386,37 +387,37 @@ public class DashBoardActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-            if (drawer.isDrawerOpen(GravityCompat.START)) {
-                drawer.closeDrawers();
-                return;
-            }
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawers();
+            return;
+        }
 
-            // This code loads home fragment when back key is pressed
-            // when user is in other fragment than home
-            if (shouldLoadHomeFragOnBackPress) {
-                // checking if user is on other navigation menu
-                // rather than home
-                if (navItemIndex != 0) {
-                    navItemIndex = 0;
-                    CURRENT_TAG = TAG_Session;
-                    loadHomeFragment();
-                    return;
-                } else {
+        // This code loads home fragment when back key is pressed
+        // when user is in other fragment than home
+        if (shouldLoadHomeFragOnBackPress) {
+            // checking if user is on other navigation menu
+            // rather than home
+            if (navItemIndex != 0) {
+                navItemIndex = 0;
+                CURRENT_TAG = TAG_Session;
+                loadHomeFragment();
+                return;
+            } else {
 
 //                loadHomeFragment();
                 Utils.ping(mContex, "Press again to exist");
-                    Intent intent = new Intent(Intent.ACTION_MAIN);
-                    intent.addCategory(Intent.CATEGORY_HOME);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);//***Change Here***
-                    startActivity(intent);
-                    finish();
-                    System.exit(0);
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);//***Change Here***
+                startActivity(intent);
+                finish();
+                System.exit(0);
 //                finish();
 //                System.exit(0);
 //                    moveTaskToBack(true);
-                }
             }
-            super.onBackPressed();
+        }
+        super.onBackPressed();
 
 
     }
@@ -446,18 +447,18 @@ public class DashBoardActivity extends AppCompatActivity {
         } else if (session == 14 && flag.equalsIgnoreCase("false")) {
             title_txt.setText("ENROLLMENT FAILURE");//getSupportActionBar().setTitle(
             session_cal.setVisibility(View.GONE);
-           // toolbar.setNavigationIcon(null);
-        }else if (session == 14 && flag.equalsIgnoreCase("true")) {
+            // toolbar.setNavigationIcon(null);
+        } else if (session == 14 && flag.equalsIgnoreCase("true")) {
             title_txt.setText("ENROLLMENT SUCCESSFUL");
             session_cal.setVisibility(View.GONE);
-         //  toolbar.setNavigationIcon(null);
-        }else if (session == 5 && flag.equalsIgnoreCase("true")) {
+            //  toolbar.setNavigationIcon(null);
+        } else if (session == 5 && flag.equalsIgnoreCase("true")) {
             title_txt.setText("STUDENT ATTENDANCE");
             session_cal.setVisibility(View.VISIBLE);
-        }else if(session ==2 && flag.equalsIgnoreCase("true")){
+        } else if (session == 2 && flag.equalsIgnoreCase("true")) {
             title_txt.setText("BANK DETAILS");
             session_cal.setVisibility(View.VISIBLE);
-        }else if(session ==3 && flag.equalsIgnoreCase("true")){
+        } else if (session == 3 && flag.equalsIgnoreCase("true")) {
             title_txt.setText("MY PROFILE");
             session_cal.setVisibility(View.VISIBLE);
 
@@ -573,13 +574,9 @@ public class DashBoardActivity extends AppCompatActivity {
     }
 
     private Map<String, String> getChangePasswordDetail() {
-
         Map<String, String> map = new HashMap<>();
         map.put("EmailAddress", Utils.getPref(mContex, "RegisterEmail"));
         map.put("Password", passWordStr);
-
-
         return map;
     }
-
 }

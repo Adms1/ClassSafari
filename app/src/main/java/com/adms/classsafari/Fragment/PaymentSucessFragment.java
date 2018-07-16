@@ -1,10 +1,13 @@
 package com.adms.classsafari.Fragment;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,9 +16,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.adms.classsafari.Activites.DashBoardActivity;
 import com.adms.classsafari.AppConstant.ApiHandler;
@@ -25,8 +31,13 @@ import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.FragmentPaymentSucessBinding;
+import com.adms.classsafari.databinding.SessiondetailConfirmationDialogBinding;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit.RetrofitError;
@@ -35,10 +46,13 @@ import retrofit.client.Response;
 import static android.view.View.GONE;
 
 
-public class PaymentSucessFragment extends Fragment {
+public class PaymentSucessFragment extends Fragment implements View.OnClickListener {
 
     FragmentPaymentSucessBinding paymentSucessBinding;
-    String status,orderIDStr;
+    String status, orderIDStr;
+    int SessionHour = 0;
+    Integer SessionMinit = 0;
+    String SessionDuration;
     private View rootView;
     private Context mContext;
 
@@ -87,6 +101,7 @@ public class PaymentSucessFragment extends Fragment {
             paymentSucessBinding.btnNewCharge.setText("Done");
             callEditSessionApi();
         } else {
+            paymentSucessBinding.linearClick.setVisibility(GONE);
             paymentSucessBinding.imvSuccessFail.setImageResource(R.drawable.failer);
             status = "fail";
             paymentSucessBinding.txtSucessFail.setTextColor(getResources().getColor(R.color.absent));
@@ -96,25 +111,14 @@ public class PaymentSucessFragment extends Fragment {
             paymentSucessBinding.txtTransactionID.setVisibility(GONE);
             paymentSucessBinding.txtValue.setVisibility(GONE);
             paymentSucessBinding.btnNewCharge.setText("Try Again");
+            paymentSucessBinding.btnNewSearch.setVisibility(View.VISIBLE);
         }
     }
 
     public void setListner() {
-        paymentSucessBinding.btnNewCharge.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(getArguments().getString("responseCode").equalsIgnoreCase("0")) {
-                    Fragment fragment = new SessionFragment();
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.frame, fragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                }else{
-                    callSessioncapacityApi();
-                }
-            }
-        });
+        paymentSucessBinding.btnNewCharge.setOnClickListener(this);
+        paymentSucessBinding.btnNewSearch.setOnClickListener(this);
+
     }
 
     //Use for Family and Child Session Add PAyment
@@ -191,32 +195,117 @@ public class PaymentSucessFragment extends Fragment {
                     if (editsessionInfo.getSuccess().equalsIgnoreCase("True")) {
                         Utils.dismissDialog();
                         if (editsessionInfo.getData().size() > 0) {
-                            paymentSucessBinding.subjectLinear.setVisibility(View.VISIBLE);
-                            paymentSucessBinding.teacherNameLinear.setVisibility(View.VISIBLE);
-                            paymentSucessBinding.dateLinear.setVisibility(View.VISIBLE);
-                            paymentSucessBinding.timeLinear.setVisibility(View.VISIBLE);
-                            paymentSucessBinding.transcationLinear.setVisibility(View.VISIBLE);
-                            paymentSucessBinding.amountLinear.setVisibility(View.VISIBLE);
+//                            paymentSucessBinding.subjectLinear.setVisibility(View.VISIBLE);
+//                            paymentSucessBinding.teacherNameLinear.setVisibility(View.VISIBLE);
+//                            paymentSucessBinding.dateLinear.setVisibility(View.VISIBLE);
+//                            paymentSucessBinding.timeLinear.setVisibility(View.VISIBLE);
+//                            paymentSucessBinding.transcationLinear.setVisibility(View.VISIBLE);
+//                            paymentSucessBinding.amountLinear.setVisibility(View.VISIBLE);
+paymentSucessBinding.linearClick.setVisibility(View.VISIBLE);
+                            paymentSucessBinding.sessionNameTxt.setText(editsessionInfo.getData().get(0).getLessionTypeName());
+                            paymentSucessBinding.tutorNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
+                            paymentSucessBinding.startDateTxt.setText(editsessionInfo.getData().get(0).getStartDate());
+                            paymentSucessBinding.endDateTxt.setText(editsessionInfo.getData().get(0).getEndDate());
 
-                            paymentSucessBinding.txtsubjectname.setText(editsessionInfo.getData().get(0).getLessionTypeName());
-                            paymentSucessBinding.txtteachername.setText(Utils.getPref(mContext, "RegisterUserName"));
-                            paymentSucessBinding.txtdate.setText(editsessionInfo.getData().get(0).getStartDate());
-                            if (editsessionInfo.getData().get(0).getSchedule().contains("|")) {
-                                String[] splitvalue = editsessionInfo.getData().get(0).getSchedule().split("\\|");
-                                String[] time = splitvalue[1].split("\\,");
-                                String[] splitTime = time[1].split("\\-");
-                                paymentSucessBinding.txttime.setText(splitTime[0]);
-                            }else{
-                                String[]time=editsessionInfo.getData().get(0).getSchedule().split("\\,");
-                                String[]splitTime=time[1].split("\\-");
-                                paymentSucessBinding.txttime.setText(splitTime[0]);
-                            }
+//                            if (editsessionInfo.getData().get(0).getSchedule().contains("|")) {
+//                                String[] splitvalue = editsessionInfo.getData().get(0).getSchedule().split("\\|");
+//                                String[] time = splitvalue[1].split("\\,");
+//                                String[] splitTime = time[1].split("\\-");
+//                                paymentSucessBinding.txttime.setText(splitTime[0]);
+//                            }else{
+//                                String[]time=editsessionInfo.getData().get(0).getSchedule().split("\\,");
+//                                String[]splitTime=time[1].split("\\-");
+//                                paymentSucessBinding.txttime.setText(splitTime[0]);
+//                            }
                             paymentSucessBinding.txtTransactionID.setText(getArguments().getString("transactionId"));
                             if (editsessionInfo.getData().get(0).getSessionAmount().equalsIgnoreCase("0.00")) {
                                 paymentSucessBinding.txtValue.setText("Free");
+                            } else {
+                                paymentSucessBinding.txtValue.setText("₹" + getArguments().getString("amount"));
                             }
-                            else {
-                                paymentSucessBinding.txtValue.setText(getArguments().getString("amount"));
+
+                            String[] spiltPipes = editsessionInfo.getData().get(0).getSchedule().split("\\|");
+                            String[] spiltComma;
+                            String[] spiltDash;
+                            Log.d("spilt", "" + spiltPipes.toString());
+                            for (int j = 0; j < spiltPipes.length; j++) {
+                                spiltComma = spiltPipes[j].split("\\,");
+                                spiltDash = spiltComma[1].split("\\-");
+                                calculateHours(spiltDash[0], spiltDash[1]);
+                                switch (spiltComma[0]) {
+                                    case "sun":
+                                        paymentSucessBinding.sunTimeTxt.setEnabled(true);
+                                        paymentSucessBinding.sundayBtn.setEnabled(true);
+                                        paymentSucessBinding.sunTimeTxt.setAlpha(1);
+                                        paymentSucessBinding.sundayBtn.setAlpha(1);
+                                        paymentSucessBinding.sunTimeTxt.setText(spiltDash[0]);
+                                        paymentSucessBinding.sunHoursTxt.setText(SessionDuration);
+                                        paymentSucessBinding.sunHoursTxt.setEnabled(true);
+                                        paymentSucessBinding.sunHoursTxt.setAlpha(1);
+                                        break;
+                                    case "mon":
+                                        paymentSucessBinding.monTimeTxt.setEnabled(true);
+                                        paymentSucessBinding.mondayBtn.setEnabled(true);
+                                        paymentSucessBinding.monTimeTxt.setAlpha(1);
+                                        paymentSucessBinding.mondayBtn.setAlpha(1);
+                                        paymentSucessBinding.monTimeTxt.setText(spiltDash[0]);
+                                        paymentSucessBinding.monHoursTxt.setText(SessionDuration);
+                                        paymentSucessBinding.monHoursTxt.setEnabled(true);
+                                        paymentSucessBinding.monHoursTxt.setAlpha(1);
+                                        break;
+                                    case "tue":
+                                        paymentSucessBinding.tuesTimeTxt.setEnabled(true);
+                                        paymentSucessBinding.tuesdayBtn.setEnabled(true);
+                                        paymentSucessBinding.tuesTimeTxt.setAlpha(1);
+                                        paymentSucessBinding.tuesdayBtn.setAlpha(1);
+                                        paymentSucessBinding.tuesTimeTxt.setText(spiltDash[0]);
+                                        paymentSucessBinding.tuesHoursTxt.setText(SessionDuration);
+                                        paymentSucessBinding.tuesHoursTxt.setEnabled(true);
+                                        paymentSucessBinding.tuesHoursTxt.setAlpha(1);
+                                        break;
+                                    case "wed":
+                                        paymentSucessBinding.wedTimeTxt.setEnabled(true);
+                                        paymentSucessBinding.wednesdayBtn.setEnabled(true);
+                                        paymentSucessBinding.wedTimeTxt.setAlpha(1);
+                                        paymentSucessBinding.wednesdayBtn.setAlpha(1);
+                                        paymentSucessBinding.wedTimeTxt.setText(spiltDash[0]);
+                                        paymentSucessBinding.wedHoursTxt.setText(SessionDuration);
+                                        paymentSucessBinding.wedHoursTxt.setEnabled(true);
+                                        paymentSucessBinding.wedHoursTxt.setAlpha(1);
+                                        break;
+                                    case "thu":
+                                        paymentSucessBinding.thurTimeTxt.setEnabled(true);
+                                        paymentSucessBinding.thursdayBtn.setEnabled(true);
+                                        paymentSucessBinding.thurTimeTxt.setAlpha(1);
+                                        paymentSucessBinding.thursdayBtn.setAlpha(1);
+                                        paymentSucessBinding.thurTimeTxt.setText(spiltDash[0]);
+                                        paymentSucessBinding.thurHoursTxt.setText(SessionDuration);
+                                        paymentSucessBinding.thurHoursTxt.setEnabled(true);
+                                        paymentSucessBinding.thurHoursTxt.setAlpha(1);
+                                        break;
+                                    case "fri":
+                                        paymentSucessBinding.friTimeTxt.setEnabled(true);
+                                        paymentSucessBinding.fridayBtn.setEnabled(true);
+                                        paymentSucessBinding.friTimeTxt.setAlpha(1);
+                                        paymentSucessBinding.fridayBtn.setAlpha(1);
+                                        paymentSucessBinding.friTimeTxt.setText(spiltDash[0]);
+                                        paymentSucessBinding.friHoursTxt.setText(SessionDuration);
+                                        paymentSucessBinding.friHoursTxt.setEnabled(true);
+                                        paymentSucessBinding.friHoursTxt.setAlpha(1);
+                                        break;
+                                    case "sat":
+                                        paymentSucessBinding.satTimeTxt.setEnabled(true);
+                                        paymentSucessBinding.saturdayBtn.setEnabled(true);
+                                        paymentSucessBinding.satTimeTxt.setAlpha(1);
+                                        paymentSucessBinding.saturdayBtn.setAlpha(1);
+                                        paymentSucessBinding.satTimeTxt.setText(spiltDash[0]);
+                                        paymentSucessBinding.satHoursTxt.setText(SessionDuration);
+                                        paymentSucessBinding.satHoursTxt.setEnabled(true);
+                                        paymentSucessBinding.satHoursTxt.setAlpha(1);
+                                        break;
+                                    default:
+
+                                }
                             }
                         }
                     }
@@ -302,6 +391,7 @@ public class PaymentSucessFragment extends Fragment {
         map.put("SessionID", AppConfiguration.TeacherSessionIdStr);//contatIDstr  //Utils.getPref(mContext, "coachID")
         return map;
     }
+
     //Use for paymentRequest
     public void callpaymentRequestApi() {
         if (Utils.isNetworkConnected(mContext)) {
@@ -363,6 +453,68 @@ public class PaymentSucessFragment extends Fragment {
         map.put("SessionID", AppConfiguration.TeacherSessionIdStr);
         map.put("Amount", AppConfiguration.SessionPrice);
         return map;
+    }
+
+    public void calculateHours(String time1, String time2) {
+        Date date1, date2;
+        int days, hours, min;
+        String hourstr, minstr;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa", Locale.US);
+        try {
+            date1 = simpleDateFormat.parse(time1);
+            date2 = simpleDateFormat.parse(time2);
+
+            long difference = date2.getTime() - date1.getTime();
+            days = (int) (difference / (1000 * 60 * 60 * 24));
+            hours = (int) ((difference - (1000 * 60 * 60 * 24 * days)) / (1000 * 60 * 60));
+            min = (int) (difference - (1000 * 60 * 60 * 24 * days) - (1000 * 60 * 60 * hours)) / (1000 * 60);
+            hours = (hours < 0 ? -hours : hours);
+            SessionHour = hours;
+
+            SessionMinit = min;
+//            totalHours.add(SessionHour);
+//            totalMinit.add(SessionMinit);
+            Log.i("======= Hours", " :: " + hours + ":" + min);
+
+            if (SessionMinit > 0) {
+                if (SessionMinit < 10) {
+                    SessionDuration = SessionHour + ":" + "0" + SessionMinit + " hrs";
+                } else {
+                    SessionDuration = SessionHour + ":" + SessionMinit + " hrs";
+                }
+            } else {
+                SessionDuration = SessionHour + ":" + "00" + " hrs";
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btnNewCharge:
+                if (getArguments().getString("responseCode").equalsIgnoreCase("0")) {
+                    Fragment fragment = new SessionFragment();
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.frame, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                } else {
+                    callSessioncapacityApi();
+                }
+                break;
+            case R.id.btnNewSearch:
+                Fragment fragment = new SessionFragment();
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.frame, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+                break;
+        }
     }
 }
 

@@ -202,7 +202,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_30sdp"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:drawableRight="@drawable/user_white"
+                    android:drawableRight="@drawable/class_name"
                     android:hint="Class Name"
                     android:visibility="gone" />
 
@@ -254,7 +254,7 @@
                     android:paddingRight="@dimen/_5sdp"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"
-                    android:textSize="@dimen/_10sdp"
+                    android:textSize="@dimen/_11sdp"
                     android:textStyle="normal" />
 
                 <RadioGroup
@@ -351,7 +351,7 @@
                 android:layout_marginLeft="@dimen/_15sdp"
                 android:layout_marginRight="@dimen/_15sdp"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:background="@drawable/register_btn"
+                android:background="@drawable/blue_btn"
                 android:text="Register"
                 android:textAllCaps="true"
                 android:textColor="@color/white"

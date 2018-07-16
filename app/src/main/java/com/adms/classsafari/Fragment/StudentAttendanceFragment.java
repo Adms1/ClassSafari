@@ -230,7 +230,7 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
 
                             for (int i = 0; i < dataResponse.getData().size(); i++) {
                                 dataResponse.getData().get(i).setAttendanceID("0");
-                                dataResponse.getData().get(i).setStatus("0");
+                                dataResponse.getData().get(i).setStatus("1");
                                 dataResponse.getData().get(i).setReason("");
                             }
                             totalstudetnStr = String.valueOf(sessionStudentInfo.getData().size());
@@ -600,8 +600,8 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
                     if (classattendanceInfo.getSuccess().equalsIgnoreCase("False")) {
                         Utils.dismissDialog();
                         if (classattendanceInfo.getData().size() == 0) {
-                            studentAttendanceBinding.submitBtn.setText("SUBMIT");
-                            callGetSessionStudentDetailApi();
+
+                            //callGetSessionStudentDetailApi();
                             Log.d("false", "hello");
                         }
 
@@ -617,7 +617,7 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
 //                            if (classType.equalsIgnoreCase("")) {
 //                                studentAttendanceBinding.submitBtn.setText("SUBMIT");
 //                            } else {
-                                studentAttendanceBinding.submitBtn.setText("UPDATE");
+
 //                            }
                             if (classattendanceInfo.getData()!= null) {
                                 studentAttendanceBinding.listLinear.setVisibility(View.VISIBLE);
@@ -628,11 +628,20 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
                                 for (int i = 0; i < classattendanceInfo.getData().size(); i++) {
                                     classattendanceInfo.getData().get(i).setStatus("1");
                                     //studentatt = classattendanceInfo.getData().get(i);
+                                    if (classattendanceInfo.getData().get(i).getAttendanceID().equalsIgnoreCase("0")){
+                                        classattendanceInfo.getData().get(i).setAttendanceID("1");
+                                        studentAttendanceBinding.submitBtn.setText("SUBMIT");
+                                    }else{
+                                        studentAttendanceBinding.submitBtn.setText("UPDATE");
+                                    }
 
+
+//                                    dataResponse.getData().get(i).setReason("");
                                 }
 //                                for (int i = 0; i < studentatt.getDa.size(); i++) {
 
 //                                }
+
                                 totalstudetnStr = String.valueOf(classattendanceInfo.getData().size());
                                 Log.d("totalStudent", totalstudetnStr);
                                 studentAttendanceBinding.totalStudentTxt.setText(totalstudetnStr);

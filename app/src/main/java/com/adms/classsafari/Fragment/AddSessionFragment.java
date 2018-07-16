@@ -24,6 +24,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -451,10 +452,14 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                         addSessionBinding.sessionBoardLinear.setVisibility(View.VISIBLE);
                         addSessionBinding.sessionStandardLinear.setVisibility(View.VISIBLE);
                         addSessionBinding.sessionStreamLinear.setVisibility(View.VISIBLE);
-                        //if (flag.equalsIgnoreCase("edit")) {
-                            addSessionBinding.recurringRb.setChecked(false);
-                            addSessionBinding.singleRb.setChecked(false);
-                       // }
+//                        if (flag.equalsIgnoreCase("edit")) {
+//                            if (addSessionBinding.recurringRb.isChecked()) {
+//                                addSessionBinding.recurringRb.setChecked(false);
+//                            }
+//                            if (addSessionBinding.singleRb.isChecked()) {
+//                                addSessionBinding.singleRb.setChecked(false);
+//                            }
+//                        }
 //                    addSessionBinding.singleRb.setChecked(false);
                         addSessionBinding.subjectEdt.setHint("Subject");
                         break;
@@ -464,10 +469,14 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                         addSessionBinding.sessionStandardLinear.setVisibility(View.GONE);
                         addSessionBinding.sessionStreamLinear.setVisibility(View.GONE);
                         addSessionBinding.subjectEdt.setHint("Activity");
-                        //if (flag.equalsIgnoreCase("edit")) {
-                            addSessionBinding.recurringRb.setChecked(false);
-                            addSessionBinding.singleRb.setChecked(false);
-                       // }
+//                        if (flag.equalsIgnoreCase("edit")) {
+//                            if (addSessionBinding.recurringRb.isChecked()) {
+//                                addSessionBinding.recurringRb.setChecked(false);
+//                            }
+//                            if (addSessionBinding.singleRb.isChecked()) {
+//                                addSessionBinding.singleRb.setChecked(false);
+//                            }
+//                        }
                         break;
 
                 }
@@ -480,42 +489,58 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                 switch (radioButtonId) {
                     case R.id.recurring_rb:
                         sessiontypeStr = "1";
-                        if (sessionTypeStr.equalsIgnoreCase("Academic")) {
-                            if (addSessionBinding.recurringRb.isChecked()) {
-                                sessionTypeValueStr = "1";
-                            } else {
-                                sessionTypeValueStr = "";
-                            }
-                        } else {
-                            if (addSessionBinding.recurringRb.isChecked()) {
-                                sessionTypeValueStr = "3";
-                            } else {
-                                sessionTypeValueStr = "";
-                            }
-
-                        }
+//                        if (sessionTypeStr.equalsIgnoreCase("Academic")) {
+//                            if (addSessionBinding.recurringRb.isChecked()) {
+//                                sessionTypeValueStr = "1";
+//                            } else {
+//                                sessionTypeValueStr = "";
+//                            }
+//                        } else {
+//                            if (addSessionBinding.recurringRb.isChecked()) {
+//                                sessionTypeValueStr = "3";
+//                            } else {
+//                                sessionTypeValueStr = "";
+//                            }
+//
+//                        }
+                        Log.d("sessionTypeValue", sessionTypeValueStr);
                         break;
                     case R.id.single_rb:
                         sessiontypeStr = "2";
-                        if (sessionTypeStr.equalsIgnoreCase("Academic")) {
-                            if (addSessionBinding.singleRb.isChecked()) {
-                                sessionTypeValueStr = "2";
-                            } else {
-                                sessionTypeValueStr = "";
-                            }
-                        } else {
-                            if (addSessionBinding.singleRb.isChecked()) {
-                                sessionTypeValueStr = "4";
-                            } else {
-                                sessionTypeValueStr = "";
-                            }
-                        }
+//                        if (sessionTypeStr.equalsIgnoreCase("Academic")) {
+//                            if (addSessionBinding.singleRb.isChecked()) {
+//                                sessionTypeValueStr = "2";
+//                            } else {
+//                                sessionTypeValueStr = "";
+//                            }
+//                        } else {
+//                            if (addSessionBinding.singleRb.isChecked()) {
+//                                sessionTypeValueStr = "4";
+//                            } else {
+//                                sessionTypeValueStr = "";
+//                            }
+//                        }
+                        Log.d("sessionTypeValue", sessionTypeValueStr);
                         break;
                     default:
                 }
             }
         });
 
+        addSessionBinding.scrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                addSessionBinding.descriptionEdt.getParent().requestDisallowInterceptTouchEvent(false);
+                return false;
+            }
+        });
+        addSessionBinding.descriptionEdt.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                addSessionBinding.descriptionEdt.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
         addSessionBinding.alertBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -700,7 +725,26 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
 
         done_btn = (Button) popularDialog.findViewById(R.id.done_btn);
         cancel_btn = (Button) popularDialog.findViewById(R.id.cancel_btn);
+        if (addSessionBinding.recurringRb.isChecked()) {
+            if (sessionTypeStr.equalsIgnoreCase("Academic")) {
+                sessionTypeValueStr = "1";
+            } else {
+                sessionTypeValueStr = "3";
+            }
+        } else {
+        }
+        if (addSessionBinding.singleRb.isChecked()) {
+            if (sessionTypeStr.equalsIgnoreCase("Academic")) {
 
+                sessionTypeValueStr = "2";
+            }else{
+                sessionTypeValueStr = "4";
+            }
+
+        } else {
+            // sessionTypeValueStr = "";
+        }
+        Log.d("sessionTypeValue", sessionTypeValueStr);
         if (!sessionTypeValueStr.equalsIgnoreCase("")) {
             switch (sessionTypeValueStr) {
                 case "1":
@@ -719,33 +763,33 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         }
 
 
-        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                int radioButtonId = rg.getCheckedRadioButtonId();
-                switch (radioButtonId) {
-                    case R.id.recurring_rb:
-                        sessiontypeStr = "1";
-                        if (sessionTypeStr.equalsIgnoreCase("Academic")) {
-                            sessionTypeValueStr = "1";
-                        } else {
-                            sessionTypeValueStr = "3";
-
-                        }
-                        break;
-                    case R.id.single_rb:
-                        sessiontypeStr = "2";
-                        if (sessionTypeStr.equalsIgnoreCase("Academic")) {
-                            sessionTypeValueStr = "2";
-                        } else {
-                            sessionTypeValueStr = "4";
-
-                        }
-                        break;
-                    default:
-                }
-            }
-        });
+//        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+//                int radioButtonId = rg.getCheckedRadioButtonId();
+//                switch (radioButtonId) {
+//                    case R.id.recurring_rb:
+//                        sessiontypeStr = "1";
+//                        if (sessionTypeStr.equalsIgnoreCase("Academic")) {
+//                            sessionTypeValueStr = "1";
+//                        } else {
+//                            sessionTypeValueStr = "3";
+//
+//                        }
+//                        break;
+//                    case R.id.single_rb:
+//                        sessiontypeStr = "2";
+//                        if (sessionTypeStr.equalsIgnoreCase("Academic")) {
+//                            sessionTypeValueStr = "2";
+//                        } else {
+//                            sessionTypeValueStr = "4";
+//
+//                        }
+//                        break;
+//                    default:
+//                }
+//            }
+//        });
 
 //        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
 //
@@ -1184,7 +1228,26 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                             Utils.ping(mContext, "Please select classtype");
                         }
 //                if (days.size() == scheduleArray.size()) {
+                        if (recurringrb.isChecked()) {
+                            if (sessionTypeStr.equalsIgnoreCase("Academic")) {
+                                sessionTypeValueStr = "1";
+                            } else {
+                                sessionTypeValueStr = "3";
+                            }
+                        } else {
+                        }
+                        if (singlerb.isChecked()) {
+                            if (sessionTypeStr.equalsIgnoreCase("Academic")) {
 
+                                sessionTypeValueStr = "2";
+                            }else{
+                                sessionTypeValueStr = "4";
+                            }
+
+                        } else {
+                            // sessionTypeValueStr = "";
+                        }
+                        Log.d("sessionTypeValue", sessionTypeValueStr);
                         if (!sessionTypeValueStr.equalsIgnoreCase("")) {
                             switch (sessionTypeValueStr) {
                                 case "1":
@@ -1867,6 +1930,27 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         } else {
             sessionamtStr = addSessionBinding.sessionPriceEdt.getText().toString();
         }
+
+        if (addSessionBinding.recurringRb.isChecked()) {
+            if (sessionTypeStr.equalsIgnoreCase("Academic")) {
+                sessionTypeValueStr = "1";
+            } else {
+                sessionTypeValueStr = "3";
+            }
+        } else {
+        }
+        if (addSessionBinding.singleRb.isChecked()) {
+            if (sessionTypeStr.equalsIgnoreCase("Academic")) {
+
+                sessionTypeValueStr = "2";
+            }else{
+                sessionTypeValueStr = "4";
+            }
+
+        } else {
+            // sessionTypeValueStr = "";
+        }
+        Log.d("sessionTypeValue", sessionTypeValueStr);
     }
 
     //Use for Create Session
@@ -2600,7 +2684,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                                     addSessionBinding.areaEdt.setError(getString(R.string.sessionArea));
                                 }
                             } else {
-                                Utils.ping(mContext,getString(R.string.sessionAddress));
+                                Utils.ping(mContext, getString(R.string.sessionAddress));
                             }
                         } else {
                             addSessionBinding.subjectEdt.setError(getString(R.string.lessonName));
@@ -2654,7 +2738,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                                                 addSessionBinding.areaEdt.setError(getString(R.string.sessionArea));
                                             }
                                         } else {
-                                            Utils.ping(mContext,getString(R.string.sessionAddress));
+                                            Utils.ping(mContext, getString(R.string.sessionAddress));
                                         }
                                     } else {
                                         Utils.ping(mContext, getString(R.string.sessionTime));
@@ -2719,7 +2803,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                                                 addSessionBinding.areaEdt.setError(getString(R.string.sessionArea));
                                             }
                                         } else {
-                                            Utils.ping(mContext,getString(R.string.sessionAddress));
+                                            Utils.ping(mContext, getString(R.string.sessionAddress));
                                         }
                                     } else {
                                         addSessionBinding.subjectEdt.setError(getString(R.string.lessonName));
@@ -2785,7 +2869,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                                                             addSessionBinding.areaEdt.setError(getString(R.string.sessionArea));
                                                         }
                                                     } else {
-                                                        Utils.ping(mContext,getString(R.string.sessionAddress));
+                                                        Utils.ping(mContext, getString(R.string.sessionAddress));
                                                     }
                                                 } else {
                                                     addSessionBinding.sessionTimeTxt.setError(getString(R.string.sessionTime));

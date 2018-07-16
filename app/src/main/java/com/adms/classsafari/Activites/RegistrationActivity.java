@@ -951,6 +951,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                                 AppConfiguration.bookingdate=dataResponse.getData().get(j).getStartDate();
                                 AppConfiguration.bookingtime=dataResponse.getData().get(j).getSchedule();
                                 AppConfiguration.bookingamount=dataResponse.getData().get(j).getSessionAmount();
+                                AppConfiguration.bookinhEnddate=dataResponse.getData().get(j).getEndDate();
                                 sessiondetailConfirmationDialogBinding.sessionNameTxt.setText(dataResponse.getData().get(j).getSessionName());
                                 sessiondetailConfirmationDialogBinding.ratingBar.setRating(Float.parseFloat(dataResponse.getData().get(j).getRating()));
                                 sessiondetailConfirmationDialogBinding.tutorNameTxt.setText(dataResponse.getData().get(j).getName());

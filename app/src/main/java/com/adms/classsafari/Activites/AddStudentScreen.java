@@ -1054,6 +1054,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
             public void onClick(View view) {
                 AppConfiguration.TeacherSessionIdStr = sessionIDStr;
                 AppConfiguration.TeacherSessionContactIdStr = contatIDstr;
+                AppConfiguration.UserName=firstNameStr+" "+lastNameStr;
                 callSessioncapacityApi();
                 confimDialog.dismiss();
             }
@@ -1154,6 +1155,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                                 AppConfiguration.bookingdate = dataResponse.getData().get(j).getStartDate();
                                 AppConfiguration.bookingtime = dataResponse.getData().get(j).getSchedule();
                                 AppConfiguration.bookingamount = dataResponse.getData().get(j).getSessionAmount();
+                                AppConfiguration.bookinhEnddate=dataResponse.getData().get(j).getEndDate();
                                 sessiondetailConfirmationDialogBinding.sessionNameTxt.setText(dataResponse.getData().get(j).getSessionName());
                                 sessiondetailConfirmationDialogBinding.ratingBar.setRating(Float.parseFloat(dataResponse.getData().get(j).getRating()));
 //                                sessiondetailConfirmationDialogBinding.ratingUserTxt.setText();

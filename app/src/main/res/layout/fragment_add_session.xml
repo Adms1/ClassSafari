@@ -281,12 +281,15 @@
                         style="@style/addSessionEditText"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/_30sdp"
-                        android:gravity="top"
                         android:hint="@string/description"
                         android:imeOptions="actionNext"
                         android:inputType="textMultiLine"
                         android:maxLength="400"
-                         />
+                        android:maxLines="3"
+                        android:overScrollMode="always"
+                        android:scrollbarStyle="insideInset"
+                        android:scrollbars="vertical"
+                        android:singleLine="false"/>
                     <!--android:scrollbars="vertical"-->
                 </LinearLayout>
 

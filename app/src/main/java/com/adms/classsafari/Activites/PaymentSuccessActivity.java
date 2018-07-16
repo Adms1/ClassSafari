@@ -37,7 +37,7 @@ import retrofit.client.Response;
 
 import static android.view.View.GONE;
 
-public class PaymentSuccessActivity extends AppCompatActivity {
+public class PaymentSuccessActivity extends AppCompatActivity implements View.OnClickListener{
 
     ActivityPaymentSuccessBinding paymentSuccessBinding;
     Context mContext;
@@ -55,45 +55,15 @@ public class PaymentSuccessActivity extends AppCompatActivity {
         init();
         setListner();
     }
-    public void setTypeface() {
-        Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
-
-        paymentSuccessBinding.sessionTxt.setTypeface(custom_font);
-        paymentSuccessBinding.txtUserName.setTypeface(custom_font);
-        paymentSuccessBinding.txtSucessFail.setTypeface(custom_font);
-        paymentSuccessBinding.txtSucessFailDesc.setTypeface(custom_font);
-        paymentSuccessBinding.txtTransactionID.setTypeface(custom_font);
-        paymentSuccessBinding.txtValue.setTypeface(custom_font);
-        paymentSuccessBinding.btnNewCharge.setTypeface(custom_font);
-//Class you are trying to book is already full.Please try another class.
-    }
 
     public void init() {
-        paymentSuccessBinding.txtUserName.setText(Utils.getPref(mContext,"RegisterUserName"));
+        paymentSuccessBinding.txtUserName.setText(AppConfiguration.UserName);
         if (getIntent().getStringExtra("responseCode").equalsIgnoreCase("0")) {
             status = "success";
-         //   callSessionListApi();
-            paymentSuccessBinding.subjectLinear.setVisibility(View.VISIBLE);
-            paymentSuccessBinding.teacherNameLinear.setVisibility(View.VISIBLE);
-            paymentSuccessBinding.dateLinear.setVisibility(View.VISIBLE);
-            paymentSuccessBinding.timeLinear.setVisibility(View.VISIBLE);
-            paymentSuccessBinding.transcationLinear.setVisibility(View.VISIBLE);
-            paymentSuccessBinding.amountLinear.setVisibility(View.VISIBLE);
-
-            paymentSuccessBinding.txtsubjectname.setText(AppConfiguration.bookingsubjectName);
-                paymentSuccessBinding.txtteachername.setText(AppConfiguration.bookingteacherName);
-            paymentSuccessBinding.txtdate.setText(AppConfiguration.bookingdate);
-            if (AppConfiguration.bookingtime.contains("|")) {
-                String[] splitvalue =AppConfiguration.bookingtime.split("\\|");
-                String[]time=splitvalue[1].split("\\,");
-                String[]splitTime=time[1].split("\\-");
-                paymentSuccessBinding.txttime.setText(splitTime[0]);
-            }else{
-                String[]time=AppConfiguration.bookingtime.split("\\,");
-                String[]splitTime=time[1].split("\\-");
-                paymentSuccessBinding.txttime.setText(splitTime[0]);
-            }
-
+            paymentSuccessBinding.linearClick.setVisibility(View.VISIBLE);
+            paymentSuccessBinding.sessionNameTxt.setText(AppConfiguration.bookingsubjectName);
+                paymentSuccessBinding.tutorNameTxt.setText(AppConfiguration.bookingteacherName);
+            paymentSuccessBinding.startDateTxt.setText(AppConfiguration.bookingdate);
             paymentSuccessBinding.txtTransactionID.setText(getIntent().getStringExtra("transactionId"));
             if (AppConfiguration.bookingamount.equalsIgnoreCase("0.00")) {
                 paymentSuccessBinding.txtValue.setText("Free");
@@ -101,7 +71,89 @@ public class PaymentSuccessActivity extends AppCompatActivity {
             else {
                 paymentSuccessBinding.txtValue.setText("₹"+AppConfiguration.bookingamount);
             }
+            String[] spiltPipes = AppConfiguration.bookingtime.split("\\|");
+            String[] spiltComma;
+            String[] spiltDash;
+            Log.d("spilt", "" + spiltPipes.toString());
+            for (int j = 0; j < spiltPipes.length; j++) {
+                spiltComma = spiltPipes[j].split("\\,");
+                spiltDash = spiltComma[1].split("\\-");
+                calculateHours(spiltDash[0], spiltDash[1]);
+                switch (spiltComma[0]) {
+                    case "sun":
+                        paymentSuccessBinding.sunTimeTxt.setEnabled(true);
+                        paymentSuccessBinding.sundayBtn.setEnabled(true);
+                        paymentSuccessBinding.sunTimeTxt.setAlpha(1);
+                        paymentSuccessBinding.sundayBtn.setAlpha(1);
+                        paymentSuccessBinding.sunTimeTxt.setText(spiltDash[0]);
+                        paymentSuccessBinding.sunHoursTxt.setText(SessionDuration);
+                        paymentSuccessBinding.sunHoursTxt.setEnabled(true);
+                        paymentSuccessBinding.sunHoursTxt.setAlpha(1);
+                        break;
+                    case "mon":
+                        paymentSuccessBinding.monTimeTxt.setEnabled(true);
+                        paymentSuccessBinding.mondayBtn.setEnabled(true);
+                        paymentSuccessBinding.monTimeTxt.setAlpha(1);
+                        paymentSuccessBinding.mondayBtn.setAlpha(1);
+                        paymentSuccessBinding.monTimeTxt.setText(spiltDash[0]);
+                        paymentSuccessBinding.monHoursTxt.setText(SessionDuration);
+                        paymentSuccessBinding.monHoursTxt.setEnabled(true);
+                        paymentSuccessBinding.monHoursTxt.setAlpha(1);
+                        break;
+                    case "tue":
+                        paymentSuccessBinding.tuesTimeTxt.setEnabled(true);
+                        paymentSuccessBinding.tuesdayBtn.setEnabled(true);
+                        paymentSuccessBinding.tuesTimeTxt.setAlpha(1);
+                        paymentSuccessBinding.tuesdayBtn.setAlpha(1);
+                        paymentSuccessBinding.tuesTimeTxt.setText(spiltDash[0]);
+                        paymentSuccessBinding.tuesHoursTxt.setText(SessionDuration);
+                        paymentSuccessBinding.tuesHoursTxt.setEnabled(true);
+                        paymentSuccessBinding.tuesHoursTxt.setAlpha(1);
+                        break;
+                    case "wed":
+                        paymentSuccessBinding.wedTimeTxt.setEnabled(true);
+                        paymentSuccessBinding.wednesdayBtn.setEnabled(true);
+                        paymentSuccessBinding.wedTimeTxt.setAlpha(1);
+                        paymentSuccessBinding.wednesdayBtn.setAlpha(1);
+                        paymentSuccessBinding.wedTimeTxt.setText(spiltDash[0]);
+                        paymentSuccessBinding.wedHoursTxt.setText(SessionDuration);
+                        paymentSuccessBinding.wedHoursTxt.setEnabled(true);
+                        paymentSuccessBinding.wedHoursTxt.setAlpha(1);
+                        break;
+                    case "thu":
+                        paymentSuccessBinding.thurTimeTxt.setEnabled(true);
+                        paymentSuccessBinding.thursdayBtn.setEnabled(true);
+                        paymentSuccessBinding.thurTimeTxt.setAlpha(1);
+                        paymentSuccessBinding.thursdayBtn.setAlpha(1);
+                        paymentSuccessBinding.thurTimeTxt.setText(spiltDash[0]);
+                        paymentSuccessBinding.thurHoursTxt.setText(SessionDuration);
+                        paymentSuccessBinding.thurHoursTxt.setEnabled(true);
+                        paymentSuccessBinding.thurHoursTxt.setAlpha(1);
+                        break;
+                    case "fri":
+                        paymentSuccessBinding.friTimeTxt.setEnabled(true);
+                        paymentSuccessBinding.fridayBtn.setEnabled(true);
+                        paymentSuccessBinding.friTimeTxt.setAlpha(1);
+                        paymentSuccessBinding.fridayBtn.setAlpha(1);
+                        paymentSuccessBinding.friTimeTxt.setText(spiltDash[0]);
+                        paymentSuccessBinding.friHoursTxt.setText(SessionDuration);
+                        paymentSuccessBinding.friHoursTxt.setEnabled(true);
+                        paymentSuccessBinding.friHoursTxt.setAlpha(1);
+                        break;
+                    case "sat":
+                        paymentSuccessBinding.satTimeTxt.setEnabled(true);
+                        paymentSuccessBinding.saturdayBtn.setEnabled(true);
+                        paymentSuccessBinding.satTimeTxt.setAlpha(1);
+                        paymentSuccessBinding.saturdayBtn.setAlpha(1);
+                        paymentSuccessBinding.satTimeTxt.setText(spiltDash[0]);
+                        paymentSuccessBinding.satHoursTxt.setText(SessionDuration);
+                        paymentSuccessBinding.satHoursTxt.setEnabled(true);
+                        paymentSuccessBinding.satHoursTxt.setAlpha(1);
+                        break;
+                    default:
 
+                }
+            }
             paymentSuccessBinding.imvSuccessFail.setImageResource(R.drawable.circle_sucess);
             paymentSuccessBinding.txtSucessFail.setText("Success");
             paymentSuccessBinding.txtSucessFailDesc.setText("Your enrollment was successful");
@@ -109,6 +161,7 @@ public class PaymentSuccessActivity extends AppCompatActivity {
             paymentSuccessBinding.sessionTxt.setText("ENROLLMENT SUCCESSFUL");
 
         } else {
+            paymentSuccessBinding.linearClick.setVisibility(GONE);
             paymentSuccessBinding.imvSuccessFail.setImageResource(R.drawable.failer);
             status = "fail";
             paymentSuccessBinding.txtSucessFail.setTextColor(getResources().getColor(R.color.absent));
@@ -119,6 +172,7 @@ public class PaymentSuccessActivity extends AppCompatActivity {
             paymentSuccessBinding.txtValue.setVisibility(GONE);
             paymentSuccessBinding.btnNewCharge.setText("Try Again");
             paymentSuccessBinding.sessionTxt.setText("ENROLLMENT FAILURE");
+            paymentSuccessBinding.btnNewSearch.setVisibility(View.VISIBLE);
         }
 
         callSessionPaymentApi();
@@ -126,18 +180,8 @@ public class PaymentSuccessActivity extends AppCompatActivity {
 
     public void setListner() {
 
-        paymentSuccessBinding.btnNewCharge.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (getIntent().getStringExtra("responseCode").equalsIgnoreCase("0")) {
-                    Intent isearchByuser = new Intent(mContext, MySession.class);
-                    startActivity(isearchByuser);
-                }else{
-                    callSessioncapacityApi();
-                }
-                        // Stuff that updates the UI
-            }
-        });
+        paymentSuccessBinding.btnNewCharge.setOnClickListener(this);
+        paymentSuccessBinding.btnNewSearch.setOnClickListener(this);
     }
     //Use for GetSession Report
     public void callSessioncapacityApi() {
@@ -247,189 +291,6 @@ public class PaymentSuccessActivity extends AppCompatActivity {
         return map;
     }
 
-    //Use for SessionList
-    public void callSessionListApi() {
-        if (Utils.checkNetwork(mContext)) {
-
-            Utils.showDialog(mContext);
-            ApiHandler.getApiService().get_SessionBySessionID(getSessionListDetail(), new retrofit.Callback<SessionDetailModel>() {
-                @Override
-                public void success(SessionDetailModel sessionDetailInfo, Response response) {
-                    Utils.dismissDialog();
-                    if (sessionDetailInfo == null) {
-                        Utils.ping(mContext, getString(R.string.something_wrong));
-                        return;
-                    }
-                    if (sessionDetailInfo.getSuccess() == null) {
-                        Utils.ping(mContext, getString(R.string.something_wrong));
-                        return;
-                    }
-                    if (sessionDetailInfo.getSuccess().equalsIgnoreCase("false")) {
-                        Utils.ping(mContext, getString(R.string.false_msg));
-                        return;
-                    }
-                    if (sessionDetailInfo.getSuccess().equalsIgnoreCase("True")) {
-
-                        if (sessionDetailInfo.getData().size() > 0) {
-                            dataResponse = sessionDetailInfo;
-                            for (int j = 0; j < dataResponse.getData().size(); j++) {
-
-                                paymentSuccessBinding.subjectLinear.setVisibility(View.VISIBLE);
-                                paymentSuccessBinding.teacherNameLinear.setVisibility(View.VISIBLE);
-                                paymentSuccessBinding.dateLinear.setVisibility(View.VISIBLE);
-                                paymentSuccessBinding.timeLinear.setVisibility(View.VISIBLE);
-                                paymentSuccessBinding.transcationLinear.setVisibility(View.VISIBLE);
-                                paymentSuccessBinding.amountLinear.setVisibility(View.VISIBLE);
-
-                                paymentSuccessBinding.txtsubjectname.setText(dataResponse.getData().get(j).getLessionTypeName());
-                                paymentSuccessBinding.txtteachername.setText(Utils.getPref(mContext, "RegisterUserName"));
-                                paymentSuccessBinding.txtdate.setText(dataResponse.getData().get(j).getStartDate());
-                                if (dataResponse.getData().get(j).getSchedule().contains("|")) {
-                                    String[] splitvalue = dataResponse.getData().get(j).getSchedule().split("\\|");
-                                    String[]time=splitvalue[1].split("\\,");
-                                    String[]splitTime=time[1].split("\\-");
-                                    paymentSuccessBinding.txttime.setText(splitTime[0]);
-                                }else{
-                                    String[]time=dataResponse.getData().get(j).getSchedule().split("\\,");
-                                    String[]splitTime=time[1].split("\\-");
-                                    paymentSuccessBinding.txttime.setText(splitTime[0]);
-                                }
-
-                                paymentSuccessBinding.txtTransactionID.setText(getIntent().getStringExtra("transactionId"));
-                                if (dataResponse.getData().get(j).getSessionAmount().equalsIgnoreCase("0.00")) {
-                                    paymentSuccessBinding.txtValue.setText("Free");
-                                }
-                                else {
-                                    paymentSuccessBinding.txtValue.setText("₹"+dataResponse.getData().get(j).getSessionAmount());
-                                }
-
-                                paymentSuccessBinding.imvSuccessFail.setImageResource(R.drawable.circle_sucess);
-                                paymentSuccessBinding.txtSucessFail.setText("Success");
-                                paymentSuccessBinding.txtSucessFailDesc.setText("Your enrollment was successful");
-                                paymentSuccessBinding.btnNewCharge.setText("Done");
-                                paymentSuccessBinding.sessionTxt.setText("ENROLLMENT SUCCESFUL");
-//                                paymentSuccessBinding.sessionNameTxt.setText(dataResponse.getData().get(j).getSessionName());
-//                                paymentSuccessBinding.ratingBar.setRating(Float.parseFloat(dataResponse.getData().get(j).getRating()));
-//                                paymentSuccessBinding.tutorNameTxt.setText(dataResponse.getData().get(j).getName());
-//                                paymentSuccessBinding.locationTxt.setText(dataResponse.getData().get(j).getRegionName());
-//                                paymentSuccessBinding.startDateTxt.setText(dataResponse.getData().get(j).getStartDate());
-//                                paymentSuccessBinding.endDateTxt.setText(dataResponse.getData().get(j).getEndDate());
-//                                paymentSuccessBinding.priceTxt.setText("₹"+dataResponse.getData().get(j).getSessionAmount());
-//                                if(!dataResponse.getData().get(j).getTotalRatingUser().equalsIgnoreCase("0")) {
-//                                    paymentSuccessBinding.ratingUserTxt.setText("( "+dataResponse.getData().get(j).getTotalRatingUser()+" )");
-//                                }
-//                                AppConfiguration.classsessionPrice = dataResponse.getData().get(j).getSessionAmount();
-//                                totalHours = new ArrayList<>();
-//                                totalMinit = new ArrayList<>();
-//                                String[] spiltPipes = dataResponse.getData().get(j).getSchedule().split("\\|");
-//                                String[] spiltComma;
-//                                String[] spiltDash;
-//                                Log.d("spilt", "" + spiltPipes.toString());
-//                                for (int i = 0; i < spiltPipes.length; i++) {
-//                                    spiltComma = spiltPipes[i].split("\\,");
-//                                    spiltDash = spiltComma[1].split("\\-");
-//                                    calculateHours(spiltDash[0], spiltDash[1]);
-//                                    dataResponse.getData().get(j).setDateTime(spiltDash[0]);
-//                                    Log.d("DateTime", spiltDash[0]);
-//                                    switch (spiltComma[0]) {
-//                                        case "sun":
-//                                            paymentSuccessBinding.sunHoursTxt.setEnabled(true);
-//                                            paymentSuccessBinding.sunHoursTxt.setAlpha(1);
-//                                            paymentSuccessBinding.sunTimeTxt.setEnabled(true);
-//                                            paymentSuccessBinding.sundayBtn.setEnabled(true);
-//                                            paymentSuccessBinding.sunTimeTxt.setAlpha(1);
-//                                            paymentSuccessBinding.sundayBtn.setAlpha(1);
-//                                            paymentSuccessBinding.sunTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
-//                                            paymentSuccessBinding.sunHoursTxt.setText(SessionDuration);
-//                                            break;
-//                                        case "mon":
-//                                            paymentSuccessBinding.monHoursTxt.setEnabled(true);
-//                                            paymentSuccessBinding.monHoursTxt.setAlpha(1);
-//                                            paymentSuccessBinding.monTimeTxt.setEnabled(true);
-//                                            paymentSuccessBinding.mondayBtn.setEnabled(true);
-//                                            paymentSuccessBinding.monTimeTxt.setAlpha(1);
-//                                            paymentSuccessBinding.mondayBtn.setAlpha(1);
-//                                            paymentSuccessBinding.monTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
-//                                            paymentSuccessBinding.monHoursTxt.setText(SessionDuration);
-//                                            break;
-//                                        case "tue":
-//                                            paymentSuccessBinding.tuesHoursTxt.setEnabled(true);
-//                                            paymentSuccessBinding.tuesHoursTxt.setAlpha(1);
-//                                            paymentSuccessBinding.tuesTimeTxt.setEnabled(true);
-//                                            paymentSuccessBinding.tuesdayBtn.setEnabled(true);
-//                                            paymentSuccessBinding.tuesTimeTxt.setAlpha(1);
-//                                            paymentSuccessBinding.tuesdayBtn.setAlpha(1);
-//                                            paymentSuccessBinding.tuesTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
-//                                            paymentSuccessBinding.tuesHoursTxt.setText(SessionDuration);
-//                                            break;
-//                                        case "wed":
-//                                            paymentSuccessBinding.wedHoursTxt.setEnabled(true);
-//                                            paymentSuccessBinding.wedHoursTxt.setAlpha(1);
-//                                            paymentSuccessBinding.wedTimeTxt.setEnabled(true);
-//                                            paymentSuccessBinding.wednesdayBtn.setEnabled(true);
-//                                            paymentSuccessBinding.wedTimeTxt.setAlpha(1);
-//                                            paymentSuccessBinding.wednesdayBtn.setAlpha(1);
-//                                            paymentSuccessBinding.wedTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
-//                                            paymentSuccessBinding.wedHoursTxt.setText(SessionDuration);
-//                                            break;
-//                                        case "thu":
-//                                            paymentSuccessBinding.thurHoursTxt.setEnabled(true);
-//                                            paymentSuccessBinding.thurHoursTxt.setAlpha(1);
-//                                            paymentSuccessBinding.thurTimeTxt.setEnabled(true);
-//                                            paymentSuccessBinding.thursdayBtn.setEnabled(true);
-//                                            paymentSuccessBinding.thurTimeTxt.setAlpha(1);
-//                                            paymentSuccessBinding.thursdayBtn.setAlpha(1);
-//                                            paymentSuccessBinding.thurTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
-//                                            paymentSuccessBinding.thurHoursTxt.setText(SessionDuration);
-//                                            break;
-//                                        case "fri":
-//                                            paymentSuccessBinding.friHoursTxt.setEnabled(true);
-//                                            paymentSuccessBinding.friHoursTxt.setAlpha(1);
-//                                            paymentSuccessBinding.friTimeTxt.setEnabled(true);
-//                                            paymentSuccessBinding.fridayBtn.setEnabled(true);
-//                                            paymentSuccessBinding.friTimeTxt.setAlpha(1);
-//                                            paymentSuccessBinding.fridayBtn.setAlpha(1);
-//                                            paymentSuccessBinding.friTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
-//                                            paymentSuccessBinding.friHoursTxt.setText(SessionDuration);
-//                                            break;
-//                                        case "sat":
-//                                            paymentSuccessBinding.satHoursTxt.setEnabled(true);
-//                                            paymentSuccessBinding.satHoursTxt.setAlpha(1);
-//                                            paymentSuccessBinding.satTimeTxt.setEnabled(true);
-//                                            paymentSuccessBinding.saturdayBtn.setEnabled(true);
-//                                            paymentSuccessBinding.satTimeTxt.setAlpha(1);
-//                                            paymentSuccessBinding.saturdayBtn.setAlpha(1);
-//                                            paymentSuccessBinding.satTimeTxt.setText(dataResponse.getData().get(j).getDateTime());
-//                                            paymentSuccessBinding.satHoursTxt.setText(SessionDuration);
-//                                            break;
-//                                        default:
-//
-//                                    }
-//                                }
-//                            }
-                         }}
-                    }
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    Utils.dismissDialog();
-                    error.printStackTrace();
-                    error.getMessage();
-                    Utils.ping(mContext, getString(R.string.something_wrong));
-                }
-            });
-        } else {
-            Utils.ping(mContext, getString(R.string.internet_connection_error));
-        }
-    }
-
-    private Map<String, String> getSessionListDetail() {
-        Map<String, String> map = new HashMap<>();
-        map.put("SessionID", Utils.getPref(mContext,"sessionId"));
-        return map;
-    }
-
     public void calculateHours(String time1, String time2) {
         Date date1, date2;
         int days, hours, min;
@@ -525,5 +386,24 @@ public class PaymentSuccessActivity extends AppCompatActivity {
         map.put("SessionID",getIntent().getStringExtra("sessionId"));
         map.put("Amount",  AppConfiguration.classsessionPrice);
         return map;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btnNewCharge:
+                if (getIntent().getStringExtra("responseCode").equalsIgnoreCase("0")) {
+                    Intent isearchByuser = new Intent(mContext, MySession.class);
+                    startActivity(isearchByuser);
+                }else{
+                    callSessioncapacityApi();
+                }
+                break;
+            case R.id.btnNewSearch:
+                Intent isearch = new Intent(mContext, ClassDeatilScreen.class);
+                isearch.putExtra("city","Ahmedabad");
+                startActivity(isearch);
+                break;
+        }
     }
 }

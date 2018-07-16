@@ -81,9 +81,9 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
     String SessionDuration;
     String hours, minit;
     //Use for Menu Dialog
-    String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr, sessionId, commentStr, ratingValueStr;
+    String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr, commentStr, ratingValueStr;//sessionId
     Dialog menuDialog;
-    Button btnHome,btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
+    Button btnHome, btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
     TextView userNameTxt;
     ArrayList<Integer> totalHours;
     ArrayList<Integer> totalMinit;
@@ -239,7 +239,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         for (int i = 0; i < selectedId.size(); i++) {
             splitvalue = selectedId.get(i).split("\\|");
             sessionName = splitvalue[0];
-            sessionId = splitvalue[1];
+            sessionIDStr = splitvalue[1];
         }
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.rating_dialog_layout, null);
@@ -346,7 +346,8 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                     }
                     if (addratingmodel.getSuccess().equalsIgnoreCase("True")) {
                         Utils.dismissDialog();
-                        callSessionListApi();
+                        //callSessionListApi();
+                        callSessionReportApi();
                     }
                 }
 
@@ -366,7 +367,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
     private Map<String, String> getratingDetail() {
 
         Map<String, String> map = new HashMap<>();
-        map.put("SessionID", sessionId);
+        map.put("SessionID", sessionIDStr);
         map.put("ContactID", Utils.getPref(mContext, "coachID"));
         map.put("Comment", commentStr);
         map.put("RatingValue", ratingValueStr);
@@ -578,7 +579,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                                 AppConfiguration.bookingdate = dataResponse.getData().get(j).getStartDate();
                                 AppConfiguration.bookingtime = dataResponse.getData().get(j).getSchedule();
                                 AppConfiguration.bookingamount = dataResponse.getData().get(j).getSessionAmount();
-
+                                AppConfiguration.bookinhEnddate=dataResponse.getData().get(j).getEndDate();
                                 sessiondetailConfirmationDialogBinding.sessionNameTxt.setText(dataResponse.getData().get(j).getSessionName());
                                 sessiondetailConfirmationDialogBinding.ratingBar.setRating(Float.parseFloat(dataResponse.getData().get(j).getRating()));
 //                                sessiondetailConfirmationDialogBinding.ratingUserTxt.setText();
@@ -883,7 +884,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.x = 10;
         menuDialog.getWindow().getAttributes().verticalMargin = 0.07F;
-        wlp.gravity = Gravity.TOP|Gravity.RIGHT;
+        wlp.gravity = Gravity.TOP | Gravity.RIGHT;
         window.setAttributes(wlp);
 
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -892,7 +893,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
 //        menuDialog.setContentView(menuBinding.getRoot());
         menuDialog.setContentView(R.layout.layout_menu);
 
-        btnHome=(Button)menuDialog.findViewById(R.id.btnHome);
+        btnHome = (Button) menuDialog.findViewById(R.id.btnHome);
         btnMyprofile = (Button) menuDialog.findViewById(R.id.btnMyprofile);
         btnMyReport = (Button) menuDialog.findViewById(R.id.btnMyReport);
         btnMySession = (Button) menuDialog.findViewById(R.id.btnMySession);
@@ -909,7 +910,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i=new Intent(mContext,SearchByUser.class);
+                Intent i = new Intent(mContext, SearchByUser.class);
                 startActivity(i);
             }
         });
@@ -1037,6 +1038,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         sessiondetailConfirmationDialogBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AppConfiguration.UserName = (Utils.getPref(mContext, "RegisterUserName"));
                 callSessioncapacityApi();
                 confimDialog.dismiss();
             }

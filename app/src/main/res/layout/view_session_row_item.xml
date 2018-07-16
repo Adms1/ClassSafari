@@ -11,12 +11,12 @@
         android:layout_height="wrap_content"
         android:background="@drawable/list_line"
         android:orientation="horizontal"
-        android:weightSum="4">
+        android:weightSum="3">
 
         <TextView
             android:id="@+id/no_txt"
             android:layout_width="0dp"
-            android:layout_height="@dimen/_30sdp"
+            android:layout_height="@dimen/_33sdp"
             android:layout_weight="0.3"
             android:gravity="center_vertical|center"
             android:paddingLeft="@dimen/_3sdp"
@@ -28,7 +28,7 @@
             android:id="@+id/name_txt"
             android:layout_width="0dp"
             android:layout_height="@dimen/_33sdp"
-            android:layout_weight="1.3"
+            android:layout_weight="1.5"
             android:gravity="center_vertical"
             android:paddingBottom="@dimen/_5sdp"
             android:paddingLeft="@dimen/_5sdp"
@@ -39,31 +39,32 @@
         <TextView
             android:id="@+id/phoneno_txt"
             android:layout_width="0dp"
-            android:layout_height="@dimen/_30sdp"
+            android:layout_height="@dimen/_33sdp"
             android:layout_weight="1.2"
             android:drawableLeft="@drawable/add_family_mob"
             android:gravity="center|center_vertical"
-            android:paddingLeft="@dimen/_1sdp"
+            android:drawablePadding="@dimen/_5sdp"
             android:text="7843568412"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
             android:textColor="@color/blue"
             android:textSize="@dimen/_10sdp"
             android:visibility="visible" />
 
-        <TextView
-            android:id="@+id/paid_txt"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/_23sdp"
-            android:layout_marginBottom="@dimen/_2sdp"
-            android:layout_marginLeft="@dimen/_10sdp"
-            android:layout_marginTop="@dimen/_2sdp"
-            android:layout_weight="0.9"
-            android:gravity="center_vertical|center"
-            android:text=""
-            android:textAllCaps="true"
-            android:textColor="@color/search_boder"
-            android:textSize="@dimen/_10sdp"
-            android:textStyle="bold"
-            android:visibility="visible" />
+
     </LinearLayout>
 </LinearLayout>
+<!--<TextView-->
+<!--android:id="@+id/paid_txt"-->
+<!--android:layout_width="0dp"-->
+<!--android:layout_height="@dimen/_23sdp"-->
+<!--android:layout_marginBottom="@dimen/_2sdp"-->
+<!--android:layout_marginLeft="@dimen/_10sdp"-->
+<!--android:layout_marginTop="@dimen/_2sdp"-->
+<!--android:layout_weight="0.9"-->
+<!--android:gravity="center_vertical|center"-->
+<!--android:text=""-->
+<!--android:textAllCaps="true"-->
+<!--android:textColor="@color/search_boder"-->
+<!--android:textSize="@dimen/_10sdp"-->
+<!--android:textStyle="bold"-->
+<!--android:visibility="visible" />-->

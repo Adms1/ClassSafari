@@ -77,25 +77,25 @@ public class SessionViewStudentListAdapter extends RecyclerView.Adapter<SessionV
 
             }
         });
-        if (paidStr.equalsIgnoreCase("0")) {
-            holder.linear.setBackgroundResource(R.drawable.unpaid_linear);
-            holder.paid_txt.setText("UnPaid");
-            holder.paid_txt.setBackgroundResource(R.drawable.round_yello);
-            holder.paid_txt.setTextColor(Color.parseColor("#f2552c"));
-            holder.paid_txt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    familyIdCheck = new ArrayList<String>();
-                    familyIdCheck.add(arrayList.get(position).getContactID() + "|" + arrayList.get(position).getFirstName() + "|" + arrayList.get(position).getLastName());
-                    onViewClick.getViewClick();
-                }
-            });
-        } else {
-            holder.linear.setBackgroundResource(R.drawable.list_line);
-            holder.paid_txt.setText("");
-            holder.paid_txt.setTextColor(Color.parseColor("#000000"));
-
-        }
+//        if (paidStr.equalsIgnoreCase("0")) {
+//            holder.linear.setBackgroundResource(R.drawable.unpaid_linear);
+//            holder.paid_txt.setText("UnPaid");
+//            holder.paid_txt.setBackgroundResource(R.drawable.round_yello);
+//            holder.paid_txt.setTextColor(Color.parseColor("#f2552c"));
+//            holder.paid_txt.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    familyIdCheck = new ArrayList<String>();
+//                    familyIdCheck.add(arrayList.get(position).getContactID() + "|" + arrayList.get(position).getFirstName() + "|" + arrayList.get(position).getLastName());
+//                    onViewClick.getViewClick();
+//                }
+//            });
+//        } else {
+//            holder.linear.setBackgroundResource(R.drawable.list_line);
+//            holder.paid_txt.setText("");
+//            holder.paid_txt.setTextColor(Color.parseColor("#000000"));
+//
+//        }
     }
 
     @Override

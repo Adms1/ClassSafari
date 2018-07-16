@@ -129,7 +129,7 @@ public class PaymentActivity extends AppCompatActivity {
         mapHashData.put("address_line_1", address_line_1);
         mapHashData.put("address_line_2", address_line_2);
         mapHashData.put("amount", amount);
-        mapHashData.put("api_key", "535ee616-a161-4e16-88ed-a338582e841a");//AppConfiguration.api_key
+        mapHashData.put("api_key", "535ee616-a161-4e16-88ed-a338582e841a");//AppConfiguration.api_key//  //5455f363-4300-45b4-8d29-3949eb498efb
         mapHashData.put("city", city);
         mapHashData.put("country", country);
         mapHashData.put("currency", currency);
@@ -181,7 +181,7 @@ public class PaymentActivity extends AppCompatActivity {
         mapPostData.put("zip_code", zip_code);
         mapPostData.put("show_saved_cards", show_saved_cards);
 
-        String hashData = "531553f8d6b906aa3342948a3c535ca301de9d5d";//AppConfiguration.secret_key;
+        String hashData = "531553f8d6b906aa3342948a3c535ca301de9d5d";//AppConfiguration.secret_key;// //bc6c6fd8f0a98048c316b17de63a540bb32f88b5
         String postData = "";
 
         for (String key : new TreeSet<String>(mapHashData.keySet())) {

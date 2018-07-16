@@ -6,8 +6,8 @@ package com.adms.classsafari.AppConstant;
 
 public class AppConfiguration {
 
-//    public static final String Mode="LIVE";
-    public static final String Mode="TEST";
+    public static final String Mode="LIVE";
+//    public static final String Mode="TEST";
 
 
 
@@ -50,6 +50,7 @@ public class AppConfiguration {
     public static String bookingdate;
     public static String bookingtime;
     public static String bookingamount;
+    public static String bookinhEnddate;
 
 
     //Validation String

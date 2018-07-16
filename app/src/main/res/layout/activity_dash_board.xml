@@ -18,10 +18,13 @@
         android:layout_width="@dimen/_200sdp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
         android:layout_marginTop="?attr/actionBarSize"
+        android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_dash_board"
-        app:menu="@menu/activity_dash_board_drawer"
-        app:itemIconTint="#FF4500"/>
+        app:itemIconTint="#FF4500"
 
+        app:menu="@menu/activity_dash_board_drawer" />
+    <!--&lt;!&ndash;app:itemIconTint="#FF4500"&ndash;&gt;-->
+    <!--app:itemIconTint="@drawable/drawer_item_color"-->
+    <!--app:itemTextColor="@drawable/drawer_item_color"-->
 </android.support.v4.widget.DrawerLayout>

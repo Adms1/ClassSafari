@@ -25,7 +25,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:paddingRight="@dimen/_5sdp"
                     android:background="@drawable/orange_line"
                     android:gravity="end"
                     android:text="@string/login"
@@ -240,7 +239,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_marginTop="@dimen/_5sdp"
-            android:text="Ver. 12072018.3"
+            android:text="Ver. 13072018.4"
             android:textColor="@color/gray1"
             android:textSize="@dimen/_12sdp"
             android:textStyle="normal" />
