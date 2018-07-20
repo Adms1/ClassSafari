@@ -492,7 +492,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                         finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionName(),
                         finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime()
                                 + " " + "( " + SessionDuration + " )" + System.getProperty("line.separator")
-                                + Address, startDate, endDate, 0, String.valueOf(SessionHour), R.drawable.email);
+                                + Address, startDate, endDate, 0, String.valueOf(SessionHour), R.drawable.location);
                 eventList.add(event);
 
             }

@@ -3,6 +3,7 @@ package com.adms.classsafari.Fragment;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
@@ -496,23 +497,28 @@ paymentSucessBinding.linearClick.setVisibility(View.VISIBLE);
         switch (view.getId()) {
             case R.id.btnNewCharge:
                 if (getArguments().getString("responseCode").equalsIgnoreCase("0")) {
-                    Fragment fragment = new SessionFragment();
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.frame, fragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
+//                    Fragment fragment = new SessionFragment();
+//                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                    fragmentTransaction.replace(R.id.frame, fragment);
+//                    fragmentTransaction.addToBackStack(null);
+//                    fragmentTransaction.commit();
+
+                    Intent i = new Intent(getActivity(), DashBoardActivity.class);
+                    startActivity(i);
                 } else {
                     callSessioncapacityApi();
                 }
                 break;
             case R.id.btnNewSearch:
-                Fragment fragment = new SessionFragment();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.frame, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+//                Fragment fragment = new SessionFragment();
+//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.replace(R.id.frame, fragment);
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+                Intent i = new Intent(getActivity(), DashBoardActivity.class);
+                startActivity(i);
                 break;
         }
     }

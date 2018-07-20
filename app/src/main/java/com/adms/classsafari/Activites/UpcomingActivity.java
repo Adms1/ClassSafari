@@ -158,7 +158,12 @@ public class UpcomingActivity extends AppCompatActivity implements View.OnClickL
 
     public void fillSessionList() {
 
-        upcomingClassAdapter = new UpcomingClassAdapter(mContext, dataresponse);
+        upcomingClassAdapter = new UpcomingClassAdapter(mContext, dataresponse, new onViewClick() {
+            @Override
+            public void getViewClick() {
+
+            }
+        });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         activityUpcomingBinding.upcomingClassRcList.setLayoutManager(mLayoutManager);
         activityUpcomingBinding.upcomingClassRcList.setItemAnimator(new DefaultItemAnimator());

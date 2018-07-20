@@ -43,6 +43,7 @@ public class FamilyDetailModel {
     @SerializedName("DateofBirth")
     @Expose
     private String dateofBirth;
+
     @SerializedName("ContactPhoneNumber")
     @Expose
     private String contactPhoneNumber;
@@ -340,7 +341,18 @@ public class FamilyDetailModel {
     @SerializedName("Gender")
     @Expose
     private Integer gender;
-
+    @SerializedName("Exp_Year")
+    @Expose
+    private String expYear;
+    @SerializedName("Exp_Month")
+    @Expose
+    private String expMonth;
+    @SerializedName("Qualification")
+    @Expose
+    private String qualification;
+    @SerializedName("AboutUs")
+    @Expose
+    private String aboutUs;
     public String getMobile() {
         return mobile;
     }
@@ -381,7 +393,47 @@ public class FamilyDetailModel {
         this.gender = gender;
     }
 
-//    ===============Bank Detail=========
+    public String getdOB() {
+        return dOB;
+    }
+
+    public void setdOB(String dOB) {
+        this.dOB = dOB;
+    }
+
+    public String getExpYear() {
+        return expYear;
+    }
+
+    public void setExpYear(String expYear) {
+        this.expYear = expYear;
+    }
+
+    public String getExpMonth() {
+        return expMonth;
+    }
+
+    public void setExpMonth(String expMonth) {
+        this.expMonth = expMonth;
+    }
+
+    public String getQualification() {
+        return qualification;
+    }
+
+    public void setQualification(String qualification) {
+        this.qualification = qualification;
+    }
+
+    public String getAboutUs() {
+        return aboutUs;
+    }
+
+    public void setAboutUs(String aboutUs) {
+        this.aboutUs = aboutUs;
+    }
+
+    //    ===============Bank Detail=========
 
     @SerializedName("Coach_ID")
     @Expose

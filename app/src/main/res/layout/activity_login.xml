@@ -108,7 +108,7 @@
                 android:layout_marginTop="@dimen/_70sdp"
                 android:background="@drawable/edit_text_line"
                 android:drawableTint="@color/blue"
-                android:drawableRight="@drawable/email"
+                android:drawableRight="@drawable/email_white"
                 android:hint="@string/user_id"
                 android:inputType="textEmailAddress"
                 android:paddingLeft="@dimen/_5sdp"

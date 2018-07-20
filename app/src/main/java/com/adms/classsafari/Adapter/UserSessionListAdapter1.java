@@ -62,39 +62,6 @@ onChlidClick onChlidClick;
     @Override
     public void onBindViewHolder(final UserSessionListAdapter1.MyViewHolder holder, final int position) {
 
-//        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
-//        holder.session_name_txt.setTypeface(custom_font);
-//        holder.price_txt.setTypeface(custom_font);
-//        holder.start_date_txt.setTypeface(custom_font);
-//        holder.end_date_txt.setTypeface(custom_font);
-//        holder.mon_time_txt.setTypeface(custom_font);
-//        holder.tues_time_txt.setTypeface(custom_font);
-//        holder.wed_time_txt.setTypeface(custom_font);
-//        holder.thur_time_txt.setTypeface(custom_font);
-//        holder.fri_time_txt.setTypeface(custom_font);
-//        holder.sat_time_txt.setTypeface(custom_font);
-//        holder.sun_time_txt.setTypeface(custom_font);
-//        holder.location_txt.setTypeface(custom_font);
-////        holder.duration_txt.setTypeface(custom_font);
-//        holder.tutor_name_txt.setTypeface(custom_font);
-//        holder.mon_hours_txt.setTypeface(custom_font);
-//        holder.tues_hours_txt.setTypeface(custom_font);
-//        holder.wed_hours_txt.setTypeface(custom_font);
-//        holder.thur_hours_txt.setTypeface(custom_font);
-//        holder.fri_hours_txt.setTypeface(custom_font);
-//        holder.sat_hours_txt.setTypeface(custom_font);
-//        holder.sun_hours_txt.setTypeface(custom_font);
-//        holder.rating_user_txt.setTypeface(custom_font);
-//        holder.view_more_session_btn.setTypeface(custom_font);
-//        holder.monday_btn.setTypeface(custom_font);
-//        holder.tuesday_btn.setTypeface(custom_font);
-//        holder.wednesday_btn.setTypeface(custom_font);
-//        holder.thursday_btn.setTypeface(custom_font);
-//        holder.friday_btn.setTypeface(custom_font);
-//        holder.saturday_btn.setTypeface(custom_font);
-//        holder.sunday_btn.setTypeface(custom_font);
-//        holder.book_session_btn.setTypeface(custom_font);
-
         if (arrayList.get(position).getTotalRatingUser().equalsIgnoreCase("0")) {
             holder.rating_user_txt.setVisibility(View.GONE);
         } else {

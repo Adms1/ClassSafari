@@ -84,6 +84,9 @@ public class sessionDataModel {
     @SerializedName("StreamName")
     @Expose
     private String streamName;
+    @SerializedName("Qualification")
+    @Expose
+    private String qualification;
     @SerializedName("StreamAbbr")
     @Expose
     private String streamAbbr;
@@ -230,6 +233,9 @@ public class sessionDataModel {
     @SerializedName("TotalRatingUser")
     @Expose
     private String totalRatingUser;
+    @SerializedName("Coach_ID")
+    @Expose
+    private String coachID;
     //==============attendance==========================
     @SerializedName("Contact_ID")
     @Expose
@@ -253,6 +259,15 @@ public class sessionDataModel {
     @SerializedName("SessionPrice")
     @Expose
     private String sessionPrice;
+
+    public String getQualification() {
+        return qualification;
+    }
+
+    public void setQualification(String qualification) {
+        this.qualification = qualification;
+    }
+
     //==========================SessionRatingDetail======================
     @SerializedName("RatingValue")
     @Expose
@@ -261,6 +276,13 @@ public class sessionDataModel {
     @Expose
     private String comment;
 
+    public String getCoachID() {
+        return coachID;
+    }
+
+    public void setCoachID(String coachID) {
+        this.coachID = coachID;
+    }
 
     public int getCount() {
         return count;

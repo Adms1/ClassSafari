@@ -9,21 +9,28 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 
 import com.adms.classsafari.Activites.DashBoardActivity;
 import com.adms.classsafari.Activites.RegistrationActivity;
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.Utils;
+import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.FragmentBankDetailBinding;
 import com.adms.classsafari.databinding.FragmentTeacherProfileBinding;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,17 +40,20 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 
-public class TeacherProfileFragment extends Fragment implements View.OnClickListener,DatePickerDialog.OnDateSetListener {
+public class TeacherProfileFragment extends Fragment implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
     FragmentTeacherProfileBinding teacherProfileBinding;
-    String firstNameStr, lastNameStr, classNameStr, phoneNumberStr, dobStr, genderIdStr="";
+    String firstNameStr, lastNameStr, classNameStr, phoneNumberStr, dobStr, genderIdStr = "", yearStr = "0", monthStr = "0", qualificationStr = "", aboutusStr = "";
     TeacherInfoModel teacherInfoResponse;
-    private View rootView;
-    private Context mContext;
     String finalDate;
     int Year, Month, Day;
     Calendar calendar;
     int mYear, mMonth, mDay;
+    TeacherInfoModel qualificationResponse;
+    ArrayList<String> yearofExperiance;
+    ArrayList<String> monthofExperiance;
+    private View rootView;
+    private Context mContext;
     private DatePickerDialog datePickerDialog;
 
     public TeacherProfileFragment() {
@@ -71,6 +81,8 @@ public class TeacherProfileFragment extends Fragment implements View.OnClickList
         Month = calendar.get(Calendar.MONTH);
         Day = calendar.get(Calendar.DAY_OF_MONTH);
         callTeacherProfileApi();
+        callQualificationApi();
+
     }
 
     public void setListner() {
@@ -88,6 +100,44 @@ public class TeacherProfileFragment extends Fragment implements View.OnClickList
                         genderIdStr = teacherProfileBinding.femaleChk.getTag().toString();
                         break;
                 }
+            }
+        });
+        teacherProfileBinding.yearOfSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String name = teacherProfileBinding.yearOfSpinner.getSelectedItem().toString();
+                Log.d("value", name);
+                String[] stryear = name.split("\\s+");
+                name = stryear[0];
+
+
+                if (name.equalsIgnoreCase("30+")) {
+                    yearStr = "30";
+                } else {
+                    yearStr = name;
+                }
+                Log.d("yearStr", yearStr);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        teacherProfileBinding.monthOfSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String name = teacherProfileBinding.monthOfSpinner.getSelectedItem().toString();
+                Log.d("value", name);
+                String[] strmonth = name.split("\\s+");
+                name = strmonth[0];
+                monthStr = name;
+                Log.d("monthStr", monthStr);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
     }
@@ -119,7 +169,7 @@ public class TeacherProfileFragment extends Fragment implements View.OnClickList
                         Utils.dismissDialog();
                         Utils.ping(mContext, getString(R.string.updateteacher));
                         Utils.setPref(mContext, "ClassName", classNameStr);
-                        Utils.setPref(mContext,"RegisterUserName",firstNameStr+ " "+lastNameStr);
+                        Utils.setPref(mContext, "RegisterUserName", firstNameStr + " " + lastNameStr);
                         Fragment fragment = new SessionFragment();
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -152,6 +202,10 @@ public class TeacherProfileFragment extends Fragment implements View.OnClickList
         map.put("DateOfBirth", dobStr);
         map.put("PhoneNumber", phoneNumberStr);
         map.put("ClassName", classNameStr);
+        map.put("Year", yearStr);
+        map.put("Month", monthStr);
+        map.put("Qualification", qualificationStr);
+        map.put("AboutUs", aboutusStr);
         return map;
     }
 
@@ -183,6 +237,7 @@ public class TeacherProfileFragment extends Fragment implements View.OnClickList
                         teacherInfoResponse = teacherInfoModel;
                         Utils.dismissDialog();
                         setTeacherData();
+                        fillExperience();
                     }
                 }
 
@@ -205,6 +260,131 @@ public class TeacherProfileFragment extends Fragment implements View.OnClickList
         return map;
     }
 
+    //Use for Qualification
+    public void callQualificationApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+
+//            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_Qualification_AutoComplate(getQualificationDeatil(), new retrofit.Callback<TeacherInfoModel>() {
+                @Override
+                public void success(TeacherInfoModel qualificationInfo, Response response) {
+                    Utils.dismissDialog();
+                    if (qualificationInfo == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (qualificationInfo.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (qualificationInfo.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.dismissDialog();
+                        Utils.ping(mContext, getString(R.string.false_msg));
+                        return;
+                    }
+                    if (qualificationInfo.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.dismissDialog();
+                        if (qualificationInfo.getData().size() > 0) {
+                            qualificationResponse = qualificationInfo;
+                            fillQualification();
+                        }
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getQualificationDeatil() {
+        Map<String, String> map = new HashMap<>();
+        map.put("Coach_ID", Utils.getPref(mContext, "coachID"));
+        return map;
+    }
+
+    public void fillQualification() {
+        ArrayList<String> QualificationName = new ArrayList<String>();
+        for (int j = 0; j < qualificationResponse.getData().size(); j++) {
+            QualificationName.add(qualificationResponse.getData().get(j).getQualification());
+        }
+        ArrayAdapter<String> adapterTerm = new ArrayAdapter<String>(mContext, R.layout.autocomplete_layout, QualificationName);
+        teacherProfileBinding.qualificationEdt.setThreshold(1);
+        teacherProfileBinding.qualificationEdt.setAdapter(adapterTerm);
+    }
+
+    public void fillExperience() {
+        yearofExperiance = new ArrayList<>();
+        monthofExperiance = new ArrayList<>();
+
+        monthofExperiance.add("Experience(month)");
+        for (int i = 0; i <= 12; i++) {
+            monthofExperiance.add(String.valueOf(i) + " " + "month");
+        }
+        yearofExperiance.add("Experience(year)");
+        for (int i = 0; i <= 30; i++) {
+            if (i == 30) {
+                yearofExperiance.add(String.valueOf(i) + "+" + " " + "year");
+            } else {
+                yearofExperiance.add(String.valueOf(i) + " " + "year");
+            }
+        }
+
+        try {
+            Field popup = Spinner.class.getDeclaredField("mPopup");
+            popup.setAccessible(true);
+
+            // Get private mPopup member variable and try cast to ListPopupWindow
+            android.widget.ListPopupWindow popupWindow = (android.widget.ListPopupWindow) popup.get(teacherProfileBinding.monthOfSpinner);
+
+            popupWindow.setHeight(monthofExperiance.size() > 5 ? 500 : monthofExperiance.size() * 70);
+        } catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
+            // silently fail...
+        }
+        ArrayAdapter<String> adaptermonth = new ArrayAdapter<String>(mContext, R.layout.spinner_layout, monthofExperiance);
+        teacherProfileBinding.monthOfSpinner.setAdapter(adaptermonth);
+
+        try {
+            Field popup = Spinner.class.getDeclaredField("mPopup");
+            popup.setAccessible(true);
+
+            // Get private mPopup member variable and try cast to ListPopupWindow
+            android.widget.ListPopupWindow popupWindow = (android.widget.ListPopupWindow) popup.get(teacherProfileBinding.yearOfSpinner);
+
+            popupWindow.setHeight(yearofExperiance.size() > 5 ? 500 : yearofExperiance.size() * 70);
+        } catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
+            // silently fail...
+        }
+        ArrayAdapter<String> adapterYear = new ArrayAdapter<String>(mContext, R.layout.spinner_layout, yearofExperiance);
+        teacherProfileBinding.yearOfSpinner.setAdapter(adapterYear);
+        for (int i = 1; i < yearofExperiance.size(); i++) {
+            String[] splityear = yearofExperiance.get(i).split("\\s+");
+            if (teacherInfoResponse.getData().get(0).getExpYear().equalsIgnoreCase(splityear[0])) {
+                teacherProfileBinding.yearOfSpinner.setSelection(i);
+                break;
+            } else {
+                teacherProfileBinding.yearOfSpinner.setSelection(0);
+            }
+        }
+        for (int i = 1; i < monthofExperiance.size(); i++) {
+            String[] splitmonth = monthofExperiance.get(i).split("\\s+");
+            if (teacherInfoResponse.getData().get(0).getExpMonth().equalsIgnoreCase(splitmonth[0])) {
+                teacherProfileBinding.monthOfSpinner.setSelection(i);
+                break;
+            } else {
+                teacherProfileBinding.monthOfSpinner.setSelection(0);
+            }
+        }
+
+
+    }
 
     public void getInsertValue() {
         firstNameStr = teacherProfileBinding.firstNameEdt.getText().toString();
@@ -212,6 +392,14 @@ public class TeacherProfileFragment extends Fragment implements View.OnClickList
         dobStr = teacherProfileBinding.dateOfBirthEdt.getText().toString();
         phoneNumberStr = teacherProfileBinding.phoneNoEdt.getText().toString();
         classNameStr = teacherProfileBinding.classNameEdt.getText().toString();
+        aboutusStr = teacherProfileBinding.aboutUsEdt.getText().toString();
+        qualificationStr = teacherProfileBinding.qualificationEdt.getText().toString();
+        if (yearStr.equalsIgnoreCase("Experience(year)")) {
+            yearStr = "0";
+        }
+        if (monthStr.equalsIgnoreCase("Experience(month)")) {
+            monthStr = "0";
+        }
     }
 
     public void setTeacherData() {
@@ -222,12 +410,15 @@ public class TeacherProfileFragment extends Fragment implements View.OnClickList
             teacherProfileBinding.phoneNoEdt.setText(teacherInfoResponse.getData().get(i).getMobile());
             String[] date = teacherInfoResponse.getData().get(i).getDOB().split("\\s+");
             teacherProfileBinding.dateOfBirthEdt.setText(date[0]);
-            genderIdStr= String.valueOf(teacherInfoResponse.getData().get(i).getGender());
+            genderIdStr = String.valueOf(teacherInfoResponse.getData().get(i).getGender());
             if (teacherInfoResponse.getData().get(i).getGender() == 1) {
                 teacherProfileBinding.maleChk.setChecked(true);
             } else {
                 teacherProfileBinding.femaleChk.setChecked(true);
             }
+            teacherProfileBinding.aboutUsEdt.setText(teacherInfoResponse.getData().get(i).getAboutUs());
+            teacherProfileBinding.qualificationEdt.setText(teacherInfoResponse.getData().get(i).getQualification());
+
         }
     }
 

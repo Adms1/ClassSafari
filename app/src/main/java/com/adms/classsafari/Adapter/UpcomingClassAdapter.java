@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 
 import com.adms.classsafari.AppConstant.Utils;
+import com.adms.classsafari.Interface.onChlidClick;
 import com.adms.classsafari.Interface.onViewClick;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.Session.sessionDataModel;
@@ -31,14 +32,16 @@ public class UpcomingClassAdapter extends RecyclerView.Adapter<UpcomingClassAdap
     private SessionDetailModel arrayList;
     private Context mContext;
     String address;
+    onViewClick onViewClick;
 //    public UpcomingClassAdapter(Context mContext, List<sessionDataModel> arrayList, onViewClick onViewClick) {
 //        this.mContext = mContext;
 //
 //    }
 
-    public UpcomingClassAdapter(Context mContext, SessionDetailModel arrayList) {
+    public UpcomingClassAdapter(Context mContext, SessionDetailModel arrayList, onViewClick onViewClick) {
         this.mContext = mContext;
         this.arrayList = arrayList;
+        this.onViewClick=onViewClick;
     }
 
     @Override
@@ -159,6 +162,22 @@ public class UpcomingClassAdapter extends RecyclerView.Adapter<UpcomingClassAdap
                 mContext.startActivity(intent);
             }
         });
+//        upcomingClassesListBinding.viewProfileImg.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                CoachId = new ArrayList<>();
+//                CoachId.add(arrayList.get(position).getCoachID());
+//                onChlidClick.getChilClick();
+//            }
+//        });
+//        upcomingClassesListBinding.teacherNameTxt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                CoachId = new ArrayList<>();
+//                CoachId.add(arrayList.get(position).getCoachID());
+//                onChlidClick.getChilClick();
+//            }
+//        });
     }
 
     @Override

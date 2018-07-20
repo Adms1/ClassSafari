@@ -61,6 +61,10 @@ public interface WebServices {
     public void get_Stream(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
 
     @FormUrlEncoded
+    @POST("/Get_Qualification_AutoComplate")
+    public void get_Qualification_AutoComplate(@FieldMap Map<String, String> map, Callback<TeacherInfoModel> callback);
+
+    @FormUrlEncoded
     @POST("/Get_SessionDetailByCoachID")
     public void get_SessionDetailByCoachID(@FieldMap Map<String, String> map, Callback<SessionDetailModel> callback);
 

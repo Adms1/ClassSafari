@@ -70,11 +70,11 @@
                 android:layout_width="@dimen/_31sdp"
                 android:layout_height="@dimen/_30sdp"
                 android:layout_gravity="center"
-                android:button="@drawable/leave_radio_type"
                 android:tag="-1"
                 android:textAlignment="center"
                 android:textSize="@dimen/_9sdp"
                 android:visibility="gone"/>
+            <!--android:button="@drawable/leave_radio_type"-->
         </RadioGroup>
 
         <EditText

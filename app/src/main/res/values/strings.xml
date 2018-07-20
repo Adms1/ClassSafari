@@ -87,6 +87,8 @@
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="phone_no">Phone Number</string>
+    <string name="about_us">About Us</string>
+    <string name="qualification">Qualification</string>
     <string name="family_register1">REGISTRATION</string>
     <string name="forgot">Forgot Password</string>
     <string name="title_activity_dash_board">DashBoardActivity</string>
@@ -248,4 +250,7 @@
     <string name="kyc_mail">kyc@searchclasses.in</string>
     <string name="bank_sucees">Bank details added successfully</string>
     <string name="bank_usucees">Bank details updated successfully</string>
+    <string name="pan_card">\u2022 PAN Card</string>
+    <string name="addhar_card">\u2022 AADHAR Card</string>
+    <string name="cheqck">\u2022 CANCEL Cheque</string>
 </resources>

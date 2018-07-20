@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.adms.classsafari.AppConstant.Utils;
+import com.adms.classsafari.Interface.onChlidClick;
 import com.adms.classsafari.Interface.onViewClick;
 import com.adms.classsafari.Model.Session.sessionDataModel;
 import com.adms.classsafari.R;
@@ -42,9 +43,10 @@ public class PurchaseSessionDetailAdapter extends RecyclerView.Adapter {
     ArrayList<String> descriptionviewarray;
     private Context mContext;
     private ArrayList<String> SessionDetail;
-
+    private ArrayList<String> CoachId;
+    onChlidClick onChlidClick;
     public PurchaseSessionDetailAdapter(Context mContext, List<sessionDataModel> arrayList,
-                                        ArrayList<String> descriptionviewarray, ArrayList<String> reviewarray, String ratinguserStr, List<sessionDataModel> sessionRatingList, onViewClick onViewClick) {
+                                        ArrayList<String> descriptionviewarray, ArrayList<String> reviewarray, String ratinguserStr, List<sessionDataModel> sessionRatingList, onChlidClick onChlidClick, onViewClick onViewClick) {
         this.mContext = mContext;
         this.arrayList = arrayList;
         this.onViewClick = onViewClick;
@@ -52,6 +54,7 @@ public class PurchaseSessionDetailAdapter extends RecyclerView.Adapter {
         this.reviewarray = reviewarray;
         this.ratinguserStr=ratinguserStr;
         this.descriptionviewarray = descriptionviewarray;
+        this.onChlidClick=onChlidClick;
     }
 
     @Override
@@ -214,6 +217,23 @@ public class PurchaseSessionDetailAdapter extends RecyclerView.Adapter {
                     mContext.startActivity(Intent.createChooser(intent, "Send mail"));
                 }
             });
+            sessionCardLayout1Binding.viewProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CoachId = new ArrayList<>();
+                    CoachId.add(arrayList.get(position).getCoachID());
+                    onChlidClick.getChilClick();
+                }
+            });
+            sessionCardLayout1Binding.teacherNameTxt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CoachId = new ArrayList<>();
+                    CoachId.add(arrayList.get(position).getCoachID());
+                    onChlidClick.getChilClick();
+                }
+            });
+
         }
         if (holder instanceof DescriptionView) {
             final DescriptionView descriptionHolder = (DescriptionView) holder;
@@ -260,7 +280,9 @@ public class PurchaseSessionDetailAdapter extends RecyclerView.Adapter {
     public ArrayList<String> getSessionDetail() {
         return SessionDetail;
     }
-
+    public ArrayList<String> getCoach() {
+        return CoachId;
+    }
     public class SessionCard extends RecyclerView.ViewHolder {
 //        public TextView session_name_txt, session_type_txt, session_detail_name_txt,
 //                session_board_txt, session_standard_txt, session_stream_txt, session_total_student_txt,

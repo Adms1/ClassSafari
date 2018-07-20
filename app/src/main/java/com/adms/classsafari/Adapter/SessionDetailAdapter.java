@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.adms.classsafari.AppConstant.Utils;
+import com.adms.classsafari.Interface.onChlidClick;
 import com.adms.classsafari.Interface.onViewClick;
 import com.adms.classsafari.Model.Session.sessionDataModel;
 import com.adms.classsafari.R;
@@ -47,16 +48,19 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
     ArrayList<String> descriptionviewarray;
     private Context mContext;
     private ArrayList<String> SessionDetail;
+    private ArrayList<String> CoachId;
+    onChlidClick onChlidClick;
 
 
     public SessionDetailAdapter(Context mContext, List<sessionDataModel> arrayList,
                                 ArrayList<String> descriptionviewarray,
                                 ArrayList<String> reviewarray,
                                 List<sessionDataModel> sessionRatingList,
-                                String ratinguserStr, onViewClick onViewClick) {
+                                String ratinguserStr, onChlidClick onChlidClick, onViewClick onViewClick) {
         this.mContext = mContext;
         this.arrayList = arrayList;
         this.onViewClick = onViewClick;
+        this.onChlidClick=onChlidClick;
         this.sessionRatingList = sessionRatingList;
         this.reviewarray = reviewarray;
         this.descriptionviewarray = descriptionviewarray;
@@ -94,17 +98,6 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof SessionCard) {
             final SessionCard headerHolder = (SessionCard) holder;
-//            Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
-//            sessionCardLayout1Binding.sessionNameTxt.setTypeface(custom_font);
-//            sessionCardLayout1Binding.sessionDetailNameTxt
-//            sessionCardLayout1Binding.sessionBoardTxt
-//            sessionCardLayout1Binding.sessionStandardTxt
-//            sessionCardLayout1Binding.sessionStreamTxt
-//            sessionCardLayout1Binding.sessionTotalStudentTxt
-//            sessionCardLayout1Binding.addressTxt
-//            sessionCardLayout1Binding.emailTxt
-//            sessionCardLayout1Binding.phoneTxt
-
             sessionCardLayout1Binding.sessionNameTxt.setText(arrayList.get(position).getSessionName());
             sessionCardLayout1Binding.sessionRatingbar.setRating(Float.parseFloat(arrayList.get(position).getRating()));
             if (arrayList.get(position).getCoachTypeID().equalsIgnoreCase("1")) {
@@ -118,7 +111,7 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
                 sessionCardLayout1Binding.linearStream.setVisibility(View.GONE);
                 sessionCardLayout1Binding.sessionTypeTxt.setText("Sports");
             }
-            address = arrayList.get(position).getAddressLine1()+
+            address = arrayList.get(position).getAddressLine1() +
                     "," + arrayList.get(position).getAddressLine2() +
                     "," + arrayList.get(position).getRegionName() +
                     "," + arrayList.get(position).getAddressCity() +
@@ -129,12 +122,12 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
             sessionCardLayout1Binding.sessionStandardTxt.setText(arrayList.get(position).getStandard());
             sessionCardLayout1Binding.sessionStreamTxt.setText(arrayList.get(position).getStream());
             sessionCardLayout1Binding.sessionTotalStudentTxt.setText(arrayList.get(position).getSessionCapacity());
-            if (arrayList.get(position).getAddressLine2().equalsIgnoreCase("")){
+            if (arrayList.get(position).getAddressLine2().equalsIgnoreCase("")) {
                 sessionCardLayout1Binding.addressTxt.setText(Html.fromHtml(arrayList.get(position).getAddressLine1()
                         + "<br>" + arrayList.get(position).getRegionName() +
                         ", " + arrayList.get(position).getAddressCity() + "<br>" +
                         arrayList.get(position).getAddressState() + " " + arrayList.get(position).getAddressZipCode()));
-            }else {
+            } else {
                 sessionCardLayout1Binding.addressTxt.setText(Html.fromHtml(arrayList.get(position).getAddressLine1() + "<br>" +
                         arrayList.get(position).getAddressLine2() + "<br>" + arrayList.get(position).getRegionName() +
                         ", " + arrayList.get(position).getAddressCity() + "<br>" +
@@ -143,10 +136,10 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
             sessionCardLayout1Binding.emailTxt.setText(arrayList.get(position).getEmailAddress());
             sessionCardLayout1Binding.phoneTxt.setText(arrayList.get(position).getContactPhoneNumber());
             sessionCardLayout1Binding.teacherNameTxt.setText(arrayList.get(position).getName());
-            if (arrayList.get(position).getDescription().equalsIgnoreCase("")){
-             sessionCardLayout1Binding.descriptionTxt.setVisibility(View.GONE);
-             sessionCardLayout1Binding.descriptionTxtView.setVisibility(View.GONE);
-            }else {
+            if (arrayList.get(position).getDescription().equalsIgnoreCase("")) {
+                sessionCardLayout1Binding.descriptionTxt.setVisibility(View.GONE);
+                sessionCardLayout1Binding.descriptionTxtView.setVisibility(View.GONE);
+            } else {
                 sessionCardLayout1Binding.descriptionTxt.setVisibility(View.VISIBLE);
                 sessionCardLayout1Binding.descriptionTxtView.setVisibility(View.VISIBLE);
                 sessionCardLayout1Binding.descriptionTxt.setText(arrayList.get(position).getDescription());
@@ -217,7 +210,7 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
                 public boolean onTouch(View view, MotionEvent motionEvent) {
                     SessionDetail = new ArrayList<>();
                     if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                        SessionDetail.add(arrayList.get(position).getSessionName() + "|" + arrayList.get(position).getSessionID()+"|"+arrayList.get(position).getName());
+                        SessionDetail.add(arrayList.get(position).getSessionName() + "|" + arrayList.get(position).getSessionID() + "|" + arrayList.get(position).getName());
                         onViewClick.getViewClick();
                     }
                     return true;
@@ -234,6 +227,22 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
                     mContext.startActivity(Intent.createChooser(intent, "Send mail"));
                 }
             });
+            sessionCardLayout1Binding.viewProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CoachId = new ArrayList<>();
+                    CoachId.add(arrayList.get(position).getCoachID());
+                    onChlidClick.getChilClick();
+                }
+            });
+            sessionCardLayout1Binding.teacherNameTxt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CoachId = new ArrayList<>();
+                    CoachId.add(arrayList.get(position).getCoachID());
+                    onChlidClick.getChilClick();
+                }
+            });
         }
 //        if (holder instanceof DescriptionView) {
 //            final DescriptionView descriptionHolder = (DescriptionView) holder;
@@ -246,9 +255,9 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
             final ReviewCard rowHolder = (ReviewCard) holder;
             reviewCardLayout1Binding.sessionReviewsRatingBar.setRating(Float.parseFloat
                     (String.valueOf(sessionRatingList.get(position - arrayList.size() - reviewarray.size()).getRatingValue())));
-            reviewCardLayout1Binding.reviewDateTxt.setText(sessionRatingList.get(position - arrayList.size()  - reviewarray.size()).getCreateDate());
-            reviewCardLayout1Binding.userNameTxt.setText(sessionRatingList.get(position - arrayList.size()- reviewarray.size()).getFirstName()
-                    + " " + sessionRatingList.get(position - arrayList.size()  - reviewarray.size()).getLastName());
+            reviewCardLayout1Binding.reviewDateTxt.setText(sessionRatingList.get(position - arrayList.size() - reviewarray.size()).getCreateDate());
+            reviewCardLayout1Binding.userNameTxt.setText(sessionRatingList.get(position - arrayList.size() - reviewarray.size()).getFirstName()
+                    + " " + sessionRatingList.get(position - arrayList.size() - reviewarray.size()).getLastName());
             reviewCardLayout1Binding.commentTxt.setText(sessionRatingList.get(position - arrayList.size() - reviewarray.size()).getComment());// - descriptionviewarray.size()
             reviewCardLayout1Binding.ratingTxt.setText(String.valueOf("(" + sessionRatingList.get(position - arrayList.size() - reviewarray.size()).getRatingValue() + ")"));
         }
@@ -266,7 +275,7 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
         if (position - arrayList.size() < reviewarray.size()) {//- descriptionviewarray.size()
             return ROW_VIEW;
         }
-        if (position - arrayList.size()  - reviewarray.size() < sessionRatingList.size()) {//- descriptionviewarray.size()
+        if (position - arrayList.size() - reviewarray.size() < sessionRatingList.size()) {//- descriptionviewarray.size()
             return CONTENT_VIEW;
         }
         return -1;
@@ -279,6 +288,10 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
 
     public ArrayList<String> getSessionDetail() {
         return SessionDetail;
+    }
+
+    public ArrayList<String> getCoach() {
+        return CoachId;
     }
 
     public class SessionCard extends RecyclerView.ViewHolder {

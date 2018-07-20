@@ -8,6 +8,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +33,7 @@ import com.adms.classsafari.Adapter.SessionDetailAdapter;
 import com.adms.classsafari.AppConstant.ApiHandler;
 import com.adms.classsafari.AppConstant.AppConfiguration;
 import com.adms.classsafari.AppConstant.Utils;
+import com.adms.classsafari.Interface.onChlidClick;
 import com.adms.classsafari.Interface.onViewClick;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.Session.sessionDataModel;
@@ -40,6 +42,7 @@ import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivitySessionNameNewBinding;
 import com.adms.classsafari.databinding.ChangePasswordDialogBinding;
 import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
+import com.adms.classsafari.databinding.DialogViewTeacherProfileBinding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,30 +56,32 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
     ActivitySessionNameNewBinding sessionNameBinding;
     ConfirmSessionDialogBinding confirmSessionDialogBinding;
     ChangePasswordDialogBinding changePasswordDialogBinding;
+    DialogViewTeacherProfileBinding dialogViewTeacherProfileBinding;
 
     Context mContext;
-
+    TeacherInfoModel teacherInfoResponse;
     SessionDetailAdapter sessionDetailAdapter;
     List<sessionDataModel> arrayList;
     List<sessionDataModel> sessionRatingList;
     ArrayList<String> reviewarray;
     ArrayList<String> descriptionarray;
     ArrayList<String> descriptionviewarray;
-    String ratinguserStr, sessionratingcommentStr = "";
+    String ratinguserStr, sessionratingcommentStr = "", emailstr, phonestr;
+    ;
     float rating = 0;
 
     String sessionIDStr, locationStr, classNameStr, genderStr, sessionDateStr, durationStr,
-            boardStr, standardStr, streamStr, subjectStr, sessionId,
+            boardStr, standardStr, streamStr, subjectStr, sessionId, coachIdStr,
             commentStr = "", ratingValueStr, searchfront, familysessionfeesStr, familysessionnameStr,
-            familylocationStr, familysessionStudentStr, firsttimesearch, RegionName,TeacherName;
+            familylocationStr, familysessionStudentStr, firsttimesearch, RegionName, TeacherName;
 
     ArrayList<String> purchaseSessionIDArray;
     SessionDetailModel dataResponse, dataResponseRating;
 
     //Use for Menu Dialog
     String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr, SearchPlaystudy;
-    Dialog menuDialog, changeDialog;
-    Button btnHome,btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily,btnMyenroll,btnMyprofile;
+    Dialog menuDialog, changeDialog, profileDialog;
+    Button btnHome, btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
     TextView userNameTxt;
 
 
@@ -102,7 +107,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         firsttimesearch = getIntent().getStringExtra("firsttimesearch");
         RegionName = getIntent().getStringExtra("RegionName");
         SearchPlaystudy = getIntent().getStringExtra("SearchPlaystudy");
-        TeacherName=getIntent().getStringExtra("TeacherName");
+        TeacherName = getIntent().getStringExtra("TeacherName");
         //setTypeface();
         init();
         setListner();
@@ -171,7 +176,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                                     intentLogin.putExtra("RegionName", RegionName);
                                     intentLogin.putExtra("back", "SessionName");
                                     intentLogin.putExtra("SearchPlaystudy", SearchPlaystudy);
-                                    intentLogin.putExtra("TeacherName",TeacherName);
+                                    intentLogin.putExtra("TeacherName", TeacherName);
                                     startActivity(intentLogin);
                                     finish();
                                 }
@@ -207,7 +212,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                     intent.putExtra("froncontanct", "false");
                     intent.putExtra("searchfront", searchfront);
                     intent.putExtra("firsttimesearch", firsttimesearch);
-                    intent.putExtra("TeacherName",TeacherName);
+                    intent.putExtra("TeacherName", TeacherName);
 //                        intent.putExtra("RegionName",RegionName);
                     startActivity(intent);
                 }
@@ -229,7 +234,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                 inback.putExtra("firsttimesearch", firsttimesearch);
                 inback.putExtra("RegionName", RegionName);
                 inback.putExtra("SearchPlaystudy", SearchPlaystudy);
-                inback.putExtra("TeacherName",TeacherName);
+                inback.putExtra("TeacherName", TeacherName);
                 startActivity(inback);
                 break;
             case R.id.menu:
@@ -260,7 +265,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         inback.putExtra("firsttimesearch", firsttimesearch);
         inback.putExtra("RegionName", RegionName);
         inback.putExtra("SearchPlaystudy", SearchPlaystudy);
-        inback.putExtra("TeacherName",TeacherName);
+        inback.putExtra("TeacherName", TeacherName);
         inback.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(inback);
     }
@@ -385,6 +390,130 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         return map;
     }
 
+    //Use for Get Teacher detail
+    public void callTeacherProfileApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+//            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_TeacherContactDetail_Coach_ID(getTeacherdetail(), new retrofit.Callback<TeacherInfoModel>() {
+                @Override
+                public void success(final TeacherInfoModel teacherInfoModel, Response response) {
+                    Utils.dismissDialog();
+                    if (teacherInfoModel == null) {
+                        Utils.dismissDialog();
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (teacherInfoModel.getSuccess() == null) {
+                        Utils.dismissDialog();
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (teacherInfoModel.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.dismissDialog();
+                        Utils.ping(mContext, getString(R.string.false_msg));
+                        return;
+                    }
+                    if (teacherInfoModel.getSuccess().equalsIgnoreCase("True")) {
+                        teacherInfoResponse = teacherInfoModel;
+                        Utils.dismissDialog();
+
+                        for (int i = 0; i < teacherInfoResponse.getData().size(); i++) {
+                            dialogViewTeacherProfileBinding.teacherNameTxt.setText(teacherInfoModel.getData().get(i).getFirstName() + " " +
+                                    teacherInfoModel.getData().get(i).getLastName());
+
+
+                            if (!teacherInfoModel.getData().get(i).getExpYear().equalsIgnoreCase("0")) {
+                                dialogViewTeacherProfileBinding.classNameTxt.setText(teacherInfoModel.getData().get(i).getClassName() + " ("
+                                        + teacherInfoModel.getData().get(i).getExpYear() + " year" + " " + teacherInfoModel.getData().get(i).getExpMonth() + " month" + ")");
+                            } else {
+                                dialogViewTeacherProfileBinding.classNameTxt.setText(teacherInfoModel.getData().get(i).getClassName());
+                            }
+                            if (!teacherInfoModel.getData().get(i).getQualification().equalsIgnoreCase("")) {
+                                dialogViewTeacherProfileBinding.qualificationTxt.setText(teacherInfoModel.getData().get(i).getQualification());
+                            } else {
+                                dialogViewTeacherProfileBinding.qualificationTxt.setVisibility(View.GONE);
+                            }
+                            if (!teacherInfoModel.getData().get(i).getAboutUs().equalsIgnoreCase("")) {
+                                dialogViewTeacherProfileBinding.aboutUsTxt.setText(teacherInfoModel.getData().get(i).getAboutUs());
+                            } else {
+                                dialogViewTeacherProfileBinding.aboutUsTxt.setVisibility(View.GONE);
+                            }
+                            emailstr = teacherInfoModel.getData().get(i).getEmailID();
+                            phonestr = teacherInfoModel.getData().get(i).getMobile();
+
+                        }
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getTeacherdetail() {
+        Map<String, String> map = new HashMap<>();
+        map.put("Coach_ID", coachIdStr);
+        return map;
+    }
+
+    //Use for View TeacherProfile
+    public void viewTeacherProfile() {
+        dialogViewTeacherProfileBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContext), R.layout.dialog_view_teacher_profile, (ViewGroup) sessionNameBinding.getRoot(), false);
+
+        profileDialog = new Dialog(mContext, R.style.Theme_Dialog);
+        Window window = profileDialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        profileDialog.getWindow().getAttributes().verticalMargin = 0.0f;
+        wlp.gravity = Gravity.CENTER;
+        window.setAttributes(wlp);
+
+        //changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        profileDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        profileDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        profileDialog.setCancelable(false);
+        profileDialog.setContentView(dialogViewTeacherProfileBinding.getRoot());
+        callTeacherProfileApi();
+        dialogViewTeacherProfileBinding.viewTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                profileDialog.dismiss();
+            }
+        });
+        dialogViewTeacherProfileBinding.emailBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                String[] recipients = {emailstr};
+                intent.putExtra(Intent.EXTRA_EMAIL, recipients);
+                intent.setType("text/html");
+                intent.setPackage("com.google.android.gm");
+                mContext.startActivity(Intent.createChooser(intent, "Send mail"));
+            }
+        });
+        dialogViewTeacherProfileBinding.callBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Utils.checkAndRequestPermissions(mContext)) {
+                }
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.fromParts("tel", phonestr, null));
+                mContext.startActivity(intent);
+            }
+        });
+
+        profileDialog.show();
+
+    }
+
     public void setData() {
         arrayList = new ArrayList<sessionDataModel>();
         descriptionarray = new ArrayList<>();
@@ -425,19 +554,29 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
             descriptionviewarray = new ArrayList<>();
         }
         //,descriptionarray
-        sessionDetailAdapter = new SessionDetailAdapter(mContext, arrayList, descriptionviewarray, reviewarray, sessionRatingList, ratinguserStr, new onViewClick() {
+        sessionDetailAdapter = new SessionDetailAdapter(mContext, arrayList, descriptionviewarray, reviewarray, sessionRatingList, ratinguserStr, new onChlidClick() {
+            @Override
+            public void getChilClick() {
+                ArrayList<String> coachId = new ArrayList<String>();
+                coachId = sessionDetailAdapter.getCoach();
+                Log.d("coachId", "" + coachId);
+                for (int i = 0; i < coachId.size(); i++) {
+                    coachIdStr = coachId.get(i);
+                }
+                viewTeacherProfile();
+            }
+        }, new onViewClick() {
             @Override
             public void getViewClick() {
 
                 ArrayList<String> selectedId = new ArrayList<String>();
-               // String sessionName = "",teacherName="";
                 selectedId = sessionDetailAdapter.getSessionDetail();
                 Log.d("selectedId", "" + selectedId);
                 for (int i = 0; i < selectedId.size(); i++) {
                     String[] splitvalue = selectedId.get(i).split("\\|");
                     classNameStr = splitvalue[0];
                     sessionIDStr = splitvalue[1];
-                    TeacherName=splitvalue[2];
+                    TeacherName = splitvalue[2];
                 }
                 if (Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
                     addRating();
@@ -464,7 +603,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                                     intentLogin.putExtra("ratingLogin", "ratingLoginSession");
                                     intentLogin.putExtra("searchfront", searchfront);
                                     intentLogin.putExtra("sessionStudent", familysessionStudentStr);
-                                    intentLogin.putExtra("TeacherName",TeacherName);
+                                    intentLogin.putExtra("TeacherName", TeacherName);
                                     startActivity(intentLogin);
                                     finish();
                                 }
@@ -478,6 +617,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
 //                            .setIcon(R.drawable.safari)
                             .show();
                 }
+
             }
         });
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, OrientationHelper.VERTICAL, false);
@@ -488,9 +628,9 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
 
     }
 
+
+
     public void addRating() {
-
-
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.rating_dialog_layout, null);
         final RatingBar ratingBar = alertLayout.findViewById(R.id.rating_bar);
@@ -499,7 +639,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         final TextView cancel_txt = alertLayout.findViewById(R.id.cancel_txt);
         final TextView confirm_txt = alertLayout.findViewById(R.id.confirm_txt);
         final EditText comment_edt = alertLayout.findViewById(R.id.comment_edt);
-        final TextView teacher_name_txt=alertLayout.findViewById(R.id.teacher_name_txt);
+        final TextView teacher_name_txt = alertLayout.findViewById(R.id.teacher_name_txt);
         sessionNametxt.setText(classNameStr);
         teacher_name_txt.setText(TeacherName);
 
@@ -706,7 +846,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         wlp.gravity = Gravity.CENTER;
         window.setAttributes(wlp);
 
-       //changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        //changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
         changeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         changeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         changeDialog.setCancelable(false);
@@ -803,7 +943,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.x = 10;
         menuDialog.getWindow().getAttributes().verticalMargin = 0.07F;
-        wlp.gravity = Gravity.TOP|Gravity.RIGHT;
+        wlp.gravity = Gravity.TOP | Gravity.RIGHT;
         window.setAttributes(wlp);
 
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -812,21 +952,21 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
 //        menuDialog.setContentView(menuBinding.getRoot());
         menuDialog.setContentView(R.layout.layout_menu);
 
-        btnHome=(Button)menuDialog.findViewById(R.id.btnHome);
+        btnHome = (Button) menuDialog.findViewById(R.id.btnHome);
         btnMyReport = (Button) menuDialog.findViewById(R.id.btnMyReport);
         btnMySession = (Button) menuDialog.findViewById(R.id.btnMySession);
         btnChangePassword = (Button) menuDialog.findViewById(R.id.btnChangePassword);
 //        btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
-        btnMyenroll=(Button)menuDialog.findViewById(R.id.btnMyenroll);
-btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
+        btnMyenroll = (Button) menuDialog.findViewById(R.id.btnMyenroll);
+        btnMyprofile = (Button) menuDialog.findViewById(R.id.btnMyprofile);
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i=new Intent(mContext,SearchByUser.class);
+                Intent i = new Intent(mContext, SearchByUser.class);
                 startActivity(i);
             }
         });
@@ -835,7 +975,7 @@ btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
             public void onClick(View view) {
                 Intent imyaccount = new Intent(mContext, AddStudentScreen.class);
                 imyaccount.putExtra("wheretocometype", "menu");
-                imyaccount.putExtra("myprofile","true");
+                imyaccount.putExtra("myprofile", "true");
                 imyaccount.putExtra("type", "myprofile");
                 startActivity(imyaccount);
                 menuDialog.dismiss();

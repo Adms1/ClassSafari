@@ -274,7 +274,8 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_2sdp"
-                        android:src="@drawable/decri" />
+                        android:src="@drawable/menubar"
+                        android:tint="@color/gray1"/>
 
                     <EditText
                         android:id="@+id/description_edt"
@@ -767,7 +768,8 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/_5sdp"
                         android:layout_marginTop="@dimen/_2sdp"
-                        android:src="@drawable/ad" />
+                        android:src="@drawable/map"
+                        android:tint="@color/gray"/>
 
                     <TextView
                         android:id="@+id/session_select_address_txt"

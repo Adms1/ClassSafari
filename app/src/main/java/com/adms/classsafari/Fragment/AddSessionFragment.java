@@ -347,66 +347,11 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         callRegionApi();
         fillCity();
         callAddressApi();
-        //setTypeface();
         initViews();
         setListners();
 
     }
 
-    public void setTypeface() {
-//        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
-//
-//        addSessionBinding.AcademicRb.setTypeface(custom_font);
-//        addSessionBinding.playRb.setTypeface(custom_font);
-//        addSessionBinding.recurringRb.setTypeface(custom_font);
-//        addSessionBinding.singleRb.setTypeface(custom_font);
-//        addSessionBinding.sessionNameEdt.setTypeface(custom_font);
-//        addSessionBinding.boardNameEdt.setTypeface(custom_font);
-//        addSessionBinding.standardEdt.setTypeface(custom_font);
-//        addSessionBinding.streamEdt.setTypeface(custom_font);
-//        addSessionBinding.subjectEdt.setTypeface(custom_font);
-//        addSessionBinding.descriptionEdt.setTypeface(custom_font);
-//        addSessionBinding.addressEdt.setTypeface(custom_font);
-//        addSessionBinding.areaEdt.setTypeface(custom_font);
-//        addSessionBinding.cityEdt.setTypeface(custom_font);
-//        addSessionBinding.stateEdt.setTypeface(custom_font);
-//        addSessionBinding.zipcodeEdt.setTypeface(custom_font);
-//        addSessionBinding.addressEdt1.setTypeface(custom_font);
-//
-//        addSessionBinding.mondayBtn.setTypeface(custom_font);
-//        addSessionBinding.tuesdayBtn.setTypeface(custom_font);
-//        addSessionBinding.wednesdayBtn.setTypeface(custom_font);
-//        addSessionBinding.thursdayBtn.setTypeface(custom_font);
-//        addSessionBinding.fridayBtn.setTypeface(custom_font);
-//        addSessionBinding.saturdayBtn.setTypeface(custom_font);
-//        addSessionBinding.sundayBtn.setTypeface(custom_font);
-//        addSessionBinding.startDateTxt.setTypeface(custom_font);
-//        addSessionBinding.endDateTxt.setTypeface(custom_font);
-//
-//        addSessionBinding.monTimeTxt.setTypeface(custom_font);
-//        addSessionBinding.thurTimeTxt.setTypeface(custom_font);
-//        addSessionBinding.wedTimeTxt.setTypeface(custom_font);
-//        addSessionBinding.thurTimeTxt.setTypeface(custom_font);
-//        addSessionBinding.friTimeTxt.setTypeface(custom_font);
-//        addSessionBinding.satTimeTxt.setTypeface(custom_font);
-//        addSessionBinding.sunTimeTxt.setTypeface(custom_font);
-//
-//        addSessionBinding.monHoursTxt.setTypeface(custom_font);
-//        addSessionBinding.tuesHoursTxt.setTypeface(custom_font);
-//        addSessionBinding.wedHoursTxt.setTypeface(custom_font);
-//        addSessionBinding.thurHoursTxt.setTypeface(custom_font);
-//        addSessionBinding.friHoursTxt.setTypeface(custom_font);
-//        addSessionBinding.satHoursTxt.setTypeface(custom_font);
-//        addSessionBinding.sunHoursTxt.setTypeface(custom_font);
-//
-//
-//        addSessionBinding.sessionTimeTxt.setTypeface(custom_font);
-//        addSessionBinding.addSessionBtn.setTypeface(custom_font);
-//
-//        addSessionBinding.sessionSelectAddressTxt.setTypeface(custom_font);
-//        addSessionBinding.selectSessionAddressBtn.setTypeface(custom_font);
-//        addSessionBinding.submitBtn.setTypeface(custom_font);
-    }
 
     public void initViews() {
         timegapArray = new ArrayList<String>();
@@ -419,8 +364,13 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         timegapArray.add("1 day before");
         Log.d("timegapArray", "" + timegapArray);
 
-
-        addSessionBinding.sessionNameEdt.setText(Utils.getPref(mContext, "ClassName"));
+        if (Utils.getPref(mContext, "ClassName") != null) {
+            addSessionBinding.sessionNameEdt.setText(Utils.getPref(mContext, "ClassName"));
+            addSessionBinding.sessionNameEdt.setEnabled(false);
+        }else{
+            addSessionBinding.sessionNameEdt.setEnabled(true);
+            Utils.setPref(mContext,"ClassName",addSessionBinding.sessionNameEdt.getText().toString());
+        }
     }
 
     public void setListners() {
@@ -737,7 +687,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
             if (sessionTypeStr.equalsIgnoreCase("Academic")) {
 
                 sessionTypeValueStr = "2";
-            }else{
+            } else {
                 sessionTypeValueStr = "4";
             }
 
@@ -1240,7 +1190,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
                             if (sessionTypeStr.equalsIgnoreCase("Academic")) {
 
                                 sessionTypeValueStr = "2";
-                            }else{
+                            } else {
                                 sessionTypeValueStr = "4";
                             }
 
@@ -1943,7 +1893,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
             if (sessionTypeStr.equalsIgnoreCase("Academic")) {
 
                 sessionTypeValueStr = "2";
-            }else{
+            } else {
                 sessionTypeValueStr = "4";
             }
 

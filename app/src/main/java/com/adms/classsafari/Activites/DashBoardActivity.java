@@ -111,7 +111,7 @@ public class DashBoardActivity extends AppCompatActivity {
         imgProfile = (ImageView) navHeader.findViewById(R.id.profile_image);
         // load toolbar titles from string resources
         activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
-        //toolbar.setNavigationIcon(R.drawable.decri);
+        // toolbar.setNavigationIcon(R.drawable.menubar);
         if (getIntent().getStringExtra("position") != null) {
             navItemIndex = Integer.parseInt(position);
             if (getIntent().getStringExtra("position").equalsIgnoreCase("0")) {
@@ -260,6 +260,7 @@ public class DashBoardActivity extends AppCompatActivity {
                                 Utils.setPref(mContex, "sessionDetailID", "");
                                 Utils.setPref(mContex, "RegisterUserName", "");
                                 Utils.setPref(mContex, "RegisterEmail", "");
+                                Utils.setPref(mContex, "ClassName", "");
                                 Intent intentLogin = new Intent(DashBoardActivity.this, SearchByUser.class);
                                 intentLogin.putExtra("frontLogin", whereTocomestr);
                                 startActivity(intentLogin);
@@ -367,12 +368,14 @@ public class DashBoardActivity extends AppCompatActivity {
             public void onDrawerClosed(View drawerView) {
                 // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
                 super.onDrawerClosed(drawerView);
+                // toolbar.setNavigationIcon(R.drawable.menubar);
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
                 super.onDrawerOpened(drawerView);
+                //  toolbar.setNavigationIcon(R.drawable.white_arrow);
                 loadNavHeader();
             }
         };
@@ -451,7 +454,7 @@ public class DashBoardActivity extends AppCompatActivity {
         } else if (session == 14 && flag.equalsIgnoreCase("true")) {
             title_txt.setText("ENROLLMENT SUCCESSFUL");
             session_cal.setVisibility(View.GONE);
-            //  toolbar.setNavigationIcon(null);
+            toolbar.setNavigationIcon(null);
         } else if (session == 5 && flag.equalsIgnoreCase("true")) {
             title_txt.setText("STUDENT ATTENDANCE");
             session_cal.setVisibility(View.VISIBLE);
@@ -468,6 +471,7 @@ public class DashBoardActivity extends AppCompatActivity {
 //        }
         else {
             if (session == 0) {
+                // toolbar.setNavigationIcon(R.drawable.menubar);
                 session_cal.setVisibility(View.GONE);
             }
 //            getSupportActionBar().setTitle(activityTitles[session]);
