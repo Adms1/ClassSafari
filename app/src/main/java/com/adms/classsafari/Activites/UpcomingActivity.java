@@ -39,7 +39,6 @@ import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivityMySessionBinding;
 import com.adms.classsafari.databinding.ActivityUpcomingBinding;
 import com.adms.classsafari.databinding.ChangePasswordDialogBinding;
-import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
 import com.adms.classsafari.databinding.LayoutMenuBinding;
 import com.adms.classsafari.databinding.SessiondetailConfirmationDialogBinding;
 
@@ -63,6 +62,8 @@ public class UpcomingActivity extends AppCompatActivity implements View.OnClickL
     String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr;
     Dialog menuDialog, changeDialog;
     Button btnHome,btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
+    View view_home, view_profile, view_myenroll, view_mysession,
+            view_myreport, view_btnfamily, view_changepass;
     TextView userNameTxt;
     ChangePasswordDialogBinding changePasswordDialogBinding;
     UpcomingClassAdapter upcomingClassAdapter;
@@ -297,8 +298,18 @@ public class UpcomingActivity extends AppCompatActivity implements View.OnClickL
         btnMyenroll = (Button) menuDialog.findViewById(R.id.btnMyenroll);
         btnMyprofile = (Button) menuDialog.findViewById(R.id.btnMyprofile);
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
+
+        view_home = (View) menuDialog.findViewById(R.id.view_home);
+        view_profile = (View) menuDialog.findViewById(R.id.view_home);
+        view_myenroll = (View) menuDialog.findViewById(R.id.view_myenroll);
+        view_mysession = (View) menuDialog.findViewById(R.id.view_mysession);
+        view_myreport = (View) menuDialog.findViewById(R.id.view_myreport);
+        view_btnfamily = (View) menuDialog.findViewById(R.id.view_btnfamily);
+        view_changepass = (View) menuDialog.findViewById(R.id.view_changepass);
+
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
         btnMySession.setVisibility(View.GONE);
+        view_mysession.setVisibility(View.GONE);
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -67,6 +67,8 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
     Dialog menuDialog, changeDialog;
     Button btnHome,btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily,btnMyenroll,btnMyprofile;
     TextView userNameTxt;
+    View view_home, view_profile, view_myenroll, view_mysession,
+            view_myreport, view_btnfamily, view_changepass;
     //
     Calendar[] daysArray;
     List<Calendar> dayslist = new LinkedList<Calendar>();
@@ -404,9 +406,19 @@ public class MyAccountActivity extends AppCompatActivity implements DatePickerDi
         btnMyenroll=(Button)menuDialog.findViewById(R.id.btnMyenroll);
 btnMyprofile=(Button)menuDialog.findViewById(R.id.btnMyprofile);
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
+
+        view_home = (View) menuDialog.findViewById(R.id.view_home);
+        view_profile = (View) menuDialog.findViewById(R.id.view_home);
+        view_myenroll = (View) menuDialog.findViewById(R.id.view_myenroll);
+        view_mysession = (View) menuDialog.findViewById(R.id.view_mysession);
+        view_myreport = (View) menuDialog.findViewById(R.id.view_myreport);
+        view_btnfamily = (View) menuDialog.findViewById(R.id.view_btnfamily);
+        view_changepass = (View) menuDialog.findViewById(R.id.view_changepass);
+
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
 
         btnMyReport.setVisibility(View.GONE);
+        view_myreport.setVisibility(View.GONE);
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

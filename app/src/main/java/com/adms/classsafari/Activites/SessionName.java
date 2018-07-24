@@ -41,7 +41,6 @@ import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivitySessionNameNewBinding;
 import com.adms.classsafari.databinding.ChangePasswordDialogBinding;
-import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
 import com.adms.classsafari.databinding.DialogViewTeacherProfileBinding;
 
 import java.util.ArrayList;
@@ -54,7 +53,6 @@ import retrofit.client.Response;
 
 public class SessionName extends AppCompatActivity implements View.OnClickListener {
     ActivitySessionNameNewBinding sessionNameBinding;
-    ConfirmSessionDialogBinding confirmSessionDialogBinding;
     ChangePasswordDialogBinding changePasswordDialogBinding;
     DialogViewTeacherProfileBinding dialogViewTeacherProfileBinding;
 
@@ -1034,7 +1032,6 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
                 new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
                         .setCancelable(false)
                         .setTitle("Logout")
-                        .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
                         .setMessage("Are you sure you want to logout?")
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -1059,7 +1056,6 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
 
                             }
                         })
-                        .setIcon(R.drawable.safari)
                         .show();
             }
         });

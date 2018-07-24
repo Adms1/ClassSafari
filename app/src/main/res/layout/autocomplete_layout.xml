@@ -8,5 +8,4 @@
     android:background="@drawable/list_line"
     android:paddingLeft="@dimen/_4sdp"
     android:textColor="#000000"
-    android:textSize="@dimen/_10sdp"
-    />
+    android:textSize="@dimen/_10sdp"/>

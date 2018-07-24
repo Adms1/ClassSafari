@@ -38,7 +38,6 @@ import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivityRegistrationBinding;
-import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
 import com.adms.classsafari.databinding.OptionDialogBinding;
 import com.adms.classsafari.databinding.RegisterOptionDialogBinding;
 import com.adms.classsafari.databinding.SessiondetailConfirmationDialogBinding;
@@ -61,7 +60,6 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         View.OnClickListener, TextView.OnEditorActionListener, RadioGroup.OnCheckedChangeListener {
 
     ActivityRegistrationBinding registrationBinding;
-    ConfirmSessionDialogBinding confirmSessionDialogBinding;
     OptionDialogBinding optionDialogBinding;
     RegisterOptionDialogBinding registerOptionDialogBinding;
     SessiondetailConfirmationDialogBinding sessiondetailConfirmationDialogBinding;
@@ -878,13 +876,11 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                     }
                     if (sessionModel.getSuccess().equalsIgnoreCase("false")) {
                         new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
-                                .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
                                 .setMessage(getResources().getString(R.string.fail_msg))
                                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                     }
                                 })
-                                .setIcon(R.drawable.safari)
                                 .show();
                         return;
                     }

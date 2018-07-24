@@ -38,7 +38,6 @@ import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivityAddFamilyBinding;
 import com.adms.classsafari.databinding.ChangePasswordDialogBinding;
-import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
 import com.adms.classsafari.databinding.SessiondetailConfirmationDialogBinding;
 
 import java.text.ParseException;
@@ -58,7 +57,6 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
     public Context mContext;
     ActivityAddFamilyBinding familyBinding;
     ChangePasswordDialogBinding changePasswordDialogBinding;
-    ConfirmSessionDialogBinding confirmSessionDialogBinding;
     SessiondetailConfirmationDialogBinding sessiondetailConfirmationDialogBinding;
     SessionDetailModel dataResponse;
 
@@ -88,6 +86,8 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
     Dialog menuDialog, changeDialog;
     Button btnHome,btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
     TextView userNameTxt;
+    View view_home, view_profile, view_myenroll, view_mysession,
+            view_myreport, view_btnfamily, view_changepass;
     SessionConfirmationDetailModel sessionConfirmationDetailModel;
     ArrayList<Integer> totalHours;
     ArrayList<Integer> totalMinit;
@@ -653,13 +653,11 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                             }
                             if (!purchaseSessionIDStr.equalsIgnoreCase("")) {
                                 new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
-                                        .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
                                         .setMessage("You have already purchased.")
                                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int which) {
                                             }
                                         })
-                                        .setIcon(R.drawable.safari)
                                         .show();
                             } else {
                                 // ConformSessionDialog();
@@ -709,13 +707,11 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                     }
                     if (sessionModel.getSuccess().equalsIgnoreCase("false")) {
                         new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
-                                .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
                                 .setMessage(getResources().getString(R.string.fail_msg))
                                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                     }
                                 })
-                                .setIcon(R.drawable.safari)
                                 .show();
                         return;
                     }
@@ -878,8 +874,18 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         btnMyenroll = (Button) menuDialog.findViewById(R.id.btnMyenroll);
         btnMyprofile = (Button) menuDialog.findViewById(R.id.btnMyprofile);
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
+
+        view_home = (View) menuDialog.findViewById(R.id.view_home);
+        view_profile = (View) menuDialog.findViewById(R.id.view_home);
+        view_myenroll = (View) menuDialog.findViewById(R.id.view_myenroll);
+        view_mysession = (View) menuDialog.findViewById(R.id.view_mysession);
+        view_myreport = (View) menuDialog.findViewById(R.id.view_myreport);
+        view_btnfamily = (View) menuDialog.findViewById(R.id.view_btnfamily);
+        view_changepass = (View) menuDialog.findViewById(R.id.view_changepass);
+
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
         btnmyfamily.setVisibility(View.GONE);
+        view_btnfamily.setVisibility(View.GONE);
 
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override

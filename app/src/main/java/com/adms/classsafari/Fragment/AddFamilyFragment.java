@@ -34,7 +34,6 @@ import com.adms.classsafari.AppConstant.Utils;
 import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
-import com.adms.classsafari.databinding.ConfirmSessionTeacherBinding;
 import com.adms.classsafari.databinding.FragmentAddFamilyBinding;
 import com.adms.classsafari.databinding.SessiondetailConfirmationDialogBinding;
 import com.adms.classsafari.databinding.SessiondetailConfirmationDialogStudentBinding;
@@ -54,8 +53,6 @@ import retrofit.client.Response;
 public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDateSetListener,
         View.OnClickListener, TextView.OnEditorActionListener, RadioGroup.OnCheckedChangeListener {
 
-    //    ConfirmSessionDialogBinding confirmSessionDialogBinding;
-    ConfirmSessionTeacherBinding confirmSessionTeacherBinding;
     String MonthInt;
     int Year, Month, Day;
     Calendar calendar;
@@ -618,13 +615,11 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
                     }
                     if (sessionModel.getSuccess().equalsIgnoreCase("false")) {
                         new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
-                                .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
                                 .setMessage(getResources().getString(R.string.fail_msg))
                                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                     }
                                 })
-                                .setIcon(R.drawable.safari)
                                 .show();
                         return;
                     }

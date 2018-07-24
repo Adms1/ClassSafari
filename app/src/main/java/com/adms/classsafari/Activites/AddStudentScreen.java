@@ -37,7 +37,6 @@ import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivityAddStudentScreenBinding;
 import com.adms.classsafari.databinding.ChangePasswordDialogBinding;
-import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
 import com.adms.classsafari.databinding.SessiondetailConfirmationDialogBinding;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
@@ -57,7 +56,6 @@ import rx.internal.operators.BackpressureUtils;
 
 public class AddStudentScreen extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
     ActivityAddStudentScreenBinding addStudentScreenBinding;
-    ConfirmSessionDialogBinding confirmSessionDialogBinding;
     ChangePasswordDialogBinding changePasswordDialogBinding;
     SessiondetailConfirmationDialogBinding sessiondetailConfirmationDialogBinding;
     SessionDetailModel dataResponse;
@@ -88,6 +86,8 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
     String passWordStr, confirmpassWordStr, currentpasswordStr;
     Dialog menuDialog, changeDialog;
     Button btnHome, btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
+    View view_home, view_profile, view_myenroll, view_mysession,
+            view_myreport, view_btnfamily, view_changepass;
     TextView userNameTxt;
     private DatePickerDialog datePickerDialog;
 
@@ -1082,13 +1082,11 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                     }
                     if (sessionModel.getSuccess().equalsIgnoreCase("false")) {
                         new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
-                                .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
                                 .setMessage(getResources().getString(R.string.fail_msg))
                                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                     }
                                 })
-                                .setIcon(R.drawable.safari)
                                 .show();
                         return;
                     }
@@ -1493,9 +1491,18 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
         btnMyprofile = (Button) menuDialog.findViewById(R.id.btnMyprofile);
 
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
+
+        view_home = (View) menuDialog.findViewById(R.id.view_home);
+        view_profile = (View) menuDialog.findViewById(R.id.view_home);
+        view_myenroll = (View) menuDialog.findViewById(R.id.view_myenroll);
+        view_mysession = (View) menuDialog.findViewById(R.id.view_mysession);
+        view_myreport = (View) menuDialog.findViewById(R.id.view_myreport);
+        view_btnfamily = (View) menuDialog.findViewById(R.id.view_btnfamily);
+        view_changepass = (View) menuDialog.findViewById(R.id.view_changepass);
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
         if (getIntent().getStringExtra("myprofile") != null) {
             btnMyprofile.setVisibility(View.GONE);
+            view_profile.setVisibility(View.GONE);
         }
 
         btnHome.setOnClickListener(new View.OnClickListener() {

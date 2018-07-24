@@ -35,7 +35,6 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center|center_vertical"
                 android:layout_marginBottom="@dimen/_1sdp"
-
                 android:gravity="center|center_horizontal" />
             <!--android:button="@drawable/absent_radio_type"-->
         </RadioGroup>

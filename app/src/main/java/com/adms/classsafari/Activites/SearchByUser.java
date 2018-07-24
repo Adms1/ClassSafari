@@ -1,5 +1,6 @@
 package com.adms.classsafari.Activites;
 
+import android.app.ActivityOptions;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -66,7 +67,10 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
     String passWordStr, confirmpassWordStr, currentpasswordStr, cityName = "";
     Dialog menuDialog, changeDialog;
     //Use for Menu Dialog
-    Button btnHome, btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
+    Button btnHome, btnMyReport, btnMySession, btnChangePassword,
+            btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
+    View view_home, view_profile, view_myenroll, view_mysession,
+            view_myreport, view_btnfamily, view_changepass;
     TextView userNameTxt;
     String SearchPlaystudy;
     boolean flag = true;
@@ -361,6 +365,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
                 inClassDetail.putExtra("SearchPlaystudy", "");
             }
 //            inClassDetail.putExtra("searchType", "study");
+
             startActivity(inClassDetail);
         } else {
             Utils.ping(mContext, getResources().getString(R.string.location_validation));
@@ -491,8 +496,19 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
         btnMyenroll = (Button) menuDialog.findViewById(R.id.btnMyenroll);
         btnMyprofile = (Button) menuDialog.findViewById(R.id.btnMyprofile);
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
+
+        view_home = (View) menuDialog.findViewById(R.id.view_home);
+        view_profile = (View) menuDialog.findViewById(R.id.view_home);
+        view_myenroll = (View) menuDialog.findViewById(R.id.view_myenroll);
+        view_mysession = (View) menuDialog.findViewById(R.id.view_mysession);
+        view_myreport = (View) menuDialog.findViewById(R.id.view_myreport);
+        view_btnfamily = (View) menuDialog.findViewById(R.id.view_btnfamily);
+        view_changepass = (View) menuDialog.findViewById(R.id.view_changepass);
+
+
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
         btnHome.setVisibility(View.GONE);
+        view_home.setVisibility(View.GONE);
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

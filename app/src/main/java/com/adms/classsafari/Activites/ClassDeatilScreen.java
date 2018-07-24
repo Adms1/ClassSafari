@@ -1,5 +1,6 @@
 package com.adms.classsafari.Activites;
 
+import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -1653,7 +1654,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 
                             }
                         })
-                        .setIcon(R.drawable.safari)
                         .show();
             }
         });

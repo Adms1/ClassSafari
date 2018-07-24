@@ -351,7 +351,6 @@ paymentSucessBinding.linearClick.setVisibility(View.VISIBLE);
                     }
                     if (sessionModel.getSuccess().equalsIgnoreCase("false")) {
                         new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
-                                .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
                                 .setMessage(getResources().getString(R.string.fail_msg))
                                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
@@ -363,7 +362,6 @@ paymentSucessBinding.linearClick.setVisibility(View.VISIBLE);
                                         fragmentTransaction.commit();
                                     }
                                 })
-                                .setIcon(R.drawable.safari)
                                 .show();
                         return;
                     }

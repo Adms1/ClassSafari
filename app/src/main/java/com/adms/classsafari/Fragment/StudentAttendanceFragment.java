@@ -99,30 +99,11 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
 
 
     public void initViews() {
-//        if (!Utils.getPref(mContext, "coachTypeID").equalsIgnoreCase("1")) {
-//            studentAttendanceBinding.firstRowLinear.setVisibility(View.GONE);
-//        } else {
-//            studentAttendanceBinding.firstRowLinear.setVisibility(View.VISIBLE);
-//        }
         callSessionDetailApi();
-//        callClassAttendanceDetailApi();
 
     }
 
     public void setListners() {
-        studentAttendanceBinding.sessionCal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Fragment fragment = new SessionFragment();
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.frame, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-
-
-            }
-        });
         studentAttendanceBinding.submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

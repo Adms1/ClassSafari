@@ -41,7 +41,6 @@ import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivityMySessionBinding;
 import com.adms.classsafari.databinding.ChangePasswordDialogBinding;
-import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
 import com.adms.classsafari.databinding.LayoutMenuBinding;
 import com.adms.classsafari.databinding.SessiondetailConfirmationDialogBinding;
 
@@ -61,7 +60,6 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
 
 
     ActivityMySessionBinding mySessionBinding;
-    ConfirmSessionDialogBinding confirmSessionDialogBinding;
 
     LayoutMenuBinding menuBinding;
     ChangePasswordDialogBinding changePasswordDialogBinding;
@@ -84,6 +82,8 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
     String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr, commentStr, ratingValueStr;//sessionId
     Dialog menuDialog;
     Button btnHome, btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
+    View view_home, view_profile, view_myenroll, view_mysession,
+            view_myreport, view_btnfamily, view_changepass;
     TextView userNameTxt;
     ArrayList<Integer> totalHours;
     ArrayList<Integer> totalMinit;
@@ -503,13 +503,11 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                     }
                     if (sessionModel.getSuccess().equalsIgnoreCase("false")) {
                         new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
-                                .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
                                 .setMessage(getResources().getString(R.string.fail_msg))
                                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                     }
                                 })
-                                .setIcon(R.drawable.safari)
                                 .show();
                         return;
                     }
@@ -903,9 +901,18 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
         btnMyenroll = (Button) menuDialog.findViewById(R.id.btnMyenroll);
 
+        view_home = (View) menuDialog.findViewById(R.id.view_home);
+        view_profile = (View) menuDialog.findViewById(R.id.view_home);
+        view_myenroll = (View) menuDialog.findViewById(R.id.view_myenroll);
+        view_mysession = (View) menuDialog.findViewById(R.id.view_mysession);
+        view_myreport = (View) menuDialog.findViewById(R.id.view_myreport);
+        view_btnfamily = (View) menuDialog.findViewById(R.id.view_btnfamily);
+        view_changepass = (View) menuDialog.findViewById(R.id.view_changepass);
+
         userNameTxt = (TextView) menuDialog.findViewById(R.id.user_name_txt);
         userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
         btnMyenroll.setVisibility(View.GONE);
+        view_myenroll.setVisibility(View.GONE);
 
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override

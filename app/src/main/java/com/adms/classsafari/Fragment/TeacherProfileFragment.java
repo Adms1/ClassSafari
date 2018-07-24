@@ -326,14 +326,14 @@ public class TeacherProfileFragment extends Fragment implements View.OnClickList
 
         monthofExperiance.add("Experience(month)");
         for (int i = 0; i <= 12; i++) {
-            monthofExperiance.add(String.valueOf(i) + " " + "month");
+            monthofExperiance.add(String.valueOf(i) + " " + "months");
         }
         yearofExperiance.add("Experience(year)");
         for (int i = 0; i <= 30; i++) {
             if (i == 30) {
-                yearofExperiance.add(String.valueOf(i) + "+" + " " + "year");
+                yearofExperiance.add(String.valueOf(i) + "+" + " " + "years");
             } else {
-                yearofExperiance.add(String.valueOf(i) + " " + "year");
+                yearofExperiance.add(String.valueOf(i) + " " + "years");
             }
         }
 

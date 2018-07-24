@@ -18,7 +18,6 @@ import com.adms.classsafari.Model.Session.sessionDataModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ListItemReviewsBinding;
 import com.adms.classsafari.databinding.SessionCardLayout1Binding;
-import com.adms.classsafari.databinding.SessionDescriptionItemBinding;
 import com.adms.classsafari.databinding.SessionReviewCardLayout1Binding;
 
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class PurchaseSessionDetailAdapter extends RecyclerView.Adapter {
     //    private final static int DESCRIPTION_ROW_VIEW = 1;
 //    private final static int DESCRIPTION_VIEW = 1;
     SessionCardLayout1Binding sessionCardLayout1Binding;
-    SessionDescriptionItemBinding descriptionItemBinding;
+//    SessionDescriptionItemBinding descriptionItemBinding;
     ListItemReviewsBinding itemReviewsBinding;
     SessionReviewCardLayout1Binding reviewCardLayout1Binding;
 
@@ -235,10 +234,10 @@ public class PurchaseSessionDetailAdapter extends RecyclerView.Adapter {
             });
 
         }
-        if (holder instanceof DescriptionView) {
-            final DescriptionView descriptionHolder = (DescriptionView) holder;
-            descriptionItemBinding.descriptionTxt.setText(descriptionviewarray.get(position - arrayList.size()));
-        }
+//        if (holder instanceof DescriptionView) {
+//            final DescriptionView descriptionHolder = (DescriptionView) holder;
+//            descriptionItemBinding.descriptionTxt.setText(descriptionviewarray.get(position - arrayList.size()));
+//        }
         if (holder instanceof SessionDetailAdapter.RowView) {
 
         }

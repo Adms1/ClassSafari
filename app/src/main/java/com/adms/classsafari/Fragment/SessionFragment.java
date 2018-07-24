@@ -40,7 +40,6 @@ import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.Session.sessionDataModel;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
-import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
 import com.adms.classsafari.databinding.FragmentCalendarBinding;
 import com.adms.classsafari.databinding.SessiondetailConfirmationDialogBinding;
 import com.github.tibolte.agendacalendarview.CalendarPickerController;
@@ -66,7 +65,6 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
     public static SessionFragment fragment;
     public Dialog sessionDialog;
     FragmentCalendarBinding calendarBinding;
-    ConfirmSessionDialogBinding confirmSessionDialogBinding;
     Button cancel_btn, add_attendance_btn, add_student_btn;
     String sessionnameStr, sessionstrattimeStr = "", sessionendtimeStr = "", sessionDateStr = "", sessionIDStr, sessionDetailIDStr, priceStr;
     TextView start_time_txt, end_time_txt, session_title_txt, date_txt, total_spot_txt, spot_left_txt, no_record_txt, edit_session_btn;
@@ -620,13 +618,11 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                     }
                     if (sessionModel.getSuccess().equalsIgnoreCase("false")) {
                         new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
-                                .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
                                 .setMessage(getResources().getString(R.string.fail_msg))
                                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                     }
                                 })
-                                .setIcon(R.drawable.safari)
                                 .show();
                         return;
                     }

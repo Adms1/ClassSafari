@@ -34,7 +34,6 @@ import com.adms.classsafari.Model.Session.SessionDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ActivityLoginBinding;
-import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
 import com.adms.classsafari.databinding.ForgotPasswordDialogBinding;
 import com.adms.classsafari.databinding.OptionDialogBinding;
 
@@ -53,7 +52,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     ActivityLoginBinding loginScreenBinding;
     ForgotPasswordDialogBinding forgotPasswordDialogBinding;
-    ConfirmSessionDialogBinding confirmSessionDialogBinding;
     OptionDialogBinding optionDialogBinding;
 
     Context mContext;

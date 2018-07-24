@@ -19,11 +19,13 @@ import com.adms.classsafari.Model.Session.sessionDataModel;
 import com.adms.classsafari.R;
 import com.adms.classsafari.databinding.ListItemReviewsBinding;
 import com.adms.classsafari.databinding.SessionCardLayout1Binding;
-import com.adms.classsafari.databinding.SessionDescriptionItemBinding;
+//import com.adms.classsafari.databinding.SessionDescriptionItemBinding;
+//import com.adms.classsafari.databinding.SessionDescriptionItemBinding;
 import com.adms.classsafari.databinding.SessionReviewCardLayout1Binding;
 
 import java.util.ArrayList;
 import java.util.List;
+//import java.util.List;
 
 /**
  * Created by admsandroid on 3/5/2018.
@@ -37,7 +39,7 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
     //    private final static int DESCRIPTION_ROW_VIEW = 1;
 //    private final static int DESCRIPTION_VIEW = 1;
     SessionCardLayout1Binding sessionCardLayout1Binding;
-    SessionDescriptionItemBinding descriptionItemBinding;
+//    SessionDescriptionItemBinding descriptionItemBinding;
     ListItemReviewsBinding itemReviewsBinding;
     SessionReviewCardLayout1Binding reviewCardLayout1Binding;
 

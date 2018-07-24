@@ -42,7 +42,6 @@ import com.adms.classsafari.Model.TeacherInfo.ChildDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.FamilyDetailModel;
 import com.adms.classsafari.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.classsafari.R;
-import com.adms.classsafari.databinding.ConfirmSessionDialogBinding;
 import com.adms.classsafari.databinding.FragmentOldFamilyListBinding;
 import com.adms.classsafari.databinding.SessiondetailConfirmationDialogBinding;
 
@@ -61,7 +60,7 @@ import retrofit.client.Response;
 
 public class OldFamilyListFragment extends Fragment {
 
-    ConfirmSessionDialogBinding confirmSessionDialogBinding;
+
     List<FamilyDetailModel> finalFamilyDetail;
     List<String> listDataHeader;
     HashMap<String, List<ChildDetailModel>> listDataChild;
@@ -178,7 +177,7 @@ public class OldFamilyListFragment extends Fragment {
                 if (charSequence.length() > 0) {
                     oldFamilyListBinding.searchEdt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cross_11, 0);
                 } else {
-                    oldFamilyListBinding.searchEdt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.search_icon, 0);
+                    oldFamilyListBinding.searchEdt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.search_white, 0);
                 }
             }
 
@@ -276,69 +275,6 @@ public class OldFamilyListFragment extends Fragment {
             }
         });
     }
-
-
-    public void ConformationDialog() {
-
-        confirmSessionDialogBinding = DataBindingUtil.
-                inflate(LayoutInflater.from(mContext), R.layout.confirm_session_dialog, (ViewGroup) oldFamilyListBinding.getRoot(), false);
-
-        confimDialog = new Dialog(getActivity(), R.style.Theme_Dialog);
-        Window window = confimDialog.getWindow();
-        WindowManager.LayoutParams wlp = window.getAttributes();
-        confimDialog.getWindow().getAttributes().verticalMargin = 0.10f;
-        wlp.gravity = Gravity.CENTER;
-        window.setAttributes(wlp);
-
-        confimDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
-
-        confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        confimDialog.setCancelable(false);
-
-        confimDialog.setContentView(confirmSessionDialogBinding.getRoot());
-
-        getsessionID();
-
-        if (AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
-            confirmSessionDialogBinding.sessionFeeTxt.setText("Free");
-        } else {
-            confirmSessionDialogBinding.sessionFeeTxt.setText("₹" + AppConfiguration.SessionPrice);
-        }
-        confirmSessionDialogBinding.sessionTeacherTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
-//        confirmSessionDialogBinding.sessionStudentTxt.setText(familyNameStr);
-        confirmSessionDialogBinding.sessionNameTxt.setText(AppConfiguration.SessionName);
-        confirmSessionDialogBinding.locationTxt.setText(AppConfiguration.SessionLocation);
-        confirmSessionDialogBinding.durationTxt.setText(AppConfiguration.SessionDuration);
-        confirmSessionDialogBinding.timeTxt.setText(AppConfiguration.SessionTime);
-
-        AppConfiguration.UserName = confirmSessionDialogBinding.sessionStudentTxt.getText().toString();
-
-        confirmSessionDialogBinding.cancelTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                confimDialog.dismiss();
-            }
-        });
-        confirmSessionDialogBinding.confirmTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("")) {// && !AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
-                    callpaymentRequestApi();
-                }
-//                else {
-//                    paymentStatusstr = "1";
-//                    callSessionConfirmationApi();
-//                }
-                confimDialog.dismiss();
-            }
-        });
-
-
-        confimDialog.show();
-
-    }
-
     public void SessionConfirmationDialog() {
         sessiondetailConfirmationDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.sessiondetail_confirmation_dialog, (ViewGroup) oldFamilyListBinding.getRoot(), false);
@@ -415,13 +351,11 @@ public class OldFamilyListFragment extends Fragment {
                     }
                     if (sessionModel.getSuccess().equalsIgnoreCase("false")) {
                         new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
-                                .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
                                 .setMessage(getResources().getString(R.string.fail_msg))
                                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
                                     }
                                 })
-                                .setIcon(R.drawable.safari)
                                 .show();
                         return;
                     }
@@ -847,13 +781,11 @@ public class OldFamilyListFragment extends Fragment {
                             }
                             if (!purchaseSessionIDStr.equalsIgnoreCase("")) {
                                 new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
-                                        .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
                                         .setMessage("You are already purchase.")
                                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int which) {
                                             }
                                         })
-                                        .setIcon(R.drawable.safari)
                                         .show();
                             } else {
                                 // ConformSessionDialog();
@@ -1042,7 +974,6 @@ public class OldFamilyListFragment extends Fragment {
                     }
                     if (familyInfoModel.getSuccess().equalsIgnoreCase("True")) {
                         new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
-                                .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
                                 .setMessage("The family you are searching for is already a member of search classes. Please request them to go to the application and register for your class")
                                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
@@ -1056,7 +987,6 @@ public class OldFamilyListFragment extends Fragment {
                                         }
                                     }
                                 })
-                                .setIcon(R.drawable.safari)
                                 .show();
                     }
                 }

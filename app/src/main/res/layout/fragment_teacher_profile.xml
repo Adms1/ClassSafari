@@ -141,10 +141,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_30sdp"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:drawableRight="@drawable/mobile"
+                    android:drawableRight="@drawable/about_us"
+                    android:paddingBottom="@dimen/_5sdp"
                     android:hint="@string/about_us"
-                    android:inputType="textMultiLine"
-                    android:maxLength="400"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:maxLength="500"
                     android:maxLines="3"
                     android:overScrollMode="always"
                     android:scrollbarStyle="insideInset"
@@ -156,23 +157,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_30sdp"
                     android:layout_marginTop="@dimen/_10sdp"
-                    android:drawableRight="@drawable/mobile"
+                    android:drawableRight="@drawable/qualification"
                     android:hint="@string/qualification"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:weightSum="2">
-
+                    <!--style="@style/RegiAutoComplete"-->
                     <Spinner
                         android:id="@+id/year_of_spinner"
-                        style="@style/RegiAutoComplete"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/_30sdp"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_2sdp"
                         android:layout_weight="1"
+                        android:background="@drawable/edit_line"
                         android:forceHasOverlappingRendering="false"
                         android:gravity="left|center_vertical"
                         android:overlapAnchor="false"
@@ -180,12 +181,13 @@
                         android:visibility="visible" />
                     <Spinner
                         android:id="@+id/month_of_spinner"
-                        style="@style/RegiAutoComplete"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/_30sdp"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/_5sdp"
+                        android:layout_marginRight="@dimen/_10sdp"
                         android:layout_marginTop="@dimen/_2sdp"
+                        android:background="@drawable/edit_line"
                         android:layout_weight="1"
                         android:forceHasOverlappingRendering="false"
                         android:gravity="left|center_vertical"
