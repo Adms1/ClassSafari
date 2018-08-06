@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/family_register1_bg"
-        tools:context="com.adms.classsafari.Activites.RegistrationScreen">
+        tools:context="com.adms.searchclasses.Activites.RegistrationScreen">
 
 
         <LinearLayout

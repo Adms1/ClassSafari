@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.adms.classsafari.Activites.PaymentActivity">
+    tools:context="com.adms.searchclasses.Activites.PaymentActivity">
 
 
     <android.support.v7.widget.Toolbar

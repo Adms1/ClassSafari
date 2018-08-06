@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/first_screen_bg"
         android:orientation="vertical"
-        tools:context="com.adms.classsafari.Activites.SearchByUser">
+        tools:context="com.adms.searchclasses.Activites.SearchByUser">
 
         <LinearLayout
             android:id="@+id/linear_login"
@@ -238,7 +238,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_marginTop="@dimen/_5sdp"
-            android:text="Ver. 13072018.4"
+            android:text="Ver. 31072018.5"
             android:textColor="@color/gray1"
             android:textSize="@dimen/_12sdp"
             android:textStyle="normal" />

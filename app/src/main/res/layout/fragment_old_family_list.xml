@@ -8,7 +8,7 @@
         android:background="@color/white"
         android:orientation="vertical"
         android:weightSum="3"
-        tools:context="com.adms.classsafari.Activites.AddStudentScreen">
+        tools:context="com.adms.searchclasses.Activites.AddStudentScreen">
 
         <LinearLayout
             android:id="@+id/select_linear"

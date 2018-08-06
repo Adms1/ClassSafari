@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/study_bg"
-        tools:context="com.adms.classsafari.Activites.ClassSearchScreen">
+        tools:context="com.adms.searchclasses.Activites.ClassSearchScreen">
 
 
         <LinearLayout

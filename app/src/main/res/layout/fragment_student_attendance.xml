@@ -9,7 +9,7 @@
         android:background="@color/search_class"
         android:orientation="vertical"
         android:weightSum="2"
-        tools:context="com.adms.classsafari.Activites.AddSessionScreen">
+        tools:context="com.adms.searchclasses.Activites.AddSessionScreen">
 
 
         <LinearLayout
