@@ -62,11 +62,10 @@ public class BankDetailFragment extends Fragment implements View.OnClickListener
         return rootView;
     }
 
+    //Use for intilize view
+    public void init() {}
 
-    public void init() {
-
-    }
-
+    //Use for Click Event
     public void setListner() {
         bankDetailBinding.submitBtn.setOnClickListener(this);
         bankDetailBinding.emailTxt.setOnClickListener(this);
@@ -149,6 +148,7 @@ public class BankDetailFragment extends Fragment implements View.OnClickListener
         return map;
     }
 
+    //Use for Get Inserted BankDetail
     public void getInsertValue() {
         bankNameStr = bankDetailBinding.bankNameEdt.getText().toString();
         accountNameStr = bankDetailBinding.accountNameEdt.getText().toString();
@@ -205,6 +205,7 @@ public class BankDetailFragment extends Fragment implements View.OnClickListener
         return map;
     }
 
+    //Use for Click Event
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -248,6 +249,7 @@ public class BankDetailFragment extends Fragment implements View.OnClickListener
         }
     }
 
+    //Use for Display Bank Detail
     public void setBankData() {
         for (int i = 0; i < bankDetailResponse.getData().size(); i++) {
             bankDetailBinding.bankNameEdt.setText(bankDetailResponse.getData().get(i).getBankName());

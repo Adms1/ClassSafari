@@ -66,6 +66,7 @@ public class PaymentFragment extends Fragment {
         return rootView;
     }
 
+    //Use for initilize value
     public void init() {
          /*
         * IMPORTANT: For this to work your return_page_android.php should have following code.

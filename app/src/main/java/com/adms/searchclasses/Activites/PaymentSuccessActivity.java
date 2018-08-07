@@ -57,6 +57,7 @@ public class PaymentSuccessActivity extends AppCompatActivity implements View.On
         setListner();
     }
 
+    //Use for initilize view
     public void init() {
         paymentSuccessBinding.txtUserName.setText(AppConfiguration.UserName);
         if (getIntent().getStringExtra("responseCode").equalsIgnoreCase("0")) {
@@ -180,8 +181,8 @@ public class PaymentSuccessActivity extends AppCompatActivity implements View.On
         callSessionPaymentApi();
     }
 
+    //Use for Click Event
     public void setListner() {
-
         paymentSuccessBinding.btnNewCharge.setOnClickListener(this);
         paymentSuccessBinding.btnNewSearch.setOnClickListener(this);
     }
@@ -292,10 +293,10 @@ public class PaymentSuccessActivity extends AppCompatActivity implements View.On
         return map;
     }
 
+    //Use for calculate class time
     public void calculateHours(String time1, String time2) {
         Date date1, date2;
         int days, hours, min;
-        String hourstr, minstr;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa", Locale.US);
         try {
             date1 = simpleDateFormat.parse(time1);
@@ -309,12 +310,6 @@ public class PaymentSuccessActivity extends AppCompatActivity implements View.On
             SessionHour = hours;
             SessionMinit = min;
             Log.i("======= Hours", " :: " + hours + ":" + min);
-//            if (SessionHour > 0) {
-//                totalHours.add(SessionHour);
-//            }
-////            if(SessionMinit>0) {
-//            totalMinit.add(SessionMinit);
-////            }
 
             if (SessionMinit > 0) {
                 if (SessionMinit < 10) {
@@ -381,7 +376,6 @@ public class PaymentSuccessActivity extends AppCompatActivity implements View.On
             Utils.ping(mContext, getString(R.string.internet_connection_error));
         }
     }
-
 
     private Map<String, String> getpaymentRequestdetail() {
         Map<String, String> map = new HashMap<>();

@@ -93,7 +93,6 @@ public class AddressListAdapter extends RecyclerView.Adapter<AddressListAdapter.
 
         public MyViewHolder(View view) {
             super(view);
-//            name_txt = (TextView) view.findViewById(R.id.name_txt);
             linear = (LinearLayout) view.findViewById(R.id.linear);
             address_rb = (RadioButton) view.findViewById(R.id.address_rb);
 

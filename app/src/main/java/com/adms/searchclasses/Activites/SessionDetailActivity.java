@@ -84,20 +84,14 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
         setListner();
     }
 
-    public void setTypeface() {
-        Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
-
-        sessionDetailBinding.sessionTxt.setTypeface(custom_font);
-
-
-    }
-
+    //Use for initilize view
     public void init() {
         wheretocometypeStr = getIntent().getStringExtra("wheretocometype");
         sessionIDStr = getIntent().getStringExtra("sessionID");
         callSessionListApi();
     }
 
+    //Use for Click Event
     public void setListner() {
         sessionDetailBinding.back.setOnClickListener(this);
         sessionDetailBinding.menu.setOnClickListener(this);
@@ -116,6 +110,7 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
                 break;
         }
     }
+
     //Use for Get Teacher detail
     public void callTeacherProfileApi() {
         if (Utils.isNetworkConnected(mContext)) {
@@ -239,6 +234,7 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
         profileDialog.show();
 
     }
+
     //Use for SessionList
     public void callSessionListApi() {
         if (Utils.checkNetwork(mContext)) {
@@ -269,7 +265,6 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
                         }
                     }
                 }
-
                 @Override
                 public void failure(RetrofitError error) {
                     Utils.dismissDialog();
@@ -289,6 +284,7 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
         return map;
     }
 
+    //Use for Display Class Detail
     public void setData() {
         arrayList = new ArrayList<sessionDataModel>();
         descriptionarray = new ArrayList<>();
@@ -423,9 +419,8 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
         return map;
     }
 
+    //Use for Give Rating on class
     public void addRating() {
-
-
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.rating_dialog_layout, null);
         final RatingBar ratingBar = alertLayout.findViewById(R.id.rating_bar);
@@ -546,7 +541,6 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
     }
 
     private Map<String, String> getratingDetail() {
-
         Map<String, String> map = new HashMap<>();
         map.put("SessionID", sessionIDStr);
         map.put("ContactID", Utils.getPref(mContext, "coachID"));
@@ -556,6 +550,7 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
         return map;
     }
 
+    //Use for Menu
     public void menuDialog() {
         menuDialog = new Dialog(mContext);//, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();
@@ -568,14 +563,12 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         menuDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         menuDialog.setCanceledOnTouchOutside(true);
-//        menuDialog.setContentView(menuBinding.getRoot());
         menuDialog.setContentView(R.layout.layout_menu);
 
         btnHome=(Button)menuDialog.findViewById(R.id.btnHome);
         btnMyReport = (Button) menuDialog.findViewById(R.id.btnMyReport);
         btnMySession = (Button) menuDialog.findViewById(R.id.btnMySession);
         btnChangePassword = (Button) menuDialog.findViewById(R.id.btnChangePassword);
-//        btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
         btnMyenroll = (Button) menuDialog.findViewById(R.id.btnMyenroll);
@@ -653,8 +646,6 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
                 menuDialog.dismiss();
                 new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AlertDialogTheme))
                         .setCancelable(false)
-//                        .setTitle("Logout")
-//                        .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
                         .setMessage("Are you sure you want to logout?")
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -683,96 +674,10 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
                         .show();
             }
         });
-//        menuBinding = DataBindingUtil.
-//                inflate(LayoutInflater.from(mContext), R.layout.layout_menu, (ViewGroup) mySessionBinding.getRoot(), false);
-//
-//        menuDialog = new Dialog(mContext, R.style.Theme_Dialog);
-//        Window window = menuDialog.getWindow();
-//        WindowManager.LayoutParams wlp = window.getAttributes();
-//        menuDialog.getWindow().getAttributes().verticalMargin = 0.1F;
-//        wlp.gravity = Gravity.TOP;
-//        window.setAttributes(wlp);
-//
-//        menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-//        menuDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        menuDialog.setCanceledOnTouchOutside(true);
-//        menuDialog.setContentView(menuBinding.getRoot());
-//
-//        menuBinding.userNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
-//        menuBinding.btnMyReport.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent imyaccount = new Intent(mContext, MyAccountActivity.class);
-//                imyaccount.putExtra("wheretocometype", "mySession");
-//                startActivity(imyaccount);
-//            }
-//        });
-//        menuBinding.btnMySession.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent isession = new Intent(mContext, MySession.class);
-//                isession.putExtra("wheretocometype", "mySession");
-//                startActivity(isession);
-//                menuDialog.dismiss();
-//            }
-//        });
-//        menuBinding.btnChangePassword.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                menuDialog.dismiss();
-//                changePasswordDialog();
-//            }
-//        });
-//        menuBinding.btnmyfamily.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(mContext, FamilyListActivity.class);
-//                intent.putExtra("froncontanct", "true");
-//                intent.putExtra("wheretocometype", "mySession");
-//                intent.putExtra("familyNameStr", Utils.getPref(mContext, "RegisterUserName"));
-//                intent.putExtra("familyID", Utils.getPref(mContext, "coachTypeID"));
-//                startActivity(intent);
-//            }
-//        });
-//        menuBinding.btnLogout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                menuDialog.dismiss();
-//                new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AppTheme))
-//                        .setCancelable(false)
-//                        .setTitle("Logout")
-//                        .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
-//                        .setMessage("Are you sure you want to logout?")
-//                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                Utils.setPref(mContext, "coachID", "");
-//                                Utils.setPref(mContext, "coachTypeID", "");
-//                                Utils.setPref(mContext, "RegisterUserName", "");
-//                                Utils.setPref(mContext, "RegisterEmail", "");
-//                                Utils.setPref(mContext, "LoginType", "");
-//                                Utils.setPref(mContext, "Password", "");
-//                                Utils.setPref(mContext, "FamilyID", "");
-//                                Utils.setPref(mContext, "location", "");
-//                                Utils.setPref(mContext, "sessionName", "");
-//                                Intent intentLogin = new Intent(mContext, SearchByUser.class);
-//                                intentLogin.putExtra("frontLogin", "beforeLogin");
-//                                startActivity(intentLogin);
-//                                finish();
-//                            }
-//                        })
-//                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                // do nothing
-//
-//                            }
-//                        })
-//                        .setIcon(R.drawable.safari)
-//                        .show();
-//            }
-//        });
         menuDialog.show();
     }
 
+    //Use for Change Password
     public void changePasswordDialog() {
         changePasswordDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.change_password_dialog, (ViewGroup) sessionDetailBinding.getRoot(), false);

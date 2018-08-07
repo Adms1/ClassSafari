@@ -40,6 +40,7 @@ import com.adms.searchclasses.Model.Session.SessionDetailModel;
 import com.adms.searchclasses.Model.Session.sessionDataModel;
 import com.adms.searchclasses.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.searchclasses.R;
+import com.adms.searchclasses.databinding.DialogViewSessionBinding;
 import com.adms.searchclasses.databinding.FragmentCalendarBinding;
 import com.adms.searchclasses.databinding.SessiondetailConfirmationDialogBinding;
 import com.github.tibolte.agendacalendarview.CalendarPickerController;
@@ -65,11 +66,8 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
     public static SessionFragment fragment;
     public Dialog sessionDialog;
     FragmentCalendarBinding calendarBinding;
-    Button cancel_btn, add_attendance_btn, add_student_btn;
-    String sessionnameStr, sessionstrattimeStr = "", sessionendtimeStr = "", sessionDateStr = "", sessionIDStr, sessionDetailIDStr, priceStr;
-    TextView start_time_txt, end_time_txt, session_title_txt, date_txt, total_spot_txt, spot_left_txt, no_record_txt, edit_session_btn;
-    RecyclerView studentnamelist_rcView;
-    LinearLayout list_linear;
+    DialogViewSessionBinding dialogViewSessionBinding;
+    String sessionnameStr, sessionstrattimeStr = "", sessionendtimeStr = "", sessionDateStr = "", sessionIDStr, sessionDetailIDStr, priceStr;;
     SessionViewStudentListAdapter sessionViewStudentListAdapter;
     List<sessionDataModel> arrayList;
     SessionDetailModel finalsessionfullDetailModel;
@@ -80,19 +78,15 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
     int SessionHour = 0;
     Integer SessionMinit = 0;
     String flag;
-    Calendar calendar;
-    String dateStr;
     int k;
     ArrayList<Integer> totalHours;
     ArrayList<Integer> totalMinit;
-    int avgHoursvalue, avgMinitvalue;
     String SessionDuration;
     //Use for PaymentConfirmation Dialog
     Dialog confimDialog;
     String contatIDstr, orderIDStr, familyNameStr;
     ArrayList<String> selectedId;
     SessiondetailConfirmationDialogBinding sessiondetailConfirmationDialogBinding;
-    String hours, minit;
     SessionDetailModel dataResponse;
     private View rootView;
     private Context mContext;
@@ -121,17 +115,12 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
         } else {
 
         }
-    //    setTypeface();
+
         setListner();
         return rootView;
     }
 
-    public void setTypeface() {
-        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
-        calendarBinding.monthYearTxt.setTypeface(custom_font);
-    }
-
-
+    //Use for initlize view
     public void init() {
         if (Utils.checkAndRequestPermissions(mContext)) {
         }
@@ -145,6 +134,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
         calendarBinding.agendaCalendarView.init(eventList, minDate, maxDate, Locale.US, this);
     }
 
+    //Use for Click Event
     public void setListner() {
         calendarBinding.addEventFabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,11 +152,13 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
         });
     }
 
+    //Use for Day selection
     @Override
     public void onDaySelected(DayItem dayItem) {
         Log.d("CurrentDay", "" + dayItem);
     }
 
+    //Use for select class
     @Override
     public void onEventSelected(CalendarEvent event) {
         if (!event.getTitle().equals("No events")) {
@@ -194,18 +186,8 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
 
 
                         String[] spiltTime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime().split("\\-");
-                        //calculateHours(spiltTime[0], spiltTime[1]);
                         AppConfiguration.SessionName = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionName();
-//                        if (SessionHour < 10) {
-//                            hours= "0"+SessionHour;
-//                        }else{
-//                            hours= String.valueOf(SessionHour);
-//                        }
-//                        if(SessionMinit<10){
-//                            minit="0"+SessionMinit;
-//                        }else{
-//                            minit=String.valueOf(SessionMinit);
-//                        }
+
                         if (!finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getTotalRatingUser().equalsIgnoreCase("0")) {
                             AppConfiguration.SessionUserRating = "( " + finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getTotalRatingUser() + " )";
                         } else {
@@ -214,7 +196,6 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                         AppConfiguration.SessionRating = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getRating();
                         AppConfiguration.SessionTime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime();
                         AppConfiguration.SessionPrice = String.valueOf(Math.round(Float.parseFloat(finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionPrice())));
-//                        AppConfiguration.SessionPrice=finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionPrice();
                         AppConfiguration.SessionDate = finalsessionfullDetailModel.getData().get(i).getSessionDate();
                         AppConfiguration.RegionName = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getRegionName();
                         Log.d("price + RegionName", AppConfiguration.SessionPrice + " " + AppConfiguration.RegionName);
@@ -223,15 +204,6 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
 
                 }
             }
-
-//            averageHours(totalHours);
-//            averageMinit(totalMinit);
-//            if(avgMinitvalue==0) {
-//                AppConfiguration.SessionDuration =avgHoursvalue + " hr ";
-//            }else{
-//                AppConfiguration.SessionDuration =avgHoursvalue + " hr " + avgMinitvalue + " min";//+ " min"
-//            }
-
             SessionDialog();
         } else {
 //            Util.ping(mContext, "No Event Available...");
@@ -239,6 +211,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
 
     }
 
+    //Use for get scrolldate
     @Override
     public void onScrollToDate(Calendar calendar) {
         Log.d("month", String.valueOf(calendar.getTime()));
@@ -261,6 +234,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
         calendarBinding.monthYearTxt.setText(str);
     }
 
+    //Use for convert date as per our requirement
     public String parseTodaysDate(String Starttime, String Endtime) {
         String inputPattern = "EEE MMM d HH:mm:ss zzz yyyy";
         String outputPattern = "EEEE,MMM dd yyyy";
@@ -293,50 +267,41 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
         return str;
     }
 
+    //Use for get class and student detail
     public void SessionDialog() {
-        sessionDialog = new Dialog(getActivity(), R.style.Theme_Dialog);
+        dialogViewSessionBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContext), R.layout.dialog_view_session,null, false);
+
+        sessionDialog = new Dialog(mContext, R.style.Theme_Dialog);
         Window window = sessionDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
+        sessionDialog.getWindow().getAttributes().verticalMargin = 0.0f;
         wlp.gravity = Gravity.CENTER;
-        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         window.setAttributes(wlp);
 
-        //sessionDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        // changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
         sessionDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         sessionDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         sessionDialog.setCancelable(false);
-        sessionDialog.setContentView(R.layout.dialog_view_session);
-        sessionDialog.show();
+        sessionDialog.setContentView(dialogViewSessionBinding.getRoot());
 
-        cancel_btn = (Button) sessionDialog.findViewById(R.id.cancel_btn);
-        add_attendance_btn = (Button) sessionDialog.findViewById(R.id.add_attendance_btn);
-        edit_session_btn = (TextView) sessionDialog.findViewById(R.id.edit_session_btn);
-        session_title_txt = (TextView) sessionDialog.findViewById(R.id.session_title_txt);
-        start_time_txt = (TextView) sessionDialog.findViewById(R.id.start_time_txt);
-        end_time_txt = (TextView) sessionDialog.findViewById(R.id.end_time_txt);
-        date_txt = (TextView) sessionDialog.findViewById(R.id.date_txt);
-        studentnamelist_rcView = (RecyclerView) sessionDialog.findViewById(R.id.student_name_list_rcView);
-        list_linear = (LinearLayout) sessionDialog.findViewById(R.id.list_linear);
-        add_student_btn = (Button) sessionDialog.findViewById(R.id.add_student_btn);
-        total_spot_txt = (TextView) sessionDialog.findViewById(R.id.total_spot_txt);
-        spot_left_txt = (TextView) sessionDialog.findViewById(R.id.spot_left_txt);
-        no_record_txt = (TextView) sessionDialog.findViewById(R.id.no_record_txt);
+        sessionDialog.show();
         callGetSessionStudentDetailApi();
 
-        date_txt.setText(sessionDateStr);
-        session_title_txt.setText(sessionnameStr);
-        start_time_txt.setText(sessionstrattimeStr);
-        end_time_txt.setText(sessionendtimeStr);
+        dialogViewSessionBinding.dateTxt.setText(sessionDateStr);
+        dialogViewSessionBinding.sessionTitleTxt.setText(sessionnameStr);
+        dialogViewSessionBinding.startTimeTxt.setText(sessionstrattimeStr);
+        dialogViewSessionBinding.endTimeTxt.setText(sessionendtimeStr);
 
 
-        cancel_btn.setOnClickListener(new View.OnClickListener() {
+        dialogViewSessionBinding.cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sessionDialog.dismiss();
             }
         });
 
-        edit_session_btn.setOnClickListener(new View.OnClickListener() {
+        dialogViewSessionBinding.editSessionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DashBoardActivity.navItemIndex = 1;
@@ -355,12 +320,12 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
             }
         });
 
-        add_attendance_btn.setOnClickListener(new View.OnClickListener() {
+        dialogViewSessionBinding.addAttendanceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DashBoardActivity.navItemIndex = 1;
-                AppConfiguration.DateStr = date_txt.getText().toString();
-                AppConfiguration.TimeStr = start_time_txt.getText().toString() + "to" + end_time_txt.getText().toString();
+                AppConfiguration.DateStr = dialogViewSessionBinding.dateTxt.getText().toString();
+                AppConfiguration.TimeStr = dialogViewSessionBinding.startTimeTxt.getText().toString() + "to" + dialogViewSessionBinding.endTimeTxt.getText().toString();
                 Fragment fragment = new StudentAttendanceFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -373,7 +338,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
             }
         });
 
-        add_student_btn.setOnClickListener(new View.OnClickListener() {
+        dialogViewSessionBinding.addStudentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DashBoardActivity.navItemIndex = 1;
@@ -390,7 +355,6 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
             }
         });
     }
-
 
     //Use for Get AllSession Detail
     public void callGetSessionDetailApi() {
@@ -445,12 +409,12 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
         return map;
     }
 
+    //Use for add class in calender
     public void mockList(List<CalendarEvent> eventList) {
         long startDate = 0, endDate = 0;
         totalHours = new ArrayList<>();
         totalMinit = new ArrayList<>();
         for (int i = 0; i < finalsessionfullDetailModel.getData().size(); i++) {
-
 
             for (int j = 0; j < finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().size(); j++) {
 
@@ -467,7 +431,6 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                     startDate = date.getTime();
                     endDate = date1.getTime();
                     Log.d("FirstTime", "first event :" + startDate + endDate);
-
 
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -534,8 +497,8 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                         studentAvailability = sessionCapacity - count;
                         Log.d("capacity", "" + sessionCapacity + "arraySize :" + arraySize + "studentAvailability :" + studentAvailability);
                         if (sessionStudentInfo.getData().size() > 0) {
-                            list_linear.setVisibility(View.VISIBLE);
-                            no_record_txt.setVisibility(View.GONE);
+                            dialogViewSessionBinding.listLinear.setVisibility(View.VISIBLE);
+                            dialogViewSessionBinding.noRecordTxt.setVisibility(View.GONE);
 
                             sessionViewStudentListAdapter = new SessionViewStudentListAdapter(mContext, arrayList, new onViewClick() {
                                 @Override
@@ -546,35 +509,35 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                                 }
                             });
                             RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
-                            studentnamelist_rcView.setLayoutManager(mLayoutManager);
-                            studentnamelist_rcView.setItemAnimator(new DefaultItemAnimator());
-                            studentnamelist_rcView.setAdapter(sessionViewStudentListAdapter);
+                            dialogViewSessionBinding.studentNameListRcView.setLayoutManager(mLayoutManager);
+                            dialogViewSessionBinding.studentNameListRcView.setItemAnimator(new DefaultItemAnimator());
+                            dialogViewSessionBinding.studentNameListRcView.setAdapter(sessionViewStudentListAdapter);
 
                         } else {
-                            list_linear.setVisibility(View.GONE);
-                            no_record_txt.setVisibility(View.VISIBLE);
+                            dialogViewSessionBinding.listLinear.setVisibility(View.GONE);
+                            dialogViewSessionBinding.noRecordTxt.setVisibility(View.VISIBLE);
                         }
-                        total_spot_txt.setText(String.valueOf(sessionCapacity));
-                        spot_left_txt.setText(String.valueOf(studentAvailability));
+                        dialogViewSessionBinding.totalSpotTxt.setText(String.valueOf(sessionCapacity));
+                        dialogViewSessionBinding.spotLeftTxt.setText(String.valueOf(studentAvailability));
                         if (arraySize > 0) {
-                            add_attendance_btn.setEnabled(true);
-                            add_attendance_btn.setAlpha(1);
+                            dialogViewSessionBinding.addAttendanceBtn.setEnabled(true);
+                            dialogViewSessionBinding.addAttendanceBtn.setAlpha(1);
                         } else {
-                            add_attendance_btn.setEnabled(false);
-                            add_attendance_btn.setAlpha(0.5f);
+                            dialogViewSessionBinding.addAttendanceBtn.setEnabled(false);
+                            dialogViewSessionBinding.addAttendanceBtn.setAlpha(0.5f);
                         }
                         if (studentAvailability > 0) {
-                            add_student_btn.setEnabled(true);
-                            add_student_btn.setAlpha(1);
+                            dialogViewSessionBinding.addStudentBtn.setEnabled(true);
+                            dialogViewSessionBinding.addStudentBtn.setAlpha(1);
                         } else {
-                            add_student_btn.setEnabled(false);
-                            add_student_btn.setAlpha(0.5f);
+                            dialogViewSessionBinding.addStudentBtn.setEnabled(false);
+                            dialogViewSessionBinding.addStudentBtn.setAlpha(0.5f);
                         }
                         if (arraySize == 0) {
-                            edit_session_btn.setText("Edit");
+                            dialogViewSessionBinding.editSessionBtn.setText("Edit");
                             flag = "edit";
                         } else {
-                            edit_session_btn.setText("View");
+                            dialogViewSessionBinding.editSessionBtn.setText("View");
                             flag = "view";
                         }
                     }
@@ -656,6 +619,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
         return map;
     }
 
+    //Use for calculate class time
     public void calculateHours(String time1, String time2) {
         Date date1, date2;
         int days, hours, min;
@@ -692,24 +656,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
         }
     }
 
-    public void averageHours(List<Integer> list) {
-        int sum = 0;
-        int n = list.size();
-        for (int i = 0; i < n; i++)
-            sum += list.get(i);
-        avgHoursvalue = (sum) / n;
-        Log.d("value", "" + avgHoursvalue);
-    }
-
-    public void averageMinit(List<Integer> list) {
-        int sum = 0;
-        int n = list.size();
-        for (int i = 0; i < n; i++)
-            sum += list.get(i);
-        avgMinitvalue = (sum) / n;
-        Log.d("value", "" + avgMinitvalue);
-    }
-
+    //Use for class confirmation
     public void SessionConfirmationDialog() {
         sessiondetailConfirmationDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.sessiondetail_confirmation_dialog, (ViewGroup) calendarBinding.getRoot(), false);
@@ -805,19 +752,6 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
                                     spiltDash = spiltComma[1].split("\\-");
                                     calculateHours(spiltDash[0], spiltDash[1]);
 
-//        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//
-//        SimpleDateFormat outsdf = new SimpleDateFormat("EEE");
-//        Date date = null;
-//        String inputstr = null;
-//        try {
-//            date = sdf.parse(AppConfiguration.SessionDate);
-//            inputstr = outsdf.format(date);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Log.d("DateTime", inputstr);
                                     switch (spiltComma[0]) {
                                         case "sun":
                                             sessiondetailConfirmationDialogBinding.sunTimeTxt.setEnabled(true);
@@ -982,6 +916,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
         return map;
     }
 
+    //Use for get selected student detail
     public void getFamilyID() {
         selectedId = new ArrayList<String>();
 

@@ -80,17 +80,7 @@ public class PaymentSucessFragment extends Fragment implements View.OnClickListe
         return rootView;
     }
 
-    public void setTypeface() {
-
-        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
-        paymentSucessBinding.txtUserName.setTypeface(custom_font);
-        paymentSucessBinding.txtSucessFail.setTypeface(custom_font);
-        paymentSucessBinding.txtSucessFailDesc.setTypeface(custom_font);
-        paymentSucessBinding.txtTransactionID.setTypeface(custom_font);
-        paymentSucessBinding.txtValue.setTypeface(custom_font);
-        paymentSucessBinding.btnNewCharge.setTypeface(custom_font);
-    }
-
+    //Use for initilize view
     public void init() {
 //        Log.d("userName", AppConfiguration.UserName);//
         paymentSucessBinding.txtUserName.setText(AppConfiguration.UserName);
@@ -116,6 +106,7 @@ public class PaymentSucessFragment extends Fragment implements View.OnClickListe
         }
     }
 
+    //Use for Click Event
     public void setListner() {
         paymentSucessBinding.btnNewCharge.setOnClickListener(this);
         paymentSucessBinding.btnNewSearch.setOnClickListener(this);
@@ -454,10 +445,10 @@ paymentSucessBinding.linearClick.setVisibility(View.VISIBLE);
         return map;
     }
 
+    //Use for calculate Class Time
     public void calculateHours(String time1, String time2) {
         Date date1, date2;
         int days, hours, min;
-        String hourstr, minstr;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa", Locale.US);
         try {
             date1 = simpleDateFormat.parse(time1);
@@ -471,8 +462,6 @@ paymentSucessBinding.linearClick.setVisibility(View.VISIBLE);
             SessionHour = hours;
 
             SessionMinit = min;
-//            totalHours.add(SessionHour);
-//            totalMinit.add(SessionMinit);
             Log.i("======= Hours", " :: " + hours + ":" + min);
 
             if (SessionMinit > 0) {
@@ -490,18 +479,12 @@ paymentSucessBinding.linearClick.setVisibility(View.VISIBLE);
         }
     }
 
+    //Use for click Event
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnNewCharge:
                 if (getArguments().getString("responseCode").equalsIgnoreCase("0")) {
-//                    Fragment fragment = new SessionFragment();
-//                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                    fragmentTransaction.replace(R.id.frame, fragment);
-//                    fragmentTransaction.addToBackStack(null);
-//                    fragmentTransaction.commit();
-
                     Intent i = new Intent(getActivity(), DashBoardActivity.class);
                     startActivity(i);
                 } else {
@@ -509,12 +492,6 @@ paymentSucessBinding.linearClick.setVisibility(View.VISIBLE);
                 }
                 break;
             case R.id.btnNewSearch:
-//                Fragment fragment = new SessionFragment();
-//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.replace(R.id.frame, fragment);
-//                fragmentTransaction.addToBackStack(null);
-//                fragmentTransaction.commit();
                 Intent i = new Intent(getActivity(), DashBoardActivity.class);
                 startActivity(i);
                 break;

@@ -88,6 +88,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
         setListner();
     }
 
+    //Use for initlize view
     public void init() {
 //        getLocation();
         try {
@@ -117,10 +118,9 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
             searchByUserBinding.loginTxt.setText(Html.fromHtml("<b>Login</b>"));
             searchByUserBinding.regiTxt.setText(Html.fromHtml("<b>Register</b>"));
         }
-
-
     }
 
+    //Use for Click Event
     public void setListner() {
         callSessionListApi();
         searchByUserBinding.letsStudyTxt.setOnClickListener(this);
@@ -309,6 +309,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
         return map;
     }
 
+    //Use for fill class city
     public void fillCity() {
        ArrayList<String> CityName = new ArrayList<String>();
 
@@ -335,6 +336,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    //Use for fill class list
     public void fillSessionList() {
         ArrayList<String> SesisonNameArray = new ArrayList<String>();
 
@@ -362,6 +364,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
         System.exit(0);
     }
 
+    //Use for validation
     public void validation() {
         selectedSessionNameStr = searchByUserBinding.searchClassEdt.getText().toString();
         selectedLocationStr = searchByUserBinding.locationEdt.getText().toString();
@@ -391,6 +394,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    //Use for Change Password
     public void changePasswordDialog() {
         changePasswordDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.change_password_dialog, (ViewGroup) searchByUserBinding.getRoot(), false);
@@ -492,6 +496,7 @@ public class SearchByUser extends AppCompatActivity implements View.OnClickListe
         return map;
     }
 
+    //Use for Menu
     public void menuDialog() {
         menuDialog = new Dialog(mContext);//, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();

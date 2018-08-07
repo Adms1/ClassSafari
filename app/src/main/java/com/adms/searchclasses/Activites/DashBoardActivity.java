@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -22,8 +23,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -40,6 +43,7 @@ import com.adms.searchclasses.Fragment.SessionFragment;
 import com.adms.searchclasses.Fragment.TeacherProfileFragment;
 import com.adms.searchclasses.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.searchclasses.R;
+import com.adms.searchclasses.databinding.ChangePasswordDialogBinding;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,6 +65,7 @@ public class DashBoardActivity extends AppCompatActivity {
     public static String position;
     Context mContex;
     //Use for dialog
+    ChangePasswordDialogBinding changePasswordDialogBinding;
     Dialog changeDialog;
     EditText edtnewpassword, edtconfirmpassword, edtcurrentpassword;
     Button changepwd_btn, cancel_btn;
@@ -389,12 +394,10 @@ public class DashBoardActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawers();
             return;
         }
-
         // This code loads home fragment when back key is pressed
         // when user is in other fragment than home
         if (shouldLoadHomeFragOnBackPress) {
@@ -406,8 +409,6 @@ public class DashBoardActivity extends AppCompatActivity {
                 loadHomeFragment();
                 return;
             } else {
-
-//                loadHomeFragment();
                 Utils.ping(mContex, "Press again to exist");
                 Intent intent = new Intent(Intent.ACTION_MAIN);
                 intent.addCategory(Intent.CATEGORY_HOME);
@@ -415,9 +416,6 @@ public class DashBoardActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
                 System.exit(0);
-//                finish();
-//                System.exit(0);
-//                    moveTaskToBack(true);
             }
         }
         super.onBackPressed();
@@ -466,20 +464,19 @@ public class DashBoardActivity extends AppCompatActivity {
             session_cal.setVisibility(View.VISIBLE);
 
         }
-//        else if (session == 15 && flag.equalsIgnoreCase("false")) {
-//            getSupportActionBar().setTitle("Payment Report");
-//        }
         else {
             if (session == 0) {
-                // toolbar.setNavigationIcon(R.drawable.menubar);
                 session_cal.setVisibility(View.GONE);
             }
-//            getSupportActionBar().setTitle(activityTitles[session]);
             title_txt.setText(activityTitles[session]);
         }
     }
 
+    //Use for Change password
     public void changePasswordDialog() {
+        changePasswordDialogBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContex), R.layout.change_password_dialog,null, false);
+
         changeDialog = new Dialog(mContex, R.style.Theme_Dialog);
         Window window = changeDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -487,45 +484,39 @@ public class DashBoardActivity extends AppCompatActivity {
         wlp.gravity = Gravity.CENTER;
         window.setAttributes(wlp);
 
-        //changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        // changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
         changeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         changeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         changeDialog.setCancelable(false);
-        changeDialog.setContentView(R.layout.change_password_dialog);
+        changeDialog.setContentView(changePasswordDialogBinding.getRoot());
 
-        cancel_btn = (Button) changeDialog.findViewById(R.id.cancel_btn);
-        changepwd_btn = (Button) changeDialog.findViewById(R.id.changepwd_btn);
-        edtconfirmpassword = (EditText) changeDialog.findViewById(R.id.edtconfirmpassword);
-        edtnewpassword = (EditText) changeDialog.findViewById(R.id.edtnewpassword);
-        edtcurrentpassword = (EditText) changeDialog.findViewById(R.id.edtcurrentpassword);
-
-        changepwd_btn.setOnClickListener(new View.OnClickListener() {
+        changePasswordDialogBinding.changepwdBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentpasswordStr = edtcurrentpassword.getText().toString();
-                confirmpassWordStr = edtconfirmpassword.getText().toString();
-                passWordStr = edtnewpassword.getText().toString();
+                currentpasswordStr = changePasswordDialogBinding.edtcurrentpassword.getText().toString();
+                confirmpassWordStr = changePasswordDialogBinding.edtconfirmpassword.getText().toString();
+                passWordStr = changePasswordDialogBinding.edtnewpassword.getText().toString();
                 if (currentpasswordStr.equalsIgnoreCase(Utils.getPref(mContex, "Password"))) {
                     if (!passWordStr.equalsIgnoreCase("") && passWordStr.length() >= 4 && passWordStr.length() <= 8) {
                         if (passWordStr.equalsIgnoreCase(confirmpassWordStr)) {
                             callChangePasswordApi();
                         } else {
-                            edtconfirmpassword.setError("Confirm password does not match");
+                            changePasswordDialogBinding.edtconfirmpassword.setError("Confirm password does not match");
                         }
                     } else {
 //                    Utils.ping(mContex, "Confirm Password does not match.");
-                        edtnewpassword.setError("Password must be 4-8 characters");
-                        edtnewpassword.setText("");
-                        edtnewpassword.setText("");
+                        changePasswordDialogBinding.edtnewpassword.setError("Password must be 4-8 characters");
+                        changePasswordDialogBinding.edtnewpassword.setText("");
+                        changePasswordDialogBinding.edtnewpassword.setText("");
                     }
                 } else {
-                    edtcurrentpassword.setError("Password does not match to current password");
+                    changePasswordDialogBinding.edtcurrentpassword.setError("Password does not match to current password");
                 }
 
 
             }
         });
-        cancel_btn.setOnClickListener(new View.OnClickListener() {
+        changePasswordDialogBinding.cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 changeDialog.dismiss();

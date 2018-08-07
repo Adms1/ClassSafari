@@ -60,10 +60,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
 
 
     ActivityMySessionBinding mySessionBinding;
-
-    LayoutMenuBinding menuBinding;
     ChangePasswordDialogBinding changePasswordDialogBinding;
-
     SessiondetailConfirmationDialogBinding sessiondetailConfirmationDialogBinding;
 
     Context mContext;
@@ -77,11 +74,11 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
     int SessionHour = 0;
     Integer SessionMinit = 0;
     String SessionDuration;
-    String hours, minit;
+
     //Use for Menu Dialog
     String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr, commentStr, ratingValueStr;//sessionId
     Dialog menuDialog;
-    Button btnHome, btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
+    Button btnHome, btnMyReport, btnMySession, btnChangePassword, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
     View view_home, view_profile, view_myenroll, view_mysession,
             view_myreport, view_btnfamily, view_changepass;
     TextView userNameTxt;
@@ -105,17 +102,12 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         wheretocometypeStr = getIntent().getStringExtra("wheretocometype");
     }
 
-    public void setTypeface() {
-        Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
-
-        mySessionBinding.paymentTxt.setTypeface(custom_font);
-        mySessionBinding.noRecordTxt.setTypeface(custom_font);
-    }
-
+    //Use for initilize view
     public void init() {
         callSessionReportApi();
     }
 
+    //Use for Click Event
     public void setListner() {
         mySessionBinding.back.setOnClickListener(this);
         mySessionBinding.menu.setOnClickListener(this);
@@ -193,6 +185,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         return map;
     }
 
+    //Use for fill our class and class detail
     public void fillSessionList() {
         userSessionListAdapter = new UserSessionListAdapter1(mContext, sessionList, new onViewClick() {
             @Override
@@ -230,6 +223,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         mySessionBinding.sessionRcList.setAdapter(userSessionListAdapter);
     }
 
+    //Use for Give class to rating
     public void addRating() {
         ArrayList<String> selectedId = new ArrayList<String>();
         String sessionName = "";
@@ -685,14 +679,6 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
                                     }
                                 }
                             }
-//                            averageHours(totalHours);
-//                            averageMinit(totalMinit);
-//
-//                            if(avgMinitvalue==0) {
-//                                sessiondetailConfirmationDialogBinding.durationTxt.setText(avgHoursvalue + " hr ");
-//                            }else{
-//                                sessiondetailConfirmationDialogBinding.durationTxt.setText(avgHoursvalue + " hr " + avgMinitvalue + " min");//+ " min"
-//                            }
                         }
                     }
                 }
@@ -716,29 +702,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         return map;
     }
 
-    public void averageHours(List<Integer> list) {
-        if (list != null) {
-            int sum = 0;
-            int n = list.size();
-            for (int i = 0; i < n; i++)
-                sum += list.get(i);
-            Log.d("sum", "" + sum);
-            avgHoursvalue = (sum) / n;
-            Log.d("value", "" + avgHoursvalue);
-        }
-    }
-
-    public void averageMinit(List<Integer> list) {
-        if (list != null) {
-            int sum = 0;
-            int n = list.size();
-            for (int i = 0; i < n; i++)
-                sum += list.get(i);
-            avgMinitvalue = (sum) / n;
-            Log.d("value", "" + avgMinitvalue);
-        }
-    }
-
+    //Use for calculate class time
     public void calculateHours(String time1, String time2) {
         Date date1, date2;
         int days, hours, min;
@@ -773,7 +737,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
 
     }
 
-
+    //Use for password change
     public void changePasswordDialog() {
         changePasswordDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.change_password_dialog, (ViewGroup) mySessionBinding.getRoot(), false);
@@ -876,6 +840,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         return map;
     }
 
+    //Use for Menu
     public void menuDialog() {
         menuDialog = new Dialog(mContext);//, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();
@@ -1018,6 +983,7 @@ public class MySession extends AppCompatActivity implements View.OnClickListener
         menuDialog.show();
     }
 
+    //Use for class confirmation
     public void SessionConfirmationDialog() {
         sessiondetailConfirmationDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.sessiondetail_confirmation_dialog, (ViewGroup) mySessionBinding.getRoot(), false);

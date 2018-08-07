@@ -87,15 +87,13 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         setListner();
     }
 
-
+    //Use for initlize view
     public void init() {
-
         if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
             classSearchScreenBinding.menu.setVisibility(View.GONE);
         } else {
             classSearchScreenBinding.menu.setVisibility(View.VISIBLE);
         }
-
         if (SearchPlaystudy.equalsIgnoreCase("2")) {
             classSearchScreenBinding.linearBg.setBackgroundResource(R.drawable.play_bg);
             classSearchScreenBinding.boardAutoTxt.setVisibility(View.GONE);
@@ -147,6 +145,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
 
     }
 
+    //Use for Click Event
     public void setListner() {
         classSearchScreenBinding.searchAutoTxt.setOnClickListener(this);
         classSearchScreenBinding.back.setOnClickListener(this);
@@ -428,6 +427,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         return map;
     }
 
+    //Use for fill class
     public void fillSession() {
         selectedSessionCityStr = classSearchScreenBinding.searchAutoTxt.getText().toString();
         selectedSessionRegionStr = classSearchScreenBinding.regionNameTxt.getText().toString();
@@ -463,6 +463,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
 
     }
 
+    //Use for fill class board
     public void fillBoard() {
         selectedSessionStr = classSearchScreenBinding.classAutoTxt.getText().toString();
         ArrayList<String> BoardName = new ArrayList<String>();
@@ -517,6 +518,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
 
     }
 
+    //Use for fill class standard
     public void fillStandard() {
         selectedSessionStr = classSearchScreenBinding.classAutoTxt.getText().toString();
         ArrayList<String> StandardName = new ArrayList<String>();
@@ -568,6 +570,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         classSearchScreenBinding.standardAutoTxt.setAdapter(adapterTerm);
     }
 
+    //Use for fill class stream
     public void fillStream() {
         selectedSessionStr = classSearchScreenBinding.classAutoTxt.getText().toString();
         ArrayList<String> StreamName = new ArrayList<String>();
@@ -618,6 +621,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         classSearchScreenBinding.streamAutoTxt.setAdapter(adapterTerm);
     }
 
+    //Use for fill class lession
     public void fillLession() {
         selectedSessionStr = classSearchScreenBinding.classAutoTxt.getText().toString();
         ArrayList<String> LessionNameArray = new ArrayList<String>();
@@ -644,6 +648,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         classSearchScreenBinding.classAutoTxt.setAdapter(adapterSessionName);
     }
 
+    //Use for fill class city
     public void fillCity() {
         ArrayList<String> CityName = new ArrayList<String>();
 
@@ -659,6 +664,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         classSearchScreenBinding.searchAutoTxt.setAdapter(adapterTerm);
     }
 
+    //Use for fill class area
     public void fillRegion() {
         ArrayList<String> RegionName = new ArrayList<String>();
 
@@ -711,6 +717,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         }
     }
 
+    //Use for validation
     public void validationSearch() {
         if (!classSearchScreenBinding.searchAutoTxt.getText().toString().equalsIgnoreCase("")) { /**&&
          !classSearchScreenBinding.sessionAutoTxt.getText().toString().equalsIgnoreCase("")) {**/
@@ -734,6 +741,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         }
     }
 
+    //Use for Menu
     public void menuDialog() {
         menuDialog = new Dialog(mContext);//, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();
@@ -862,6 +870,7 @@ public class ClassSearchScreen extends AppCompatActivity implements View.OnClick
         menuDialog.show();
     }
 
+    //Use for Change password
     public void changePasswordDialog() {
         changePasswordDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.change_password_dialog, (ViewGroup) classSearchScreenBinding.getRoot(), false);

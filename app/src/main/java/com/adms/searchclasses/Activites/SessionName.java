@@ -90,7 +90,6 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         mContext = SessionName.this;
         subjectStr = getIntent().getStringExtra("lessionName");
         sessionIDStr = getIntent().getStringExtra("sessionID");
-//        searchByStr = getIntent().getStringExtra("SearchBy");
         locationStr = getIntent().getStringExtra("city");
         classNameStr = getIntent().getStringExtra("sessionName");
         sessionDateStr = getIntent().getStringExtra("sessiondate");
@@ -98,29 +97,17 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         standardStr = getIntent().getStringExtra("standard");
         streamStr = getIntent().getStringExtra("stream");
         boardStr = getIntent().getStringExtra("board");
-//        searchTypeStr = getIntent().getStringExtra("searchType");
         genderStr = getIntent().getStringExtra("gender");
-//        wheretoComeStr = getIntent().getStringExtra("withOR");
         searchfront = getIntent().getStringExtra("searchfront");
         firsttimesearch = getIntent().getStringExtra("firsttimesearch");
         RegionName = getIntent().getStringExtra("RegionName");
         SearchPlaystudy = getIntent().getStringExtra("SearchPlaystudy");
         TeacherName = getIntent().getStringExtra("TeacherName");
-        //setTypeface();
         init();
         setListner();
     }
 
-//    public void setTypeface() {
-//        Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
-//
-////        sessionNameBinding.sessionTxt.setTypeface(custom_font);
-//        sessionNameBinding.rupesSymbol.setTypeface(custom_font);
-//        sessionNameBinding.priceTxt.setTypeface(custom_font);
-//        sessionNameBinding.bookSessionBtn.setTypeface(custom_font);
-//
-//    }
-
+    //Use for initilize view
     public void init() {
         if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
             sessionNameBinding.menu.setVisibility(View.GONE);
@@ -131,6 +118,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
 
     }
 
+    //Use for Click Event
     public void setListner() {
 
         sessionNameBinding.back.setOnClickListener(this);
@@ -512,6 +500,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
 
     }
 
+    //Use for Display Class Detail
     public void setData() {
         arrayList = new ArrayList<sessionDataModel>();
         descriptionarray = new ArrayList<>();
@@ -626,8 +615,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
 
     }
 
-
-
+    //Use for Give rating on class
     public void addRating() {
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.rating_dialog_layout, null);
@@ -833,6 +821,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         return map;
     }
 
+    //Use for Change Password
     public void changePasswordDialog() {
         changePasswordDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.change_password_dialog, (ViewGroup) sessionNameBinding.getRoot(), false);
@@ -935,6 +924,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
         return map;
     }
 
+    //Use for Menu
     public void menuDialog() {
         menuDialog = new Dialog(mContext);//, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();

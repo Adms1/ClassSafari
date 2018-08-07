@@ -28,7 +28,8 @@
         android:icon="@drawable/app_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:resizeableActivity="false">
         <activity
             android:name=".Activites.SearchByUser"
             android:screenOrientation="portrait">
@@ -40,25 +41,31 @@
         </activity>
         <activity
             android:name=".Activites.ClassDeatilScreen"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".Activites.SessionName"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".Activites.ClassSearchScreen"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".Activites.AddStudentScreen"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".Activites.PaymentActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
 
         <!-- Safari -->
         <activity
             android:name=".Activites.LoginActivity"
             android:configChanges="keyboardHidden"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"
             android:noHistory="true">
 
             <!-- <intent-filter> -->
@@ -84,7 +91,7 @@
             android:configChanges="keyboardHidden|screenSize|orientation"
             android:label="@string/title_activity_dash_board"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <!-- <meta-data -->
         <!-- android:name="com.facebook.sdk.ApplicationId" -->
@@ -111,16 +118,22 @@
         <!-- </activity> -->
         <activity
             android:name=".Activites.PaymentSuccessActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".Activites.MyAccountActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".Activites.MySession"
-            android:screenOrientation="portrait" />
-        <activity android:name=".Activites.FamilyListActivity" />
-        <activity android:name=".Activites.SessionDetailActivity" />
-        <activity android:name=".Activites.UpcomingActivity"></activity>
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity android:name=".Activites.FamilyListActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity android:name=".Activites.SessionDetailActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity android:name=".Activites.UpcomingActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
     </application>
 
 </manifest>

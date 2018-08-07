@@ -100,8 +100,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
             populardurationStr = "", populargenderStr = "", popluarsessiondateStr = "", firsttimesearch, RegionName = "", SearchPlaystudy, dialogselectareaStr = "";
     SessionDetailModel dataResponse, populardataresponse, areadataResponse;
     List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-    boolean arrayfirst = true;
-
 
     String rangestatusStr = "", afterfilterresult, pricewiseStr = "", ratingStr = "", searchfront;
     int count = 0, result = 0;
@@ -112,15 +110,11 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
     int avgHoursvalue, avgMinitvalue;
 
     //Use for Menu Dialog
-    String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr;
+    String passWordStr, confirmpassWordStr, currentpasswordStr;
     Dialog menuDialog, changeDialog;
-    Button btnHome,btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily,btnMyenroll,btnMyprofile;
+    Button btnHome,btnMyReport, btnMySession, btnChangePassword, btnLogout, btnmyfamily,btnMyenroll,btnMyprofile;
     TextView userNameTxt;
     ChangePasswordDialogBinding changePasswordDialogBinding;
-
-    //area
-    ArrayList<sessionDataModel> afterremoveduplicate;
-    ArrayList<sessionDataModel> beforeremoveduplicate;
 
     @Override
 
@@ -128,28 +122,15 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_class_deatil_screen);
         mContext = ClassDeatilScreen.this;
-       // setTypeface();
+
         init();
         setListner();
     }
 
-    public void setTypeface() {
-        Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
-
-        binding.subjectTxt.setTypeface(custom_font);
-        binding.cityTxt.setTypeface(custom_font);
-        binding.boardTxt.setTypeface(custom_font);
-        binding.standardTxt.setTypeface(custom_font);
-        binding.streamTxt.setTypeface(custom_font);
-        binding.multiautocompe.setTypeface(custom_font);
-        binding.inforTxt.setTypeface(custom_font);
-        binding.noRecordTxt.setTypeface(custom_font);
-    }
-
+    //Use for initlize view
     public void init() {
         BottomNavigationViewHelper.removeShiftMode(binding.bottomNavigationView);
         validData();
-
 
         if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
             binding.menu.setVisibility(View.GONE);
@@ -174,8 +155,8 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 
     }
 
+    //Use for click event
     public void setListner() {
-
         binding.bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -201,100 +182,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         binding.searchImg.setOnClickListener(this);
         binding.addBtn.setOnClickListener(this);
         binding.menu.setOnClickListener(this);
-//        binding.multiautocompe.setOnClickListener(this);
-//        binding.multiautocompe.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int count) {
-//                Log.d("valueOf OnTextChange", "" + charSequence + i + i1);
-//                if (charSequence.length() == 0) {
-////                    binding.inforTxt.setVisibility(View.VISIBLE);
-//                    if (dataResponse.getSuccess().equalsIgnoreCase("True")) {
-//                        if (dataResponse.getData().size() >= 0) {
-//                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                if (arrayObj.getAddressCity().trim().toLowerCase().contains(locationStr.trim().toLowerCase()) &&
-//                                        arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-//                                    filterFinalArray.add(arrayObj);
-//                                }
-//                            }
-//                            fillData(filterFinalArray);
-//                        }
-//                    } else {
-//                        Utils.ping(mContext, "Location not found.");
-//                    }
-//                    arrayfirst = true;
-//
-//                } else {
-//                    if (dataResponse.getSuccess().equalsIgnoreCase("True")) {
-//                        if (dataResponse.getData().size() >= 0) {
-//                            String[] spilt = charSequence.toString().trim().split("\\,");
-//                            Log.d("spiltOnText", "" + spilt.length);
-//                            for (int k = 0; k < spilt.length; k++) {
-//                                List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                                for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                    if (arrayObj.getAddressCity().trim().toLowerCase().contains(locationStr.trim().toLowerCase()) &&
-//                                            arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-//                                        if (arrayObj.getRegionName().trim().toLowerCase().contains(spilt[k].trim().toLowerCase())) {
-//                                            filterFinalArray.add(arrayObj);
-//                                        }
-//                                    }
-//                                }
-//                                fillData(filterFinalArray);
-//                            }
-//                        }
-//                    } else {
-//                        Utils.ping(mContext, "Location not found.");
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//            }
-//        });
-        ///////////////////////
-//
-//        binding.multiautocompe.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                binding.inforTxt.setVisibility(View.GONE);
-//                if (arrayfirst) {
-//                    filterFinalArray = new ArrayList<sessionDataModel>();
-//                }
-//                String str = binding.multiautocompe.getText().toString();
-//                if (!str.equalsIgnoreCase("")) {
-//                    arrayfirst = false;
-//                    String[] spilt = adapterView.getItemAtPosition(i).toString().trim().split("\\,");
-//
-//                    for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                        if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-//                            if (arrayObj.getRegionName().trim().toLowerCase().contains((spilt[0]).trim().toLowerCase())) {
-//                                filterFinalArray.add(arrayObj);
-//
-//                            }
-//                        }
-//                    }
-//                    Log.d("FilterArray", "" + filterFinalArray.size());
-//                    fillData(filterFinalArray);
-//                } else {
-//                    List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                    for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                        if (arrayObj.getAddressCity().trim().toLowerCase().contains(locationStr.trim().toLowerCase()) &&
-//                                arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-//                            filterFinalArray.add(arrayObj);
-//                        }
-//                    }
-//                    Log.d("FilterArray", "" + filterFinalArray.size());
-//                    fillData(filterFinalArray);
-//                }
-//            }
-//        });
     }
 
     @Override
@@ -342,6 +229,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         startActivity(inback);
     }
 
+    //Use for display popular class detail
     public void PopularDialog() {
         popularBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.dialog_popular, (ViewGroup) binding.getRoot(), false);
@@ -419,8 +307,8 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         popularDialog.show();
     }
 
+    //Use for class pricewise sorting
     public void PriceDialog() {
-
         priceBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.dialog_price, (ViewGroup) binding.getRoot(), false);
 
@@ -467,34 +355,13 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 
             Object objmax = Collections.max(priceList);
             Object objmin = Collections.min(priceList);
-//            if (!maxpriceStr.equalsIgnoreCase("") && !minpriceStr.equalsIgnoreCase("")) {
-//                priceBinding.rangeSeekbar.setMaxStartValue(Float.parseFloat(maxpriceStr));
-//                priceBinding.rangeSeekbar.setMinStartValue(Float.parseFloat(minpriceStr));
-//            } else {
+
             priceBinding.rangeSeekbar.setMaxValue((Float) objmax);
             priceBinding.rangeSeekbar.setMinValue((Float) objmin);
-//            }
         }
         priceBinding.doneTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                String[] maxsplit = priceBinding.priceRange2Txt.getText().toString().split("\\s+");
-//                String[] minsplit = priceBinding.priceRange1Txt.getText().toString().split("\\s+");
-//                maxpriceStr = maxsplit[1];
-//                minpriceStr = minsplit[1];
-//                if (dataResponse.getData().size() >= 0) {
-//                    List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                    for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                        if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim())
-//                                && arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-//                            if (Float.parseFloat(arrayObj.getSessionAmount()) >= Integer.parseInt(minpriceStr) &&
-//                                    Float.parseFloat(arrayObj.getSessionAmount()) <= Integer.parseInt(maxpriceStr)) {
-//                                filterFinalArray.add(arrayObj);
-//                            }
-//                        }
-//                    }
-//                    fillData(filterFinalArray);
-//                }
                 priceDialog.dismiss();
 
 
@@ -536,6 +403,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 
     }
 
+    //Use for class Sorting by range,price,rating
     public void SortDialog() {
         sortBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.dialog_sort, (ViewGroup) binding.getRoot(), false);
@@ -555,20 +423,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 
         sortBinding.resultTxt.setText(String.valueOf(result));
 
-//        if (!rangestatusStr.equalsIgnoreCase("")) {
-//            if (rangestatusStr.equalsIgnoreCase("low")) {
-//                sortBinding.lowHighRb.setChecked(true);
-//            } else {
-//                sortBinding.highLowRb.setChecked(true);
-//            }
-//        }
-//        if (!ratingStr.equalsIgnoreCase("")) {
-//            if (ratingStr.equalsIgnoreCase("low")) {
-//                sortBinding.lowestFirstUserRb.setChecked(true);
-//            } else {
-//                sortBinding.highestFirstUserRb.setChecked(true);
-//            }
-//        }
         dialogselectareaStr = "";
         if (dialogselectareaStr.equalsIgnoreCase("")) {
             binding.headerLinear.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 0.7f));
@@ -586,79 +440,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         sortBinding.doneTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (pricewiseStr.equalsIgnoreCase("price")) {
-//                    if (rangestatusStr.equalsIgnoreCase("low")) {
-//                        if (dataResponse.getData().size() >= 0) {
-//                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                        arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-//                                    filterFinalArray.add(arrayObj);
-//                                    Collections.sort(filterFinalArray, new LowToHighSortSessionPrice());
-//                                }
-//                            }
-//                            fillData(filterFinalArray);
-//                            sortDialog.dismiss();
-//                            pricewiseStr = "";
-//                        }
-//                    } else {
-//                        if (dataResponse.getData().size() >= 0) {
-//                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                        arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-//                                    filterFinalArray.add(arrayObj);
-//                                    Collections.sort(filterFinalArray, new HightToLowSortSessionPrice());
-//                                }
-//                            }
-//                            fillData(filterFinalArray);
-//                            sortDialog.dismiss();
-//                            pricewiseStr = "";
-//                        }
-//                    }
-////                        } else {
-////                            Utils.ping(mContext, "Please Select One Option");
-////                        }
-//                } else {
-////                        if (!ratingStr.equalsIgnoreCase("")) {
-//                    if (ratingStr.equalsIgnoreCase("low")) {
-//                        if (dataResponse.getData().size() >= 0) {
-//                            List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                        arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-//                                    filterFinalArray.add(arrayObj);
-//                                    Collections.sort(filterFinalArray, new LowToHighSortRating());
-//                                }
-//                            }
-//                            fillData(filterFinalArray);
-//                            sortDialog.dismiss();
-//                            pricewiseStr = "";
-//                        }
-//                    } else {
-//                        List<sessionDataModel> filterFinalArray = new ArrayList<sessionDataModel>();
-//                        if (dataResponse.getData().size() >= 0) {
-//                            for (sessionDataModel arrayObj : dataResponse.getData()) {
-//                                if (arrayObj.getAddressCity().trim().equalsIgnoreCase(locationStr.trim()) &&
-//                                        arrayObj.getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
-//                                    filterFinalArray.add(arrayObj);
-//                                    Collections.sort(filterFinalArray, new HighToLowSortRating());
-//                                }
-//                            }
-//                            fillData(filterFinalArray);
-//                            sortDialog.dismiss();
-//                            pricewiseStr = "";
-//                        }
-//                    }
-////                        } else {
-////                            Utils.ping(mContext, "Please Select One Option");
-////                        }
-//                }
-
-//                } else {
-//                    Utils.ping(mContext, "Please Select One Option");
-//                }
-
                 sortDialog.dismiss();
             }
         });
@@ -796,7 +577,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         sortDialog.show();
     }
 
-
+    //Use for location sorting
     public void FilterDialog() {
         filterBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.dialog_filter, (ViewGroup) binding.getRoot(), false);
@@ -828,12 +609,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                 }
                 Log.d("Area", dialogselectarea.toString());
 
-//                for (String s : dialogselectarea) {
-//                    if (!s.equals("")) {
-//                        dialogselectareaStr = dialogselectareaStr + " , " + s;
-//                    }
-//
-//                }
                 dialogselectareaStr = dialogselectarea.toString();
                 if (!dialogselectareaStr.equalsIgnoreCase("")) {
                     dialogselectareaStr = dialogselectareaStr.substring(1, dialogselectareaStr.length() - 1);
@@ -880,30 +655,14 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                 dataResponse.getData().get(j).setCheckStatus("0");
             }
         }
-// else {
-//            String[] split = dialogselectareaStr.split("\\,");
-//            for (int i = 0; i < split.length; i++) {
-//                for (int j = 0; j < dataResponse.getData().size(); j++) {
-//                    if (dataResponse.getData().get(j).getRegionName().equalsIgnoreCase(split[i])) {
-//                        dataResponse.getData().get(j).setCheckStatus("1");
-//                    } else {
-//                        dataResponse.getData().get(j).setCheckStatus("0");
-//                    }
-//                }
-//            }
-//        }
-
         if (searchAreaAdapter == null) {
             searchAreaAdapter = new SearchAreaAdapter(mContext, dataResponse, dialogselectareaStr);
-//        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
-//        filterBinding.displayAreaList.setLayoutManager(mLayoutManager);
-//        filterBinding.displayAreaList.setItemAnimator(new DefaultItemAnimator());
         }
         filterBinding.displayAreaList.setAdapter(searchAreaAdapter);
         filterDialog.show();
     }
 
-    //    //Use for SessionList
+    //Use for SessionList
     public void callSessionListApi() {
         if (Utils.checkNetwork(mContext)) {
 
@@ -941,11 +700,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                         Log.d("FilterArray", "" + filterFinalArray.size());
 
                         result = dataResponse.getData().size();
-//                        if (result < 10) {
-//                            binding.countTxt.setText("0" + String.valueOf(result));
-//                        } else {
-//                            binding.countTxt.setText(String.valueOf(result));
-//                        }
                     }
 
                 }
@@ -978,7 +732,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         return map;
     }
 
-
+    //Use for fill class detail
     public void fillData(List<sessionDataModel> array) {
         classDetailAdapter = new ClassDetailAdapter(mContext, array, locationStr,
                 classNameStr, boardStr, streamStr, standardStr, SearchPlaystudy, /*searchTypeStr, wheretoComeStr, searchByStr,*/
@@ -1018,8 +772,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                 } else {
                     new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.AlertDialogTheme))
                             .setCancelable(false)
-//                            .setTitle("Login")
-//                            .setIcon(mContext.getResources().getDrawable(R.drawable.safari))
                             .setMessage(getResources().getString(R.string.loginmsg))
                             .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -1113,13 +865,11 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 
     }
 
+    //Use for fill class area
     public void fillArea() {
         AreaName = new ArrayList<String>();
         for (int j = 0; j < dataResponse.getData().size(); j++) {
-//            if (dataResponse.getData().get(j).getAddressCity().trim().toLowerCase().contains(locationStr.trim().toLowerCase())
-//                    && dataResponse.getData().get(j).getSessionName().trim().toLowerCase().contains(classNameStr.trim().toLowerCase())) {
             AreaName.add(dataResponse.getData().get(j).getRegionName());
-//            }
         }
 
         HashSet<String> hashSet = new HashSet<String>();
@@ -1132,6 +882,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 //        binding.multiautocompe.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
     }
 
+    //Use for Give Rating of class
     public void addRating() {
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.rating_dialog_layout, null);
@@ -1256,7 +1007,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
     }
 
     private Map<String, String> getratingDetail() {
-
         Map<String, String> map = new HashMap<>();
         map.put("SessionID", sessionId);
         map.put("ContactID", Utils.getPref(mContext, "coachID"));
@@ -1334,8 +1084,8 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                                                 popluarsessiondateStr = dataResponse.getData().get(i).getStartDate() + " To " + dataResponse.getData().get(i).getEndDate();
                                             }
                                         }
-                                        averageHours(totalHours);
-                                        averageMinit(totalMinit);
+//                                        averageHours(totalHours);
+//                                        averageMinit(totalMinit);
                                         if (avgMinitvalue == 0) {
                                             populardurationStr = String.valueOf(avgHoursvalue);
                                         } else {
@@ -1345,7 +1095,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
 
                                         Intent inSession = new Intent(mContext, SessionName.class);
                                         inSession.putExtra("sessionID", popularsessionID);
-//                    inSession.putExtra("SearchBy", searchByStr);
                                         inSession.putExtra("city", locationStr);
                                         inSession.putExtra("sessionName", classNameStr);
                                         inSession.putExtra("board", boardStr);
@@ -1355,8 +1104,6 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
                                         inSession.putExtra("sessiondate", popluarsessiondateStr);
                                         inSession.putExtra("duration", populardurationStr);
                                         inSession.putExtra("gender", populargenderStr);
-//                    inSession.putExtra("searchType", searchTypeStr);
-//                    inSession.putExtra("withOR", wheretoComeStr);
                                         inSession.putExtra("searchfront", searchfront);
                                         mContext.startActivity(inSession);
                                         popularDialog.dismiss();
@@ -1390,6 +1137,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         return map;
     }
 
+    //Use for class time
     public void calculateHours(String time1, String time2) {
         Date date1, date2;
         int days, hours = 0, min = 0;
@@ -1410,9 +1158,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
             if (SessionHour > 0) {
                 totalHours.add(SessionHour);
             }
-//            if(SessionMinit>0) {
             totalMinit.add(SessionMinit);
-//            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -1443,6 +1189,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         }
     }
 
+    //Use for validation
     public void validData() {
         if (getIntent().getStringExtra("searchfront") != null) {
             searchfront = getIntent().getStringExtra("searchfront");
@@ -1533,6 +1280,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         }
     }
 
+    //Use for Menu
     public void menuDialog() {
         menuDialog = new Dialog(mContext);//, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();
@@ -1545,14 +1293,12 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         menuDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         menuDialog.setCanceledOnTouchOutside(true);
-//        menuDialog.setContentView(menuBinding.getRoot());
         menuDialog.setContentView(R.layout.layout_menu);
 
         btnHome=(Button)menuDialog.findViewById(R.id.btnHome);
         btnMyReport = (Button) menuDialog.findViewById(R.id.btnMyReport);
         btnMySession = (Button) menuDialog.findViewById(R.id.btnMySession);
         btnChangePassword = (Button) menuDialog.findViewById(R.id.btnChangePassword);
-//        btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
         btnMyenroll=(Button)menuDialog.findViewById(R.id.btnMyenroll);
@@ -1659,6 +1405,7 @@ public class ClassDeatilScreen extends AppCompatActivity implements View.OnClick
         menuDialog.show();
     }
 
+    //Use for Password Change
     public void changePasswordDialog() {
         changePasswordDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.change_password_dialog, (ViewGroup) binding.getRoot(), false);

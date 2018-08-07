@@ -46,39 +46,19 @@ import retrofit.client.Response;
 
 public class StudentAttendanceFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
 
-    String monthDisplayStr, MonthInt, TimeInt, finaldateStr;
-    String[] spiltmonth;
-    String[] spilttime;
-    int Year, Month, Day;
-    Calendar calendar;
+    String monthDisplayStr, MonthInt;
     int mYear, mMonth, mDay;
     StudentAttendanceAdapter studentAttendanceAdapter;
-    ArrayList<String> arrayList;
-    String sessionIDStr, attendanceIDStr, ContactEnrollmentIDStr = "", noteStr,dateStr, classTypeIDStr = "1", totalstudetnStr, priceStr;//, SesionDetailIDStr, sessionDateStr, sessionTimeStr;
+    String ContactEnrollmentIDStr = "",dateStr, classTypeIDStr = "1", totalstudetnStr;//, SesionDetailIDStr, sessionDateStr, sessionTimeStr;
     SessionDetailModel dataResponse;
     TeacherInfoModel classListInfo;
-    //List<sessionDataModel> studentList;
-    sessionDataModel studentatt;
     HashMap<Integer, String> spinnerClassMap;
     String classType = "";
     private FragmentStudentAttendanceBinding studentAttendanceBinding;
     private View rootView;
     private Context mContext;
-    private Fragment fragment = null;
-    private FragmentManager fragmentManager = null;
-    private DatePickerDialog datePickerDialog;
 
     public StudentAttendanceFragment() {
-    }
-
-    public static boolean isPackageInstalled(String packagename, Context context) {
-        PackageManager pm = context.getPackageManager();
-        try {
-            pm.getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);
-            return true;
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
-        }
     }
 
     @Nullable
@@ -96,13 +76,11 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
         return rootView;
     }
 
-
-
+    //Use for initilize view
     public void initViews() {
-        callSessionDetailApi();
+        callSessionDetailApi(); }
 
-    }
-
+    //Use for clcik event
     public void setListners() {
         studentAttendanceBinding.submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,17 +113,7 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
 
     }
 
-    public void getMonthFun(int month) {
-        SimpleDateFormat monthParse = new SimpleDateFormat("MM");
-        SimpleDateFormat monthDisplay = new SimpleDateFormat("MMM");
-        try {
-            monthDisplayStr = monthDisplay.format(monthParse.parse(String.valueOf(month)));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        Log.d("month", "" + monthDisplayStr);
-    }
-
+    //Use for select Attendance date
     @Override
     public void onDateSet(com.wdullaer.materialdatetimepicker.date.DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         mDay = dayOfMonth;
@@ -167,87 +135,6 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
 
         studentAttendanceBinding.dateTxt.setText(MonthInt);
     }
-
-    //Use for Get SessionStudent Detail
-    public void callGetSessionStudentDetailApi() {
-        if (Utils.isNetworkConnected(mContext)) {
-//            Utils.showDialog(mContext);
-            ApiHandler.getApiService().get_Session_StudentDetail_for_attendance(getsessionStudentDetail(), new retrofit.Callback<SessionDetailModel>() {
-                @Override
-                public void success(SessionDetailModel sessionStudentInfo, Response response) {
-                    Utils.dismissDialog();
-                    if (sessionStudentInfo == null) {
-                        Utils.ping(mContext, getString(R.string.something_wrong));
-                        return;
-                    }
-                    if (sessionStudentInfo.getSuccess() == null) {
-                        Utils.ping(mContext, getString(R.string.something_wrong));
-                        return;
-                    }
-                    if (sessionStudentInfo.getSuccess().equalsIgnoreCase("false")) {
-                        Utils.dismissDialog();
-                       // if (sessionStudentInfo.getData() != null) {
-                            Utils.ping(mContext,"No student found");
-                            studentAttendanceBinding.listLinear.setVisibility(View.GONE);
-                            studentAttendanceBinding.headerLinear.setVisibility(View.GONE);
-                            studentAttendanceBinding.submitBtn.setVisibility(View.GONE);
-                            studentAttendanceBinding.noRecordTxt.setVisibility(View.VISIBLE);
-                            studentAttendanceBinding.totalStudentTxt.setVisibility(View.GONE);
-                    //}
-                        return;
-                    }
-                    if (sessionStudentInfo.getSuccess().equalsIgnoreCase("True")) {
-                        Utils.dismissDialog();
-                        dataResponse = sessionStudentInfo;
-
-                        if (sessionStudentInfo.getData() != null) {
-                            studentAttendanceBinding.listLinear.setVisibility(View.VISIBLE);
-                            studentAttendanceBinding.headerLinear.setVisibility(View.VISIBLE);
-                            studentAttendanceBinding.submitBtn.setVisibility(View.VISIBLE);
-                            studentAttendanceBinding.noRecordTxt.setVisibility(View.GONE);
-                            studentAttendanceBinding.totalStudentTxt.setVisibility(View.VISIBLE);
-
-                            //studentList = dataResponse.getData();
-
-                            for (int i = 0; i < dataResponse.getData().size(); i++) {
-                                dataResponse.getData().get(i).setAttendanceID("0");
-                                dataResponse.getData().get(i).setStatus("1");
-                                dataResponse.getData().get(i).setReason("");
-                            }
-                            totalstudetnStr = String.valueOf(sessionStudentInfo.getData().size());
-                            Log.d("totalStudent", totalstudetnStr);
-                            studentAttendanceBinding.totalStudentTxt.setText(totalstudetnStr);
-                            studentAttendanceAdapter = new StudentAttendanceAdapter(mContext, dataResponse);
-                            studentAttendanceBinding.studentListRcView.setAdapter(studentAttendanceAdapter);
-                        } else {
-                            studentAttendanceBinding.listLinear.setVisibility(View.GONE);
-                            studentAttendanceBinding.headerLinear.setVisibility(View.GONE);
-                            studentAttendanceBinding.submitBtn.setVisibility(View.GONE);
-                            studentAttendanceBinding.noRecordTxt.setVisibility(View.VISIBLE);
-                            studentAttendanceBinding.totalStudentTxt.setVisibility(View.GONE);
-                        }
-                    }
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    Utils.dismissDialog();
-                    error.printStackTrace();
-                    error.getMessage();
-                    Utils.ping(mContext, getString(R.string.something_wrong));
-                }
-            });
-        } else {
-            Utils.ping(mContext, getString(R.string.internet_connection_error));
-        }
-    }
-
-    private Map<String, String> getsessionStudentDetail() {
-        Map<String, String> map = new HashMap<>();
-        map.put("SessionID", Utils.getPref(mContext, "sessionID"));
-        return map;
-    }
-
 
     //Use for Get SessionStudentAttendace Detail
     public void callGetSessionStudentAttendanceApi() {
@@ -304,7 +191,6 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
     }
 
     private Map<String, String> getsessionStudentAttendanceDetail() {
-//        InsertAttendanceDetail();
         Map<String, String> map = new HashMap<>();
         map.put("ContactEnrollmentID", ContactEnrollmentIDStr);
         map.put("ClassTypeID", classTypeIDStr);
@@ -365,6 +251,7 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
         return map;
     }
 
+    //Use for fill Attendance data
     public void fillSessionData() {
         for (int i = 0; i < dataResponse.getData().size(); i++) {
             studentAttendanceBinding.boardTxt.setText(dataResponse.getData().get(i).getBoard());
@@ -378,44 +265,8 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
         DateConvert();
     }
 
+    //Use for Get Insert Attendance detail
     public void InsertAttendanceDetail() {
-//        final ArrayList<String> Attendacestatus = new ArrayList<>();
-//        final ArrayList<String> ContactEnrollmentid = new ArrayList<>();
-//        final ArrayList<String> Remarks = new ArrayList<>();
-//
-//        for (int i = 0; i < dataResponse.getData().size(); i++) {
-//            ContactEnrollmentid.add(String.valueOf(dataResponse.getData().get(i).getContactEnrollmentID()));
-//            Attendacestatus.add(dataResponse.getData().get(i).getCheckboxStatus());
-//            Remarks.add(dataResponse.getData().get(i).getRemarks());
-//
-//        }
-//        Log.d("Attendanceid", "" + ContactEnrollmentid);
-//        Log.d("Attendacestatus", "" + Attendacestatus);
-//
-//
-//        ContactEnrollmentIDStr = "";
-//        for (String s : ContactEnrollmentid) {
-//            ContactEnrollmentIDStr = ContactEnrollmentIDStr + "," + s;
-//        }
-//
-//        ContactEnrollmentIDStr = ContactEnrollmentIDStr.substring(1, ContactEnrollmentIDStr.length());
-//        Log.d("ContactEnrollmentIDStr", ContactEnrollmentIDStr);
-//
-//        attendanceIDStr = "";
-//        for (String s : Attendacestatus) {
-//            attendanceIDStr = attendanceIDStr + "," + s;
-//        }
-//
-//        attendanceIDStr = attendanceIDStr.substring(1, attendanceIDStr.length());
-//        Log.d("attendanceIDStr", attendanceIDStr);
-//
-//        noteStr = "";
-//        for (String s : Remarks) {
-//            noteStr = noteStr + "," + s;
-//        }
-//
-//        noteStr = noteStr.substring(1, noteStr.length());
-//        Log.d("Remarks", noteStr);
         String responseString = "";
 
         ArrayList<String> newArray = new ArrayList<>();
@@ -502,6 +353,7 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
         return map;
     }
 
+    //Use for fill classtype
     public void fillClassTypeSpinner() {
         ArrayList<Integer> classTypeId = new ArrayList<Integer>();
         for (int i = 0; i < classListInfo.getData().size(); i++) {
@@ -591,15 +443,8 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
                     if (classattendanceInfo.getSuccess().equalsIgnoreCase("True")) {
                         Utils.dismissDialog();
                         if (classattendanceInfo.getData().size() > 0) {
-
-//                            studentAttendanceBinding.submitBtn.setText("UPDATE");
                             dataResponse = classattendanceInfo;
-//                            classType = dataResponse.getData().get(0).getClassType();
-//                            if (classType.equalsIgnoreCase("")) {
-//                                studentAttendanceBinding.submitBtn.setText("SUBMIT");
-//                            } else {
 
-//                            }
                             if (classattendanceInfo.getData()!= null) {
                                 studentAttendanceBinding.listLinear.setVisibility(View.VISIBLE);
                                 studentAttendanceBinding.headerLinear.setVisibility(View.VISIBLE);
@@ -608,21 +453,13 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
 
                                 for (int i = 0; i < classattendanceInfo.getData().size(); i++) {
                                     classattendanceInfo.getData().get(i).setStatus("1");
-                                    //studentatt = classattendanceInfo.getData().get(i);
                                     if (classattendanceInfo.getData().get(i).getAttendanceID().equalsIgnoreCase("0")){
                                         classattendanceInfo.getData().get(i).setAttendanceID("1");
                                         studentAttendanceBinding.submitBtn.setText("SUBMIT");
                                     }else{
                                         studentAttendanceBinding.submitBtn.setText("UPDATE");
                                     }
-
-
-//                                    dataResponse.getData().get(i).setReason("");
                                 }
-//                                for (int i = 0; i < studentatt.getDa.size(); i++) {
-
-//                                }
-
                                 totalstudetnStr = String.valueOf(classattendanceInfo.getData().size());
                                 Log.d("totalStudent", totalstudetnStr);
                                 studentAttendanceBinding.totalStudentTxt.setText(totalstudetnStr);
@@ -659,6 +496,7 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
         return map;
     }
 
+    //Use for convert date
     public void DateConvert(){
         String inputPattern = "EEEE,MMM dd yyyy";
         String outputPattern = "dd/MM/yyyy";
@@ -668,8 +506,8 @@ public class StudentAttendanceFragment extends Fragment implements DatePickerDia
         SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
 
 
-        Date date = null, startdateTime = null, enddateTime = null;
-        String str = null, StartTimeStr = null, EndTimeStr = null;
+        Date date = null;
+        String str = null;
 
         try {
             date = inputFormat.parse(studentAttendanceBinding.dateTxt.getText().toString());

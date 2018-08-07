@@ -101,6 +101,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setListner();
     }
 
+    //Use for Click Event
     public void setListner() {
         loginScreenBinding.registerTxt.setOnClickListener(this);
         loginScreenBinding.passwordEdt.setOnEditorActionListener(this);
@@ -187,7 +188,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             finish();
         } else {
             Intent intent = new Intent(mContext, SessionName.class);
-//            intent.putExtra("SearchBy", searchByStr);
             intent.putExtra("sessionID", sessionIDStr);
             intent.putExtra("board", boardStr);
             intent.putExtra("stream", streamStr);
@@ -196,7 +196,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             intent.putExtra("sessionName", classNameStr);
             intent.putExtra("lessionName", subjectStr);
             intent.putExtra("gender", genderStr);
-//            intent.putExtra("withOR", whereTocomestr);
             intent.putExtra("ratingLogin", ratingLoginStr);
             intent.putExtra("searchfront", searchfront);
             intent.putExtra("sessionType", sessionType);
@@ -251,55 +250,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         contatIDstr = splitCoachID[0];
                         if (teacherInfoModel.getLoginType().equalsIgnoreCase("Family")) {
                             if (frontloginStr.equalsIgnoreCase("beforeLogin")) {
-//                                Intent iSearchByUser = new Intent(mContext, SearchByUser.class);
-//                                startActivity(iSearchByUser);
                                 Intent iSearchByUser = new Intent(mContext, MySession.class);
                                 startActivity(iSearchByUser);
                                 finish();
                             } else {
                                 if (ratingLoginStr.equalsIgnoreCase("ratingLoginclass")) {
-//                                    Intent iSearchByUser = new Intent(mContext, ClassDeatilScreen.class);
-//                                    iSearchByUser.putExtra("frontLogin", "afterLogin");
-//                                    iSearchByUser.putExtra("sessionID", sessionIDStr);
-////                                    iSearchByUser.putExtra("SearchBy", searchByStr);
-//                                    iSearchByUser.putExtra("board", boardStr);
-//                                    iSearchByUser.putExtra("stream", streamStr);
-//                                    iSearchByUser.putExtra("standard", standardStr);
-//                                    iSearchByUser.putExtra("city", locationStr);
-//                                    iSearchByUser.putExtra("sessionName", classNameStr);
-//
-//                                    iSearchByUser.putExtra("lessionName", subjectStr);
-//                                    iSearchByUser.putExtra("gender", genderStr);
-////                                    iSearchByUser.putExtra("withOR", whereTocomestr);
-//                                    iSearchByUser.putExtra("searchfront", searchfront);
-//                                    iSearchByUser.putExtra("sessionType", sessionType);
-//                                    iSearchByUser.putExtra("firsttimesearch", firsttimesearch);
-//                                    iSearchByUser.putExtra("RegionName", RegionName);
-//                                    iSearchByUser.putExtra("TeacherName",TeacherName);
-//                                    startActivity(iSearchByUser);
                                     addRating();
                                 } else if (ratingLoginStr.equalsIgnoreCase("ratingLoginSession")) {
                                     addRating();
-//                                    Intent iSearchByUser = new Intent(mContext, SessionName.class);
-//                                    iSearchByUser.putExtra("frontLogin", "afterLogin");
-//                                    iSearchByUser.putExtra("sessionID", sessionIDStr);
-////                                    iSearchByUser.putExtra("SearchBy", searchByStr);
-//                                    iSearchByUser.putExtra("board", boardStr);
-//                                    iSearchByUser.putExtra("stream", streamStr);
-//                                    iSearchByUser.putExtra("standard", standardStr);
-//                                    iSearchByUser.putExtra("city", locationStr);
-//                                    iSearchByUser.putExtra("sessionName", classNameStr);
-//
-//                                    iSearchByUser.putExtra("lessionName", subjectStr);
-//                                    iSearchByUser.putExtra("gender", genderStr);
-////                                    iSearchByUser.putExtra("withOR", whereTocomestr);
-//                                    iSearchByUser.putExtra("ratingLogin", "false");
-//                                    iSearchByUser.putExtra("searchfront", searchfront);
-//                                    iSearchByUser.putExtra("sessionType", sessionType);
-//                                    iSearchByUser.putExtra("firsttimesearch", firsttimesearch);
-//                                    iSearchByUser.putExtra("RegionName", RegionName);
-//                                    iSearchByUser.putExtra("TeacherName",TeacherName);
-//                                    startActivity(iSearchByUser);
                                 } else {
                                     Intent iFamilyList = new Intent(mContext, FamilyListActivity.class);
                                     iFamilyList.putExtra("sessionfees", AppConfiguration.classsessionPrice);
@@ -307,16 +265,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                     iFamilyList.putExtra("duration", AppConfiguration.classsessionDuration);
                                     iFamilyList.putExtra("sessiondate", AppConfiguration.classsessionDate);
                                     iFamilyList.putExtra("froncontanct", "false");
-//                                    iFamilyList.putExtra("SearchBy", searchByStr);
                                     iFamilyList.putExtra("sessionID", sessionIDStr);
                                     iFamilyList.putExtra("board", boardStr);
                                     iFamilyList.putExtra("stream", streamStr);
                                     iFamilyList.putExtra("standard", standardStr);
                                     iFamilyList.putExtra("city", locationStr);
-
                                     iFamilyList.putExtra("lessionName", subjectStr);
                                     iFamilyList.putExtra("gender", genderStr);
-//                                    iFamilyList.putExtra("withOR", whereTocomestr);
                                     iFamilyList.putExtra("location", familylocationStr);
                                     iFamilyList.putExtra("searchfront", searchfront);
                                     iFamilyList.putExtra("sessionType", sessionType);
@@ -357,12 +312,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return map;
     }
 
+    //Use for Get Insert value
     public void getInsertedValue() {
         EmailIdStr = loginScreenBinding.emailEdt.getText().toString();
         passwordStr = loginScreenBinding.passwordEdt.getText().toString();
         Utils.setPref(mContext, "Password", passwordStr);
     }
 
+    //Use for login or not
     public void checkUnmPwd() {
         if (!Utils.getPref(mContext, "coachID").equalsIgnoreCase("")) {
             Intent intentDashboard = new Intent(LoginActivity.this, DashBoardActivity.class);
@@ -371,6 +328,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    //Use for Forgot password
     public void forgotPasswordDialog() {
         forgotPasswordDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.forgot_password_dialog, (ViewGroup) loginScreenBinding.getRoot(), false);
@@ -413,6 +371,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
+    //Use for checkEmail
     public void callCheckEmailIdApi() {
         if (Utils.isNetworkConnected(mContext)) {
 
@@ -512,7 +471,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return map;
     }
 
-
+    //Use for select on option for for view
     public void selectOptionDialog() {
         optionDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.option_dialog, (ViewGroup) loginScreenBinding.getRoot(), false);
@@ -552,24 +511,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 optionDialog.dismiss();
             }
         });
-//        optionDialogBinding.cancelBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                loginScreenBinding.emailEdt.setText("");
-//                loginScreenBinding.passwordEdt.setText("");
-//                Utils.setPref(mContext, "coachID", "");
-//                Utils.setPref(mContext, "coachTypeID","");
-//                Utils.setPref(mContext, "RegisterUserName","");
-//                Utils.setPref(mContext, "RegisterEmail","");
-//                Utils.setPref(mContext, "LoginType","");
-//                optionDialog.dismiss();
-//            }
-//        });
         optionDialog.show();
 
     }
 
-
+    //Use for Give class rating
     public void addRating() {
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.rating_dialog_layout, null);

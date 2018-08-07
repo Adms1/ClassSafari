@@ -62,9 +62,7 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
             contactTypeIDStr, familyIDStr, contatIDstr, orderIDStr,
             sessionIDStr, classStr = "Child", familyNameStr, paymentStatusstr, familyMobileStr;
     Dialog confimDialog;
-    //    TextView cancel_txt, confirm_txt, session_student_txt, session_name_txt, location_txt, duration_txt, time_txt, session_fee_txt, session_student_txt_view;
     TeacherInfoModel classListInfo;
-    HashMap<Integer, String> spinnerClassMap;
     SessiondetailConfirmationDialogStudentBinding sessiondetailConfirmationDialogBinding;
     boolean callservice = false;
     int SessionHour = 0;
@@ -100,27 +98,8 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         return rootView;
     }
 
-    public void setTypeface() {
-        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
 
-        addFamilyBinding.familynameTxt.setTypeface(custom_font);
-        addFamilyBinding.familynameTxtView.setTypeface(custom_font);
-        addFamilyBinding.selfChk.setTypeface(custom_font);
-        addFamilyBinding.childChk.setTypeface(custom_font);
-        addFamilyBinding.spouseChk.setTypeface(custom_font);
-        addFamilyBinding.firstNameEdt.setTypeface(custom_font);
-        addFamilyBinding.lastNameEdt.setTypeface(custom_font);
-        addFamilyBinding.emailEdt.setTypeface(custom_font);
-        addFamilyBinding.passwordEdt.setTypeface(custom_font);
-        addFamilyBinding.phoneNoEdt.setTypeface(custom_font);
-        addFamilyBinding.dateOfBirthEdt.setTypeface(custom_font);
-        addFamilyBinding.maleChk.setTypeface(custom_font);
-        addFamilyBinding.femaleChk.setTypeface(custom_font);
-//        addFamilyBinding.cancelBtn.setTypeface(custom_font);
-        addFamilyBinding.registerBtn.setTypeface(custom_font);
-
-    }
-
+    ////Use for initilize view
     public void initViews() {
         calendar = Calendar.getInstance();
         Year = calendar.get(Calendar.YEAR);
@@ -142,6 +121,7 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         AppConfiguration.UserName = familyNameStr;
     }
 
+    //Use for ClickEvent
     public void setListners() {
         addFamilyBinding.dateOfBirthEdt.setOnClickListener(this);
 //        addFamilyBinding.cancelBtn.setOnClickListener(this);
@@ -156,6 +136,7 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
 
     }
 
+    //Use for ClickEvent
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -222,6 +203,7 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         }
     }
 
+    //Use for ClickEvent
     @Override
     public void onCheckedChanged(RadioGroup radioGroup, int i) {
         switch (radioGroup.getId()) {
@@ -254,6 +236,7 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         }
     }
 
+    //Use for ClickEvent
     @Override
     public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
         switch (textView.getId()) {
@@ -296,6 +279,7 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         return false;
     }
 
+    //Use for Select Date
     @Override
     public void onDateSet(com.wdullaer.materialdatetimepicker.date.DatePickerDialog
                                   view, int year, int monthOfYear, int dayOfMonth) {
@@ -472,7 +456,7 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         return map;
     }
 
-
+    //Use for Get Inserted value
     public void getInsertedValue() {
         firstNameStr = addFamilyBinding.firstNameEdt.getText().toString();
         lastNameStr = addFamilyBinding.lastNameEdt.getText().toString();
@@ -547,6 +531,7 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         return map;
     }
 
+    //Use for Class Confirmation
     public void SessionConfirmationDialog() {
         sessiondetailConfirmationDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.sessiondetail_confirmation_dialog_student, (ViewGroup) addFamilyBinding.getRoot(), false);
@@ -794,6 +779,7 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
         return map;
     }
 
+    //Use for Class Time
     public void calculateHours(String time1, String time2) {
         Date date1, date2;
         int days, hours, min;

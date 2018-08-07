@@ -77,15 +77,14 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
     int SessionHour = 0;
     Integer SessionMinit = 0;
     String SessionDuration;
-    String hours, minit;
     boolean callservice = false;
     ArrayList<Integer> totalHours;
     ArrayList<Integer> totalMinit;
-    int avgHoursvalue, avgMinitvalue;
+    int avgHoursvalue;
     //Use for Menu Dialog
     String passWordStr, confirmpassWordStr, currentpasswordStr;
     Dialog menuDialog, changeDialog;
-    Button btnHome, btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
+    Button btnHome, btnMyReport, btnMySession, btnChangePassword, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
     View view_home, view_profile, view_myenroll, view_mysession,
             view_myreport, view_btnfamily, view_changepass;
     TextView userNameTxt;
@@ -100,8 +99,8 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
         setListner();
     }
 
+    //Use for initilize view
     public void init() {
-
         if (!Utils.getPref(mContext, "LoginType").equalsIgnoreCase("Family")) {
             addStudentScreenBinding.menu.setVisibility(View.GONE);
         } else {
@@ -127,12 +126,10 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
         sessionDateStr = getIntent().getStringExtra("sessiondate");
         locationStr = getIntent().getStringExtra("city");
         subjectStr = getIntent().getStringExtra("lessionName");
-//        searchByStr = getIntent().getStringExtra("SearchBy");
         standardStr = getIntent().getStringExtra("standard");
         streamStr = getIntent().getStringExtra("stream");
         boardStr = getIntent().getStringExtra("board");
         genderStr = getIntent().getStringExtra("gender");
-//        wheretoComeStr = getIntent().getStringExtra("withOR");
         froncontanctStr = getIntent().getStringExtra("froncontanct");
         wheretocometypeStr = getIntent().getStringExtra("wheretocometype");
         searchfront = getIntent().getStringExtra("searchfront");
@@ -176,6 +173,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
         }
     }
 
+    //Use for set updatedata
     public void setUpdateData() {
         if (updateTypestr.equalsIgnoreCase("Family")) {
             addStudentScreenBinding.familyNameLinear.setVisibility(View.GONE);
@@ -224,8 +222,8 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
         }
     }
 
+    //Use for click event
     public void setListner() {
-
         addStudentScreenBinding.menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -241,22 +239,13 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                     intent.putExtra("familyID", familyIDStr);
                     intent.putExtra("familyNameStr", familyNameStr);
                     intent.putExtra("sessionID", sessionIDStr);
-//                    intent.putExtra("duration", durationStr);
-//                    intent.putExtra("sessiondate", sessionDateStr);
                     intent.putExtra("sessionName", familysessionnameStr);
-//                    intent.putExtra("location", familylocationStr);
-//                    intent.putExtra("sessionfees", familysessionfeesStr);
-//                    intent.putExtra("sessionStudent", familysessionStudentStr);
                     intent.putExtra("city", locationStr);
-//                    intent.putExtra("SearchBy", searchByStr);
                     intent.putExtra("board", boardStr);
                     intent.putExtra("stream", streamStr);
                     intent.putExtra("standard", standardStr);
                     intent.putExtra("lessionName", subjectStr);
-//                    intent.putExtra("gender", genderStr);
-//                    intent.putExtra("withOR", wheretoComeStr);
                     intent.putExtra("searchfront", searchfront);
-//                    intent.putExtra("sessionType", sessionType);
                     intent.putExtra("froncontanct", froncontanctStr);
                     intent.putExtra("firsttimesearch", firsttimesearch);
                     intent.putExtra("RegionName", RegionName);
@@ -388,13 +377,8 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                 if (!contactTypeIDStr.equalsIgnoreCase("")) {
                     if (!firstNameStr.equalsIgnoreCase("")) {
                         if (!lastNameStr.equalsIgnoreCase("")) {
-//                            if (!emailStr.equalsIgnoreCase("") && Utils.isValidEmaillId(emailStr)) {
-//                                if (!passwordStr.equalsIgnoreCase("") && passwordStr.length() >= 4 && passwordStr.length() <= 8) {
-//                                    if (!phonenoStr.equalsIgnoreCase("") && phonenoStr.length() >= 10) {
                             if (!gendarIdStr.equalsIgnoreCase("")) {
                                 if (!dateofbirthStr.equalsIgnoreCase("")) {
-                                    //callservice=true;
-                                    //callCheckEmailIdApi();
                                     if (updateprofilestr.equalsIgnoreCase("true")) {
                                         callUpdateFamilyContactApi();
                                     } else {
@@ -406,15 +390,6 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                             } else {
                                 addStudentScreenBinding.femaleChk.setError("Select gender");
                             }
-//                                    } else {
-//                                        addStudentScreenBinding.phoneNoEdt.setError("Enter 10 digit Phone Number.");
-//                                    }
-//                                } else {
-//                                    addStudentScreenBinding.passwordEdt.setError("Password must be 4-8 Characters.");
-//                                }
-//                            } else {
-//                                addStudentScreenBinding.emailEdt.setError("Please Enter Valid Email Addres.");
-//                            }
                         } else {
                             addStudentScreenBinding.lastNameEdt.setError("Please enter last Name");
                         }
@@ -426,48 +401,6 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                 }
             }
         });
-//        addStudentScreenBinding.cancelBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (type.equalsIgnoreCase("book")) {
-//                    Intent intent = new Intent(mContext, FamilyListActivity.class);
-//                    intent.putExtra("type", "book");
-//                    intent.putExtra("familyID", familyIDStr);
-//                    intent.putExtra("familyNameStr", familyNameStr);
-//                    intent.putExtra("sessionID", sessionIDStr);
-////                    intent.putExtra("duration", durationStr);
-////                    intent.putExtra("sessiondate", sessionDateStr);
-//                    intent.putExtra("sessionName", familysessionnameStr);
-////                    intent.putExtra("location", familylocationStr);
-////                    intent.putExtra("sessionfees", familysessionfeesStr);
-////                    intent.putExtra("sessionStudent", familysessionStudentStr);
-//                    intent.putExtra("city", locationStr);
-////                    intent.putExtra("SearchBy", searchByStr);
-//                    intent.putExtra("board", boardStr);
-//                    intent.putExtra("stream", streamStr);
-//                    intent.putExtra("standard", standardStr);
-//                    intent.putExtra("lessionName", subjectStr);
-////                    intent.putExtra("gender", genderStr);
-////                    intent.putExtra("withOR", wheretoComeStr);
-//                    intent.putExtra("searchfront", searchfront);
-////                    intent.putExtra("sessionType", sessionType);
-//                    intent.putExtra("froncontanct", froncontanctStr);
-//                    intent.putExtra("firsttimesearch", firsttimesearch);
-//                    intent.putExtra("RegionName", RegionName);
-//                    intent.putExtra("back", backStr);
-//                    intent.putExtra("TeacherName",TeacherName);
-//                    intent.putExtra("SearchPlaystudy",SearchPlaystudy);
-//                    startActivity(intent);
-//                } else {
-//                    Intent intent = new Intent(mContext, FamilyListActivity.class);
-//                    intent.putExtra("froncontanct", froncontanctStr);
-//                    intent.putExtra("wheretocometype", wheretocometypeStr);
-//                    intent.putExtra("searchfront", searchfront);
-//                    intent.putExtra("firsttimesearch", firsttimesearch);
-//                    startActivity(intent);
-//                }
-//            }
-//        });
     }
 
     @Override
@@ -479,22 +412,13 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
             intent.putExtra("familyID", familyIDStr);
             intent.putExtra("familyNameStr", familyNameStr);
             intent.putExtra("sessionID", sessionIDStr);
-//                    intent.putExtra("duration", durationStr);
-//                    intent.putExtra("sessiondate", sessionDateStr);
             intent.putExtra("sessionName", familysessionnameStr);
-//                    intent.putExtra("location", familylocationStr);
-//                    intent.putExtra("sessionfees", familysessionfeesStr);
-//                    intent.putExtra("sessionStudent", familysessionStudentStr);
             intent.putExtra("city", locationStr);
-//                    intent.putExtra("SearchBy", searchByStr);
             intent.putExtra("board", boardStr);
             intent.putExtra("stream", streamStr);
             intent.putExtra("standard", standardStr);
             intent.putExtra("lessionName", subjectStr);
-//                    intent.putExtra("gender", genderStr);
-//                    intent.putExtra("withOR", wheretoComeStr);
             intent.putExtra("searchfront", searchfront);
-//                    intent.putExtra("sessionType", sessionType);
             intent.putExtra("froncontanct", froncontanctStr);
             intent.putExtra("firsttimesearch", firsttimesearch);
             intent.putExtra("RegionName", RegionName);
@@ -527,6 +451,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
         }
     }
 
+    //Use for select date
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         mDay = dayOfMonth;
@@ -546,47 +471,9 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
 
         MonthInt = d + "/" + m + "/" + y;
         addStudentScreenBinding.dateOfBirthEdt.setText(MonthInt);
-        //Age Validation
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//        int age = 0;
-//        try {
-//            Date date1 = dateFormat.parse(addStudentScreenBinding.dateOfBirthEdt.getText().toString());
-//            Calendar now = Calendar.getInstance();
-//            Calendar dob = Calendar.getInstance();
-//            dob.setTime(date1);
-//            if (dob.after(now)) {
-////                throw new IllegalArgumentException("Can't be born in the future");
-////                Util.ping(mContext, "Can't be born in the future");
-//                addStudentScreenBinding.dateOfBirthEdt.setError("Can't be born in the future");
-//                addStudentScreenBinding.dateOfBirthEdt.setText("");
-//            }
-//            int year1 = now.get(Calendar.YEAR);
-//            int year2 = dob.get(Calendar.YEAR);
-//            age = year1 - year2;
-//            int month1 = now.get(Calendar.MONTH);
-//            int month2 = dob.get(Calendar.MONTH);
-//            if (month2 > month1) {
-//                age--;
-//            } else if (month1 == month2) {
-//                int day1 = now.get(Calendar.DAY_OF_MONTH);
-//                int day2 = dob.get(Calendar.DAY_OF_MONTH);
-//                if (day2 > day1) {
-//                    age--;
-//                }
-//            }
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        if (age >= 1) {
-//        } else {
-////            Util.ping(mContext, "Please Enter Valid Birthdate.");
-//            addStudentScreenBinding.dateOfBirthEdt.setError(getResources().getString(R.string.agevalidation));
-//            addStudentScreenBinding.dateOfBirthEdt.setText("");
-//
-//        }
     }
 
+    //Use for Get insert detail
     public void getInsertedValue() {
         firstNameStr = addStudentScreenBinding.firstNameEdt.getText().toString();
         lastNameStr = addStudentScreenBinding.lastNameEdt.getText().toString();
@@ -613,60 +500,6 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
             }
 
         }
-    }
-
-    //Use for Check Register emailId exist or not
-    public void callCheckEmailIdApi() {
-        if (Utils.isNetworkConnected(mContext)) {
-
-            Utils.showDialog(mContext);
-            ApiHandler.getApiService().getCheckEmailAddress(getcheckEmailidDetail(), new retrofit.Callback<TeacherInfoModel>() {
-                @Override
-                public void success(TeacherInfoModel teacherInfoModel, Response response) {
-                    Utils.dismissDialog();
-                    if (teacherInfoModel == null) {
-                        Utils.ping(mContext, getString(R.string.something_wrong));
-                        return;
-                    }
-                    if (teacherInfoModel.getSuccess() == null) {
-                        Utils.ping(mContext, getString(R.string.something_wrong));
-                        return;
-                    }
-                    if (teacherInfoModel.getSuccess().equalsIgnoreCase("false")) {
-//                        Utils.ping(mContext, getString(R.string.false_msg));
-
-                        if (callservice == true) {
-                            callNewChildApi();
-                        }
-                        callservice = false;
-                        return;
-                    }
-                    if (teacherInfoModel.getSuccess().equalsIgnoreCase("True")) {
-                        addStudentScreenBinding.emailEdt.setError("Already exist!");
-                        addStudentScreenBinding.emailEdt.setText("");
-                        callservice = false;
-                    }
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    Utils.dismissDialog();
-                    error.printStackTrace();
-                    error.getMessage();
-                    Utils.ping(mContext, getString(R.string.something_wrong));
-                }
-            });
-        } else {
-            Utils.ping(mContext, getString(R.string.internet_connection_error));
-        }
-    }
-
-    private Map<String, String> getcheckEmailidDetail() {
-
-        Map<String, String> map = new HashMap<>();
-        map.put("EmailAddress", addStudentScreenBinding.emailEdt.getText().toString());
-
-        return map;
     }
 
     //Use for Family add NewChild
@@ -861,7 +694,6 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
         return map;
     }
 
-
     //Use for paymentRequest
     public void callpaymentRequestApi() {
         if (Utils.isNetworkConnected(mContext)) {
@@ -924,7 +756,6 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
 
         return map;
     }
-
 
     //Use for Family and Child Session Confirmation
     public void callSessionConfirmationApi() {
@@ -1028,6 +859,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
         return map;
     }
 
+    //Use for class confirmation
     public void SessionConfirmationDialog() {
         sessiondetailConfirmationDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.sessiondetail_confirmation_dialog, (ViewGroup) addStudentScreenBinding.getRoot(), false);
@@ -1042,7 +874,6 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
         confimDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         confimDialog.setCancelable(false);
-//        confimDialog.setContentView(R.layout.confirm_session_dialog);
         confimDialog.setContentView(sessiondetailConfirmationDialogBinding.getRoot());
         callSessionListApi();
         sessiondetailConfirmationDialogBinding.cancelTxt.setOnClickListener(new View.OnClickListener() {
@@ -1097,10 +928,6 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                         if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("")) {////&& !AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
                             callpaymentRequestApi();
                         }
-//                        } else {
-//                            paymentStatusstr = "1";
-//                           callpaymentRequestApi();
-//                        }
                     }
                 }
 
@@ -1118,7 +945,6 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
     }
 
     private Map<String, String> getSessioncapacityDetail() {
-
         Map<String, String> map = new HashMap<>();
         map.put("SessionID", sessionIDStr);//contatIDstr  //Utils.getPref(mContext, "coachID")
         return map;
@@ -1158,7 +984,6 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                                 AppConfiguration.bookinhEnddate=dataResponse.getData().get(j).getEndDate();
                                 sessiondetailConfirmationDialogBinding.sessionNameTxt.setText(dataResponse.getData().get(j).getSessionName());
                                 sessiondetailConfirmationDialogBinding.ratingBar.setRating(Float.parseFloat(dataResponse.getData().get(j).getRating()));
-//                                sessiondetailConfirmationDialogBinding.ratingUserTxt.setText();
                                 sessiondetailConfirmationDialogBinding.tutorNameTxt.setText(dataResponse.getData().get(j).getName());
                                 sessiondetailConfirmationDialogBinding.locationTxt.setText(dataResponse.getData().get(j).getRegionName());
                                 sessiondetailConfirmationDialogBinding.startDateTxt.setText(dataResponse.getData().get(j).getStartDate());
@@ -1187,16 +1012,6 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                                     calculateHours(spiltDash[0], spiltDash[1]);
                                     dataResponse.getData().get(j).setDateTime(spiltDash[0]);
                                     Log.d("DateTime", spiltDash[0]);
-//                                    if (SessionHour < 10) {
-//                                        hours= "0"+SessionHour;
-//                                    }else{
-//                                        hours= String.valueOf(SessionHour);
-//                                    }
-//                                    if(SessionMinit<10){
-//                                        minit="0"+SessionMinit;
-//                                    }else{
-//                                        minit=String.valueOf(SessionMinit);
-//                                    }
 
                                     switch (spiltComma[0]) {
                                         case "sun":
@@ -1274,14 +1089,6 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
                                     }
                                 }
                             }
-//                            averageHours(totalHours);
-//                            averageMinit(totalMinit);
-//
-//                            if(avgMinitvalue==0) {
-//                                sessiondetailConfirmationDialogBinding.durationTxt.setText(avgHoursvalue + " hr ");
-//                            }else{
-//                                sessiondetailConfirmationDialogBinding.durationTxt.setText(avgHoursvalue + " hr " + avgMinitvalue + " min");//+ " min"
-//                            }
                         }
                     }
                 }
@@ -1317,21 +1124,10 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
         }
     }
 
-    public void averageMinit(List<Integer> list) {
-        if (list != null) {
-            int sum = 0;
-            int n = list.size();
-            for (int i = 0; i < n; i++)
-                sum += list.get(i);
-            avgMinitvalue = (sum) / n;
-            Log.d("value", "" + avgMinitvalue);
-        }
-    }
-
+    //Use for calculate class time
     public void calculateHours(String time1, String time2) {
         Date date1, date2;
         int days, hours, min;
-        String hourstr, minstr;
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm aa", Locale.US);
         try {
             date1 = simpleDateFormat.parse(time1);
@@ -1345,12 +1141,6 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
             SessionHour = hours;
             SessionMinit = min;
             Log.i("======= Hours", " :: " + hours + ":" + min);
-//            if(SessionHour>0) {
-//                totalHours.add(SessionHour);
-//            }
-////            if(SessionMinit>0) {
-//            totalMinit.add(SessionMinit);
-////            }
 
             if (SessionMinit > 0) {
                 if (SessionMinit < 10) {
@@ -1366,6 +1156,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
         }
     }
 
+    //Use for password change
     public void changePasswordDialog() {
         changePasswordDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.change_password_dialog, (ViewGroup) addStudentScreenBinding.getRoot(), false);
@@ -1468,6 +1259,7 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
         return map;
     }
 
+    //Use for Menu
     public void menuDialog() {
         menuDialog = new Dialog(mContext);//, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();
@@ -1480,13 +1272,11 @@ public class AddStudentScreen extends AppCompatActivity implements DatePickerDia
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         menuDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         menuDialog.setCanceledOnTouchOutside(true);
-//        menuDialog.setContentView(menuBinding.getRoot());
         menuDialog.setContentView(R.layout.layout_menu);
         btnHome = (Button) menuDialog.findViewById(R.id.btnHome);
         btnMyReport = (Button) menuDialog.findViewById(R.id.btnMyReport);
         btnMySession = (Button) menuDialog.findViewById(R.id.btnMySession);
         btnChangePassword = (Button) menuDialog.findViewById(R.id.btnChangePassword);
-//        btnaddChild = (Button) menuDialog.findViewById(R.id.btnaddChild);
         btnLogout = (Button) menuDialog.findViewById(R.id.btnLogout);
         btnmyfamily = (Button) menuDialog.findViewById(R.id.btnmyfamily);
         btnMyenroll = (Button) menuDialog.findViewById(R.id.btnMyenroll);

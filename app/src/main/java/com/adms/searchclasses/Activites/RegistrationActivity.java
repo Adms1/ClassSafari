@@ -111,42 +111,21 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         SearchPlaystudy = getIntent().getStringExtra("SearchPlaystudy");
         frontRegister = getIntent().getStringExtra("frontRegister");
         TeacherName=getIntent().getStringExtra("TeacherName");
-//        setTypeface();
 
         init();
         setListner();
     }
 
-//    public void setTypeface() {
-//        Typeface custom_font = Typeface.createFromAsset(getAssets(), "font/TitilliumWeb-Regular.ttf");
-//
-//        registrationBinding.activityName.setTypeface(custom_font);
-//        registrationBinding.typeOfRegi.setTypeface(custom_font);
-//        registrationBinding.clickHere.setTypeface(custom_font);
-//        registrationBinding.firstNameEdt.setTypeface(custom_font);
-//        registrationBinding.lastNameEdt.setTypeface(custom_font);
-//        registrationBinding.emailEdt.setTypeface(custom_font);
-//        registrationBinding.passwordEdt.setTypeface(custom_font);
-//        registrationBinding.phoneNoEdt.setTypeface(custom_font);
-//        registrationBinding.dateOfBirthEdt.setTypeface(custom_font);
-//        registrationBinding.maleChk.setTypeface(custom_font);
-//        registrationBinding.femaleChk.setTypeface(custom_font);
-//        registrationBinding.chkTermsAndCondi.setTypeface(custom_font);
-//        registrationBinding.registerBtn.setTypeface(custom_font);
-//        registrationBinding.viewTxt.setTypeface(custom_font);
-//
-//
-//    }
-
+    //Use for initilize view
     public void init() {
         selectRegisterOptionDialog();
-
         calendar = Calendar.getInstance();
         Year = calendar.get(Calendar.YEAR);
         Month = calendar.get(Calendar.MONTH);
         Day = calendar.get(Calendar.DAY_OF_MONTH);
     }
 
+    //Use for Click Event
     public void setListner() {
         registrationBinding.back.setOnClickListener(this);
         registrationBinding.registerBtn.setOnClickListener(this);
@@ -353,6 +332,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         return false;
     }
 
+    //Use for Get Inserted data for register
     public void getInsertedValue() {
         firstNameStr = registrationBinding.firstNameEdt.getText().toString();
         lastNameStr = registrationBinding.lastNameEdt.getText().toString();
@@ -373,7 +353,6 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
             finish();
         } else {
             Intent inback = new Intent(mContext, LoginActivity.class);
-//        inback.putExtra("SearchBy", searchByStr);
             inback.putExtra("sessionID", sessionIDStr);
             inback.putExtra("board", boardStr);
             inback.putExtra("stream", streamStr);
@@ -398,6 +377,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         }
     }
 
+    //Use for select date
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         mDay = dayOfMonth;
@@ -418,46 +398,6 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         finalDate = d + "/" + m + "/" + y;
 
         registrationBinding.dateOfBirthEdt.setText(finalDate);
-        //Age Validation
-
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//        int age = 0;
-//        try {
-//            Date date1 = dateFormat.parse(registrationBinding.dateOfBirthEdt.getText().toString());
-//            Calendar now = Calendar.getInstance();
-//            Calendar dob = Calendar.getInstance();
-//            dob.setTime(date1);
-//            if (dob.after(now)) {
-////                throw new IllegalArgumentException("Can't be born in the future");
-////                Utils.ping(mContext, "Can't be born in the future");
-//                registrationBinding.dateOfBirthEdt.setError("Can't be born in the future");
-//                registrationBinding.dateOfBirthEdt.setText("");
-//            }
-//            int year1 = now.get(Calendar.YEAR);
-//            int year2 = dob.get(Calendar.YEAR);
-//            age = year1 - year2;
-//            int month1 = now.get(Calendar.MONTH);
-//            int month2 = dob.get(Calendar.MONTH);
-//            if (month2 > month1) {
-//                age--;
-//            } else if (month1 == month2) {
-//                int day1 = now.get(Calendar.DAY_OF_MONTH);
-//                int day2 = dob.get(Calendar.DAY_OF_MONTH);
-//                if (day2 > day1) {
-//                    age--;
-//                }
-//            }
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        if (age >= 1) {
-//        } else {
-////            Utils.ping(mContext, "Please Enter Valid Birthdate.");
-//            registrationBinding.dateOfBirthEdt.setError(getResources().getString(R.string.agevalidation));
-//            registrationBinding.dateOfBirthEdt.setText("");
-//
-//        }
     }
 
 
@@ -519,7 +459,6 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     }
 
     //Use for Check Register emailId exist or not
-
     public void callCheckEmailIdApi() {
         if (Utils.isNetworkConnected(mContext)) {
 
@@ -656,7 +595,6 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     //Use for New Family
     public void callFamilyApi() {
         if (Utils.isNetworkConnected(mContext)) {
-
             Utils.showDialog(mContext);
             ApiHandler.getApiService().get_Create_Family(getNewFamilyetail(), new retrofit.Callback<TeacherInfoModel>() {
                 @Override
@@ -763,7 +701,6 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
     }
 
     private Map<String, String> getpaymentRequestdetail() {
-
         Map<String, String> map = new HashMap<>();
         map.put("ContactID", contatIDstr);
         map.put("SessionID", sessionIDStr);
@@ -771,7 +708,6 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
 
         return map;
     }
-
 
     //Use for Family and Child Session Confirmation
     public void callSessionConfirmationApi() {
@@ -826,6 +762,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         return map;
     }
 
+    //Use for class confirmation
     public void SessionConfirmationDialog() {
         sessiondetailConfirmationDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.sessiondetail_confirmation_dialog, (ViewGroup) registrationBinding.getRoot(), false);
@@ -861,6 +798,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         confimDialog.show();
 
     }
+
     //Use for GetSession Report
     public void callSessioncapacityApi() {
         if (Utils.isNetworkConnected(mContext)) {
@@ -893,10 +831,6 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                         if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("")){// && !AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
                             callpaymentRequestApi();
                         }
-//                        else {
-//                            paymentStatusstr = "1";
-//                            callSessionConfirmationApi();
-//                        }
                     }
                 }
 
@@ -981,21 +915,6 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                                     calculateHours(spiltDash[0], spiltDash[1]);
                                     dataResponse.getData().get(j).setDateTime(spiltDash[0]);
                                     Log.d("DateTime", spiltDash[0]);
-//                                    if (SessionHour < 10) {
-//                                        hours = "0" + SessionHour;
-//                                    } else {
-//                                        hours = String.valueOf(SessionHour);
-//                                    }
-//                                    if (SessionMinit < 10) {
-//                                        minit = "0" + SessionMinit;
-//                                    } else {
-//                                        minit = String.valueOf(SessionMinit);
-//                                    }
-//                                    if (minit.equalsIgnoreCase(("00"))) {
-//                                        sessiondetailConfirmationDialogBinding.durationTxt.setText(hours + " hr ");
-//                                    } else {
-//                                        sessiondetailConfirmationDialogBinding.durationTxt.setText(hours + " hr " + minit + " min");//+ " min"
-//                                    }
                                     switch (spiltComma[0]) {
                                         case "sun":
                                             sessiondetailConfirmationDialogBinding.sunHoursTxt.setEnabled(true);
@@ -1072,14 +991,6 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                                     }
                                 }
                             }
-//                            averageHours(totalHours);
-//                            averageMinit(totalMinit);
-
-//                            if(avgMinitvalue==0) {
-//                                sessiondetailConfirmationDialogBinding.durationTxt.setText(avgHoursvalue + " hr ");
-//                            }else{
-//                                sessiondetailConfirmationDialogBinding.durationTxt.setText(avgHoursvalue + " hr " + avgMinitvalue + " min");//+ " min"
-//                            }
                         }
                     }
                 }
@@ -1103,29 +1014,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         return map;
     }
 
-    public void averageHours(List<Integer> list) {
-        if (list != null) {
-            int sum = 0;
-            int n = list.size();
-            for (int i = 0; i < n; i++)
-                sum += list.get(i);
-            Log.d("sum", "" + sum);
-            avgHoursvalue = (sum) / n;
-            Log.d("value", "" + avgHoursvalue);
-        }
-    }
-
-    public void averageMinit(List<Integer> list) {
-        if (list != null) {
-            int sum = 0;
-            int n = list.size();
-            for (int i = 0; i < n; i++)
-                sum += list.get(i);
-            avgMinitvalue = (sum) / n;
-            Log.d("value", "" + avgMinitvalue);
-        }
-    }
-
+    //Use for calculate class time
     public void calculateHours(String time1, String time2) {
         Date date1, date2;
         int days, hours, min;
@@ -1143,12 +1032,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
             SessionHour = hours;
             SessionMinit = min;
             Log.i("======= Hours", " :: " + hours + ":" + min);
-//            if(SessionHour>0) {
-//                totalHours.add(SessionHour);
-//            }
-////            if(SessionMinit>0) {
-//            totalMinit.add(SessionMinit);
-////            }
+
             if (SessionMinit > 0) {
                 if (SessionMinit < 10) {
                     SessionDuration = String.valueOf(SessionHour) + ":" + String.valueOf("0" + SessionMinit + " hrs");
@@ -1165,6 +1049,8 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
 
 
     }
+
+    //Use for select after login option
     public void selectOptionDialog() {
         optionDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.option_dialog, (ViewGroup) registrationBinding.getRoot(), false);
@@ -1204,23 +1090,11 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
                 optionDialog.dismiss();
             }
         });
-//        optionDialogBinding.cancelBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                registrationBinding.emailEdt.setText("");
-//                registrationBinding.passwordEdt.setText("");
-//                Utils.setPref(mContext, "coachID", "");
-//                Utils.setPref(mContext, "coachTypeID", "");
-//                Utils.setPref(mContext, "RegisterUserName", "");
-//                Utils.setPref(mContext, "RegisterEmail", "");
-//                Utils.setPref(mContext, "LoginType", "");
-//                optionDialog.dismiss();
-//            }
-//        });
         optionDialog.show();
 
     }
 
+    //Use for select register option
     public void selectRegisterOptionDialog() {
         registerOptionDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.register_option_dialog, (ViewGroup) registrationBinding.getRoot(), false);
@@ -1263,6 +1137,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
 
     }
 
+    //Use for give class rating
     public void addRating() {
         LayoutInflater inflater = getLayoutInflater();
         View alertLayout = inflater.inflate(R.layout.rating_dialog_layout, null);

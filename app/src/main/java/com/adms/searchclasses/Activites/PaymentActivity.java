@@ -299,8 +299,7 @@ public class PaymentActivity extends AppCompatActivity {
         }
     }
 
-    public void setListner() {
-    }
+    public void setListner() {}
 
     @Override
     public void onBackPressed() {

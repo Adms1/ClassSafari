@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -24,14 +23,12 @@ import android.widget.TextView;
 
 import com.adms.searchclasses.Adapter.ExapndableListAdapterFromFront;
 import com.adms.searchclasses.Adapter.ExpandableListAdapterIn;
-import com.adms.searchclasses.Adapter.ExpandableSelectStudentListAdapter;
 import com.adms.searchclasses.AppConstant.ApiHandler;
 import com.adms.searchclasses.AppConstant.AppConfiguration;
 import com.adms.searchclasses.AppConstant.Utils;
 import com.adms.searchclasses.Interface.onChlidClick;
 import com.adms.searchclasses.Interface.onViewClick;
 import com.adms.searchclasses.Model.Session.SessionDetailModel;
-import com.adms.searchclasses.Model.SessionConfirmationDetailModel;
 import com.adms.searchclasses.Model.TeacherInfo.ChildDetailModel;
 import com.adms.searchclasses.Model.TeacherInfo.FamilyDetailModel;
 import com.adms.searchclasses.Model.TeacherInfo.TeacherInfoModel;
@@ -66,34 +63,32 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
     ExpandableListAdapterIn expandableListAdapterIn;
     //Conformation Dialog
     Dialog confimDialog;
-    String paymentStatusstr, sessionIDStr, familysessionfeesStr, familysessionnameStr,
-            familylocationStr, familysessionStudentStr, sessionDateStr, durationStr,
+    String paymentStatusstr, sessionIDStr, familysessionnameStr,
             orderIDStr, contatIDstr, type, familyIdStr = "", familyNameStr = "", locationStr,
-            boardStr, standardStr, streamStr, searchTypeStr, subjectStr, searchfront, arraowStr, TeacherName,
-    /* wheretoComeStr, searchByStr,*/ genderStr, froncontanctStr, wheretocometypeStr, sessionType, RegionName,
-            firsttimesearch, selectedfamilyNameStr, selectedfamilytagStr, bactStr, sessionNameStr, SearchPlaystudy;
+            boardStr, standardStr, streamStr,subjectStr, searchfront, arraowStr, TeacherName,
+            froncontanctStr, wheretocometypeStr,firsttimesearch, selectedfamilyNameStr,
+            selectedfamilytagStr, bactStr, SearchPlaystudy;
     String fNstr, lNstr, cIdstr, eAstr, gIdstr, dobstr, pNstr, cnIdstr, updateTypestr;
     int SessionHour = 0;
     Integer SessionMinit = 0;
     String SessionDuration;
-    String hours, minit;
     ArrayList<String> selectedId;
+
     //Purchase dialog
     ArrayList<String> purchaseSessionIDArray;
     String purchaseSessionIDStr = "";
+
     //Use for Menu Dialog
     String passWordStr, confirmpassWordStr, currentpasswordStr;
     Dialog menuDialog, changeDialog;
-    Button btnHome,btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
+    Button btnHome, btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
     TextView userNameTxt;
     View view_home, view_profile, view_myenroll, view_mysession,
             view_myreport, view_btnfamily, view_changepass;
-    SessionConfirmationDetailModel sessionConfirmationDetailModel;
     ArrayList<Integer> totalHours;
     ArrayList<Integer> totalMinit;
     int avgHoursvalue, avgMinitvalue;
     ExapndableListAdapterFromFront exapndableListAdapterFromFront;
-    private int lastExpandedPosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,44 +103,29 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
     }
 
     public void getIntenetValue() {
-//        sessionNameStr=getIntent().getStringExtra("sessionName");
         sessionIDStr = getIntent().getStringExtra("sessionID");
         SearchPlaystudy = getIntent().getStringExtra("SearchPlaystudy");
-//        familysessionStudentStr = getIntent().getStringExtra("sessionStudent");
-//        familylocationStr = getIntent().getStringExtra("location");
-//        durationStr = getIntent().getStringExtra("duration");
-//        familysessionfeesStr = getIntent().getStringExtra("sessionfees");
         familysessionnameStr = getIntent().getStringExtra("sessionName");
-//        sessionDateStr = getIntent().getStringExtra("sessiondate");
         locationStr = getIntent().getStringExtra("city");
         subjectStr = getIntent().getStringExtra("lessionName");
         standardStr = getIntent().getStringExtra("standard");
         streamStr = getIntent().getStringExtra("stream");
         boardStr = getIntent().getStringExtra("board");
-//        searchTypeStr = getIntent().getStringExtra("searchType");
-//        genderStr = getIntent().getStringExtra("gender");
         froncontanctStr = getIntent().getStringExtra("froncontanct");
-//        familyIdStr = getIntent().getStringExtra("familyID");
-//        familyNameStr = getIntent().getStringExtra("familyNameStr");
         searchfront = getIntent().getStringExtra("searchfront");
         wheretocometypeStr = getIntent().getStringExtra("wheretocometype");
-//        sessionType = getIntent().getStringExtra("sessionType");
         firsttimesearch = getIntent().getStringExtra("firsttimesearch");
-//        RegionName = getIntent().getStringExtra("RegionName");
         bactStr = getIntent().getStringExtra("back");
         TeacherName = getIntent().getStringExtra("TeacherName");
-        sessionConfirmationDetailModel = getIntent().getParcelableExtra("detail");
     }
 
-
+    //Use for initlize view
     public void init() {
-
         familyBinding.lvExpfamilylist.setEnabled(false);
         callFamilyListApi();
-
-
     }
 
+    //Use for Click Event
     public void setListner() {
         familyBinding.back.setOnClickListener(this);
         familyBinding.addchildTxt.setOnClickListener(this);
@@ -217,7 +197,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                         Intent intent = new Intent(mContext, SearchByUser.class);
                         intent.putExtra("wheretocometype", wheretocometypeStr);
                         startActivity(intent);
-                    }else {
+                    } else {
                         Intent intent = new Intent(mContext, SearchByUser.class);
                         intent.putExtra("wheretocometype", wheretocometypeStr);
                         startActivity(intent);
@@ -369,7 +349,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                                                 cnIdstr = spilt[3];
                                                 updateTypestr = spilt[6];
                                                 pNstr = spilt[7];
-                                                familyNameStr = spilt[8]+" "+ spilt[9];
+                                                familyNameStr = spilt[8] + " " + spilt[9];
 
                                             }
                                             Intent addchild = new Intent(mContext, AddStudentScreen.class);
@@ -452,7 +432,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                     + finalFamilyDetail.get(i).getGenderID() + "|"
                     + finalFamilyDetail.get(i).getDateofBirth());
             pNstr = finalFamilyDetail.get(i).getContactPhoneNumber();
-            familyNameStr=finalFamilyDetail.get(i).getFirstName() + ""
+            familyNameStr = finalFamilyDetail.get(i).getFirstName() + ""
                     + finalFamilyDetail.get(i).getLastName();
             Log.d("header", "" + listDataHeader);
             ArrayList<ChildDetailModel> row = new ArrayList<ChildDetailModel>();
@@ -464,7 +444,6 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
             Log.d("child", "" + listDataChild);
         }
     }
-
 
     //Use for paymentRequest
     public void callpaymentRequestApi() {
@@ -558,7 +537,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                         Intent isearchBYuser = new Intent(mContext, PaymentSuccessActivity.class);
                         isearchBYuser.putExtra("transactionId", orderIDStr);
                         isearchBYuser.putExtra("responseCode", "0");
-                        isearchBYuser.putExtra("order_id",orderIDStr);
+                        isearchBYuser.putExtra("order_id", orderIDStr);
                         startActivity(isearchBYuser);
 
                     }
@@ -585,22 +564,20 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         return map;
     }
 
+    //Use for Get select class detail
     public void getsessionID() {
         selectedId = new ArrayList<String>();
 
         selectedId = expandableListAdapterIn.getSessionDetail();
         Log.d("selectedId", "" + selectedId);
         for (int i = 0; i < selectedId.size(); i++) {
-//            contatIDstr = selectedId.get(i);
             String[] spilt = selectedId.get(i).split("\\|");
             contatIDstr = spilt[2];
             Utils.setPref(mContext, "FamilyID", contatIDstr);
             selectedfamilyNameStr = spilt[0] + " " + spilt[1];
             selectedfamilytagStr = spilt[3];
-//            confirmSessionDialogBinding.sessionStudentTxt.setText(spilt[0] + " " + spilt[1]);
-//            confirmSessionDialogBinding.sessionStudentTxtView.setText(spilt[3]);
             type = spilt[4];
-            AppConfiguration.UserName=selectedfamilyNameStr;
+            AppConfiguration.UserName = selectedfamilyNameStr;
             Utils.setPref(mContext, "Type", type);
             Log.d("selectedIdStr", contatIDstr);
         }
@@ -717,7 +694,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                     }
                     if (sessionModel.getSuccess().equalsIgnoreCase("True")) {
                         Utils.dismissDialog();
-                        if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("")){// && !AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
+                        if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("")) {// && !AppConfiguration.classsessionPrice.equalsIgnoreCase("0.00")) {
                             callpaymentRequestApi();
                         }
 //                        else {
@@ -747,6 +724,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         return map;
     }
 
+    //Use for Change password
     public void changePasswordDialog() {
         changePasswordDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.change_password_dialog, (ViewGroup) familyBinding.getRoot(), false);
@@ -849,13 +827,14 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         return map;
     }
 
+    //Use for Menu
     public void menuDialog() {
         menuDialog = new Dialog(mContext);//, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
         wlp.x = 10;
         menuDialog.getWindow().getAttributes().verticalMargin = 0.07F;
-        wlp.gravity = Gravity.TOP|Gravity.RIGHT;
+        wlp.gravity = Gravity.TOP | Gravity.RIGHT;
         window.setAttributes(wlp);
 
         menuDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -864,7 +843,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
 //        menuDialog.setContentView(menuBinding.getRoot());
         menuDialog.setContentView(R.layout.layout_menu);
 
-        btnHome=(Button)menuDialog.findViewById(R.id.btnHome);
+        btnHome = (Button) menuDialog.findViewById(R.id.btnHome);
         btnMyReport = (Button) menuDialog.findViewById(R.id.btnMyReport);
         btnMySession = (Button) menuDialog.findViewById(R.id.btnMySession);
         btnChangePassword = (Button) menuDialog.findViewById(R.id.btnChangePassword);
@@ -890,7 +869,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         btnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i=new Intent(mContext,SearchByUser.class);
+                Intent i = new Intent(mContext, SearchByUser.class);
                 startActivity(i);
             }
         });
@@ -990,6 +969,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         menuDialog.show();
     }
 
+    //Use for class confirmation
     public void SessionConfirmationDialog() {
         sessiondetailConfirmationDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.sessiondetail_confirmation_dialog, (ViewGroup) familyBinding.getRoot(), false);
@@ -1057,7 +1037,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                                 AppConfiguration.bookingdate = dataResponse.getData().get(j).getStartDate();
                                 AppConfiguration.bookingtime = dataResponse.getData().get(j).getSchedule();
                                 AppConfiguration.bookingamount = dataResponse.getData().get(j).getSessionAmount();
-                                AppConfiguration.bookinhEnddate=dataResponse.getData().get(j).getEndDate();
+                                AppConfiguration.bookinhEnddate = dataResponse.getData().get(j).getEndDate();
 
                                 sessiondetailConfirmationDialogBinding.sessionNameTxt.setText(dataResponse.getData().get(j).getSessionName());
                                 sessiondetailConfirmationDialogBinding.ratingBar.setRating(Float.parseFloat(dataResponse.getData().get(j).getRating()));
@@ -1196,29 +1176,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
         return map;
     }
 
-    public void averageHours(List<Integer> list) {
-        if (list != null) {
-            int sum = 0;
-            int n = list.size();
-            for (int i = 0; i < n; i++)
-                sum += list.get(i);
-            Log.d("sum", "" + sum);
-            avgHoursvalue = (sum) / n;
-            Log.d("value", "" + avgHoursvalue);
-        }
-    }
-
-    public void averageMinit(List<Integer> list) {
-        if (list != null) {
-            int sum = 0;
-            int n = list.size();
-            for (int i = 0; i < n; i++)
-                sum += list.get(i);
-            avgMinitvalue = (sum) / n;
-            Log.d("value", "" + avgMinitvalue);
-        }
-    }
-
+    //Use for calculate class time
     public void calculateHours(String time1, String time2) {
         Date date1, date2;
         int days, hours, min;
@@ -1236,12 +1194,6 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
             SessionHour = hours;
             SessionMinit = min;
             Log.i("======= Hours", " :: " + hours + ":" + min);
-//            if (SessionHour > 0) {
-//                totalHours.add(SessionHour);
-//            }
-////            if(SessionMinit>0) {
-//            totalMinit.add(SessionMinit);
-////            }
 
             if (SessionMinit > 0) {
                 if (SessionMinit < 10) {

@@ -61,13 +61,12 @@ public class UpcomingActivity extends AppCompatActivity implements View.OnClickL
     //Use for Menu Dialog
     String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr;
     Dialog menuDialog, changeDialog;
-    Button btnHome,btnMyReport, btnMySession, btnChangePassword, btnaddChild, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
+    Button btnHome,btnMyReport, btnMySession, btnChangePassword, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
     View view_home, view_profile, view_myenroll, view_mysession,
             view_myreport, view_btnfamily, view_changepass;
     TextView userNameTxt;
     ChangePasswordDialogBinding changePasswordDialogBinding;
     UpcomingClassAdapter upcomingClassAdapter;
-    ArrayList<String> arrayList;
     SessionDetailModel dataresponse;
 
     @Override
@@ -80,10 +79,12 @@ public class UpcomingActivity extends AppCompatActivity implements View.OnClickL
         setListner();
     }
 
+    //Use for initilize view
     public void init() {
         callSessionUpcomingReportApi();
     }
 
+    //Use for Click Event
     public void setListner() {
         activityUpcomingBinding.back.setOnClickListener(this);
         activityUpcomingBinding.menu.setOnClickListener(this);
@@ -151,12 +152,12 @@ public class UpcomingActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private Map<String, String> getSessionUpcomingReportDetail() {
-
         Map<String, String> map = new HashMap<>();
         map.put("FamilyID", Utils.getPref(mContext, "coachTypeID"));
         return map;
     }
 
+    //Use for next class detail
     public void fillSessionList() {
 
         upcomingClassAdapter = new UpcomingClassAdapter(mContext, dataresponse, new onViewClick() {
@@ -171,6 +172,7 @@ public class UpcomingActivity extends AppCompatActivity implements View.OnClickL
         activityUpcomingBinding.upcomingClassRcList.setAdapter(upcomingClassAdapter);
     }
 
+    //Use for Change Password
     public void changePasswordDialog() {
         changePasswordDialogBinding = DataBindingUtil.
                 inflate(LayoutInflater.from(mContext), R.layout.change_password_dialog, (ViewGroup) activityUpcomingBinding.getRoot(), false);
@@ -273,6 +275,7 @@ public class UpcomingActivity extends AppCompatActivity implements View.OnClickL
         return map;
     }
 
+    //Use for Menu
     public void menuDialog() {
         menuDialog = new Dialog(mContext);//, R.style.Theme_Dialog);
         Window window = menuDialog.getWindow();

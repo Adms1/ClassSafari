@@ -43,7 +43,9 @@ import retrofit.client.Response;
 public class TeacherProfileFragment extends Fragment implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
     FragmentTeacherProfileBinding teacherProfileBinding;
-    String firstNameStr, lastNameStr, classNameStr, phoneNumberStr, dobStr, genderIdStr = "", yearStr = "0", monthStr = "0", qualificationStr = "", aboutusStr = "";
+    String firstNameStr, lastNameStr, classNameStr, phoneNumberStr,
+            dobStr, genderIdStr = "", yearStr = "0", monthStr = "0",
+            qualificationStr = "", aboutusStr = "";
     TeacherInfoModel teacherInfoResponse;
     String finalDate;
     int Year, Month, Day;
@@ -74,7 +76,7 @@ public class TeacherProfileFragment extends Fragment implements View.OnClickList
         return rootView;
     }
 
-
+    //Use for initilize view
     public void init() {
         calendar = Calendar.getInstance();
         Year = calendar.get(Calendar.YEAR);
@@ -85,6 +87,7 @@ public class TeacherProfileFragment extends Fragment implements View.OnClickList
 
     }
 
+    //Use for Click Event
     public void setListner() {
         teacherProfileBinding.dateOfBirthEdt.setOnClickListener(this);
         teacherProfileBinding.registerBtn.setOnClickListener(this);
@@ -209,7 +212,6 @@ public class TeacherProfileFragment extends Fragment implements View.OnClickList
         return map;
     }
 
-
     //Use for Get Teacher detail
     public void callTeacherProfileApi() {
         if (Utils.isNetworkConnected(mContext)) {
@@ -310,6 +312,7 @@ public class TeacherProfileFragment extends Fragment implements View.OnClickList
         return map;
     }
 
+    //Use for fill teacher qualification
     public void fillQualification() {
         ArrayList<String> QualificationName = new ArrayList<String>();
         for (int j = 0; j < qualificationResponse.getData().size(); j++) {
@@ -320,6 +323,7 @@ public class TeacherProfileFragment extends Fragment implements View.OnClickList
         teacherProfileBinding.qualificationEdt.setAdapter(adapterTerm);
     }
 
+    //Use for fill teacher experience
     public void fillExperience() {
         yearofExperiance = new ArrayList<>();
         monthofExperiance = new ArrayList<>();
@@ -386,6 +390,7 @@ public class TeacherProfileFragment extends Fragment implements View.OnClickList
 
     }
 
+    //Use for get teacher inserted value
     public void getInsertValue() {
         firstNameStr = teacherProfileBinding.firstNameEdt.getText().toString();
         lastNameStr = teacherProfileBinding.lastNameEdt.getText().toString();
@@ -402,6 +407,7 @@ public class TeacherProfileFragment extends Fragment implements View.OnClickList
         }
     }
 
+    //Use for set teacher detail
     public void setTeacherData() {
         for (int i = 0; i < teacherInfoResponse.getData().size(); i++) {
             teacherProfileBinding.firstNameEdt.setText(teacherInfoResponse.getData().get(i).getFirstName());
@@ -422,6 +428,7 @@ public class TeacherProfileFragment extends Fragment implements View.OnClickList
         }
     }
 
+    //Use for click event
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -467,6 +474,7 @@ public class TeacherProfileFragment extends Fragment implements View.OnClickList
         }
     }
 
+    //Use for select date
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         mDay = dayOfMonth;

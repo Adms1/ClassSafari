@@ -62,21 +62,14 @@ public class PaymentReportFragment extends Fragment implements DatePickerDialog.
         mContext = getActivity();
 
         ((DashBoardActivity) getActivity()).setActionBar(4, "true");
-        setTypeface();
         initViews();
         setListners();
 
         return rootView;
     }
 
-    public void setTypeface() {
-        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
-        paymentReportBinding.txtStartDate.setTypeface(custom_font);
-        paymentReportBinding.txtEndDate.setTypeface(custom_font);
-        paymentReportBinding.btnShow.setTypeface(custom_font);
-        paymentReportBinding.noRecordTxt.setTypeface(custom_font);
-    }
 
+    //Use for initilize view
     public void initViews() {
         calendar = Calendar.getInstance();
         Year = calendar.get(Calendar.YEAR);
@@ -89,6 +82,7 @@ public class PaymentReportFragment extends Fragment implements DatePickerDialog.
         callPaymentReportApi();
     }
 
+    //Use for Click Event
     public void setListners() {
         paymentReportBinding.startDateLinear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +93,6 @@ public class PaymentReportFragment extends Fragment implements DatePickerDialog.
                 datePickerDialog.setOkText("Done");
                 datePickerDialog.showYearPickerFirst(false);
                 datePickerDialog.setAccentColor(Color.parseColor("#f2552c"));
-//                datePickerDialog.setTitle("Select Date From DatePickerDialog");
                 datePickerDialog.show(getActivity().getFragmentManager(), "Datepickerdialog");
             }
         });
@@ -112,14 +105,12 @@ public class PaymentReportFragment extends Fragment implements DatePickerDialog.
                 datePickerDialog.setOkText("Done");
                 datePickerDialog.showYearPickerFirst(false);
                 datePickerDialog.setAccentColor(Color.parseColor("#f2552c"));
-//                datePickerDialog.setTitle("Select Date From DatePickerDialog");
                 datePickerDialog.show(getActivity().getFragmentManager(), "Datepickerdialog");
             }
         });
         paymentReportBinding.btnShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (!startDateStr.equalsIgnoreCase("dd/MM/yyyy") && !endDateStr.equalsIgnoreCase("dd/MM/yyyy")) {
                     callPaymentReportApi();
                 } else {
@@ -129,6 +120,7 @@ public class PaymentReportFragment extends Fragment implements DatePickerDialog.
         });
     }
 
+    //Use for Select Date for display payment report
     @Override
     public void onDateSet(com.wdullaer.materialdatetimepicker.date.DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         mDay = dayOfMonth;

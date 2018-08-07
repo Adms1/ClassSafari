@@ -66,7 +66,6 @@ public class OldFamilyListFragment extends Fragment {
     HashMap<String, List<ChildDetailModel>> listDataChild;
     ExpandableSelectStudentListAdapter expandableSelectStudentListAdapter;
     Dialog confimDialog;
-    //    TextView cancel_txt, confirm_txt, session_student_txt,session_teacher_txt, session_student_txt_view, session_name_txt, location_txt, duration_txt, time_txt, session_fee_txt;
     String familyIdStr = "", contatIDstr, orderIDStr, sessionIDStr, type, familyNameStr = "", familyMobileStr = "", paymentStatusstr, arraowStr, valueStr;
     ArrayList<String> selectedId;
     String froncontanctStr;
@@ -82,8 +81,6 @@ public class OldFamilyListFragment extends Fragment {
     private FragmentOldFamilyListBinding oldFamilyListBinding;
     private View rootView;
     private Context mContext;
-    private Fragment fragment = null;
-    private FragmentManager fragmentManager = null;
     private int lastExpandedPosition = -1;
 
     public OldFamilyListFragment() {
@@ -101,7 +98,6 @@ public class OldFamilyListFragment extends Fragment {
         ((DashBoardActivity) getActivity()).setActionBar(13, "false");
         sessionIDStr = Utils.getPref(mContext, "sessionID");
         Log.d("sessionID", sessionIDStr);
-        setTypeface();
         initViews();
         setListners();
         callFamilyListApi();
@@ -109,17 +105,10 @@ public class OldFamilyListFragment extends Fragment {
         return rootView;
     }
 
-    public void setTypeface() {
-        Typeface custom_font = Typeface.createFromAsset(mContext.getAssets(), "font/TitilliumWeb-Regular.ttf");
-        oldFamilyListBinding.text.setTypeface(custom_font);
-        oldFamilyListBinding.noRecordTxt.setTypeface(custom_font);
-    }
+    //Use for initilize view
+    public void initViews() {}
 
-    public void initViews() {
-
-
-    }
-
+    //Use for Click Event
     public void setListners() {
         oldFamilyListBinding.searchEdt.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -133,6 +122,7 @@ public class OldFamilyListFragment extends Fragment {
                     if (event.getRawX() >= (oldFamilyListBinding.searchEdt.getRight() - oldFamilyListBinding.searchEdt.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                         // your action here
                         oldFamilyListBinding.searchEdt.setText("");
+                        oldFamilyListBinding.searchEdt.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.search_white, 0);
                         return true;
                     }
                 }
@@ -227,6 +217,7 @@ public class OldFamilyListFragment extends Fragment {
                 }
             }
         });
+
         oldFamilyListBinding.searchEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
@@ -275,9 +266,11 @@ public class OldFamilyListFragment extends Fragment {
             }
         });
     }
+
+    //Use for Class Confirmation
     public void SessionConfirmationDialog() {
         sessiondetailConfirmationDialogBinding = DataBindingUtil.
-                inflate(LayoutInflater.from(mContext), R.layout.sessiondetail_confirmation_dialog, (ViewGroup) oldFamilyListBinding.getRoot(), false);
+                inflate(LayoutInflater.from(mContext), R.layout.sessiondetail_confirmation_dialog,(ViewGroup) oldFamilyListBinding.getRoot(), false);// (ViewGroup) oldFamilyListBinding.getRoot()
         confimDialog = new Dialog(mContext, R.style.Theme_Dialog);
         Window window = confimDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -290,15 +283,12 @@ public class OldFamilyListFragment extends Fragment {
         confimDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         confimDialog.setCancelable(false);
         confimDialog.setContentView(sessiondetailConfirmationDialogBinding.getRoot());
-        //getsessionID();
+
         callEditSessionApi();
         AppConfiguration.UserName = familyNameStr;
         sessiondetailConfirmationDialogBinding.tutorNameTxt.setText(Utils.getPref(mContext, "RegisterUserName"));
         sessiondetailConfirmationDialogBinding.sessionNameTxt.setText(AppConfiguration.SessionName);
         sessiondetailConfirmationDialogBinding.locationTxt.setText(AppConfiguration.RegionName);
-//        sessiondetailConfirmationDialogBinding.durationTxt.setText(AppConfiguration.SessionDuration);
-//        sessiondetailConfirmationDialogBinding.startDateTxt.setText(AppConfiguration.SessionDate);
-//        sessiondetailConfirmationDialogBinding.endDateTxt.setText(AppConfiguration.SessionDate);
 
 
         if (AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
@@ -366,10 +356,6 @@ public class OldFamilyListFragment extends Fragment {
                         if (!contatIDstr.equalsIgnoreCase("") && !sessionIDStr.equalsIgnoreCase("") ){//&& !AppConfiguration.SessionPrice.equalsIgnoreCase("0")) {
                             callpaymentRequestApi();
                         }
-//                        else {
-//                            paymentStatusstr = "1";
-//                            callSessionConfirmationApi();
-//                        }
                     }
                 }
 
@@ -531,6 +517,7 @@ public class OldFamilyListFragment extends Fragment {
         return map;
     }
 
+    //Use for calculate Class Time
     public void calculateHours(String time1, String time2) {
         Date date1, date2;
         int days, hours, min;
@@ -635,6 +622,7 @@ public class OldFamilyListFragment extends Fragment {
         return map;
     }
 
+    //Use for fill Family Detail
     private void setExpandableListView(List<FamilyDetailModel> array) {
         listDataHeader = new ArrayList<>();
         listDataChild = new HashMap<String, List<ChildDetailModel>>();
@@ -686,31 +674,7 @@ public class OldFamilyListFragment extends Fragment {
         oldFamilyListBinding.lvExpfamilylist.expandGroup(0);
     }
 
-    //Use for fill Family List
-//    public void fillExpLV() {
-//        listDataHeader = new ArrayList<>();
-//        listDataChild = new HashMap<String, List<ChildDetailModel>>();
-//        for (int i = 0; i < finalFamilyDetail.size(); i++) {
-//            listDataHeader.add(finalFamilyDetail.get(i).getFirstName() + "|"
-//                    + finalFamilyDetail.get(i).getLastName() + "|"
-//                    + finalFamilyDetail.get(i).getContactPhoneNumber() + "|"
-//                    + finalFamilyDetail.get(i).getFamilyID() + "|"
-//                    + finalFamilyDetail.get(i).getContactID());
-//            Log.d("header", "" + listDataHeader);
-//            ArrayList<ChildDetailModel> row = new ArrayList<ChildDetailModel>();
-//            for (int j = 0; j < finalFamilyDetail.get(i).getFamilyContact().size(); j++) {
-////                if (finalFamilyDetail.get(i).getFamilyContact().get(i) != null) {
-//                row.add(finalFamilyDetail.get(i).getFamilyContact().get(j));
-//                Log.d("row", "" + row);
-////                }
-//
-//
-//            }
-//            listDataChild.put(listDataHeader.get(i), row);
-//            Log.d("child", "" + listDataChild);
-//        }
-//    }
-
+    //Use for get selected data
     public void getFamilyID() {
         selectedId = new ArrayList<String>();
 
@@ -726,19 +690,17 @@ public class OldFamilyListFragment extends Fragment {
         }
     }
 
+    //Use for get selected data
     public void getsessionID() {
         selectedId = new ArrayList<String>();
 
         selectedId = expandableSelectStudentListAdapter.getSessionDetail();
         Log.d("selectedId", "" + selectedId);
         for (int i = 0; i < selectedId.size(); i++) {
-//            contatIDstr = selectedId.get(i);
             String[] spilt = selectedId.get(i).split("\\|");
             contatIDstr = spilt[2];
             Utils.setPref(mContext, "FamilyID", contatIDstr);
             familyNameStr = spilt[0] + " " + spilt[1];
-//            confirmSessionDialogBinding.sessionStudentTxt.setText(spilt[0] + " " + spilt[1]);
-//            confirmSessionDialogBinding.sessionStudentTxtView.setText(spilt[3]);
             type = spilt[4];
 
             AppConfiguration.TeacherBookTypeStr = type;
@@ -788,7 +750,6 @@ public class OldFamilyListFragment extends Fragment {
                                         })
                                         .show();
                             } else {
-                                // ConformSessionDialog();
                                 SessionConfirmationDialog();
                             }
 
@@ -942,10 +903,6 @@ public class OldFamilyListFragment extends Fragment {
         map.put("SessionID", sessionIDStr);
         map.put("Amount", AppConfiguration.SessionPrice);
         return map;
-    }
-
-    public void Search() {
-
     }
 
     //Use for Get FamilyListRegister
