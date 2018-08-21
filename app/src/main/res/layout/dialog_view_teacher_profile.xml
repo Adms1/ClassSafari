@@ -128,7 +128,7 @@
                         android:alpha="1"
                         android:background="@drawable/blue_btn"
                         android:gravity="center"
-                        android:text="Phone"
+                        android:text="Call"
                         android:textAllCaps="true"
                         android:textColor="@color/white"
                         android:textSize="@dimen/_10sdp"

@@ -122,8 +122,8 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
 
     //Use for initlize view
     public void init() {
-        if (Utils.checkAndRequestPermissions(mContext)) {
-        }
+//        if (Utils.checkAndRequestPermissions(mContext)) {
+//        }
         Calendar minDate = Calendar.getInstance();
         Calendar maxDate = Calendar.getInstance();
 
@@ -325,7 +325,7 @@ public class SessionFragment extends Fragment implements CalendarPickerControlle
             public void onClick(View view) {
                 DashBoardActivity.navItemIndex = 1;
                 AppConfiguration.DateStr = dialogViewSessionBinding.dateTxt.getText().toString();
-                AppConfiguration.TimeStr = dialogViewSessionBinding.startTimeTxt.getText().toString() + "to" + dialogViewSessionBinding.endTimeTxt.getText().toString();
+                AppConfiguration.TimeStr = dialogViewSessionBinding.startTimeTxt.getText().toString() + " to " + dialogViewSessionBinding.endTimeTxt.getText().toString();
                 Fragment fragment = new StudentAttendanceFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

@@ -77,12 +77,13 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
             checkTime_tue = false, checkTime_wed = false, checkTime_thu = false, checkTime_fri = false, checkTime_sat = false;
     static String Tag;
     static ArrayList<String> days;
+    static AddSessionDialogBinding addSessionDialogBinding;
+    static SessionDetailModel finalsessionfullDetailModel;
     private static String dateFinal;
     private static String minuteFinal, hourFinal, FinalTimeStr;
     private static boolean isFromDate = false;
+    private static Context mContext;
     public Dialog popularDialog;
-    static AddSessionDialogBinding addSessionDialogBinding;
-
     //Use for Alert Dialog
     ArrayList<String> timegapArray;
     AlertListAdapter alertListAdapter;
@@ -90,7 +91,6 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
     Calendar calendar;
     int mYear, mMonth, mDay;
     String flag, SeslectedsessionID, CoachTypeStr, studentAvailable;
-
     //Use for selectedSessionTimeValue
     String coachIdStr, lessionTypeNameStr = "", sessionNameStr = "", boardStr = "", standardStr = "", streamStr = "", startDateStr = "", endDateStr = "",
             address1Str = "", address2Str = "", regionStr = "", cityStr = "", stateStr = "", zipcodeStr = "", descriptionStr = "", sessionamtStr = "0",
@@ -118,11 +118,11 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
     boolean checkfalse = false;
     private FragmentAddSessionBinding addSessionBinding;
     private View rootView;
-    private Context mContext;
     private com.wdullaer.materialdatetimepicker.date.DatePickerDialog datePickerDialog;
 
     public AddSessionFragment() {
     }
+
     //Use for ClassTimeDialog
     private static List<String> getDates(String dateString1, String dateString2) {
         days = new ArrayList<String>();
@@ -174,14 +174,14 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         addSessionDialogBinding.tueEndLinear.setAlpha(0.2f);
         addSessionDialogBinding.tueStartAddSessionBtn.setEnabled(false);
         addSessionDialogBinding.tueEndAddSessionBtn.setEnabled(false);
-        
+
         addSessionDialogBinding.wedStartLinear.setEnabled(false);
         addSessionDialogBinding.wedEndLinear.setEnabled(false);
         addSessionDialogBinding.wedStartLinear.setAlpha(0.2f);
         addSessionDialogBinding.wedEndLinear.setAlpha(0.2f);
         addSessionDialogBinding.wedStartAddSessionBtn.setEnabled(false);
         addSessionDialogBinding.wedEndAddSessionBtn.setEnabled(false);
-        
+
         addSessionDialogBinding.thuStartLinear.setEnabled(false);
         addSessionDialogBinding.thuEndLinear.setEnabled(false);
         addSessionDialogBinding.thuStartLinear.setAlpha(0.2f);
@@ -328,6 +328,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         } else {
             addSessionBinding.submitBtn.setText("Submit");
         }
+        callGetSessionDetailApi();
         callBoardApi();
         callstandardApi();
         callStreamApi();
@@ -353,8 +354,13 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         Log.d("timegapArray", "" + timegapArray);
 
         if (Utils.getPref(mContext, "ClassName") != null) {
-            addSessionBinding.sessionNameEdt.setText(Utils.getPref(mContext, "ClassName"));
-            addSessionBinding.sessionNameEdt.setEnabled(false);
+            if (!Utils.getPref(mContext, "ClassName").equalsIgnoreCase("")) {
+                addSessionBinding.sessionNameEdt.setText(Utils.getPref(mContext, "ClassName"));
+                addSessionBinding.sessionNameEdt.setEnabled(false);
+            } else {
+                addSessionBinding.sessionNameEdt.setEnabled(true);
+                Utils.setPref(mContext, "ClassName", addSessionBinding.sessionNameEdt.getText().toString());
+            }
         } else {
             addSessionBinding.sessionNameEdt.setEnabled(true);
             Utils.setPref(mContext, "ClassName", addSessionBinding.sessionNameEdt.getText().toString());
@@ -541,8 +547,8 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
 
     //Use for ClassTimeDialog
     public void SessionTimeDialog() {
-           addSessionDialogBinding= DataBindingUtil.
-                   inflate(LayoutInflater.from(mContext), R.layout.add_session_dialog,null, false);
+        addSessionDialogBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContext), R.layout.add_session_dialog, null, false);
         popularDialog = new Dialog(mContext, R.style.Theme_Dialog);
         Window window = popularDialog.getWindow();
         WindowManager.LayoutParams wlp = window.getAttributes();
@@ -554,8 +560,8 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         popularDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         popularDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         popularDialog.setCancelable(false);
-            popularDialog.setContentView(addSessionDialogBinding.getRoot());
-            
+        popularDialog.setContentView(addSessionDialogBinding.getRoot());
+
         popularDialog.show();
 
         calendar = Calendar.getInstance();
@@ -563,9 +569,9 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         Month = calendar.get(Calendar.MONTH);
         Day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        if (flag.equalsIgnoreCase("view")){
+        if (flag.equalsIgnoreCase("view")) {
             addSessionDialogBinding.doneBtn.setVisibility(View.GONE);
-        }else{
+        } else {
             addSessionDialogBinding.doneBtn.setVisibility(View.VISIBLE);
         }
         if (addSessionBinding.recurringRb.isChecked()) {
@@ -1274,8 +1280,7 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
 
             }
         });
-        addSessionDialogBinding.sunEndAddSessionBtn.setOnClickListener(new View.OnClickListener()
-        {
+        addSessionDialogBinding.sunEndAddSessionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Tag = view.getTag().toString();
@@ -2702,7 +2707,6 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         addSessionBinding.cityEdt.setEnabled(false);
         addSessionBinding.stateEdt.setEnabled(false);
         addSessionBinding.zipcodeEdt.setEnabled(false);
-        addSessionBinding.descriptionEdt.setEnabled(false);
         addSessionBinding.freeRb.setEnabled(false);
         addSessionBinding.paidRb.setEnabled(false);
         addSessionBinding.sportsEdt.setEnabled(false);
@@ -2714,12 +2718,14 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         addSessionBinding.newSessionAddressBtn.setVisibility(View.GONE);
         addSessionBinding.sessionSelectAddressLinear.setVisibility(View.VISIBLE);
         addSessionBinding.sessionSelectAddressTxt.setText("View Class Address");
-
+        addSessionBinding.descriptionEdt.setEnabled(true);
+        addSessionBinding.descriptionEdt.setFocusableInTouchMode(false);
+        addSessionBinding.descriptionEdt.clearFocus();
     }
 
     //Use for disable ClassTimeDetail Edited
     public void diableDialogControl() {
-        
+
         addSessionDialogBinding.startDateTxt.setEnabled(false);
         addSessionDialogBinding.endDateTxt.setEnabled(false);
 
@@ -3060,6 +3066,59 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
 
     }
 
+    //Use for Get AllSession Detail
+    public void callGetSessionDetailApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+            //Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_SessionDetailByCoachID(getsessionDetail(), new retrofit.Callback<SessionDetailModel>() {
+                @Override
+                public void success(SessionDetailModel sessionInfo, Response response) {
+                    Utils.dismissDialog();
+                    if (sessionInfo == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionInfo.getSuccess() == null) {
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (sessionInfo.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.dismissDialog();
+                        if (sessionInfo.getData() != null) {
+                            Utils.ping(mContext, getString(R.string.false_msg));
+                        }
+                        return;
+                    }
+                    if (sessionInfo.getSuccess().equalsIgnoreCase("True")) {
+                        Utils.dismissDialog();
+                        if (sessionInfo.getData() != null) {
+                            finalsessionfullDetailModel = sessionInfo;
+
+                            Log.d("DataModel", "" + finalsessionfullDetailModel.getData().size());
+
+                        }
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getsessionDetail() {
+        Map<String, String> map = new HashMap<>();
+        map.put("CoachID", Utils.getPref(mContext, "coachID"));//Util.getPref(mContext, "coachID"));
+        return map;
+    }
+
     //Use for select ClassTime
     public static class TimePicker extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
@@ -3117,315 +3176,1445 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
             FinalTimeStr = hourFinal + ":" + minuteFinal + " " + status;
             switch (Tag) {
                 case "0":
-                    addSessionDialogBinding.sunStartTimeTxt.setText(FinalTimeStr);
-                    addSessionDialogBinding.sunStartAddSessionBtn.setText("x");
-                    addSessionDialogBinding.sunStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
-                    addSessionDialogBinding.sunStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
-                    SimpleDateFormat sdf0 = new SimpleDateFormat("hh:mm aa", Locale.US);
-                    try {
-                        Date inTime = sdf0.parse(addSessionDialogBinding.sunStartTimeTxt.getText().toString());
-                        Date outTime = sdf0.parse(addSessionDialogBinding.sunEndTimeTxt.getText().toString());
-                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                            addSessionDialogBinding.sunEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
-                            addSessionDialogBinding.sunEndLinear.setBackgroundResource(R.drawable.red_linear);
-                            checkTime_sun = true;
-                        } else {
-                            checkTime_sun = false;
-                            addSessionDialogBinding.sunEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
-                            addSessionDialogBinding.sunEndTimeTxt.setBackgroundResource(R.drawable.linear_shape);
+                    if (finalsessionfullDetailModel.getData().size()>0) {
+                        for (int i = 0; i < finalsessionfullDetailModel.getData().size(); i++) {
+                            for (int j = 0; j < finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().size(); j++) {
+                                if (finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionDate()
+                                        .equalsIgnoreCase(addSessionDialogBinding.startDateTxt.getText().toString())) {
+                                    String[] splittime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime().split("\\-");
+                                    try {
+                                        SimpleDateFormat sdft = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                        Date inTimet = sdft.parse(splittime[0]);
+                                        Date outTimet = sdft.parse(splittime[1]);
+                                        Date inTimeSelected = sdft.parse(FinalTimeStr);
+                                        // Date outTimeSelected = sdf16.parse("10:00 PM");
+                                        if (inTimeSelected.equals(inTimet) || inTimeSelected.equals(outTimet)) {
+                                            Utils.ping(mContext, "You have already class at this time");
+                                        } else if (inTimeSelected.after(inTimet) && inTimeSelected.before(outTimet)) {
+                                            Utils.ping(mContext, "You have already class at this time");
+                                        } else {
+                                            addSessionDialogBinding.sunStartTimeTxt.setText(FinalTimeStr);
+                                            addSessionDialogBinding.sunStartAddSessionBtn.setText("x");
+                                            addSessionDialogBinding.sunStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.sunStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                            SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                            try {
+                                                Date inTime = sdf16.parse(addSessionDialogBinding.sunStartTimeTxt.getText().toString());
+                                                Date outTime = sdf16.parse(addSessionDialogBinding.sunEndTimeTxt.getText().toString());
+                                                if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                                    addSessionDialogBinding.sunEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                                    addSessionDialogBinding.sunEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                                    checkTime_sun = true;
+                                                } else {
+                                                    checkTime_sun = false;
+                                                    addSessionDialogBinding.sunEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                                    addSessionDialogBinding.sunEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                                }
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
 
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    addSessionDialogBinding.sunStartTimeTxt.setText(FinalTimeStr);
+                                    addSessionDialogBinding.sunStartAddSessionBtn.setText("x");
+                                    addSessionDialogBinding.sunStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                    addSessionDialogBinding.sunStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                    SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                    try {
+                                        Date inTime = sdf16.parse(addSessionDialogBinding.sunStartTimeTxt.getText().toString());
+                                        Date outTime = sdf16.parse(addSessionDialogBinding.sunEndTimeTxt.getText().toString());
+                                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                            addSessionDialogBinding.sunEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.sunEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                            checkTime_sun = true;
+                                        } else {
+                                            checkTime_sun = false;
+                                            addSessionDialogBinding.sunEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                            addSessionDialogBinding.sunEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                            }
                         }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    }else{
+                        addSessionDialogBinding.sunStartTimeTxt.setText(FinalTimeStr);
+                        addSessionDialogBinding.sunStartAddSessionBtn.setText("x");
+                        addSessionDialogBinding.sunStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                        addSessionDialogBinding.sunStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                        SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                        try {
+                            Date inTime = sdf16.parse(addSessionDialogBinding.sunStartTimeTxt.getText().toString());
+                            Date outTime = sdf16.parse(addSessionDialogBinding.sunEndTimeTxt.getText().toString());
+                            if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                addSessionDialogBinding.sunEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                addSessionDialogBinding.sunEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                checkTime_sun = true;
+                            } else {
+                                checkTime_sun = false;
+                                addSessionDialogBinding.sunEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                addSessionDialogBinding.sunEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 case "1":
-                    addSessionDialogBinding.sunEndTimeTxt.setText(FinalTimeStr);
-                    addSessionDialogBinding.sunEndAddSessionBtn.setText("x");
-                    addSessionDialogBinding.sunEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
-                    addSessionDialogBinding.sunEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
-                    SimpleDateFormat sdf = new SimpleDateFormat("hh:mm aa", Locale.US);
-                    try {
-                        Date inTime = sdf.parse(addSessionDialogBinding.sunStartTimeTxt.getText().toString());
-                        Date outTime = sdf.parse(addSessionDialogBinding.sunEndTimeTxt.getText().toString());
-                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                            addSessionDialogBinding.sunEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
-                            addSessionDialogBinding.sunEndLinear.setBackgroundResource(R.drawable.red_linear);
-                            checkTime_sun = true;
-                        } else {
-                            checkTime_sun = false;
-                            addSessionDialogBinding.sunEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                    if (finalsessionfullDetailModel.getData().size()>0) {
+                        for (int i = 0; i < finalsessionfullDetailModel.getData().size(); i++) {
+                            for (int j = 0; j < finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().size(); j++) {
+                                if (finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionDate()
+                                        .equalsIgnoreCase(addSessionDialogBinding.startDateTxt.getText().toString())) {
+                                    String[] splittime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime().split("\\-");
+                                    try {
+                                        SimpleDateFormat sdft = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                        Date inTimet = sdft.parse(splittime[0]);
+                                        Date outTimet = sdft.parse(splittime[1]);
+                                        Date inTimeSelected = sdft.parse(FinalTimeStr);
+                                        Date starttime = sdft.parse(addSessionDialogBinding.sunStartTimeTxt.getText().toString());
+                                        // Date outTimeSelected = sdf16.parse("10:00 PM");
+                                        if (starttime.after(outTimet)) {
+                                            addSessionDialogBinding.sunEndTimeTxt.setText(FinalTimeStr);
+                                            addSessionDialogBinding.sunEndAddSessionBtn.setText("x");
+                                            addSessionDialogBinding.sunEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.sunEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                            SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                            try {
+                                                Date inTime = sdf3.parse(addSessionDialogBinding.sunStartTimeTxt.getText().toString());
+                                                Date outTime = sdf3.parse(addSessionDialogBinding.sunEndTimeTxt.getText().toString());
+                                                if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                                    addSessionDialogBinding.sunEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                                    addSessionDialogBinding.sunEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                                    checkTime_sun = true;
+                                                } else {
+                                                    checkTime_sun = false;
+                                                    addSessionDialogBinding.sunEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                                    addSessionDialogBinding.sunEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                                }
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                        } else {
+                                            if (inTimeSelected.equals(inTimet) || inTimeSelected.equals(outTimet)) {
+                                                Utils.ping(mContext, "You have already class at this time");
+                                            } else if (inTimeSelected.after(inTimet) && inTimeSelected.before(outTimet)) {
+                                                Utils.ping(mContext, "You have already class at this time");
+                                            } else if (inTimeSelected.after(inTimet) && inTimeSelected.after(outTimet)) {
+                                                Utils.ping(mContext, "You have already class at this time");
+                                            } else {
+                                                addSessionDialogBinding.sunEndTimeTxt.setText(FinalTimeStr);
+                                                addSessionDialogBinding.sunEndAddSessionBtn.setText("x");
+                                                addSessionDialogBinding.sunEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                                addSessionDialogBinding.sunEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                                SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                                try {
+                                                    Date inTime = sdf3.parse(addSessionDialogBinding.sunStartTimeTxt.getText().toString());
+                                                    Date outTime = sdf3.parse(addSessionDialogBinding.sunEndTimeTxt.getText().toString());
+                                                    if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                                        addSessionDialogBinding.sunEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                                        addSessionDialogBinding.sunEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                                        checkTime_sun = true;
+                                                    } else {
+                                                        checkTime_sun = false;
+                                                        addSessionDialogBinding.sunEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                                        addSessionDialogBinding.sunEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                                    }
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    addSessionDialogBinding.sunEndTimeTxt.setText(FinalTimeStr);
+                                    addSessionDialogBinding.sunEndAddSessionBtn.setText("x");
+                                    addSessionDialogBinding.sunEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                    addSessionDialogBinding.sunEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                    SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                    try {
+                                        Date inTime = sdf3.parse(addSessionDialogBinding.sunStartTimeTxt.getText().toString());
+                                        Date outTime = sdf3.parse(addSessionDialogBinding.sunEndTimeTxt.getText().toString());
+                                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                            addSessionDialogBinding.sunEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.sunEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                            checkTime_sun = true;
+                                        } else {
+                                            checkTime_sun = false;
+                                            addSessionDialogBinding.sunEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                            addSessionDialogBinding.sunEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
                         }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    }else{
+                        addSessionDialogBinding.sunEndTimeTxt.setText(FinalTimeStr);
+                        addSessionDialogBinding.sunEndAddSessionBtn.setText("x");
+                        addSessionDialogBinding.sunEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                        addSessionDialogBinding.sunEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                        SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                        try {
+                            Date inTime = sdf3.parse(addSessionDialogBinding.sunStartTimeTxt.getText().toString());
+                            Date outTime = sdf3.parse(addSessionDialogBinding.sunEndTimeTxt.getText().toString());
+                            if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                addSessionDialogBinding.sunEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                addSessionDialogBinding.sunEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                checkTime_sun = true;
+                            } else {
+                                checkTime_sun = false;
+                                addSessionDialogBinding.sunEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                addSessionDialogBinding.sunEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 case "2":
-                    addSessionDialogBinding.monStartTimeTxt.setText(FinalTimeStr);
-                    addSessionDialogBinding.monStartAddSessionBtn.setText("x");
-                    addSessionDialogBinding.monStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
-                    addSessionDialogBinding.monStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
-                    SimpleDateFormat sdf21 = new SimpleDateFormat("hh:mm aa", Locale.US);
-                    try {
-                        Date inTime = sdf21.parse(addSessionDialogBinding.monStartTimeTxt.getText().toString());
-                        Date outTime = sdf21.parse(addSessionDialogBinding.monEndTimeTxt.getText().toString());
-                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                            addSessionDialogBinding.monEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
-                            addSessionDialogBinding.monEndLinear.setBackgroundResource(R.drawable.red_linear);
-                            checkTime_mon = true;
-                        } else {
-                            checkTime_mon = false;
-                            addSessionDialogBinding.monEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
-                            addSessionDialogBinding.monEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                    if (finalsessionfullDetailModel.getData().size()>0) {
+                        for (int i = 0; i < finalsessionfullDetailModel.getData().size(); i++) {
+                            for (int j = 0; j < finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().size(); j++) {
+                                if (finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionDate()
+                                        .equalsIgnoreCase(addSessionDialogBinding.startDateTxt.getText().toString())) {
+                                    String[] splittime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime().split("\\-");
+                                    try {
+                                        SimpleDateFormat sdft = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                        Date inTimet = sdft.parse(splittime[0]);
+                                        Date outTimet = sdft.parse(splittime[1]);
+                                        Date inTimeSelected = sdft.parse(FinalTimeStr);
+                                        // Date outTimeSelected = sdf16.parse("10:00 PM");
+                                        if (inTimeSelected.equals(inTimet) || inTimeSelected.equals(outTimet)) {
+                                            Utils.ping(mContext, "You have already class at this time");
+                                        } else if (inTimeSelected.after(inTimet) && inTimeSelected.before(outTimet)) {
+                                            Utils.ping(mContext, "You have already class at this time");
+                                        } else {
+                                            addSessionDialogBinding.monStartTimeTxt.setText(FinalTimeStr);
+                                            addSessionDialogBinding.monStartAddSessionBtn.setText("x");
+                                            addSessionDialogBinding.monStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.monStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                            SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                            try {
+                                                Date inTime = sdf16.parse(addSessionDialogBinding.monStartTimeTxt.getText().toString());
+                                                Date outTime = sdf16.parse(addSessionDialogBinding.monEndTimeTxt.getText().toString());
+                                                if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                                    addSessionDialogBinding.monEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                                    addSessionDialogBinding.monEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                                    checkTime_mon = true;
+                                                } else {
+                                                    checkTime_mon = false;
+                                                    addSessionDialogBinding.monEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                                    addSessionDialogBinding.monEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                                }
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    addSessionDialogBinding.monStartTimeTxt.setText(FinalTimeStr);
+                                    addSessionDialogBinding.monStartAddSessionBtn.setText("x");
+                                    addSessionDialogBinding.monStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                    addSessionDialogBinding.monStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                    SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                    try {
+                                        Date inTime = sdf16.parse(addSessionDialogBinding.monStartTimeTxt.getText().toString());
+                                        Date outTime = sdf16.parse(addSessionDialogBinding.monEndTimeTxt.getText().toString());
+                                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                            addSessionDialogBinding.monEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.monEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                            checkTime_mon = true;
+                                        } else {
+                                            checkTime_mon = false;
+                                            addSessionDialogBinding.monEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                            addSessionDialogBinding.monEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                            }
                         }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    }else{
+                        addSessionDialogBinding.monStartTimeTxt.setText(FinalTimeStr);
+                        addSessionDialogBinding.monStartAddSessionBtn.setText("x");
+                        addSessionDialogBinding.monStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                        addSessionDialogBinding.monStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                        SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                        try {
+                            Date inTime = sdf16.parse(addSessionDialogBinding.monStartTimeTxt.getText().toString());
+                            Date outTime = sdf16.parse(addSessionDialogBinding.monEndTimeTxt.getText().toString());
+                            if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                addSessionDialogBinding.monEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                addSessionDialogBinding.monEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                checkTime_mon = true;
+                            } else {
+                                checkTime_mon = false;
+                                addSessionDialogBinding.monEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                addSessionDialogBinding.monEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 case "3":
-                    addSessionDialogBinding.monEndTimeTxt.setText(FinalTimeStr);
-                    addSessionDialogBinding.monEndAddSessionBtn.setText("x");
-                    addSessionDialogBinding.monEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
-                    addSessionDialogBinding.monEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
-                    SimpleDateFormat sdf1 = new SimpleDateFormat("hh:mm aa", Locale.US);
-                    try {
-                        Date inTime = sdf1.parse(addSessionDialogBinding.monStartTimeTxt.getText().toString());
-                        Date outTime = sdf1.parse(addSessionDialogBinding.monEndTimeTxt.getText().toString());
-                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                            addSessionDialogBinding.monEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
-                            addSessionDialogBinding.monEndLinear.setBackgroundResource(R.drawable.red_linear);
-                            checkTime_mon = true;
-                        } else {
-                            checkTime_mon = false;
-                            addSessionDialogBinding.monEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
-                            addSessionDialogBinding.monEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                    if (finalsessionfullDetailModel.getData().size()>0) {
+                        for (int i = 0; i < finalsessionfullDetailModel.getData().size(); i++) {
+                            for (int j = 0; j < finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().size(); j++) {
+                                if (finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionDate()
+                                        .equalsIgnoreCase(addSessionDialogBinding.startDateTxt.getText().toString())) {
+                                    String[] splittime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime().split("\\-");
+                                    try {
+                                        SimpleDateFormat sdft = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                        Date inTimet = sdft.parse(splittime[0]);
+                                        Date outTimet = sdft.parse(splittime[1]);
+                                        Date inTimeSelected = sdft.parse(FinalTimeStr);
+                                        Date starttime = sdft.parse(addSessionDialogBinding.monStartTimeTxt.getText().toString());
+                                        // Date outTimeSelected = sdf16.parse("10:00 PM");
+                                        if (starttime.after(outTimet)) {
+                                            addSessionDialogBinding.monEndTimeTxt.setText(FinalTimeStr);
+                                            addSessionDialogBinding.monEndAddSessionBtn.setText("x");
+                                            addSessionDialogBinding.monEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.monEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                            SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                            try {
+                                                Date inTime = sdf3.parse(addSessionDialogBinding.monStartTimeTxt.getText().toString());
+                                                Date outTime = sdf3.parse(addSessionDialogBinding.monEndTimeTxt.getText().toString());
+                                                if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                                    addSessionDialogBinding.monEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                                    addSessionDialogBinding.monEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                                    checkTime_mon = true;
+                                                } else {
+                                                    checkTime_mon = false;
+                                                    addSessionDialogBinding.monEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                                    addSessionDialogBinding.monEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                                }
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                        } else {
+                                            if (inTimeSelected.equals(inTimet) || inTimeSelected.equals(outTimet)) {
+                                                Utils.ping(mContext, "You have already class at this time");
+                                            } else if (inTimeSelected.after(inTimet) && inTimeSelected.before(outTimet)) {
+                                                Utils.ping(mContext, "You have already class at this time");
+                                            } else if (inTimeSelected.after(inTimet) && inTimeSelected.after(outTimet)) {
+                                                Utils.ping(mContext, "You have already class at this time");
+                                            } else {
+                                                addSessionDialogBinding.monEndTimeTxt.setText(FinalTimeStr);
+                                                addSessionDialogBinding.monEndAddSessionBtn.setText("x");
+                                                addSessionDialogBinding.monEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                                addSessionDialogBinding.monEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                                SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                                try {
+                                                    Date inTime = sdf3.parse(addSessionDialogBinding.monStartTimeTxt.getText().toString());
+                                                    Date outTime = sdf3.parse(addSessionDialogBinding.monEndTimeTxt.getText().toString());
+                                                    if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                                        addSessionDialogBinding.monEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                                        addSessionDialogBinding.monEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                                        checkTime_mon = true;
+                                                    } else {
+                                                        checkTime_mon = false;
+                                                        addSessionDialogBinding.monEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                                        addSessionDialogBinding.monEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                                    }
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    addSessionDialogBinding.monEndTimeTxt.setText(FinalTimeStr);
+                                    addSessionDialogBinding.monEndAddSessionBtn.setText("x");
+                                    addSessionDialogBinding.monEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                    addSessionDialogBinding.monEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                    SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                    try {
+                                        Date inTime = sdf3.parse(addSessionDialogBinding.monStartTimeTxt.getText().toString());
+                                        Date outTime = sdf3.parse(addSessionDialogBinding.monEndTimeTxt.getText().toString());
+                                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                            addSessionDialogBinding.monEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.monEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                            checkTime_mon = true;
+                                        } else {
+                                            checkTime_mon = false;
+                                            addSessionDialogBinding.monEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                            addSessionDialogBinding.monEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
                         }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    }else{
+                        addSessionDialogBinding.monEndTimeTxt.setText(FinalTimeStr);
+                        addSessionDialogBinding.monEndAddSessionBtn.setText("x");
+                        addSessionDialogBinding.monEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                        addSessionDialogBinding.monEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                        SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                        try {
+                            Date inTime = sdf3.parse(addSessionDialogBinding.monStartTimeTxt.getText().toString());
+                            Date outTime = sdf3.parse(addSessionDialogBinding.monEndTimeTxt.getText().toString());
+                            if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                addSessionDialogBinding.monEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                addSessionDialogBinding.monEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                checkTime_mon = true;
+                            } else {
+                                checkTime_mon = false;
+                                addSessionDialogBinding.monEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                addSessionDialogBinding.monEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 case "4":
-                    addSessionDialogBinding.tueStartTimeTxt.setText(FinalTimeStr);
-                    addSessionDialogBinding.tueStartAddSessionBtn.setText("x");
-                    addSessionDialogBinding.tueStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
-                    addSessionDialogBinding.tueStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
-                    SimpleDateFormat sdf24 = new SimpleDateFormat("hh:mm aa", Locale.US);
-                    try {
-                        Date inTime = sdf24.parse(addSessionDialogBinding.tueStartTimeTxt.getText().toString());
-                        Date outTime = sdf24.parse(addSessionDialogBinding.tueEndTimeTxt.getText().toString());
-                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                            addSessionDialogBinding.tueEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
-                            addSessionDialogBinding.tueEndLinear.setBackgroundResource(R.drawable.red_linear);
-                            checkTime_tue = true;
-                        } else {
-                            checkTime_tue = false;
-                            addSessionDialogBinding.tueEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
-                            addSessionDialogBinding.tueEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                    if (finalsessionfullDetailModel.getData().size()>0) {
+                        for (int i = 0; i < finalsessionfullDetailModel.getData().size(); i++) {
+                            for (int j = 0; j < finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().size(); j++) {
+                                if (finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionDate()
+                                        .equalsIgnoreCase(addSessionDialogBinding.startDateTxt.getText().toString())) {
+                                    String[] splittime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime().split("\\-");
+                                    try {
+                                        SimpleDateFormat sdft = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                        Date inTimet = sdft.parse(splittime[0]);
+                                        Date outTimet = sdft.parse(splittime[1]);
+                                        Date inTimeSelected = sdft.parse(FinalTimeStr);
+                                        // Date outTimeSelected = sdf16.parse("10:00 PM");
+                                        if (inTimeSelected.equals(inTimet) || inTimeSelected.equals(outTimet)) {
+                                            Utils.ping(mContext, "You have already class at this time");
+                                        } else if (inTimeSelected.after(inTimet) && inTimeSelected.before(outTimet)) {
+                                            Utils.ping(mContext, "You have already class at this time");
+                                        } else {
+                                            addSessionDialogBinding.tueStartTimeTxt.setText(FinalTimeStr);
+                                            addSessionDialogBinding.tueStartAddSessionBtn.setText("x");
+                                            addSessionDialogBinding.tueStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.tueStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                            SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                            try {
+                                                Date inTime = sdf16.parse(addSessionDialogBinding.tueStartTimeTxt.getText().toString());
+                                                Date outTime = sdf16.parse(addSessionDialogBinding.tueEndTimeTxt.getText().toString());
+                                                if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                                    addSessionDialogBinding.tueEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                                    addSessionDialogBinding.tueEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                                    checkTime_tue = true;
+                                                } else {
+                                                    checkTime_tue = false;
+                                                    addSessionDialogBinding.tueEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                                    addSessionDialogBinding.tueEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                                }
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    addSessionDialogBinding.tueStartTimeTxt.setText(FinalTimeStr);
+                                    addSessionDialogBinding.tueStartAddSessionBtn.setText("x");
+                                    addSessionDialogBinding.tueStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                    addSessionDialogBinding.tueStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                    SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                    try {
+                                        Date inTime = sdf16.parse(addSessionDialogBinding.tueStartTimeTxt.getText().toString());
+                                        Date outTime = sdf16.parse(addSessionDialogBinding.tueEndTimeTxt.getText().toString());
+                                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                            addSessionDialogBinding.tueEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.tueEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                            checkTime_tue = true;
+                                        } else {
+                                            checkTime_tue = false;
+                                            addSessionDialogBinding.tueEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                            addSessionDialogBinding.tueEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                            }
                         }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    }else{
+                        addSessionDialogBinding.tueStartTimeTxt.setText(FinalTimeStr);
+                        addSessionDialogBinding.tueStartAddSessionBtn.setText("x");
+                        addSessionDialogBinding.tueStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                        addSessionDialogBinding.tueStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                        SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                        try {
+                            Date inTime = sdf16.parse(addSessionDialogBinding.tueStartTimeTxt.getText().toString());
+                            Date outTime = sdf16.parse(addSessionDialogBinding.tueEndTimeTxt.getText().toString());
+                            if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                addSessionDialogBinding.tueEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                addSessionDialogBinding.tueEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                checkTime_tue = true;
+                            } else {
+                                checkTime_tue = false;
+                                addSessionDialogBinding.tueEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                addSessionDialogBinding.tueEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 case "5":
-                    addSessionDialogBinding.tueEndTimeTxt.setText(FinalTimeStr);
-                    addSessionDialogBinding.tueEndAddSessionBtn.setText("x");
-                    addSessionDialogBinding.tueEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
-                    addSessionDialogBinding.tueEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
-                    SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm aa", Locale.US);
-                    try {
-                        Date inTime = sdf2.parse(addSessionDialogBinding.tueStartTimeTxt.getText().toString());
-                        Date outTime = sdf2.parse(addSessionDialogBinding.tueEndTimeTxt.getText().toString());
-                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                            addSessionDialogBinding.tueEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
-                            addSessionDialogBinding.tueEndLinear.setBackgroundResource(R.drawable.red_linear);
-                            checkTime_tue = true;
-                        } else {
-                            checkTime_tue = false;
-                            addSessionDialogBinding.tueEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
-                            addSessionDialogBinding.tueEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                    if (finalsessionfullDetailModel.getData().size()>0) {
+                        for (int i = 0; i < finalsessionfullDetailModel.getData().size(); i++) {
+                            for (int j = 0; j < finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().size(); j++) {
+                                if (finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionDate()
+                                        .equalsIgnoreCase(addSessionDialogBinding.startDateTxt.getText().toString())) {
+                                    String[] splittime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime().split("\\-");
+                                    try {
+                                        SimpleDateFormat sdft = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                        Date inTimet = sdft.parse(splittime[0]);
+                                        Date outTimet = sdft.parse(splittime[1]);
+                                        Date inTimeSelected = sdft.parse(FinalTimeStr);
+                                        Date starttime = sdft.parse(addSessionDialogBinding.tueStartTimeTxt.getText().toString());
+                                        // Date outTimeSelected = sdf16.parse("10:00 PM");
+                                        if (starttime.after(outTimet)) {
+                                            addSessionDialogBinding.tueEndTimeTxt.setText(FinalTimeStr);
+                                            addSessionDialogBinding.tueEndAddSessionBtn.setText("x");
+                                            addSessionDialogBinding.tueEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.tueEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                            SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                            try {
+                                                Date inTime = sdf3.parse(addSessionDialogBinding.tueStartTimeTxt.getText().toString());
+                                                Date outTime = sdf3.parse(addSessionDialogBinding.tueEndTimeTxt.getText().toString());
+                                                if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                                    addSessionDialogBinding.tueEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                                    addSessionDialogBinding.tueEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                                    checkTime_tue = true;
+                                                } else {
+                                                    checkTime_tue = false;
+                                                    addSessionDialogBinding.tueEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                                    addSessionDialogBinding.tueEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                                }
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                        } else {
+                                            if (inTimeSelected.equals(inTimet) || inTimeSelected.equals(outTimet)) {
+                                                Utils.ping(mContext, "You have already class at this time");
+                                            } else if (inTimeSelected.after(inTimet) && inTimeSelected.before(outTimet)) {
+                                                Utils.ping(mContext, "You have already class at this time");
+                                            } else if (inTimeSelected.after(inTimet) && inTimeSelected.after(outTimet)) {
+                                                Utils.ping(mContext, "You have already class at this time");
+                                            } else {
+                                                addSessionDialogBinding.tueEndTimeTxt.setText(FinalTimeStr);
+                                                addSessionDialogBinding.tueEndAddSessionBtn.setText("x");
+                                                addSessionDialogBinding.tueEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                                addSessionDialogBinding.tueEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                                SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                                try {
+                                                    Date inTime = sdf3.parse(addSessionDialogBinding.tueStartTimeTxt.getText().toString());
+                                                    Date outTime = sdf3.parse(addSessionDialogBinding.tueEndTimeTxt.getText().toString());
+                                                    if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                                        addSessionDialogBinding.tueEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                                        addSessionDialogBinding.tueEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                                        checkTime_tue = true;
+                                                    } else {
+                                                        checkTime_tue = false;
+                                                        addSessionDialogBinding.tueEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                                        addSessionDialogBinding.tueEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                                    }
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    addSessionDialogBinding.tueEndTimeTxt.setText(FinalTimeStr);
+                                    addSessionDialogBinding.tueEndAddSessionBtn.setText("x");
+                                    addSessionDialogBinding.tueEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                    addSessionDialogBinding.tueEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                    SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                    try {
+                                        Date inTime = sdf3.parse(addSessionDialogBinding.tueStartTimeTxt.getText().toString());
+                                        Date outTime = sdf3.parse(addSessionDialogBinding.tueEndTimeTxt.getText().toString());
+                                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                            addSessionDialogBinding.tueEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.tueEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                            checkTime_tue = true;
+                                        } else {
+                                            checkTime_tue = false;
+                                            addSessionDialogBinding.tueEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                            addSessionDialogBinding.tueEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
                         }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    }else{
+                        addSessionDialogBinding.tueEndTimeTxt.setText(FinalTimeStr);
+                        addSessionDialogBinding.tueEndAddSessionBtn.setText("x");
+                        addSessionDialogBinding.tueEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                        addSessionDialogBinding.tueEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                        SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                        try {
+                            Date inTime = sdf3.parse(addSessionDialogBinding.tueStartTimeTxt.getText().toString());
+                            Date outTime = sdf3.parse(addSessionDialogBinding.tueEndTimeTxt.getText().toString());
+                            if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                addSessionDialogBinding.tueEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                addSessionDialogBinding.tueEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                checkTime_tue = true;
+                            } else {
+                                checkTime_tue = false;
+                                addSessionDialogBinding.tueEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                addSessionDialogBinding.tueEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 case "6":
-                    addSessionDialogBinding.wedStartTimeTxt.setText(FinalTimeStr);
-                    addSessionDialogBinding.wedStartAddSessionBtn.setText("x");
-                    addSessionDialogBinding.wedStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
-                    addSessionDialogBinding.wedStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
-                    SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
-                    try {
-                        Date inTime = sdf16.parse(addSessionDialogBinding.wedStartTimeTxt.getText().toString());
-                        Date outTime = sdf16.parse(addSessionDialogBinding.wedEndTimeTxt.getText().toString());
-                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                            addSessionDialogBinding.wedEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
-                            addSessionDialogBinding.wedEndLinear.setBackgroundResource(R.drawable.red_linear);
-                            checkTime_wed = true;
-                        } else {
-                            checkTime_wed = false;
-                            addSessionDialogBinding.wedEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
-                            addSessionDialogBinding.wedEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                    if (finalsessionfullDetailModel.getData().size()>0) {
+                        for (int i = 0; i < finalsessionfullDetailModel.getData().size(); i++) {
+                            for (int j = 0; j < finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().size(); j++) {
+                                if (finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionDate()
+                                        .equalsIgnoreCase(addSessionDialogBinding.startDateTxt.getText().toString())) {
+                                    String[] splittime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime().split("\\-");
+                                    try {
+                                        SimpleDateFormat sdft = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                        Date inTimet = sdft.parse(splittime[0]);
+                                        Date outTimet = sdft.parse(splittime[1]);
+                                        Date inTimeSelected = sdft.parse(FinalTimeStr);
+                                        // Date outTimeSelected = sdf16.parse("10:00 PM");
+                                        if (inTimeSelected.equals(inTimet) || inTimeSelected.equals(outTimet)) {
+                                            Utils.ping(mContext, "You have already class at this time");
+                                        } else if (inTimeSelected.after(inTimet) && inTimeSelected.before(outTimet)) {
+                                            Utils.ping(mContext, "You have already class at this time");
+                                        } else {
+                                            addSessionDialogBinding.wedStartTimeTxt.setText(FinalTimeStr);
+                                            addSessionDialogBinding.wedStartAddSessionBtn.setText("x");
+                                            addSessionDialogBinding.wedStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.wedStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                            SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                            try {
+                                                Date inTime = sdf16.parse(addSessionDialogBinding.wedStartTimeTxt.getText().toString());
+                                                Date outTime = sdf16.parse(addSessionDialogBinding.wedEndTimeTxt.getText().toString());
+                                                if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                                    addSessionDialogBinding.wedEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                                    addSessionDialogBinding.wedEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                                    checkTime_wed = true;
+                                                } else {
+                                                    checkTime_wed = false;
+                                                    addSessionDialogBinding.wedEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                                    addSessionDialogBinding.wedEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                                }
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    addSessionDialogBinding.wedStartTimeTxt.setText(FinalTimeStr);
+                                    addSessionDialogBinding.wedStartAddSessionBtn.setText("x");
+                                    addSessionDialogBinding.wedStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                    addSessionDialogBinding.wedStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                    SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                    try {
+                                        Date inTime = sdf16.parse(addSessionDialogBinding.wedStartTimeTxt.getText().toString());
+                                        Date outTime = sdf16.parse(addSessionDialogBinding.wedEndTimeTxt.getText().toString());
+                                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                            addSessionDialogBinding.wedEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.wedEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                            checkTime_wed = true;
+                                        } else {
+                                            checkTime_wed = false;
+                                            addSessionDialogBinding.wedEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                            addSessionDialogBinding.wedEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                            }
                         }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    }else{
+                        addSessionDialogBinding.wedStartTimeTxt.setText(FinalTimeStr);
+                        addSessionDialogBinding.wedStartAddSessionBtn.setText("x");
+                        addSessionDialogBinding.wedStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                        addSessionDialogBinding.wedStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                        SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                        try {
+                            Date inTime = sdf16.parse(addSessionDialogBinding.wedStartTimeTxt.getText().toString());
+                            Date outTime = sdf16.parse(addSessionDialogBinding.wedEndTimeTxt.getText().toString());
+                            if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                addSessionDialogBinding.wedEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                addSessionDialogBinding.wedEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                checkTime_wed = true;
+                            } else {
+                                checkTime_wed = false;
+                                addSessionDialogBinding.wedEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                addSessionDialogBinding.wedEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 case "7":
-                    addSessionDialogBinding.wedEndTimeTxt.setText(FinalTimeStr);
-                    addSessionDialogBinding.wedEndAddSessionBtn.setText("x");
-                    addSessionDialogBinding.wedEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
-                    addSessionDialogBinding.wedEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
-
-                    SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
-                    try {
-                        Date inTime = sdf3.parse(addSessionDialogBinding.wedStartTimeTxt.getText().toString());
-                        Date outTime = sdf3.parse(addSessionDialogBinding.wedEndTimeTxt.getText().toString());
-                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                            addSessionDialogBinding.wedEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
-                            addSessionDialogBinding.wedEndLinear.setBackgroundResource(R.drawable.red_linear);
-                            checkTime_wed = true;
-                        } else {
-                            checkTime_wed = false;
-                            addSessionDialogBinding.wedEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
-                            addSessionDialogBinding.wedEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                    if (finalsessionfullDetailModel.getData().size()>0) {
+                        for (int i = 0; i < finalsessionfullDetailModel.getData().size(); i++) {
+                            for (int j = 0; j < finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().size(); j++) {
+                                if (finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionDate()
+                                        .equalsIgnoreCase(addSessionDialogBinding.startDateTxt.getText().toString())) {
+                                    String[] splittime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime().split("\\-");
+                                    try {
+                                        SimpleDateFormat sdft = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                        Date inTimet = sdft.parse(splittime[0]);
+                                        Date outTimet = sdft.parse(splittime[1]);
+                                        Date inTimeSelected = sdft.parse(FinalTimeStr);
+                                        Date starttime = sdft.parse(addSessionDialogBinding.wedStartTimeTxt.getText().toString());
+                                        // Date outTimeSelected = sdf16.parse("10:00 PM");
+                                        if (starttime.after(outTimet)) {
+                                            addSessionDialogBinding.wedEndTimeTxt.setText(FinalTimeStr);
+                                            addSessionDialogBinding.wedEndAddSessionBtn.setText("x");
+                                            addSessionDialogBinding.wedEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.wedEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                            SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                            try {
+                                                Date inTime = sdf3.parse(addSessionDialogBinding.wedStartTimeTxt.getText().toString());
+                                                Date outTime = sdf3.parse(addSessionDialogBinding.wedEndTimeTxt.getText().toString());
+                                                if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                                    addSessionDialogBinding.wedEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                                    addSessionDialogBinding.wedEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                                    checkTime_wed = true;
+                                                } else {
+                                                    checkTime_wed = false;
+                                                    addSessionDialogBinding.wedEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                                    addSessionDialogBinding.wedEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                                }
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                        } else {
+                                            if (inTimeSelected.equals(inTimet) || inTimeSelected.equals(outTimet)) {
+                                                Utils.ping(mContext, "You have already class at this time");
+                                            } else if (inTimeSelected.after(inTimet) && inTimeSelected.before(outTimet)) {
+                                                Utils.ping(mContext, "You have already class at this time");
+                                            } else if (inTimeSelected.after(inTimet) && inTimeSelected.after(outTimet)) {
+                                                Utils.ping(mContext, "You have already class at this time");
+                                            } else {
+                                                addSessionDialogBinding.wedEndTimeTxt.setText(FinalTimeStr);
+                                                addSessionDialogBinding.wedEndAddSessionBtn.setText("x");
+                                                addSessionDialogBinding.wedEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                                addSessionDialogBinding.wedEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                                SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                                try {
+                                                    Date inTime = sdf3.parse(addSessionDialogBinding.wedStartTimeTxt.getText().toString());
+                                                    Date outTime = sdf3.parse(addSessionDialogBinding.wedEndTimeTxt.getText().toString());
+                                                    if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                                        addSessionDialogBinding.wedEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                                        addSessionDialogBinding.wedEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                                        checkTime_wed = true;
+                                                    } else {
+                                                        checkTime_wed = false;
+                                                        addSessionDialogBinding.wedEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                                        addSessionDialogBinding.wedEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                                    }
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    addSessionDialogBinding.wedEndTimeTxt.setText(FinalTimeStr);
+                                    addSessionDialogBinding.wedEndAddSessionBtn.setText("x");
+                                    addSessionDialogBinding.wedEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                    addSessionDialogBinding.wedEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                    SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                    try {
+                                        Date inTime = sdf3.parse(addSessionDialogBinding.wedStartTimeTxt.getText().toString());
+                                        Date outTime = sdf3.parse(addSessionDialogBinding.wedEndTimeTxt.getText().toString());
+                                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                            addSessionDialogBinding.wedEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.wedEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                            checkTime_wed = true;
+                                        } else {
+                                            checkTime_wed = false;
+                                            addSessionDialogBinding.wedEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                            addSessionDialogBinding.wedEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
                         }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    }else{
+                        addSessionDialogBinding.wedEndTimeTxt.setText(FinalTimeStr);
+                        addSessionDialogBinding.wedEndAddSessionBtn.setText("x");
+                        addSessionDialogBinding.wedEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                        addSessionDialogBinding.wedEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                        SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                        try {
+                            Date inTime = sdf3.parse(addSessionDialogBinding.wedStartTimeTxt.getText().toString());
+                            Date outTime = sdf3.parse(addSessionDialogBinding.wedEndTimeTxt.getText().toString());
+                            if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                addSessionDialogBinding.wedEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                addSessionDialogBinding.wedEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                checkTime_wed = true;
+                            } else {
+                                checkTime_wed = false;
+                                addSessionDialogBinding.wedEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                addSessionDialogBinding.wedEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 case "8":
-                    addSessionDialogBinding.thuStartTimeTxt.setText(FinalTimeStr);
-                    addSessionDialogBinding.thuStartAddSessionBtn.setText("x");
-                    addSessionDialogBinding.thuStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
-                    addSessionDialogBinding.thuStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
-                    SimpleDateFormat sdf48 = new SimpleDateFormat("hh:mm aa", Locale.US);
-                    try {
-                        Date inTime = sdf48.parse(addSessionDialogBinding.thuStartTimeTxt.getText().toString());
-                        Date outTime = sdf48.parse(addSessionDialogBinding.thuEndTimeTxt.getText().toString());
-                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                            addSessionDialogBinding.thuEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
-                            addSessionDialogBinding.thuEndLinear.setBackgroundResource(R.drawable.red_linear);
-                            checkTime_thu = true;
-                        } else {
-                            checkTime_thu = false;
-                            addSessionDialogBinding.thuEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
-                            addSessionDialogBinding.thuEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                    if (finalsessionfullDetailModel.getData().size()>0) {
+                        for (int i = 0; i < finalsessionfullDetailModel.getData().size(); i++) {
+                            for (int j = 0; j < finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().size(); j++) {
+                                if (finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionDate()
+                                        .equalsIgnoreCase(addSessionDialogBinding.startDateTxt.getText().toString())) {
+                                    String[] splittime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime().split("\\-");
+                                    try {
+                                        SimpleDateFormat sdft = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                        Date inTimet = sdft.parse(splittime[0]);
+                                        Date outTimet = sdft.parse(splittime[1]);
+                                        Date inTimeSelected = sdft.parse(FinalTimeStr);
+                                        // Date outTimeSelected = sdf16.parse("10:00 PM");
+                                        if (inTimeSelected.equals(inTimet) || inTimeSelected.equals(outTimet)) {
+                                            Utils.ping(mContext, "You have already class at this time");
+                                        } else if (inTimeSelected.after(inTimet) && inTimeSelected.before(outTimet)) {
+                                            Utils.ping(mContext, "You have already class at this time");
+                                        } else {
+                                            addSessionDialogBinding.thuStartTimeTxt.setText(FinalTimeStr);
+                                            addSessionDialogBinding.thuStartAddSessionBtn.setText("x");
+                                            addSessionDialogBinding.thuStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.thuStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                            SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                            try {
+                                                Date inTime = sdf16.parse(addSessionDialogBinding.thuStartTimeTxt.getText().toString());
+                                                Date outTime = sdf16.parse(addSessionDialogBinding.thuEndTimeTxt.getText().toString());
+                                                if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                                    addSessionDialogBinding.thuEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                                    addSessionDialogBinding.thuEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                                    checkTime_thu = true;
+                                                } else {
+                                                    checkTime_thu = false;
+                                                    addSessionDialogBinding.thuEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                                    addSessionDialogBinding.thuEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                                }
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    addSessionDialogBinding.thuStartTimeTxt.setText(FinalTimeStr);
+                                    addSessionDialogBinding.thuStartAddSessionBtn.setText("x");
+                                    addSessionDialogBinding.thuStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                    addSessionDialogBinding.thuStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                    SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                    try {
+                                        Date inTime = sdf16.parse(addSessionDialogBinding.thuStartTimeTxt.getText().toString());
+                                        Date outTime = sdf16.parse(addSessionDialogBinding.thuEndTimeTxt.getText().toString());
+                                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                            addSessionDialogBinding.thuEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.thuEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                            checkTime_thu = true;
+                                        } else {
+                                            checkTime_thu = false;
+                                            addSessionDialogBinding.thuEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                            addSessionDialogBinding.thuEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                            }
                         }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    }else{
+                        addSessionDialogBinding.thuStartTimeTxt.setText(FinalTimeStr);
+                        addSessionDialogBinding.thuStartAddSessionBtn.setText("x");
+                        addSessionDialogBinding.thuStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                        addSessionDialogBinding.thuStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                        SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                        try {
+                            Date inTime = sdf16.parse(addSessionDialogBinding.thuStartTimeTxt.getText().toString());
+                            Date outTime = sdf16.parse(addSessionDialogBinding.thuEndTimeTxt.getText().toString());
+                            if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                addSessionDialogBinding.thuEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                addSessionDialogBinding.thuEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                checkTime_thu = true;
+                            } else {
+                                checkTime_thu = false;
+                                addSessionDialogBinding.thuEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                addSessionDialogBinding.thuEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 case "9":
-                    addSessionDialogBinding.thuEndTimeTxt.setText(FinalTimeStr);
-                    addSessionDialogBinding.thuEndAddSessionBtn.setText("x");
-                    addSessionDialogBinding.thuEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
-                    addSessionDialogBinding.thuEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
-
-                    SimpleDateFormat sdf4 = new SimpleDateFormat("hh:mm aa", Locale.US);
-                    try {
-                        Date inTime = sdf4.parse(addSessionDialogBinding.thuStartTimeTxt.getText().toString());
-                        Date outTime = sdf4.parse(addSessionDialogBinding.thuEndTimeTxt.getText().toString());
-                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                            addSessionDialogBinding.thuEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
-                            addSessionDialogBinding.thuEndLinear.setBackgroundResource(R.drawable.red_linear);
-                            checkTime_thu = true;
-                        } else {
-                            checkTime_thu = false;
-                            addSessionDialogBinding.thuEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
-                            addSessionDialogBinding.thuEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                    if (finalsessionfullDetailModel.getData().size()>0) {
+                        for (int i = 0; i < finalsessionfullDetailModel.getData().size(); i++) {
+                            for (int j = 0; j < finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().size(); j++) {
+                                if (finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionDate()
+                                        .equalsIgnoreCase(addSessionDialogBinding.startDateTxt.getText().toString())) {
+                                    String[] splittime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime().split("\\-");
+                                    try {
+                                        SimpleDateFormat sdft = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                        Date inTimet = sdft.parse(splittime[0]);
+                                        Date outTimet = sdft.parse(splittime[1]);
+                                        Date inTimeSelected = sdft.parse(FinalTimeStr);
+                                        Date starttime = sdft.parse(addSessionDialogBinding.thuStartTimeTxt.getText().toString());
+                                        // Date outTimeSelected = sdf16.parse("10:00 PM");
+                                        if (starttime.after(outTimet)) {
+                                            addSessionDialogBinding.thuEndTimeTxt.setText(FinalTimeStr);
+                                            addSessionDialogBinding.thuEndAddSessionBtn.setText("x");
+                                            addSessionDialogBinding.thuEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.thuEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                            SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                            try {
+                                                Date inTime = sdf3.parse(addSessionDialogBinding.thuStartTimeTxt.getText().toString());
+                                                Date outTime = sdf3.parse(addSessionDialogBinding.thuEndTimeTxt.getText().toString());
+                                                if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                                    addSessionDialogBinding.thuEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                                    addSessionDialogBinding.thuEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                                    checkTime_thu = true;
+                                                } else {
+                                                    checkTime_thu = false;
+                                                    addSessionDialogBinding.thuEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                                    addSessionDialogBinding.thuEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                                }
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                        } else {
+                                            if (inTimeSelected.equals(inTimet) || inTimeSelected.equals(outTimet)) {
+                                                Utils.ping(mContext, "You have already class at this time");
+                                            } else if (inTimeSelected.after(inTimet) && inTimeSelected.before(outTimet)) {
+                                                Utils.ping(mContext, "You have already class at this time");
+                                            } else if (inTimeSelected.after(inTimet) && inTimeSelected.after(outTimet)) {
+                                                Utils.ping(mContext, "You have already class at this time");
+                                            } else {
+                                                addSessionDialogBinding.thuEndTimeTxt.setText(FinalTimeStr);
+                                                addSessionDialogBinding.thuEndAddSessionBtn.setText("x");
+                                                addSessionDialogBinding.thuEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                                addSessionDialogBinding.thuEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                                SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                                try {
+                                                    Date inTime = sdf3.parse(addSessionDialogBinding.thuStartTimeTxt.getText().toString());
+                                                    Date outTime = sdf3.parse(addSessionDialogBinding.thuEndTimeTxt.getText().toString());
+                                                    if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                                        addSessionDialogBinding.thuEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                                        addSessionDialogBinding.thuEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                                        checkTime_thu = true;
+                                                    } else {
+                                                        checkTime_thu = false;
+                                                        addSessionDialogBinding.thuEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                                        addSessionDialogBinding.thuEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                                    }
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    addSessionDialogBinding.thuEndTimeTxt.setText(FinalTimeStr);
+                                    addSessionDialogBinding.thuEndAddSessionBtn.setText("x");
+                                    addSessionDialogBinding.thuEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                    addSessionDialogBinding.thuEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                    SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                    try {
+                                        Date inTime = sdf3.parse(addSessionDialogBinding.thuStartTimeTxt.getText().toString());
+                                        Date outTime = sdf3.parse(addSessionDialogBinding.thuEndTimeTxt.getText().toString());
+                                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                            addSessionDialogBinding.thuEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.thuEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                            checkTime_thu = true;
+                                        } else {
+                                            checkTime_thu = false;
+                                            addSessionDialogBinding.thuEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                            addSessionDialogBinding.thuEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
                         }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    }else{
+                        addSessionDialogBinding.thuEndTimeTxt.setText(FinalTimeStr);
+                        addSessionDialogBinding.thuEndAddSessionBtn.setText("x");
+                        addSessionDialogBinding.thuEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                        addSessionDialogBinding.thuEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                        SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                        try {
+                            Date inTime = sdf3.parse(addSessionDialogBinding.thuStartTimeTxt.getText().toString());
+                            Date outTime = sdf3.parse(addSessionDialogBinding.thuEndTimeTxt.getText().toString());
+                            if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                addSessionDialogBinding.thuEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                addSessionDialogBinding.thuEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                checkTime_thu = true;
+                            } else {
+                                checkTime_thu = false;
+                                addSessionDialogBinding.thuEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                addSessionDialogBinding.thuEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 case "10":
-                    addSessionDialogBinding.friStartTimeTxt.setText(FinalTimeStr);
-                    addSessionDialogBinding.friStartAddSessionBtn.setText("x");
-                    addSessionDialogBinding.friStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
-                    addSessionDialogBinding.friStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
-                    SimpleDateFormat sdf51 = new SimpleDateFormat("hh:mm aa", Locale.US);
-                    try {
-                        Date inTime = sdf51.parse(addSessionDialogBinding.friStartTimeTxt.getText().toString());
-                        Date outTime = sdf51.parse(addSessionDialogBinding.friEndTimeTxt.getText().toString());
-                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                            addSessionDialogBinding.friEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
-                            addSessionDialogBinding.friEndLinear.setBackgroundResource(R.drawable.red_linear);
-                            checkTime_fri = true;
-                        } else {
-                            checkTime_fri = false;
-                            addSessionDialogBinding.friEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
-                            addSessionDialogBinding.friEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                    if (finalsessionfullDetailModel.getData().size()>0) {
+                        for (int i = 0; i < finalsessionfullDetailModel.getData().size(); i++) {
+                            for (int j = 0; j < finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().size(); j++) {
+                                if (finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionDate()
+                                        .equalsIgnoreCase(addSessionDialogBinding.startDateTxt.getText().toString())) {
+                                    String[] splittime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime().split("\\-");
+                                    try {
+                                        SimpleDateFormat sdft = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                        Date inTimet = sdft.parse(splittime[0]);
+                                        Date outTimet = sdft.parse(splittime[1]);
+                                        Date inTimeSelected = sdft.parse(FinalTimeStr);
+                                        // Date outTimeSelected = sdf16.parse("10:00 PM");
+                                        if (inTimeSelected.equals(inTimet) || inTimeSelected.equals(outTimet)) {
+                                            Utils.ping(mContext, "You have already class at this time");
+                                        } else if (inTimeSelected.after(inTimet) && inTimeSelected.before(outTimet)) {
+                                            Utils.ping(mContext, "You have already class at this time");
+                                        } else {
+                                            addSessionDialogBinding.friStartTimeTxt.setText(FinalTimeStr);
+                                            addSessionDialogBinding.friStartAddSessionBtn.setText("x");
+                                            addSessionDialogBinding.friStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.friStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                            SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                            try {
+                                                Date inTime = sdf16.parse(addSessionDialogBinding.friStartTimeTxt.getText().toString());
+                                                Date outTime = sdf16.parse(addSessionDialogBinding.friEndTimeTxt.getText().toString());
+                                                if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                                    addSessionDialogBinding.friEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                                    addSessionDialogBinding.friEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                                    checkTime_fri = true;
+                                                } else {
+                                                    checkTime_fri = false;
+                                                    addSessionDialogBinding.friEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                                    addSessionDialogBinding.friEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                                }
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    addSessionDialogBinding.friStartTimeTxt.setText(FinalTimeStr);
+                                    addSessionDialogBinding.friStartAddSessionBtn.setText("x");
+                                    addSessionDialogBinding.friStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                    addSessionDialogBinding.friStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                    SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                    try {
+                                        Date inTime = sdf16.parse(addSessionDialogBinding.friStartTimeTxt.getText().toString());
+                                        Date outTime = sdf16.parse(addSessionDialogBinding.friEndTimeTxt.getText().toString());
+                                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                            addSessionDialogBinding.friEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.friEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                            checkTime_fri = true;
+                                        } else {
+                                            checkTime_fri = false;
+                                            addSessionDialogBinding.friEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                            addSessionDialogBinding.friEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                            }
                         }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    }else{
+                        addSessionDialogBinding.friStartTimeTxt.setText(FinalTimeStr);
+                        addSessionDialogBinding.friStartAddSessionBtn.setText("x");
+                        addSessionDialogBinding.friStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                        addSessionDialogBinding.friStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                        SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                        try {
+                            Date inTime = sdf16.parse(addSessionDialogBinding.friStartTimeTxt.getText().toString());
+                            Date outTime = sdf16.parse(addSessionDialogBinding.friEndTimeTxt.getText().toString());
+                            if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                addSessionDialogBinding.friEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                addSessionDialogBinding.friEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                checkTime_fri = true;
+                            } else {
+                                checkTime_fri = false;
+                                addSessionDialogBinding.friEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                addSessionDialogBinding.friEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 case "11":
-                    addSessionDialogBinding.friEndTimeTxt.setText(FinalTimeStr);
-                    addSessionDialogBinding.friEndAddSessionBtn.setText("x");
-                    addSessionDialogBinding.friEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
-                    addSessionDialogBinding.friEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
-
-                    SimpleDateFormat sdf5 = new SimpleDateFormat("hh:mm aa", Locale.US);
-                    try {
-                        Date inTime = sdf5.parse(addSessionDialogBinding.friStartTimeTxt.getText().toString());
-                        Date outTime = sdf5.parse(addSessionDialogBinding.friEndTimeTxt.getText().toString());
-                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                            addSessionDialogBinding.friEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
-                            addSessionDialogBinding.friEndLinear.setBackgroundResource(R.drawable.red_linear);
-                            checkTime_fri = true;
-                        } else {
-                            checkTime_fri = false;
-                            addSessionDialogBinding.friEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
-                            addSessionDialogBinding.friEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                    if (finalsessionfullDetailModel.getData().size()>0) {
+                        for (int i = 0; i < finalsessionfullDetailModel.getData().size(); i++) {
+                            for (int j = 0; j < finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().size(); j++) {
+                                if (finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionDate()
+                                        .equalsIgnoreCase(addSessionDialogBinding.startDateTxt.getText().toString())) {
+                                    String[] splittime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime().split("\\-");
+                                    try {
+                                        SimpleDateFormat sdft = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                        Date inTimet = sdft.parse(splittime[0]);
+                                        Date outTimet = sdft.parse(splittime[1]);
+                                        Date inTimeSelected = sdft.parse(FinalTimeStr);
+                                        Date starttime = sdft.parse(addSessionDialogBinding.friStartTimeTxt.getText().toString());
+                                        // Date outTimeSelected = sdf16.parse("10:00 PM");
+                                        if (starttime.after(outTimet)) {
+                                            addSessionDialogBinding.friEndTimeTxt.setText(FinalTimeStr);
+                                            addSessionDialogBinding.friEndAddSessionBtn.setText("x");
+                                            addSessionDialogBinding.friEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.friEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                            SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                            try {
+                                                Date inTime = sdf3.parse(addSessionDialogBinding.friStartTimeTxt.getText().toString());
+                                                Date outTime = sdf3.parse(addSessionDialogBinding.friEndTimeTxt.getText().toString());
+                                                if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                                    addSessionDialogBinding.friEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                                    addSessionDialogBinding.friEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                                    checkTime_fri = true;
+                                                } else {
+                                                    checkTime_fri = false;
+                                                    addSessionDialogBinding.friEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                                    addSessionDialogBinding.friEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                                }
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                        } else {
+                                            if (inTimeSelected.equals(inTimet) || inTimeSelected.equals(outTimet)) {
+                                                Utils.ping(mContext, "You have already class at this time");
+                                            } else if (inTimeSelected.after(inTimet) && inTimeSelected.before(outTimet)) {
+                                                Utils.ping(mContext, "You have already class at this time");
+                                            } else if (inTimeSelected.after(inTimet) && inTimeSelected.after(outTimet)) {
+                                                Utils.ping(mContext, "You have already class at this time");
+                                            } else {
+                                                addSessionDialogBinding.friEndTimeTxt.setText(FinalTimeStr);
+                                                addSessionDialogBinding.friEndAddSessionBtn.setText("x");
+                                                addSessionDialogBinding.friEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                                addSessionDialogBinding.friEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                                SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                                try {
+                                                    Date inTime = sdf3.parse(addSessionDialogBinding.friStartTimeTxt.getText().toString());
+                                                    Date outTime = sdf3.parse(addSessionDialogBinding.friEndTimeTxt.getText().toString());
+                                                    if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                                        addSessionDialogBinding.friEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                                        addSessionDialogBinding.friEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                                        checkTime_fri = true;
+                                                    } else {
+                                                        checkTime_fri = false;
+                                                        addSessionDialogBinding.friEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                                        addSessionDialogBinding.friEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                                    }
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    addSessionDialogBinding.friEndTimeTxt.setText(FinalTimeStr);
+                                    addSessionDialogBinding.friEndAddSessionBtn.setText("x");
+                                    addSessionDialogBinding.friEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                    addSessionDialogBinding.friEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                    SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                    try {
+                                        Date inTime = sdf3.parse(addSessionDialogBinding.friStartTimeTxt.getText().toString());
+                                        Date outTime = sdf3.parse(addSessionDialogBinding.friEndTimeTxt.getText().toString());
+                                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                            addSessionDialogBinding.friEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.friEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                            checkTime_fri = true;
+                                        } else {
+                                            checkTime_fri = false;
+                                            addSessionDialogBinding.friEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                            addSessionDialogBinding.friEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
                         }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    }else{
+                        addSessionDialogBinding.friEndTimeTxt.setText(FinalTimeStr);
+                        addSessionDialogBinding.friEndAddSessionBtn.setText("x");
+                        addSessionDialogBinding.friEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                        addSessionDialogBinding.friEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                        SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                        try {
+                            Date inTime = sdf3.parse(addSessionDialogBinding.friStartTimeTxt.getText().toString());
+                            Date outTime = sdf3.parse(addSessionDialogBinding.friEndTimeTxt.getText().toString());
+                            if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                addSessionDialogBinding.friEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                addSessionDialogBinding.friEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                checkTime_fri = true;
+                            } else {
+                                checkTime_fri = false;
+                                addSessionDialogBinding.friEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                addSessionDialogBinding.friEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 case "12":
-                    addSessionDialogBinding.satStartTimeTxt.setText(FinalTimeStr);
-                    addSessionDialogBinding.satStartAddSessionBtn.setText("x");
-                    addSessionDialogBinding.satStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
-                    addSessionDialogBinding.satStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
-                    SimpleDateFormat sdf61 = new SimpleDateFormat("hh:mm aa", Locale.US);
-                    try {
-                        Date inTime = sdf61.parse(addSessionDialogBinding.satStartTimeTxt.getText().toString());
-                        Date outTime = sdf61.parse(addSessionDialogBinding.satEndTimeTxt.getText().toString());
-                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                            addSessionDialogBinding.satEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
-                            addSessionDialogBinding.satEndLinear.setBackgroundResource(R.drawable.red_linear);
-                            checkTime_sat = true;
-                        } else {
-                            checkTime_sat = false;
-                            addSessionDialogBinding.satEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
-                            addSessionDialogBinding.satEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                    if (finalsessionfullDetailModel.getData().size()>0) {
+                        for (int i = 0; i < finalsessionfullDetailModel.getData().size(); i++) {
+                            for (int j = 0; j < finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().size(); j++) {
+                                if (finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionDate()
+                                        .equalsIgnoreCase(addSessionDialogBinding.startDateTxt.getText().toString())) {
+                                    String[] splittime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime().split("\\-");
+                                    try {
+                                        SimpleDateFormat sdft = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                        Date inTimet = sdft.parse(splittime[0]);
+                                        Date outTimet = sdft.parse(splittime[1]);
+                                        Date inTimeSelected = sdft.parse(FinalTimeStr);
+                                        // Date outTimeSelected = sdf16.parse("10:00 PM");
+                                        if (inTimeSelected.equals(inTimet) || inTimeSelected.equals(outTimet)) {
+                                            Utils.ping(mContext, "You have already class at this time");
+                                        } else if (inTimeSelected.after(inTimet) && inTimeSelected.before(outTimet)) {
+                                            Utils.ping(mContext, "You have already class at this time");
+                                        } else {
+                                            addSessionDialogBinding.satStartTimeTxt.setText(FinalTimeStr);
+                                            addSessionDialogBinding.satStartAddSessionBtn.setText("x");
+                                            addSessionDialogBinding.satStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.satStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                            SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                            try {
+                                                Date inTime = sdf16.parse(addSessionDialogBinding.satStartTimeTxt.getText().toString());
+                                                Date outTime = sdf16.parse(addSessionDialogBinding.satEndTimeTxt.getText().toString());
+                                                if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                                    addSessionDialogBinding.satEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                                    addSessionDialogBinding.satEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                                    checkTime_sat = true;
+                                                } else {
+                                                    checkTime_sat = false;
+                                                    addSessionDialogBinding.satEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                                    addSessionDialogBinding.satEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                                }
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    addSessionDialogBinding.satStartTimeTxt.setText(FinalTimeStr);
+                                    addSessionDialogBinding.satStartAddSessionBtn.setText("x");
+                                    addSessionDialogBinding.satStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                    addSessionDialogBinding.satStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                    SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                    try {
+                                        Date inTime = sdf16.parse(addSessionDialogBinding.satStartTimeTxt.getText().toString());
+                                        Date outTime = sdf16.parse(addSessionDialogBinding.satEndTimeTxt.getText().toString());
+                                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                            addSessionDialogBinding.satEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.satEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                            checkTime_sat = true;
+                                        } else {
+                                            checkTime_sat = false;
+                                            addSessionDialogBinding.satEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                            addSessionDialogBinding.satEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+
+                            }
                         }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    }else{
+                        addSessionDialogBinding.satStartTimeTxt.setText(FinalTimeStr);
+                        addSessionDialogBinding.satStartAddSessionBtn.setText("x");
+                        addSessionDialogBinding.satStartAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                        addSessionDialogBinding.satStartAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                        SimpleDateFormat sdf16 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                        try {
+                            Date inTime = sdf16.parse(addSessionDialogBinding.satStartTimeTxt.getText().toString());
+                            Date outTime = sdf16.parse(addSessionDialogBinding.satEndTimeTxt.getText().toString());
+                            if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                addSessionDialogBinding.satEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                addSessionDialogBinding.satEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                checkTime_sat = true;
+                            } else {
+                                checkTime_sat = false;
+                                addSessionDialogBinding.satEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                addSessionDialogBinding.satEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 case "13":
-                    addSessionDialogBinding.satEndTimeTxt.setText(FinalTimeStr);
-                    addSessionDialogBinding.satEndAddSessionBtn.setText("x");
-                    addSessionDialogBinding.satEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
-                    addSessionDialogBinding.satEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
-
-                    SimpleDateFormat sdf6 = new SimpleDateFormat("hh:mm aa", Locale.US);
-                    try {
-                        Date inTime = sdf6.parse(addSessionDialogBinding.satStartTimeTxt.getText().toString());
-                        Date outTime = sdf6.parse(addSessionDialogBinding.satEndTimeTxt.getText().toString());
-                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
-                            addSessionDialogBinding.satEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
-                            addSessionDialogBinding.satEndLinear.setBackgroundResource(R.drawable.red_linear);
-                            checkTime_sat = true;
-                        } else {
-                            checkTime_sat = false;
-                            addSessionDialogBinding.satEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
-                            addSessionDialogBinding.satEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                    if (finalsessionfullDetailModel.getData().size()>0) {
+                        for (int i = 0; i < finalsessionfullDetailModel.getData().size(); i++) {
+                            for (int j = 0; j < finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().size(); j++) {
+                                if (finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionDate()
+                                        .equalsIgnoreCase(addSessionDialogBinding.startDateTxt.getText().toString())) {
+                                    String[] splittime = finalsessionfullDetailModel.getData().get(i).getSessionFullDetails().get(j).getSessionTime().split("\\-");
+                                    try {
+                                        SimpleDateFormat sdft = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                        Date inTimet = sdft.parse(splittime[0]);
+                                        Date outTimet = sdft.parse(splittime[1]);
+                                        Date inTimeSelected = sdft.parse(FinalTimeStr);
+                                        Date starttime = sdft.parse(addSessionDialogBinding.satStartTimeTxt.getText().toString());
+                                        // Date outTimeSelected = sdf16.parse("10:00 PM");
+                                        if (starttime.after(outTimet)) {
+                                            addSessionDialogBinding.satEndTimeTxt.setText(FinalTimeStr);
+                                            addSessionDialogBinding.satEndAddSessionBtn.setText("x");
+                                            addSessionDialogBinding.satEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.satEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                            SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                            try {
+                                                Date inTime = sdf3.parse(addSessionDialogBinding.satStartTimeTxt.getText().toString());
+                                                Date outTime = sdf3.parse(addSessionDialogBinding.satEndTimeTxt.getText().toString());
+                                                if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                                    addSessionDialogBinding.satEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                                    addSessionDialogBinding.satEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                                    checkTime_sat = true;
+                                                } else {
+                                                    checkTime_sat = false;
+                                                    addSessionDialogBinding.satEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                                    addSessionDialogBinding.satEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                                }
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                        } else {
+                                            if (inTimeSelected.equals(inTimet) || inTimeSelected.equals(outTimet)) {
+                                                Utils.ping(mContext, "You have already class at this time");
+                                            } else if (inTimeSelected.after(inTimet) && inTimeSelected.before(outTimet)) {
+                                                Utils.ping(mContext, "You have already class at this time");
+                                            } else if (inTimeSelected.after(inTimet) && inTimeSelected.after(outTimet)) {
+                                                Utils.ping(mContext, "You have already class at this time");
+                                            } else {
+                                                addSessionDialogBinding.satEndTimeTxt.setText(FinalTimeStr);
+                                                addSessionDialogBinding.satEndAddSessionBtn.setText("x");
+                                                addSessionDialogBinding.satEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                                addSessionDialogBinding.satEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                                SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                                try {
+                                                    Date inTime = sdf3.parse(addSessionDialogBinding.satStartTimeTxt.getText().toString());
+                                                    Date outTime = sdf3.parse(addSessionDialogBinding.satEndTimeTxt.getText().toString());
+                                                    if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                                        addSessionDialogBinding.satEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                                        addSessionDialogBinding.satEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                                        checkTime_sat = true;
+                                                    } else {
+                                                        checkTime_sat = false;
+                                                        addSessionDialogBinding.satEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                                        addSessionDialogBinding.satEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                                    }
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    addSessionDialogBinding.satEndTimeTxt.setText(FinalTimeStr);
+                                    addSessionDialogBinding.satEndAddSessionBtn.setText("x");
+                                    addSessionDialogBinding.satEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                                    addSessionDialogBinding.satEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                                    SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                                    try {
+                                        Date inTime = sdf3.parse(addSessionDialogBinding.satStartTimeTxt.getText().toString());
+                                        Date outTime = sdf3.parse(addSessionDialogBinding.satEndTimeTxt.getText().toString());
+                                        if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                            addSessionDialogBinding.satEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                            addSessionDialogBinding.satEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                            checkTime_sat = true;
+                                        } else {
+                                            checkTime_sat = false;
+                                            addSessionDialogBinding.satEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                            addSessionDialogBinding.satEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
                         }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                    }else {
+                        addSessionDialogBinding.satEndTimeTxt.setText(FinalTimeStr);
+                        addSessionDialogBinding.satEndAddSessionBtn.setText("x");
+                        addSessionDialogBinding.satEndAddSessionBtn.setTextColor(getResources().getColor(R.color.search_boder));
+                        addSessionDialogBinding.satEndAddSessionBtn.setBackground(getResources().getDrawable(R.drawable.round_red_btn));
+                        SimpleDateFormat sdf3 = new SimpleDateFormat("hh:mm aa", Locale.US);
+                        try {
+                            Date inTime = sdf3.parse(addSessionDialogBinding.satStartTimeTxt.getText().toString());
+                            Date outTime = sdf3.parse(addSessionDialogBinding.satEndTimeTxt.getText().toString());
+                            if (outTime.before(inTime)) { //Same way you can check with after() method also.
+                                addSessionDialogBinding.satEndTimeTxt.setTextColor(getResources().getColor(R.color.search_boder));
+                                addSessionDialogBinding.satEndLinear.setBackgroundResource(R.drawable.red_linear);
+                                checkTime_sat = true;
+                            } else {
+                                checkTime_sat = false;
+                                addSessionDialogBinding.satEndTimeTxt.setTextColor(getResources().getColor(R.color.text_color));
+                                addSessionDialogBinding.satEndLinear.setBackgroundResource(R.drawable.linear_shape);
+                            }
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                     break;
                 default:
@@ -3433,5 +4622,4 @@ public class AddSessionFragment extends Fragment implements com.wdullaer.materia
         }
 
     }
-
 }

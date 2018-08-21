@@ -26,6 +26,7 @@ public class StudentAttendanceAdapter extends BaseAdapter {
     private Context mContext;
 //    private List<sessionDataModel> studentList;
     private SessionDetailModel studentList;
+
     public StudentAttendanceAdapter(Context mContext, SessionDetailModel studentList) {
         this.mContext = mContext;
         this.studentList = studentList;

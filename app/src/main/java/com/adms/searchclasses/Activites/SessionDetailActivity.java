@@ -223,8 +223,8 @@ public class SessionDetailActivity extends AppCompatActivity implements View.OnC
         dialogViewTeacherProfileBinding.callBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Utils.checkAndRequestPermissions(mContext)) {
-                }
+//                if (Utils.checkAndRequestPermissions(mContext)) {
+//                }
                 Intent intent = new Intent(Intent.ACTION_DIAL);
                 intent.setData(Uri.fromParts("tel", phonestr, null));
                 mContext.startActivity(intent);

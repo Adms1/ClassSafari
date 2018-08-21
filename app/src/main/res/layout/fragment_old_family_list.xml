@@ -116,8 +116,8 @@
             android:visibility="gone"/>
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/add_family"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
             android:layout_gravity="end"
             android:layout_marginRight="@dimen/_20sdp"
             android:src="@drawable/plus_outline"

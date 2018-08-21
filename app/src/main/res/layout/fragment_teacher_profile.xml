@@ -132,6 +132,8 @@
                     android:layout_marginTop="@dimen/_10sdp"
                     android:drawableRight="@drawable/class_name"
                     android:hint="Class Name"
+                    android:maxLength="50"
+                    android:maxLines="1"
                     android:visibility="visible" />
 
 

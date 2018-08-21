@@ -99,7 +99,7 @@
                         <TextView
                             android:id="@+id/subject_txt"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/_20sdp"
+                            android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/_3sdp"
                             android:paddingLeft="@dimen/_1sdp"
                             android:text=""

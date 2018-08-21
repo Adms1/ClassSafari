@@ -33,10 +33,7 @@ public class UpcomingClassAdapter extends RecyclerView.Adapter<UpcomingClassAdap
     private Context mContext;
     String address;
     onViewClick onViewClick;
-//    public UpcomingClassAdapter(Context mContext, List<sessionDataModel> arrayList, onViewClick onViewClick) {
-//        this.mContext = mContext;
-//
-//    }
+    ArrayList<String> CoachId;
 
     public UpcomingClassAdapter(Context mContext, SessionDetailModel arrayList, onViewClick onViewClick) {
         this.mContext = mContext;
@@ -128,9 +125,12 @@ public class UpcomingClassAdapter extends RecyclerView.Adapter<UpcomingClassAdap
         upcomingClassesListBinding.phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.fromParts("tel", upcomingClassesListBinding.phoneTxt.getText().toString(), null));
-                mContext.startActivity(intent);
+                if (Utils.checkAndRequestPermissions(mContext)) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.fromParts("tel", upcomingClassesListBinding.phoneTxt.getText().toString(), null));
+                    mContext.startActivity(intent);
+                }
+
             }
         });
 
@@ -157,27 +157,30 @@ public class UpcomingClassAdapter extends RecyclerView.Adapter<UpcomingClassAdap
         upcomingClassesListBinding.phoneTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.fromParts("tel", upcomingClassesListBinding.phoneTxt.getText().toString(), null));
-                mContext.startActivity(intent);
+                if (Utils.checkAndRequestPermissions(mContext)) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.fromParts("tel", upcomingClassesListBinding.phoneTxt.getText().toString(), null));
+                    mContext.startActivity(intent);
+                }
+
             }
         });
-//        upcomingClassesListBinding.viewProfileImg.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                CoachId = new ArrayList<>();
-//                CoachId.add(arrayList.get(position).getCoachID());
-//                onChlidClick.getChilClick();
-//            }
-//        });
-//        upcomingClassesListBinding.teacherNameTxt.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                CoachId = new ArrayList<>();
-//                CoachId.add(arrayList.get(position).getCoachID());
-//                onChlidClick.getChilClick();
-//            }
-//        });
+        upcomingClassesListBinding.viewProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CoachId = new ArrayList<>();
+                CoachId.add(arrayList.getData().get(position).getCoachID());
+                onViewClick.getViewClick();
+            }
+        });
+        upcomingClassesListBinding.teacherNameTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CoachId = new ArrayList<>();
+                CoachId.add(arrayList.getData().get(position).getCoachID());
+                onViewClick.getViewClick();
+            }
+        });
     }
 
     @Override
@@ -201,6 +204,10 @@ public class UpcomingClassAdapter extends RecyclerView.Adapter<UpcomingClassAdap
             super(view);
 
         }
+    }
+
+    public ArrayList<String> getCoach() {
+        return CoachId;
     }
 }
 

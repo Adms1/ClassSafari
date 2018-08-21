@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by admsandroid on 3/22/2018.
+ * Created by Megha on 3/22/2018.
  */
 
 public class sessionDataModel {
@@ -307,6 +307,7 @@ public class sessionDataModel {
     public void setWeekDayID(String weekDayID) {
         this.weekDayID = weekDayID;
     }
+
 
     public String getSessionStartDate() {
         return sessionStartDate;

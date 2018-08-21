@@ -9,6 +9,7 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ import com.adms.searchclasses.R;
 import com.adms.searchclasses.databinding.ActivityMySessionBinding;
 import com.adms.searchclasses.databinding.ActivityUpcomingBinding;
 import com.adms.searchclasses.databinding.ChangePasswordDialogBinding;
+import com.adms.searchclasses.databinding.DialogViewTeacherProfileBinding;
 import com.adms.searchclasses.databinding.LayoutMenuBinding;
 import com.adms.searchclasses.databinding.SessiondetailConfirmationDialogBinding;
 
@@ -57,18 +59,20 @@ import retrofit.client.Response;
 public class UpcomingActivity extends AppCompatActivity implements View.OnClickListener {
 
     ActivityUpcomingBinding activityUpcomingBinding;
+    ChangePasswordDialogBinding changePasswordDialogBinding;
+    DialogViewTeacherProfileBinding dialogViewTeacherProfileBinding;
+
     Context mContext;
     //Use for Menu Dialog
-    String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr;
-    Dialog menuDialog, changeDialog;
+    String passWordStr, confirmpassWordStr, currentpasswordStr, wheretocometypeStr,coachIdStr,emailstr, phonestr;
+    Dialog menuDialog, changeDialog,profileDialog;
     Button btnHome,btnMyReport, btnMySession, btnChangePassword, btnLogout, btnmyfamily, btnMyenroll, btnMyprofile;
     View view_home, view_profile, view_myenroll, view_mysession,
             view_myreport, view_btnfamily, view_changepass;
     TextView userNameTxt;
-    ChangePasswordDialogBinding changePasswordDialogBinding;
     UpcomingClassAdapter upcomingClassAdapter;
     SessionDetailModel dataresponse;
-
+    TeacherInfoModel teacherInfoResponse;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,13 +167,143 @@ public class UpcomingActivity extends AppCompatActivity implements View.OnClickL
         upcomingClassAdapter = new UpcomingClassAdapter(mContext, dataresponse, new onViewClick() {
             @Override
             public void getViewClick() {
-
+                ArrayList<String> coachId = new ArrayList<String>();
+                coachId = upcomingClassAdapter.getCoach();
+                Log.d("coachId", "" + coachId);
+                for (int i = 0; i < coachId.size(); i++) {
+                    coachIdStr = coachId.get(i);
+                }
+                viewTeacherProfile();
             }
         });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(mContext);
         activityUpcomingBinding.upcomingClassRcList.setLayoutManager(mLayoutManager);
         activityUpcomingBinding.upcomingClassRcList.setItemAnimator(new DefaultItemAnimator());
         activityUpcomingBinding.upcomingClassRcList.setAdapter(upcomingClassAdapter);
+    }
+
+    //Use for View TeacherProfile
+    public void viewTeacherProfile() {
+        dialogViewTeacherProfileBinding = DataBindingUtil.
+                inflate(LayoutInflater.from(mContext), R.layout.dialog_view_teacher_profile, (ViewGroup) activityUpcomingBinding.getRoot(), false);
+
+        profileDialog = new Dialog(mContext, R.style.Theme_Dialog);
+        Window window = profileDialog.getWindow();
+        WindowManager.LayoutParams wlp = window.getAttributes();
+        profileDialog.getWindow().getAttributes().verticalMargin = 0.0f;
+        wlp.gravity = Gravity.CENTER;
+        window.setAttributes(wlp);
+
+        //changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.session_confirm);
+        profileDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        profileDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        profileDialog.setCancelable(false);
+        profileDialog.setContentView(dialogViewTeacherProfileBinding.getRoot());
+        callTeacherProfileApi();
+        dialogViewTeacherProfileBinding.viewTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                profileDialog.dismiss();
+            }
+        });
+        dialogViewTeacherProfileBinding.emailBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                String[] recipients = {emailstr};
+                intent.putExtra(Intent.EXTRA_EMAIL, recipients);
+                intent.setType("text/html");
+                intent.setPackage("com.google.android.gm");
+                mContext.startActivity(Intent.createChooser(intent, "Send mail"));
+            }
+        });
+        dialogViewTeacherProfileBinding.callBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Utils.checkAndRequestPermissions(mContext)) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.fromParts("tel", phonestr, null));
+                    mContext.startActivity(intent);
+                }
+
+            }
+        });
+
+        profileDialog.show();
+
+    }
+    //Use for Get Teacher detail
+    public void callTeacherProfileApi() {
+        if (Utils.isNetworkConnected(mContext)) {
+//            Utils.showDialog(mContext);
+            ApiHandler.getApiService().get_TeacherContactDetail_Coach_ID(getTeacherdetail(), new retrofit.Callback<TeacherInfoModel>() {
+                @Override
+                public void success(final TeacherInfoModel teacherInfoModel, Response response) {
+                    Utils.dismissDialog();
+                    if (teacherInfoModel == null) {
+                        Utils.dismissDialog();
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (teacherInfoModel.getSuccess() == null) {
+                        Utils.dismissDialog();
+                        Utils.ping(mContext, getString(R.string.something_wrong));
+                        return;
+                    }
+                    if (teacherInfoModel.getSuccess().equalsIgnoreCase("false")) {
+                        Utils.dismissDialog();
+                        Utils.ping(mContext, getString(R.string.false_msg));
+                        return;
+                    }
+                    if (teacherInfoModel.getSuccess().equalsIgnoreCase("True")) {
+                        teacherInfoResponse = teacherInfoModel;
+                        Utils.dismissDialog();
+
+                        for (int i = 0; i < teacherInfoResponse.getData().size(); i++) {
+                            dialogViewTeacherProfileBinding.teacherNameTxt.setText(teacherInfoModel.getData().get(i).getFirstName() + " " +
+                                    teacherInfoModel.getData().get(i).getLastName());
+
+
+                            if (!teacherInfoModel.getData().get(i).getExpYear().equalsIgnoreCase("0")) {
+                                dialogViewTeacherProfileBinding.classNameTxt.setText(teacherInfoModel.getData().get(i).getClassName() + " ("
+                                        + teacherInfoModel.getData().get(i).getExpYear() + " year" + " " + teacherInfoModel.getData().get(i).getExpMonth() + " month" + ")");
+                            } else {
+                                dialogViewTeacherProfileBinding.classNameTxt.setText(teacherInfoModel.getData().get(i).getClassName());
+                            }
+                            if (!teacherInfoModel.getData().get(i).getQualification().equalsIgnoreCase("")) {
+                                dialogViewTeacherProfileBinding.qualificationTxt.setText(teacherInfoModel.getData().get(i).getQualification());
+                            } else {
+                                dialogViewTeacherProfileBinding.qualificationTxt.setVisibility(View.GONE);
+                            }
+                            if (!teacherInfoModel.getData().get(i).getAboutUs().equalsIgnoreCase("")) {
+                                dialogViewTeacherProfileBinding.aboutUsTxt.setText(teacherInfoModel.getData().get(i).getAboutUs());
+                            } else {
+                                dialogViewTeacherProfileBinding.aboutUsTxt.setVisibility(View.GONE);
+                            }
+                            emailstr = teacherInfoModel.getData().get(i).getEmailID();
+                            phonestr = teacherInfoModel.getData().get(i).getMobile();
+
+                        }
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Utils.dismissDialog();
+                    error.printStackTrace();
+                    error.getMessage();
+                    Utils.ping(mContext, getString(R.string.something_wrong));
+                }
+            });
+        } else {
+            Utils.ping(mContext, getString(R.string.internet_connection_error));
+        }
+    }
+
+    private Map<String, String> getTeacherdetail() {
+        Map<String, String> map = new HashMap<>();
+        map.put("Coach_ID", coachIdStr);
+        return map;
     }
 
     //Use for Change Password

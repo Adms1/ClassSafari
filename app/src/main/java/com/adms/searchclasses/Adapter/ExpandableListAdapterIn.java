@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.RadioGroup;
 
+import com.adms.searchclasses.AppConstant.Utils;
 import com.adms.searchclasses.Interface.onChlidClick;
 import com.adms.searchclasses.Interface.onViewClick;
 import com.adms.searchclasses.Model.TeacherInfo.ChildDetailModel;
@@ -43,7 +44,8 @@ public class ExpandableListAdapterIn extends BaseExpandableListAdapter {
     private ArrayList<String> sesionDeatil;
 
     public ExpandableListAdapterIn(Context mContext, List<String> listDataHeader,
-                                              HashMap<String, List<ChildDetailModel>> listDataChild, String froncontanctStr, String arraowStr, onChlidClick onChlidClick, onViewClick session) {
+                                   HashMap<String, List<ChildDetailModel>> listDataChild,
+                                   String froncontanctStr, String arraowStr, onChlidClick onChlidClick, onViewClick session) {
         this.mContext = mContext;
         this._listDataChild = listDataChild;
         this._listDataHeader = listDataHeader;
@@ -97,9 +99,12 @@ public class ExpandableListAdapterIn extends BaseExpandableListAdapter {
             itembinding.phoneNoTxt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_DIAL);
-                    intent.setData(Uri.fromParts("tel", itembinding.phoneNoTxt.getText().toString(), null));
-                    mContext.startActivity(intent);
+                    if (Utils.checkAndRequestPermissions(mContext)) {
+                        Intent intent = new Intent(Intent.ACTION_DIAL);
+                        intent.setData(Uri.fromParts("tel", itembinding.phoneNoTxt.getText().toString(), null));
+                        mContext.startActivity(intent);
+                    }
+
 
                 }
             });
@@ -181,7 +186,7 @@ public class ExpandableListAdapterIn extends BaseExpandableListAdapter {
         convertView = groupbinding.getRoot();
         if (arraowStr.equalsIgnoreCase("Activity")) {
             groupbinding.arrowImg.setVisibility(View.GONE);
-        }else{
+        } else {
             groupbinding.arrowImg.setVisibility(View.VISIBLE);
             groupbinding.arrowImg.setImageResource(R.drawable.down_add_family);
         }
@@ -221,9 +226,12 @@ public class ExpandableListAdapterIn extends BaseExpandableListAdapter {
         groupbinding.noTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.fromParts("tel", spiltValue[2], null));
-                mContext.startActivity(intent);
+                if (Utils.checkAndRequestPermissions(mContext)) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.fromParts("tel", spiltValue[2], null));
+                    mContext.startActivity(intent);
+                }
+
             }
         });
         return convertView;

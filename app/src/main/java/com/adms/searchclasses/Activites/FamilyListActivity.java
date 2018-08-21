@@ -620,7 +620,7 @@ public class FamilyListActivity extends AppCompatActivity implements View.OnClic
                     }
                     if (sessionModel.getSuccess().equalsIgnoreCase("True")) {
                         Utils.dismissDialog();
-
+                        purchaseSessionIDStr="";
                         if (sessionModel.getData().size() > 0) {
                             purchaseSessionIDArray = new ArrayList<>();
                             for (int i = 0; i < sessionModel.getData().size(); i++) {

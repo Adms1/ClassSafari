@@ -30,12 +30,9 @@ public class UserSessionListAdapter1 extends RecyclerView.Adapter<UserSessionLis
 
     List<sessionDataModel> arrayList;
 
-    String searchByStr, locationStr, classNameStr,
-            address, boardStr, streamStr, standardStr,
-            searchTypeStr, wheretoComeStr, searchfront,
-            sessionType, firsttimesearch, TeacherName;
+    String address;
     onViewClick onViewClick;
-onChlidClick onChlidClick;
+    onChlidClick onChlidClick;
 
     private Context mContext;
     private ArrayList<String> SessionDetail;
@@ -220,7 +217,6 @@ onChlidClick onChlidClick;
         return position;
     }
 
-
     public ArrayList<String> getSessionDetail() {
         return SessionDetail;
     }
@@ -228,9 +224,11 @@ onChlidClick onChlidClick;
     public ArrayList<String> getSessionBookDetail() {
         return SessionBookDetail;
     }
+
     public ArrayList<String> getContactID() {
         return familyIdCheck;
     }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView session_name_txt, price_txt, start_date_txt, end_date_txt,
                 mon_time_txt, tues_time_txt, wed_time_txt, thur_time_txt, fri_time_txt, sat_time_txt, sun_time_txt,

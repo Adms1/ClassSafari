@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by admsandroid on 3/22/2018.
+ * Created by Megha on 3/22/2018.
  */
 
 public class TeacherInfoModel {

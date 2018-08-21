@@ -489,10 +489,11 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onClick(View view) {
                 if (Utils.checkAndRequestPermissions(mContext)) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.fromParts("tel", phonestr, null));
+                    mContext.startActivity(intent);
                 }
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.fromParts("tel", phonestr, null));
-                mContext.startActivity(intent);
+
             }
         });
 
@@ -758,7 +759,7 @@ public class SessionName extends AppCompatActivity implements View.OnClickListen
     private Map<String, String> getratingDetail() {
 
         Map<String, String> map = new HashMap<>();
-        map.put("SessionID", sessionId);
+        map.put("SessionID", sessionIDStr);
         map.put("ContactID", Utils.getPref(mContext, "coachID"));
         map.put("Comment", commentStr);
         map.put("RatingValue", ratingValueStr);

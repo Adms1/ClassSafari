@@ -188,7 +188,7 @@ public class RegistrationActivity extends AppCompatActivity implements DatePicke
         switch (view.getId()) {
             case R.id.view_txt:
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://classsafari.admssvc.com/terms.aspx"));
+                        Uri.parse("http://searchclasses.in/terms.aspx"));//http://classsafari.admssvc.com/terms.aspx
                 startActivity(browserIntent);
                 break;
             case R.id.date_of_birth_edt:

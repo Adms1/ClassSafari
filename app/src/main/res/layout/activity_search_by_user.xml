@@ -238,7 +238,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_marginTop="@dimen/_5sdp"
-            android:text="Ver. 31072018.5"
+            android:text="Ver. 10082018.1"
             android:textColor="@color/gray1"
             android:textSize="@dimen/_12sdp"
             android:textStyle="normal" />

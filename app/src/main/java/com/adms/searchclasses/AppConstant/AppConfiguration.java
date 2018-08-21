@@ -1,14 +1,14 @@
 package com.adms.searchclasses.AppConstant;
 
 /**
- * Created by admsandroid on 3/20/2018.
+ * Created by Megha on 3/20/2018.
  */
 
 public class AppConfiguration {
 
-//    public static final String Mode="LIVE";
-    public static final String Mode="TEST";
-//https://stackoverflow.com/questions/25201349/programmatically-check-play-store-for-app-updates
+    public static final String Mode="LIVE";
+//    public static final String Mode="TEST";
+
 
 
     //public static final String BASEURL = "http://192.168.1.20:8088/WebService.asmx/";// use for office

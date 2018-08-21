@@ -1,13 +1,11 @@
 package com.adms.searchclasses.Activites;
 
-import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -28,7 +26,6 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.adms.searchclasses.Adapter.UserSessionListAdapter;
 import com.adms.searchclasses.Adapter.UserSessionListAdapter1;
 import com.adms.searchclasses.AppConstant.ApiHandler;
 import com.adms.searchclasses.AppConstant.AppConfiguration;
@@ -41,7 +38,6 @@ import com.adms.searchclasses.Model.TeacherInfo.TeacherInfoModel;
 import com.adms.searchclasses.R;
 import com.adms.searchclasses.databinding.ActivityMySessionBinding;
 import com.adms.searchclasses.databinding.ChangePasswordDialogBinding;
-import com.adms.searchclasses.databinding.LayoutMenuBinding;
 import com.adms.searchclasses.databinding.SessiondetailConfirmationDialogBinding;
 
 import java.text.ParseException;

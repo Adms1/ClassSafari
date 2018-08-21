@@ -353,7 +353,7 @@
                                 android:layout_marginTop="@dimen/_5sdp"
                                 android:background="@drawable/list_line"
                                 android:hint="Description"
-                                android:maxLines="10"
+                                android:maxLines="15"
                                 android:text="604,Iscon Elegance,S.G highway,Opp.Karnavati club,Ahmedabad-380015"
                                 android:textColor="@color/text_color"
                                 android:textSize="@dimen/_11sdp" />

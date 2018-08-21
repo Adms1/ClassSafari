@@ -162,10 +162,11 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View view) {
                     if (Utils.checkAndRequestPermissions(mContext)) {
+                        Intent intent = new Intent(Intent.ACTION_DIAL);
+                        intent.setData(Uri.fromParts("tel", sessionCardLayout1Binding.phoneTxt.getText().toString(), null));
+                        mContext.startActivity(intent);
                     }
-                    Intent intent = new Intent(Intent.ACTION_DIAL);
-                    intent.setData(Uri.fromParts("tel", sessionCardLayout1Binding.phoneTxt.getText().toString(), null));
-                    mContext.startActivity(intent);
+
                 }
             });
             sessionCardLayout1Binding.addressLoc.setOnClickListener(new View.OnClickListener() {
@@ -192,10 +193,11 @@ public class SessionDetailAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View view) {
                     if (Utils.checkAndRequestPermissions(mContext)) {
+                        Intent intent = new Intent(Intent.ACTION_DIAL);
+                        intent.setData(Uri.fromParts("tel", sessionCardLayout1Binding.phoneTxt.getText().toString(), null));
+                        mContext.startActivity(intent);
                     }
-                    Intent intent = new Intent(Intent.ACTION_DIAL);
-                    intent.setData(Uri.fromParts("tel", sessionCardLayout1Binding.phoneTxt.getText().toString(), null));
-                    mContext.startActivity(intent);
+
                 }
             });
             sessionCardLayout1Binding.addressTxt.setOnClickListener(new View.OnClickListener() {

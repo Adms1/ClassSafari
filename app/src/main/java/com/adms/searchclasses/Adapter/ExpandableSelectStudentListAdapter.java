@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.RadioGroup;
 
+import com.adms.searchclasses.AppConstant.Utils;
 import com.adms.searchclasses.Interface.onChlidClick;
 import com.adms.searchclasses.Interface.onViewClick;
 import com.adms.searchclasses.Model.TeacherInfo.ChildDetailModel;
@@ -103,6 +104,8 @@ public class ExpandableSelectStudentListAdapter extends BaseExpandableListAdapte
             itembinding.phoneNoTxt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+//                    if (Utils.checkAndRequestPermissions(mContext)) {
+//                    }
                     Intent intent = new Intent(Intent.ACTION_DIAL);
                     intent.setData(Uri.fromParts("tel", itembinding.phoneNoTxt.getText().toString(), null));
                     mContext.startActivity(intent);
@@ -277,6 +280,8 @@ public class ExpandableSelectStudentListAdapter extends BaseExpandableListAdapte
         groupbinding.noTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                if (Utils.checkAndRequestPermissions(mContext)) {
+//                }
                 Intent intent = new Intent(Intent.ACTION_DIAL);
                 intent.setData(Uri.fromParts("tel", spiltValue[2], null));
                 mContext.startActivity(intent);

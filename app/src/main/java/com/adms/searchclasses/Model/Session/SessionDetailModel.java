@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by admsandroid on 3/22/2018.
+ * Created by Megha on 3/22/2018.
  */
 
 public class SessionDetailModel {

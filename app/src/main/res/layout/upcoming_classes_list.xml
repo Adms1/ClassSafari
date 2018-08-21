@@ -171,7 +171,7 @@
 
                             <TextView
                                 android:id="@+id/teacher_name_txt"
-                                android:layout_width="match_parent"
+                                android:layout_width="@dimen/_170sdp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/_5sdp"
                                 android:layout_marginRight="@dimen/_2sdp"
@@ -182,6 +182,13 @@
                                 android:textSize="@dimen/_11sdp"
                                 android:textStyle="normal"/>
 
+                            <ImageView
+                                android:id="@+id/view_profile"
+                                android:layout_width="@dimen/_10sdp"
+                                android:layout_height="@dimen/_15sdp"
+                                android:layout_marginTop="@dimen/_3sdp"
+                                android:src="@drawable/user_white"
+                                android:tint="@color/blue"/>
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="match_parent"

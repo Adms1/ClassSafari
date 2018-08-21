@@ -13,6 +13,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 
+import com.adms.searchclasses.AppConstant.Utils;
 import com.adms.searchclasses.Interface.onChlidClick;
 import com.adms.searchclasses.Interface.onViewClick;
 import com.adms.searchclasses.Model.TeacherInfo.ChildDetailModel;
@@ -42,6 +43,7 @@ public class ExapndableListAdapterFromFront extends BaseExpandableListAdapter {
     private ArrayList<String> familyIdCheck;
     private ArrayList<String> sesionDeatil;
     String[] spiltValue;
+
     public ExapndableListAdapterFromFront(Context mContext, List<String> listDataHeader, HashMap<String, List<ChildDetailModel>> listDataChild, onViewClick onViewClick, onChlidClick onChlidClick) {
         this.mContext = mContext;
         this._listDataChild = listDataChild;
@@ -75,9 +77,12 @@ public class ExapndableListAdapterFromFront extends BaseExpandableListAdapter {
             familyListFromfrontBinding.phoneNoTxt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_DIAL);
-                    intent.setData(Uri.fromParts("tel", familyListFromfrontBinding.phoneNoTxt.getText().toString(), null));
-                    mContext.startActivity(intent);
+                    if (Utils.checkAndRequestPermissions(mContext)) {
+                        Intent intent = new Intent(Intent.ACTION_DIAL);
+                        intent.setData(Uri.fromParts("tel", familyListFromfrontBinding.phoneNoTxt.getText().toString(), null));
+                        mContext.startActivity(intent);
+                    }
+
 
                 }
             });
@@ -184,9 +189,12 @@ public class ExapndableListAdapterFromFront extends BaseExpandableListAdapter {
         grouplistFromfrontBinding.noTxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_DIAL);
-                intent.setData(Uri.fromParts("tel", spiltValue[2], null));
-                mContext.startActivity(intent);
+                if (Utils.checkAndRequestPermissions(mContext)) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.fromParts("tel", spiltValue[2], null));
+                    mContext.startActivity(intent);
+                }
+
             }
         });
         return convertView;

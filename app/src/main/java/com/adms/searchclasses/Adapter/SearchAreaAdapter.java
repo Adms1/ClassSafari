@@ -111,8 +111,6 @@ viewHolder.count.setText("( "+arrayList.get(position).getCount()+" )");
         return convertView;
     }
 
-
-
     private class ViewHolder {
         CheckBox areachk;
         TextView count;

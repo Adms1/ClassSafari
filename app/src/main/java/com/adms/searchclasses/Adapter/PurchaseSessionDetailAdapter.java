@@ -148,8 +148,8 @@ public class PurchaseSessionDetailAdapter extends RecyclerView.Adapter {
             sessionCardLayout1Binding.phone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (Utils.checkAndRequestPermissions(mContext)) {
-                    }
+//                    if (Utils.checkAndRequestPermissions(mContext)) {
+//                    }
                     Intent intent = new Intent(Intent.ACTION_DIAL);
                     intent.setData(Uri.fromParts("tel", sessionCardLayout1Binding.phoneTxt.getText().toString(), null));
                     mContext.startActivity(intent);
@@ -178,8 +178,8 @@ public class PurchaseSessionDetailAdapter extends RecyclerView.Adapter {
             sessionCardLayout1Binding.phoneTxt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (Utils.checkAndRequestPermissions(mContext)) {
-                    }
+//                    if (Utils.checkAndRequestPermissions(mContext)) {
+//                    }
                     Intent intent = new Intent(Intent.ACTION_DIAL);
                     intent.setData(Uri.fromParts("tel", sessionCardLayout1Binding.phoneTxt.getText().toString(), null));
                     mContext.startActivity(intent);
@@ -283,34 +283,9 @@ public class PurchaseSessionDetailAdapter extends RecyclerView.Adapter {
         return CoachId;
     }
     public class SessionCard extends RecyclerView.ViewHolder {
-//        public TextView session_name_txt, session_type_txt, session_detail_name_txt,
-//                session_board_txt, session_standard_txt, session_stream_txt, session_total_student_txt,
-//                address_txt, email_txt, phone_txt, rating_txt, session_board_txt_view,
-//                session_standard_txt_view, session_stream_txt_view, teacher_name_txt;
-//                session_description_txt;
-
-//        RatingBar session_ratingbar;
 
         public SessionCard(View view) {
             super(view);
-//            session_board_txt_view = (TextView) view.findViewById(R.id.session_board_txt_view);
-//            session_standard_txt_view = (TextView) view.findViewById(R.id.session_standard_txt_view);
-//            session_stream_txt_view = (TextView) view.findViewById(R.id.session_stream_txt_view);
-//            session_name_txt = (TextView) view.findViewById(R.id.session_name_txt);
-//            session_type_txt = (TextView) view.findViewById(R.id.session_type_txt);
-//            session_detail_name_txt = (TextView) view.findViewById(R.id.session_detail_name_txt);
-//            session_board_txt = (TextView) view.findViewById(R.id.session_board_txt);
-//            session_standard_txt = (TextView) view.findViewById(R.id.session_standard_txt);
-//            session_stream_txt = (TextView) view.findViewById(R.id.session_stream_txt);
-//            session_total_student_txt = (TextView) view.findViewById(R.id.session_total_student_txt);
-//            address_txt = (TextView) view.findViewById(R.id.address_txt);
-//            email_txt = (TextView) view.findViewById(R.id.email_txt);
-//            phone_txt = (TextView) view.findViewById(R.id.phone_txt);
-//            session_ratingbar = (RatingBar) view.findViewById(R.id.session_ratingbar);
-//            rating_txt = (TextView) view.findViewById(R.id.rating_txt);
-//            teacher_name_txt = (TextView) view.findViewById(R.id.teacher_name_txt);
-//            session_description_txt = (TextView) view.findViewById(R.id.session_description_txt);
-
         }
     }
 

@@ -920,6 +920,11 @@ public class AddFamilyFragment extends Fragment implements DatePickerDialog.OnDa
                         args.putString("transactionId", orderIDStr);
                         args.putString("responseCode", "0");
                         args.putString("order_id", orderIDStr);
+                        args.putString("amount", AppConfiguration.SessionPrice);
+                        args.putString("username", firstNameStr + " " + lastNameStr);
+                        args.putString("sessionId", sessionIDStr);
+                        args.putString("contactID", contatIDstr);
+                        args.putString("type", type);
                         fragment.setArguments(args);
                         fragmentTransaction.replace(R.id.frame, fragment);
                         fragmentTransaction.addToBackStack(null);

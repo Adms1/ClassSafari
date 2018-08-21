@@ -16,7 +16,7 @@ import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 
 /**
- * Created by admsandroid on 3/20/2018.
+ * Created by Megha on 3/20/2018.
  */
 
 public class ApiHandler {
@@ -48,6 +48,7 @@ public class ApiHandler {
             return apiService;
         }
     }
+
     protected static OkHttpClient myOkHttpClient() {
 
         try {
